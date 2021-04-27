@@ -1,4 +1,4 @@
-i---
+---
 title: "exploitation stats agricoles Arvalis"
 author: "B. Maranget"
 date: "28/09/2020"
@@ -53,12 +53,18 @@ cheminL <- "../00_DATA/"
 
 ```{r}
 dpt <- st_read(paste0(cheminL,"ign.gpkg"), "dpt", quiet = TRUE, stringsAsFactors = F)
-# A TRETROUIVER
+# A RETROUIVER
 dptS <-  st_read("../dataE/00_ADMIN/contours-geographiques-tres-simplifies-des-departements-2019.geojson")
-fr <-  st_read(paste0(cheminL,"ign.gpkg"), "france", quiet = TRUE, stringsAsFactors = F)
+nomfic <- paste0(Sys.getenv("oneDrive"), "\\data sauve\\ign.gpkg")
+nomfic
+# PB dans le st_read le fichier se transforme
+fr <-  st_read("ign.gpkg", "france", quiet = TRUE, stringsAsFactors = F)
+dpt <- st_read("ign.gpkg", "dpt", quiet = TRUE, stringsAsFactors = F)
 ```
 
 Assemblage des fichiers excels
+
+un peu erratique.... NE PAS REJOUER, les fichiers sont dans data.gpkg
 
 ```{r, eval=FALSE}
 # assemblage
@@ -86,9 +92,11 @@ st_write(data, "data.gpkg", "data", row.names = FALSE,quiet = TRUE, delete_layer
 ```
 
 
+data et couleurs pour cartes / graphique
 
 ```{r}
 data <- st_read("data.gpkg", "data", quiet = TRUE, stringsAsFactors = TRUE)
+# traitement des zéros = valeur NA
 str(data)
 data$an <- as.factor(data$NA.)
 table(data$culture, data$an)
@@ -112,101 +120,163 @@ levels(data$an)
 levels(data$culture)
 par(mfrow = c(2, 3))
 # année
-i <- 1
-for (i in levels(data$an) {
-  j <- 1 
-  for (j in levels(data$culture){
-  # retraut des zéros de la distribution (c)
-  data <- data[ data$an == i& data$culture == j,]
-  hist(vec,
+i <- levels(data$an)[1]
+for (i in levels(data$an)) {
+  j <- levels(data$culture)[1]
+  num <- 1
+  for (j in levels(data$culture)){
+
+  sel <- data[ data$an == i& data$culture == j,]
+  hist(sel$surface,
        main = paste0(
-          substring(cultures [i], 6),
-          "\n Nb obs : ", 
-          length(dataF[,i][!is.na(dataF[,i])&dataF[,i]!=0])
+          i," ",
+          j,
+          " - Nb obs : ", 
+          nrow(sel)
           ) ,
-       xlab = "surfaces (ha)",
-       ylab = "nb",
-       col = couleurs[i],
-       border = NA
+       xlab = "Surface (ha)",
+       ylab = "Fréquence",
+       col = couleurs[num],
+       border = NA)
+    # couleur par rapport culture
+  num <- num + 1
 }
- 
-)
+}
 dev.off()
 ```
 
-![](../img/distributions.png)
+![](img/distributions.png)
 
-trop peu d'observations sur lin_fibre et blé_dur.
-valeurs maximum isolées pour toutes les séries
+pas beaucoup d'évolution 2020 2021
 
 
-# carto (par 16)
+# carto (par 6)
 
+
+Pour la carto, on reprend la même structure que pour les histo
 
 ```{r, eval= FALSE}
-
-
-
- i <- 1
-   png(paste0("../img/carto",".png"),
-  width = 600 *4,
-  height = 600 * 4,
-  res = 200)
-    par(mfrow = c(4,4))
-for (i in 1:16) {
-
-
- 
-  # traitement des valeurs nulles (= blanc) : on fait une carte pour les nuls et une carte sans
-  geomVide <- jointure [jointure [[i+1]] == 0  , i+1, drop = FALSE]
-  geomVide <- geomVide [!is.na(geomVide [[1]]),]
-  geomSansVide <- jointure [jointure [[i+1]] != 0 , i+1, drop = FALSE]
-  geomSansVide <- geomSansVide [!is.na(geomSansVide [[1]]),]
-  geomNA <- jointure [is.na (jointure [[i+1]]),i+1]
-  geomSansVide <- rbind (geomSansVide, geomNA)
-  # enregistrement des couches pour QGIS
-  st_write(geomVide, "../dataS/Carriere_A.gpkg", paste0("geomVide_", cultures [i]), quiet = TRUE, delete_layer = TRUE)
-  st_write(geomSansVide, "../dataS/Carriere_A.gpkg", paste0("data_", cultures[i]), quiet = TRUE, delete_layer = TRUE)
-  
-  head(geomSansVide)
-  head(geomNA)
-  head(geomVide)
-  # variables pour lin, le nobmre de classes est 3 seulement
-  nb <- ifelse(i == 8,  3,5)
-  mypal <- carto.pal(pal1 =  lcouleurs [[i]], n1 = nb)
-  par(mar=c(0,0,1.2,0))
-  #centrage sur l'ensemble de la France
-  plot(fr$geometry, col= NA, border = NA)
-  
-  # carte des valeurs non vides
-  choroLayer(
-    geomSansVide,
-    var =  cultures[i],
-    method = "jenks",
-    nclass = nb,
-    col = mypal,
-    border = NA,
+png(
+  paste0("img/carto", ".png"),
+  width = 600 * 3,
+  height = 600 * 2,
+  res = 200
+)
+par(mfrow = c(2, 3))
+# année
+i <- levels(data$an)[1]
+for (i in levels(data$an)) {
+  j <- levels(data$culture)[1]
+  num <- 1
+  for (j in levels(data$culture)) {
+    sel <- data[data$an == i & data$culture == j, ]
+    par(mar = c(0, 0, 1.2, 0))
+    #centrage sur l'ensemble de la France
+    ghostLayer(fr$geom, bg = "white")
+    choroLayer(
+      sel,
+      var =  "surface",
+      method = "jenks",
+      nclass = 5,
+      col = carto.pal(pal1 = lcouleurs [[num]], 5),
+      border = NA,
       legend.title.cex = 0.6,
-  legend.values.cex = 0.5,
-    legend.title.txt = "Nb d'ha",
-  legend.border = "gray96",
-    # pb sur les NA
-   legend.nodata = "inf. à 3",
-     colNA = "white",
-    add = TRUE
-  )
-  # carte des valeurs vnulles
-  plot(geomVide$geom, col ="azure3", border = NA, lty = 1 , add = TRUE)
-  legend(x = "bottomleft", legend = "pas de culture", cex = 0.5, fill = "azure3",
-         border =NA, bty = "n" )
-  layoutLayer(title =substring(cultures [i], 6), tabtitle = TRUE,theme = lcouleurs [[i]], frame = FALSE,
-              postitle = "center")
-  plot(dpt$geometry, col= NA, lty= 3, lwd = 1, border = "gray96", add = TRUE)}
- dev.off() 
+      legend.values.cex = 0.5,
+      legend.title.txt = "Aire (ha)",
+      legend.border = "gray96",
+      legend.pos = "left",
+      add = TRUE
+    )
+    layoutLayer(
+      title = paste0(j, " - ", i),
+      tabtitle = TRUE,
+      theme = lcouleurs [[num]],
+      frame = FALSE,
+      postitle = "center",
+      author = "Arvalis, 2021",
+      sources = "Agreste, IGN"
+    )
+    plot(
+      dpt$geom,
+      col = NA,
+      lty = 3,
+      lwd = 1,
+      border = "gray96",
+      add = TRUE
+    )
+    num <- num + 1
+  }
+}
+
+dev.off()
+```
+
+![](img/carto.png)
+# Relatif
+
+
+```{r}
+png(
+  paste0("img/cartoRelatif", ".png"),
+  width = 600 * 3,
+  height = 600 * 2,
+  res = 200
+)
+par(mfrow = c(2, 3))
+# année
+i <- levels(data$an)[1]
+for (i in levels(data$an)) {
+  j <- levels(data$culture)[1]
+  num <- 1
+  for (j in levels(data$culture)) {
+    sel <- data[data$an == i & data$culture == j, ]
+    total <- sum(sel$surface)
+    sel$rel <- (sel$surface / total) * 100
+    par(mar = c(0, 0, 1.2, 0))
+    #centrage sur l'ensemble de la France
+    ghostLayer(fr$geom, bg = "white")
+    choroLayer(
+      sel,
+      var =  "rel",
+      method = "jenks",
+      nclass = 5,
+      col = carto.pal(pal1 = lcouleurs [[num]], 5),
+      border = NA,
+      legend.title.cex = 0.6,
+      legend.values.cex = 0.5,
+      legend.title.txt = "part du total de la surface (%)",
+      legend.border = "gray96",
+      legend.pos = "left",
+      add = TRUE
+    )
+    layoutLayer(
+      title = paste0(j, " - ", i),
+      tabtitle = TRUE,
+      theme = lcouleurs [[num]],
+      frame = FALSE,
+      postitle = "center",
+      author = "Arvalis, 2021",
+      sources = "Agreste, IGN"
+    )
+    plot(
+      dpt$geom,
+      col = NA,
+      lty = 3,
+      lwd = 1,
+      border = "gray96",
+      add = TRUE
+    )
+    num <- num + 1
+  }
+}
+
+dev.off()
+
 
 ```
 
-![](../img/carto.png)
+
+
 
 # carto (par culture)
 
@@ -245,7 +315,6 @@ for (i in 1:16) {
     geomSansVide,
     var =  cultures[i],
     method = "jenks",
-    nclass = nb,
     col = mypal,
     border = NA,
       legend.title.cex = 0.6,
