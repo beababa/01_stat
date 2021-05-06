@@ -1,5 +1,5 @@
 ---
-title: "Blé dur et sorgho - stat agricole"
+title: "Blé dur et sorgho sur ans - stat agricole"
 author: "B. Maranget"
 date: "25/01/2021"
 output: 
