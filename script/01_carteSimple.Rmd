@@ -1,5 +1,5 @@
 ---
-title: "OH OP BTH Nathalie Robin"
+title: "OH OP BTH BD Nathalie Robin"
 author: "B. Maranget"
 date: "23/04/2021"
 output: 
@@ -60,11 +60,12 @@ chemin <- ifelse( Sys.getenv("DESKTOP_SESSION") == "ubuntu", cheminL, cheminW)
 ## Contours
 
 ```{r}
-nomfic <-  paste0(chemin,"ign.gpkg")
-dpt <- st_read(nomfic, "dptCorse", quiet = TRUE, stringsAsFactors = F)
-# A RETROUIVER
-dptS <-  st_read("../dataE/00_ADMIN/contours-geographiques-tres-simplifies-des-departements-2019.geojson")
 # PB dans le st_read le fichier se transforme
+chemin <- "../data/"
+nomfic <-  paste0(chemin,"ign.gpkg")
+dpt <- st_read(nomfic, "dpt_Corse", quiet = TRUE, stringsAsFactors = F)
+nomficSimole <- paste0(chemin, "contours-geographiques-tres-simplifies-des-departements-2019.geojson")
+dptS <-  st_read(nomficSimole, quiet = TRUE, stringsAsFactors = T)
 fr <-  st_read(nomfic, "france", quiet = TRUE, stringsAsFactors = F)
 ```
 
@@ -90,9 +91,10 @@ noms <- list.files("../data/",pattern = ".csv")
 data <- NULL
 i <- 1
 for (i in 1:length(noms)){
-  tmp <- read.csv(paste0("../data/",noms [i]), skip = 3, header = FALSE, fill = TRUE)
+  tmp <- read.csv2(paste0("../data/",noms [i]), skip = 3, header = FALSE, fill = TRUE)
   # impossible d'importer la ligne de titre (accent de année)
   data <- rbind(data,tmp)
+  print(i)
 }
 names(data) <-  c("dpt", "surface", "culture","S", "annee")
 data <- data [,-4]
@@ -132,12 +134,13 @@ data et couleurs pour cartes / graphique
 data <- st_read("../dataS/data.gpkg", "jointure", quiet = TRUE, stringsAsFactors = TRUE)
 str(data)
 data$annee <- as.factor(data$annee)
+data$surface <-  as.numeric(data$surface)
 # on va utiliser les facteurs dans les boucles de carto
 table(data$culture, data$an)
 # couleurs pour cultures 
-lcouleurs <- list (OP = "orange.pal", OH = "sand.pal", BTH = "green.pal")
+lcouleurs <- list (OP = "orange.pal", OH = "sand.pal", BTH = "green.pal", BD = "wine.pal")
 # trouver les couleurs correpsondant aux palettes
-couleurs <- c("orange", "wheat", "green")
+couleurs <- c("orange", "wheat", "green", "brown2")
 ```
 
 
@@ -161,7 +164,8 @@ for (i in levels(data$an)) {
   for (j in levels(data$culture)){
 
   sel <- data[ data$an == i& data$culture == j,]
-  hist(sel$surface,
+str(sel)
+    hist(sel$surface,
        main = paste0(
           i," ",
           j,
@@ -170,7 +174,7 @@ for (i in levels(data$an)) {
           ) ,
        xlab = "Surface (ha)",
        ylab = "Fréquence",
-       col = couleurs[num],
+       col = couleurs[4],
        border = NA)
     # couleur par rapport culture
   num <- num + 1
@@ -205,7 +209,7 @@ cartographier <- function(data) {
         var =  "surface",
         method = "jenks",
         nclass = 5,
-        col = carto.pal(pal1 = lcouleurs [[num]], 5),
+        col = carto.pal(pal1 = lcouleurs [[4]], 5),
         border = NA,
         legend.title.cex = 0.6,
         legend.values.cex = 0.5,
@@ -235,7 +239,7 @@ cartographier <- function(data) {
     }
   }
 }
-culture <- "OP"
+culture <- "BD"
 annee <- "2020"
 cartoSansBoucle <- function(culture, annee) {
       sel <- data[data$annee == annee & data$culture == culture,]
@@ -278,7 +282,8 @@ cartoSansBoucle <- function(culture, annee) {
         add = TRUE
       )
 }
-cartoSansBoucle("OP", "2020")
+cartoSansBoucle("BD", "2020")
+plot(dpt$geom)
 ```
 
 
