@@ -1,0 +1,136 @@
+---
+title: "Statistique univariée"
+author: "BMaranget"
+date: "20/09/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Termes
+
+## Trouver des termes pour les objets en statistiques :
+exemple : 
+- variable, 
+- observation,
+- valeur
+
+A vous !
+
+## distinguer tableau complet, tig, tableau condensé
+
+
+
+# L'essentiel : la forme d'une distribution
+
+## Abscisses et ordonnées
+
+![](img/distribution.jpg)
+
+
+## Tiges et feuilles
+
+discrétisation la plus rudimentaire
+
+https://fr.khanacademy.org/math/be-4eme-secondaire2/x213a6fc6f6c9e122:statistiques-1/x213a6fc6f6c9e122:graphiques-statistiques/a/stem-and-leaf-plots-review
+
+
+## Et sous un tableur
+
+### La source
+https://www.insee.fr/fr/statistiques/4487988
+
+```{r}
+data <- read.csv("data/2021-09-17_deces_quotidiens_departement_csv.csv", sep =";")
+length(data$Zone)
+```
+
+```{r}
+choix <- data [data$Date_evenement == '01-août'&data$Zone != 'France', c('Zone', 'Total_deces_2021')]
+write.csv(choix, "data/choix.csv")
+```
+
+
+
+### Préparation de l'exercice
+
+1. Pour obtenir un TIG avec une seule variable, quelle variable choisir et pour quels individus ?
+
+
+2. Pour faire un tableau de fréquences sous Libre Office
+
+
+Savoirs faire
+
+
+* Touche de sélection et de déplacement
+* filtre
+* tri
+* utilisation de la barre d'adresse
+* cellules nommées ou fixer les valeurs (adresse absolue)
+* formule frequence
+
+
+(remplir le framacalc rapidement)
+
+3. Quel commentaire ?
+
+- étendue
+- forme de la distribution
+
+# Pour raffiner : les indicateurs
+
+Nous avons déjà vu l'amplitude à travers minimum et maximum. Il y en a d'autres.
+Ils servent à résumer la série statistique
+
+## Calcul :  valeurs centrales et dispersion
+
+### Valeurs centrales
+
+#### Moyenne et médiane
+
+- Faire le calcul sur le tableau sans les formules moyenne et mediane
+
+- Que retenir ?
+
+#### La valeur modale
+
+La valeur la plus fréquente
+
+Quelle utilité dans notre série ?
+
+#### Indicateur de disymétrie
+
+En théorie, que permet de dire le rapport entre la moyenne et la médiane ? (S'aider des 3 graphiques d'en-tête)
+
+
+### Dispersion : Ecart-type et variance
+
+2 définitions : 
+
+- écart moyen des valeurs à leur moyenne arithmétique
+
+- moyenne du carré des écarts
+
+
+Toujours sans passer par les formules, mais avec un tableau *pas à pas*, créer les indicateurs.
+
+liste des colonnes :
+- écart à la moyenne
+- carré des écarts
+et à part sur une seule case : moyenne du carré des écarts (variance), l'écart type
+est la racine carrée.
+
+### Ecart interquartile
+
+Passer par le tableau des fréquences cumulées
+
+## Appliquer : apréhender quelques indicateurs 
+
+Faire un commentaire sur ce qu'indique les indicateurs par rapport à votre série.
+Consigner ce commentaire dans l'évaluation finale.
+
+
+

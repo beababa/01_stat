@@ -1,0 +1,89 @@
+---
+title: "Introduction"
+author: "BMaranget"
+date: "20 septembre 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+``` 
+
+
+# Intitulé du cours
+
+*"L5GEABIM Analyses bivariées et multivariées"*
+
+```{r}
+data <- read.csv("data/cours.csv", encoding = "UTF-8", header = F)
+knitr::kable(data, col.names = c("groupe", "heures", "enseignant") )
+```
+
+
+# Déroulé
+
+Il va être modifié en fonction de
+
+- votre vitesse - s'il faut prendre plus de temps sur les basiques
+- la collaboration avec Thomas Lamy
+
+
+13 cours en tout. 
+2 cours d'intro
+8 sur la stat bi-variée
+2 sur la multivariée
+1 cours pour un devoir sur table au mi-semestre
+1 devoir maison à rendre vers la fin du semestre
+
+Au départ on utilise Libre Office (plutôt que Microsoft) puis R
+
+Question : quelle utilisation de R ? des cours cette année ?
+
+```{r}
+data <- read.csv("data/deroule.csv", encoding = "UTF-8")
+knitr::kable(data)
+```
+
+
+
+
+# Présentation rapide (vous êtes nombreux !)
+
+passé / présent / futur
+appétence pour les stats
+fichier framapad, https://lite.framacalc.org/9pse-coursstatsorbonne2021
+
+
+```{r}
+# stats sur le framapad...
+```
+
+
+# Pratique
+
+Ce cours est rédigé sous R markdown. Il peut sortir en html ou en pdf. Je verrai
+en fonction des possibilités (moodle ?)
+
+Les exercices sont à rendre avec son *prénom* (toujours le même svp) sous moodle dans
+un répertoire spécifique.
+
+
+
+# Quizz de cours
+
+Quelques minutes en fin de chaque cours, histoire pour moi de voir s'il faut
+que je reprenne des notions.
+
+cours 1
+https://forms.gle/vR9f156Up9zrL86B9
+
+# Ressources autre que la bibliographie officielle
+
+2 cours universitaires disponibles sur internet
+
+- http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm
+- http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm
+
+
+
+
