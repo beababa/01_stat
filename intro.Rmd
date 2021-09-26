@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 *"L5GEABIM Analyses bivariées et multivariées"*
 
 ```{r}
-data <- read.csv("data/cours.csv", encoding = "UTF-8", header = F)
+data <- read.csv("data/presentation.csv", encoding = "UTF-8", header = F)
 knitr::kable(data, col.names = c("groupe", "heures", "enseignant") )
 ```
 
@@ -55,17 +55,25 @@ fichier framapad, https://lite.framacalc.org/9pse-coursstatsorbonne2021
 
 
 ```{r}
-# stats sur le framapad...
+cours1 <- read.csv("data/cours1.csv", fileEncoding = "UTF-8")
+cours2 <- read.csv("data/cours2.csv", fileEncoding = "UTF-8")
+cours1$session <- "cours1"
+cours2$session <- "cours2"
+names(cours1)
+names(cours2)[1] <- "prenom"
+cours <- rbind(cours1, cours2)
+cours <- cours [cours$prenom != '',]
+table(cours$session)
+# export pour framapad
+write.csv(cours [c(1:3,8)], "data/cours.csv")
 ```
+Désormais le framapad sert à l'émargement
 
 
 # Pratique
 
-Ce cours est rédigé sous R markdown. Il peut sortir en html ou en pdf. Je verrai
-en fonction des possibilités (moodle ?)
-
 Les exercices sont à rendre avec son *prénom* (toujours le même svp) sous moodle dans
-un répertoire spécifique.
+un répertoire spécifique (en attente de validation du compte moodle)
 
 
 
