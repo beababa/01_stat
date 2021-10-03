@@ -1,0 +1,63 @@
+---
+title: "Statistiques bi variées - base"
+author: "BMaranget"
+date: "16/08/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Méthode
+
+## 6 étapes
+
+1. Hypothèse
+2. Le tableau de données
+3. L'intensité
+4. Les écarts au modèle
+5. Si erreur aléatoire, significativité
+6. Explication géographique
+
+## 3 combinaisons
+
+### Trois types de variables
+
+1. par classe
+2. continu
+3. catégorie
+
+
+### Trois méthodes
+
+- Classe -> Khi2
+
+- Continu -> Régression Correlation
+
+- Continu et catégorie -> Analyse de variance
+
+
+# Exemples
+
+Utiliser le site opendata du gouvernement, choisir une thématique.
+
+Pour chaque exemple, justifier le traitement qu'il faudra utiliser et l'hypothèse
+de départ.
+
+exemple de l'exemple sur le framapad
+
+thématique : emploi, ancienneté au chomage et niveau de formation
+
+hypothèse : relation entre l'ancienneté au chomage et niveau de formation
+
+thématique : santé et covid, type de lits par région
+
+hypothèse : les différents type de lits sont cohérents entre les régions
+
+thématique : logement et urbanisme, consommation énergétique bâtiment
+
+hypothèse : relation entre consommation entre énergie électrique et les autres formes d'énergie
+
+
+

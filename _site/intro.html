@@ -14,8 +14,8 @@
 
 <title>Introduction</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -56,6 +56,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -401,7 +402,7 @@ $(document).ready(function () {
 <li>votre vitesse - s’il faut prendre plus de temps sur les basiques</li>
 <li>la collaboration avec Thomas Lamy</li>
 </ul>
-<p>13 cours en tout. 2 cours d’intro 8 sur la stat bi-variée 2 sur la multivariée 1 cours pour un devoir sur table au mi-semestre 1 devoir maison à rendre vers la fin du semestre</p>
+<p>13 cours en tout. 2 cours d’intro 7 sur la stat bi-variée 3 sur la multivariée 1 cours pour un devoir sur table au mi-semestre 1 devoir maison à rendre vers la fin du semestre</p>
 <p>Au départ on utilise Libre Office (plutôt que Microsoft) puis R</p>
 <p>Question : quelle utilisation de R ? des cours cette année ?</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/deroule.csv&quot;</span>, <span class="at">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
@@ -419,78 +420,78 @@ $(document).ready(function () {
 <tr class="odd">
 <td align="right">1</td>
 <td align="left">20/09/21</td>
-<td align="left">statistique univariée</td>
+<td align="left">statistique univariée : base</td>
 <td align="left">tableur</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
 <td align="left">27/09/21</td>
-<td align="left">statistique univariée</td>
+<td align="left">statistique univariée : indicateurs</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">04/10/21</td>
+<td align="left">bivariée : base</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">04/10/21</td>
+<td align="left">Khi 2</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">11/10/21</td>
+<td align="left">régression</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="right">6</td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">18/10/21</td>
+<td align="left">contingence</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="right">7</td>
-<td align="left"></td>
+<td align="left">25/10/21</td>
 <td align="left">devoir sur table</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="right">8</td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">08/11/21</td>
+<td align="left">variance</td>
 <td align="left">R</td>
 </tr>
 <tr class="odd">
 <td align="right">9</td>
-<td align="left"></td>
+<td align="left">15/11/21</td>
 <td align="left"></td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="right">10</td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">22/11/21</td>
+<td align="left">multivariée : multifactorielle</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="right">11</td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">29/11/21</td>
+<td align="left">classification</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="right">12</td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">06/12/21</td>
+<td align="left">régression linéaire multiple</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="right">13</td>
-<td align="left"></td>
+<td align="left">13/12/21</td>
 <td align="left">devoir à rendre</td>
 <td align="left"></td>
 </tr>
@@ -540,6 +541,13 @@ $(document).ready(function () {
 <li><a href="http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm" class="uri">http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm</a></li>
 <li><a href="http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm" class="uri">http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm</a></li>
 </ul>
+<p>2 sites pour réfléchir</p>
+<ul>
+<li><a href="https://neocarto.hypotheses.org/" class="uri">https://neocarto.hypotheses.org/</a></li>
+<li><a href="https://bmericskay.github.io/portfolio/Disgressions.html" class="uri">https://bmericskay.github.io/portfolio/Disgressions.html</a></li>
+</ul>
+<p>et bien sur :</p>
+<p><a href="https://georezo.net/" class="uri">https://georezo.net/</a></p>
 </div>
 
 <br><br><br><br><br><br><br><br><br><br><br><br>

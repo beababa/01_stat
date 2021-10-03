@@ -3,16 +3,15 @@ navbar:
   left:
     - text: "Introduction"
       href: intro.html
-    - text: "Statistiques univariées 1"
+    - text: "Statistiques univariées"
       href: jour1.html
-    - text: "Statistiques univariées 2"
+    - text: "Statistiques bi-variées base"
       href: jour2.html
-    - text: "Statistiques bi-variées 1"
+    - text: "Statistiques bi-variées khi 2"
       href: jour3.html   
   right:
     - icon: fa-github
-      href: https://github.com/beababa/coursStatSorbonne2021
-output: 
+      href: https://beababa.github.io/intro.html
   html_document:
     toc_float: TRUE  
     theme: united

@@ -96,7 +96,11 @@ hist(choix$Total_deces_2020, main = "Total décès 2020", xlab = "classes", ylab
 résultat avec un tableur
 ![](img/histogrammeLibreOffice.jpg)
 
+A explorer 
 
+graphique en barres, lignes (lissage)
+
+Observer la disposition des bornes : elles sont utilisées comme des étiquettes et non pas comme une série de valeur.
 
 # Pour raffiner : les indicateurs
 
@@ -118,15 +122,21 @@ Le calcul de la moyenne est connu. Celui de la médiane beaucoup moins.
 
 ![](img/mediane.jpg)
 
-- Calcul des effectifs cumulés, 
+###### Sur le tableau complet
 
-- puis de la fréquence des effectifs (effectif cumulé / total des effectifs)
+Créer une colonne rang. Et relever le rang médian
 
-- Repérer le rang 50 %
+###### Sur le tableau condensé
 
-savoir faire tableur
+- Calcul des fréquences cumulées, 
 
-- valeur fixe et relative (utilisation du $ et MAJ F4)
+- puis des fréquences relative (fréquence cumulée / fréquence totale)
+
+- Repérer le rang 50 % en faisant jouer les bornes
+
+#### savoir faire tableur
+
+- valeur fixe et relative (utilisation du $ et F4)
 
 - au niveau graphique, rajout d'un axe par le menu insertion après double clic sur 
 le graphique (onglet positionnement, menu déroulant valeur)
@@ -138,14 +148,19 @@ Expliquer ces phrases issues du Chadule
 
 - La médiane est dans une distribution la valeur la plus *proche* de toutes les autres
 
+Il s'agit d'une propriété mathématique de la médiane. 
+
 - les valeurs extrêmes *décentrent* la moyenne
+
+
 
 #### La valeur modale
 
-La valeur la plus fréquente
+La valeur la plus fréquente. 
 
 Quelle utilité dans notre série ?
 
+Aucune, car il y a beaucoup de chiffres différents, la classe modale serait plutôt intéressante à mentionner si on avait une typologie agricole, par exemple.
 
 ### Dispersion : Ecart-type et variance
 
@@ -161,9 +176,13 @@ La distribution est-elle hétérogène ?
 Toujours sans passer par les formules, mais avec un tableau *pas à pas*, créer les indicateurs.
 
 liste des colonnes :
+
 - écart à la moyenne
+
 - carré des écarts
-et à part sur une seule case : moyenne du carré des écarts (variance), l'écart type
+
+
+- et à part sur une seule case : moyenne du carré des écarts (variance), l'écart type
 est la racine carrée.
 
 ### Ecart interquartile
@@ -172,8 +191,16 @@ Passer par le tableau des fréquences cumulées
 
 ## Appliquer : apréhender quelques indicateurs 
 
-Faire un commentaire sur ce qu'indique les indicateurs par rapport à votre série.
+Faire un commentaire sur ce qu'indiquent les indicateurs par rapport à votre série.
 Consigner ce commentaire dans l'évaluation finale.
 
+Bonus
+
+Les étudiants ont choisi différentes dates.Les décès sont cumulés. La forme des distributions est-elle différente selon les dates ?
+
+```{r}
+data <- read.csv2("data/2021-09-17_deces_quotidiens_departement_csv.csv", fileEncoding = "UTF-8")
+
+```
 
 

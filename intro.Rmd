@@ -30,8 +30,8 @@ Il va être modifié en fonction de
 
 13 cours en tout. 
 2 cours d'intro
-8 sur la stat bi-variée
-2 sur la multivariée
+7 sur la stat bi-variée
+3 sur la multivariée
 1 cours pour un devoir sur table au mi-semestre
 1 devoir maison à rendre vers la fin du semestre
 
@@ -93,5 +93,11 @@ https://forms.gle/vR9f156Up9zrL86B9
 - http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm
 
 
+2 sites pour réfléchir
 
+- https://neocarto.hypotheses.org/
+- https://bmericskay.github.io/portfolio/Disgressions.html
 
+et bien sur :
+
+https://georezo.net/
