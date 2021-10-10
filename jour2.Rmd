@@ -45,7 +45,7 @@ Utiliser le site opendata du gouvernement, choisir une thématique.
 Pour chaque exemple, justifier le traitement qu'il faudra utiliser et l'hypothèse
 de départ.
 
-exemple de l'exemple sur le framapad
+## exemple de l'exemple
 
 thématique : emploi, ancienneté au chomage et niveau de formation
 
@@ -53,7 +53,8 @@ hypothèse : relation entre l'ancienneté au chomage et niveau de formation
 
 thématique : santé et covid, type de lits par région
 
-hypothèse : les différents type de lits sont cohérents entre les régions
+hypothèse : les différents type de lits sont cohérents entre les régions malgré
+les inégalités entre région
 
 thématique : logement et urbanisme, consommation énergétique bâtiment
 
