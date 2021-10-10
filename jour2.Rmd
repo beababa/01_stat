@@ -1,8 +1,11 @@
 ---
 title: "Statistiques bi variées - base"
-author: "BMaranget"
-date: "16/08/2021"
-output: html_document
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -11,31 +14,29 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Méthode
 
-## 6 étapes
+## 5 étapes
 
 1. Hypothèse
 2. Le tableau de données
 3. L'intensité
 4. Les écarts au modèle
-5. Si erreur aléatoire, significativité
-6. Explication géographique
+5. Explication géographique
 
 ## 3 combinaisons
 
-### Trois types de variables
+### deux types de variables
 
-1. par classe
-2. continu
-3. catégorie
+1. continu
+2. classe ou catégorie
 
 
 ### Trois méthodes
 
-- Classe -> Khi2
+- Classe / catégorie -> Khi2
 
 - Continu -> Régression Correlation
 
-- Continu et catégorie -> Analyse de variance
+- Continu et classe / catégorie -> Analyse de variance
 
 
 # Exemples

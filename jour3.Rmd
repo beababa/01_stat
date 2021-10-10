@@ -1,8 +1,11 @@
 ---
 title: "Statistiques bi variées - khi 2"
-author: "BMaranget"
-date: "16/08/2021"
-output: html_document
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -30,7 +33,7 @@ Pour l'exercice, on utilise les lits par région plutôt que par dpt
 
 # Tableau de contingence
 
-Au sens anglais du terme, * ce qui peut exister *
+Au sens anglais du terme, *ce qui peut exister*
 
 ## Analyse d'un tableau de contingence
 
@@ -62,14 +65,13 @@ dans les régions (on peut comparer)
 
 - les écarts au total des types de lit sont plus parlants
 
-On fait la même étude pour les fréquences conditionnelles en colonne afin
-de confirmer les observations.
+Qu'apporterait une étude des fréquences conditionnelles en colonnes ?
 
 ## Effectifs théoriques et observées
 
 ### Analogie du jeu du dé et de la pièce
 
-### Tableau
+### Tableau d'indépendance
 
 Pour le vérifier, les distributions univariées restent inchangées.
 
@@ -81,4 +83,65 @@ La première case reçoit la formule :
 
 ### Ecarts entre observés et théoriques
 
-### Calcul des différences
+Que signifie une valeur zéro ?
+Utiliser les notions
+
+- d'attraction et de répulsion pour les signes.
+- sur représentation / sous représentation
+
+On peut également le taux de liaison, c'est à dire le rapport entre la différence 
+et l'effectif à l'indépendance.
+Le commentaire sera du type : "Le nombre de lits de réanimation s'écarte de 9 % de
+la valeur téhorique qui indiquerait une situation ou les deux modalités ne seraient 
+pas liés"
+
+pour faire le commentaire
+
+## Le Khi2 
+
+rappel : métrique euclidienne plutôt que les valeurs absolues on utilise les carrés
+
+
+#### Le Khi2 partiel
+
+On met les écarts rapportés à la valeur théorique d'indépendance au carré.
+
+#### Le Khi2
+
+C'est le total des khi2 partiels (dans notre exemple 224 085)
+
+degré de liberté
+lg -1 * col -1
+
+13 régions et 3 types de lit = quel degré de liberté ? 
+
+risque 5 %
+
+lecture du khi2 38.89
+
+#### Rejet de H0 ou pas
+
+HO hypothèse d'indépendance. son rejet implique qu'il y a une relation.
+
+Les variables lits et régions ont une relation avec une marge d'erreur de 5 %
+
+### Intensité de la liaison
+
+indicateur entre 0 et 1. 1 pour très forte intensité.
+
+Le plus simple est le coefficient de contingence peut mesurer cette relation.
+
+C'est le Khi2 rapporté à la somme Khi2 et de l'effectif total
+
+D'autres coefficients permet de reprendre le nombre de degrés de liberté et ainsi de
+s'affranchir de la taille du tableau.
+
+
+
+
+
+
+
+
+
+Dans notre cas, il est de 0.9

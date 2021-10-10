@@ -12,6 +12,7 @@ navbar:
   right:
     - icon: fa-github
       href: https://beababa.github.io/intro.html
+output: 
   html_document:
     toc_float: TRUE  
     theme: united

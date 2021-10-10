@@ -1,8 +1,11 @@
 ---
 title: "Statistique univariée"
-author: "BMaranget"
-date: "20/09/2021"
-output: html_document
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -120,11 +123,13 @@ Il s'agit de caractériser une distribution par son centre.
 
 Le calcul de la moyenne est connu. Celui de la médiane beaucoup moins.
 
-![](img/mediane.jpg)
+
 
 ###### Sur le tableau complet
 
 Créer une colonne rang. Et relever le rang médian
+
+![](img/mediane.jpg)
 
 ###### Sur le tableau condensé
 
@@ -133,6 +138,9 @@ Créer une colonne rang. Et relever le rang médian
 - puis des fréquences relative (fréquence cumulée / fréquence totale)
 
 - Repérer le rang 50 % en faisant jouer les bornes
+
+![](img/mediane2.jpg)
+
 
 #### savoir faire tableur
 
@@ -187,19 +195,70 @@ est la racine carrée.
 
 ### Ecart interquartile
 
-Passer par le tableau des fréquences cumulées
+Passer par le tableau des fréquences cumulées, prendre les valeurs 25 % et 75 %.
 
 ## Appliquer : apréhender quelques indicateurs 
 
 Faire un commentaire sur ce qu'indiquent les indicateurs par rapport à votre série.
 Consigner ce commentaire dans l'évaluation finale.
 
-Bonus
+### Corrections quelques remarques
+
+L'objectif de l'exercice était d'obtenir un commentaire clair avec quelques repères
+statistiques.
+
+- inutile de mettre toutes les décimales de vos indicateurs ! cela ne sert à rien.
+
+- exemple d'un commentaire clair :
+
+*Il y a peu de départements recensant un grand nombre de décès puisque la médiane
+est assez faible, la moitié des départements compte plus de 750 décès. La
+moyenne est influencée par les départements comptant beaucoup de décès, c'est pourquoi elle est supérieure à la médiane : de rares départements connaissent un très grand
+nombre de morts*
+
+- attention à l'erreur :
+
+*Le nombre de décès est élevé dans les plus gros départements*
+
+Ce n'est pas faux mais ce n'est pas ce qui est demandé. 
+
+- faux :
+
+*mediane < moyenne ainsi il y a plus de jours avec de petits nombres de décès que 
+de jours avec des nombres importants. Il y a une distribution dysimétrique.*
+
+Il ne s'agit pas de jour mais de nombre de décès et de nombre de départements.
+
+- trop technique :
+
+*La série est assez dissymétrique, la distribution est assez proche de la valeur de
+la médiane, tandis que la moyenne n'est pas pertinent en raison de ses valeurs fortes*
+
+
+### Bonus
 
 Les étudiants ont choisi différentes dates.Les décès sont cumulés. La forme des distributions est-elle différente selon les dates ?
 
 ```{r}
-data <- read.csv2("data/2021-09-17_deces_quotidiens_departement_csv.csv", fileEncoding = "UTF-8")
+data <- read.csv("data/2021-09-17_deces_quotidiens_departement_csv.csv",  sep = ";", fileEncoding = "latin3")
+# on ne prend que les premiers du mois
+data <-  data [substring(data$Date_evenement,0,2) == "01",]
+data$Date_evenement <- as.Date(data$Date_evenement, format = "%d-%b")
+# pb NA
+table(data$Date_evenement, useNA = "always")
+# le mois d'avril n'est pas repris. 
+data$Date_evenement [is.na(data$Date_evenement)] <- ("2021-04-01")
+# on retire France
+data <- data [data$Zone != "France",]
+data$mois <- format(data$Date_evenement, format = "%m")
+data$mois <- as.integer(data$mois)
+i <- 1
+par(mfrow = c(2,3))
+for (i in 1:12) 
+{
+  choix <- data [data$mois == i,]
+  hist(choix$Total_deces_2020, main = i, xlab = "classes", ylab = "effectif")
+}
 
 ```
 
