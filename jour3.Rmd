@@ -58,12 +58,17 @@ quelle élément fixer, ligne ou colonne ?
 
 - Graphique par types de lit
 
+
+![](img/frequenceLG.png)
+
 commentaire
 
 - répartition des régions puis lorsque ramené à une base 100, répartition des lits
 dans les régions (on peut comparer)
 
 - les écarts au total des types de lit sont plus parlants
+
+![](img/graphEcartFreqLg.png)
 
 Qu'apporterait une étude des fréquences conditionnelles en colonnes ?
 
@@ -81,21 +86,30 @@ La première case reçoit la formule :
 
 - cette fréquence est multipliée par la totalité de l'effectif pour avoir l' EFFECTIF
 
+![](img/effectifTheorique.png)
+
 ### Ecarts entre observés et théoriques
 
 Que signifie une valeur zéro ?
+
 Utiliser les notions
 
 - d'attraction et de répulsion pour les signes.
 - sur représentation / sous représentation
 
+![](img/grapEcartTheorie.png)
+
+
+
 On peut également le taux de liaison, c'est à dire le rapport entre la différence 
 et l'effectif à l'indépendance.
+
+![](img/txliaison.png)
+
 Le commentaire sera du type : "Le nombre de lits de réanimation s'écarte de 9 % de
-la valeur téhorique qui indiquerait une situation ou les deux modalités ne seraient 
+la valeur théorique qui indiquerait une situation ou les deux modalités ne seraient 
 pas liés"
 
-pour faire le commentaire
 
 ## Le Khi2 
 
@@ -105,6 +119,8 @@ rappel : métrique euclidienne plutôt que les valeurs absolues on utilise les c
 #### Le Khi2 partiel
 
 On met les écarts rapportés à la valeur théorique d'indépendance au carré.
+
+![](img/khi2partiel.png)
 
 #### Le Khi2
 
@@ -132,6 +148,12 @@ indicateur entre 0 et 1. 1 pour très forte intensité.
 Le plus simple est le coefficient de contingence peut mesurer cette relation.
 
 C'est le Khi2 rapporté à la somme Khi2 et de l'effectif total
+
+![](img/coeff.png)
+
+*Savoir-faire tableur*
+
+Utiliser les noms plutôt que les cellules fixées
 
 D'autres coefficients permet de reprendre le nombre de degrés de liberté et ainsi de
 s'affranchir de la taille du tableau.
