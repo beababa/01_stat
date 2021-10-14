@@ -51,6 +51,7 @@ Pour pouvoir comparer les régions, chaque groupe est ramené à une même base
 
 
 
+
 savoir-faire tableur
 
 - Objectif : saisir une seule cellule et étendre la formule.
@@ -119,10 +120,21 @@ rappel : métrique euclidienne plutôt que les valeurs absolues on utilise les c
 #### Le Khi2 partiel
 
 On met les écarts rapportés à la valeur théorique d'indépendance au carré.
+Puis on divise par l'effectif.
 
 ![](img/khi2partiel.png)
 
 #### Le Khi2
+
+```{r}
+data <- read.csv("data/litsRegion.csv", row.names = noms)
+data <- data [,c(-1,-2)]
+# On passe en matrice
+data <- as.matrix(data)
+chisq.test(data)
+freqLg <- prop.table(data,1)*100
+
+```
 
 C'est le total des khi2 partiels (dans notre exemple 224 085)
 
@@ -133,7 +145,7 @@ lg -1 * col -1
 
 risque 5 %
 
-lecture du khi2 38.89
+lecture du khi2 330
 
 #### Rejet de H0 ou pas
 
@@ -158,6 +170,15 @@ Utiliser les noms plutôt que les cellules fixées
 D'autres coefficients permet de reprendre le nombre de degrés de liberté et ainsi de
 s'affranchir de la taille du tableau.
 
+```{r}
+
+data <- read.csv("data/litsRegion.csv", row.names = noms)
+data <- data [,c(-1,-2)]
+# On passe en matrice
+data <- as.matrix(data)
+chisq.test(data)
+cramer.v(data)
+```
 
 
 
@@ -166,4 +187,5 @@ s'affranchir de la taille du tableau.
 
 
 
-Dans notre cas, il est de 0.9
+
+Dans notre cas, il est de 0.018
