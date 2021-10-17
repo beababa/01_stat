@@ -127,13 +127,13 @@ Puis on divise par l'effectif.
 #### Le Khi2
 
 ```{r}
-data <- read.csv("data/litsRegion.csv", row.names = noms)
+data <- read.csv("data/litsRegion.csv")
 data <- data [,c(-1,-2)]
 # On passe en matrice
 data <- as.matrix(data)
 chisq.test(data)
 freqLg <- prop.table(data,1)*100
-
+knitr::kable(freqLg, title = "Fréquence conditionnelle ligne")
 ```
 
 C'est le total des khi2 partiels (dans notre exemple 224 085)
@@ -168,17 +168,7 @@ C'est le Khi2 rapporté à la somme Khi2 et de l'effectif total
 Utiliser les noms plutôt que les cellules fixées
 
 D'autres coefficients permet de reprendre le nombre de degrés de liberté et ainsi de
-s'affranchir de la taille du tableau.
-
-```{r}
-
-data <- read.csv("data/litsRegion.csv", row.names = noms)
-data <- data [,c(-1,-2)]
-# On passe en matrice
-data <- as.matrix(data)
-chisq.test(data)
-cramer.v(data)
-```
+s'affranchir de la taille du tableau.```
 
 
 

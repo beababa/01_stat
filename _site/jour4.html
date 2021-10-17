@@ -11,7 +11,7 @@
 
 
 
-<title>Statistiques bi variées - khi 2</title>
+<title>Statistiques bi variées - Regression</title>
 
 <script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -434,201 +434,118 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Statistiques bi variées - khi 2</h1>
+<h1 class="title toc-ignore">Statistiques bi variées - Regression</h1>
 
 </div>
 
 
 <div id="données-dexemple" class="section level1" number="1">
 <h1 number="1"><span class="header-section-number">1</span> Données d’exemple</h1>
-<p>hypothèse : relation entre les régions et les types de lits</p>
-<p>Deux distributions connues par classe quelque soit la nature des modalités.</p>
-<p>Attention, valeur plancher 5</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/lits.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>dpt <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/departements-region.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>dataM <span class="ot">&lt;-</span> <span class="fu">merge</span>(data, dpt, <span class="at">by.x =</span> <span class="st">&quot;Département&quot;</span>, <span class="at">by.y =</span> <span class="st">&quot;num_dep&quot;</span> )</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>agg <span class="ot">&lt;-</span> <span class="fu">aggregate</span> (dataM[,<span class="fu">c</span>(<span class="st">&quot;réanimation&quot;</span>, <span class="st">&quot;intensifs&quot;</span>,<span class="st">&quot;surveillance&quot;</span>)], <span class="at">by =</span> <span class="fu">list</span>(dataM<span class="sc">$</span>region_name), sum)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(agg, <span class="st">&quot;data/litsRegion.csv&quot;</span>)</span></code></pre></div>
-<p>Pour l’exercice, on utilise les lits par région plutôt que par dpt</p>
+<p><a href="https://databank.worldbank.org/indicator/SP.POP.TOTL/1ff4a498/Popular-Indicators" class="uri">https://databank.worldbank.org/indicator/SP.POP.TOTL/1ff4a498/Popular-Indicators</a> <a href="https://donnees.banquemondiale.org/indicator/EN.ATM.GHGT.KT.CE" class="uri">https://donnees.banquemondiale.org/indicator/EN.ATM.GHGT.KT.CE</a></p>
+<p>Comprendre les variables</p>
+<p>Enoncer les hypothèses</p>
+<p>De quel type sont les variables ?</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/POPU.csv&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> pop [pop<span class="sc">$</span>Series.Code <span class="sc">==</span><span class="st">&quot;SP.POP.TOTL&quot;</span>, <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">20</span>)]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>pop<span class="sc">$</span>X2015..YR2015. <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(pop<span class="sc">$</span>X2015..YR2015.)</span></code></pre></div>
+<pre><code>## Warning: NAs introduits lors de la conversion automatique</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> pop[ <span class="sc">!</span><span class="fu">is.na</span>(pop<span class="sc">$</span>X2015..YR2015.),]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ges <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/GES.csv&quot;</span>, <span class="at">skip =</span> <span class="dv">4</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>ges <span class="ot">&lt;-</span>  ges [, <span class="fu">c</span>(<span class="st">&quot;Country.Code&quot;</span>, <span class="st">&quot;X2015&quot;</span>)]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>ges <span class="ot">&lt;-</span> ges [<span class="sc">!</span><span class="fu">is.na</span>(ges<span class="sc">$</span>X2015),]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span>  <span class="fu">merge</span>(ges, pop, <span class="at">by =</span> <span class="st">&quot;Country.Code&quot;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;code&quot;</span>, <span class="st">&quot;ges&quot;</span>, <span class="st">&quot;pop&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(data, <span class="st">&quot;data/popges2015.csv&quot;</span>)</span></code></pre></div>
 </div>
-<div id="tableau-de-contingence" class="section level1" number="2">
-<h1 number="2"><span class="header-section-number">2</span> Tableau de contingence</h1>
-<p>Au sens anglais du terme, <em>ce qui peut exister</em></p>
-<div id="analyse-dun-tableau-de-contingence" class="section level2" number="2.1">
-<h2 number="2.1"><span class="header-section-number">2.1</span> Analyse d’un tableau de contingence</h2>
-<ul>
-<li><p>Il faut présenter les sources, la structure et le contenu du tableau.</p></li>
-<li><p>Lister les questions susceptibles d’être posées</p></li>
-<li><p>Analyse des distributions marginales</p></li>
-</ul>
-</div>
-<div id="fréquences-conditionnelles-en-ligne-et-colonne" class="section level2" number="2.2">
-<h2 number="2.2"><span class="header-section-number">2.2</span> Fréquences conditionnelles en ligne et colonne</h2>
-<p>Pour pouvoir comparer les régions, chaque groupe est ramené à une même base égale à 100.</p>
-<p>savoir-faire tableur</p>
-<ul>
-<li><p>Objectif : saisir une seule cellule et étendre la formule. quelle élément fixer, ligne ou colonne ?</p></li>
-<li><p>Graphique par types de lit</p></li>
-</ul>
-<p><img src="img/frequenceLG.png" /></p>
-<p>commentaire</p>
-<ul>
-<li><p>répartition des régions puis lorsque ramené à une base 100, répartition des lits dans les régions (on peut comparer)</p></li>
-<li><p>les écarts au total des types de lit sont plus parlants</p></li>
-</ul>
-<p><img src="img/graphEcartFreqLg.png" /></p>
-<p>Qu’apporterait une étude des fréquences conditionnelles en colonnes ?</p>
-</div>
-<div id="effectifs-théoriques-et-observées" class="section level2" number="2.3">
-<h2 number="2.3"><span class="header-section-number">2.3</span> Effectifs théoriques et observées</h2>
-<div id="analogie-du-jeu-du-dé-et-de-la-pièce" class="section level3" number="2.3.1">
-<h3 number="2.3.1"><span class="header-section-number">2.3.1</span> Analogie du jeu du dé et de la pièce</h3>
-</div>
-<div id="tableau-dindépendance" class="section level3" number="2.3.2">
-<h3 number="2.3.2"><span class="header-section-number">2.3.2</span> Tableau d’indépendance</h3>
-<p>Pour le vérifier, les distributions univariées restent inchangées.</p>
-<p>La première case reçoit la formule :</p>
-<ul>
-<li><p>effectif / total lg * effectif / total colonne FREQUENCE CONJOINTE</p></li>
-<li><p>cette fréquence est multipliée par la totalité de l’effectif pour avoir l’ EFFECTIF</p></li>
-</ul>
-<p><img src="img/effectifTheorique.png" /></p>
-</div>
-<div id="ecarts-entre-observés-et-théoriques" class="section level3" number="2.3.3">
-<h3 number="2.3.3"><span class="header-section-number">2.3.3</span> Ecarts entre observés et théoriques</h3>
-<p>Que signifie une valeur zéro ?</p>
-<p>Utiliser les notions</p>
-<ul>
-<li>d’attraction et de répulsion pour les signes.</li>
-<li>sur représentation / sous représentation</li>
-</ul>
-<p><img src="img/grapEcartTheorie.png" /></p>
-<p>On peut également le taux de liaison, c’est à dire le rapport entre la différence et l’effectif à l’indépendance.</p>
-<p><img src="img/txliaison.png" /></p>
-<p>Le commentaire sera du type : “Le nombre de lits de réanimation s’écarte de 9 % de la valeur théorique qui indiquerait une situation ou les deux modalités ne seraient pas liés”</p>
-</div>
-</div>
-<div id="le-khi2" class="section level2" number="2.4">
-<h2 number="2.4"><span class="header-section-number">2.4</span> Le Khi2</h2>
-<p>rappel : métrique euclidienne plutôt que les valeurs absolues on utilise les carrés</p>
-<div id="le-khi2-partiel" class="section level4" number="2.4.0.1">
-<h4 number="2.4.0.1"><span class="header-section-number">2.4.0.1</span> Le Khi2 partiel</h4>
-<p>On met les écarts rapportés à la valeur théorique d’indépendance au carré. Puis on divise par l’effectif.</p>
-<p><img src="img/khi2partiel.png" /></p>
-</div>
-<div id="le-khi2-1" class="section level4" number="2.4.0.2">
-<h4 number="2.4.0.2"><span class="header-section-number">2.4.0.2</span> Le Khi2</h4>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/litsRegion.csv&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data [,<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="sc">-</span><span class="dv">2</span>)]</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># On passe en matrice</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(data)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(data)</span></code></pre></div>
+<div id="nuage-de-points" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Nuage de points</h1>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data<span class="sc">$</span>pop, data<span class="sc">$</span>ges)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(data<span class="sc">$</span>pop,data<span class="sc">$</span>ges,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">labels =</span> <span class="fu">row.names</span>(data<span class="sc">$</span>code),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">cex =</span> <span class="fl">0.6</span>, <span class="at">pos =</span> <span class="dv">4</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="jour4_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div id="simplification-des-chiffres" class="section level2" number="2.1">
+<h2 number="2.1"><span class="header-section-number">2.1</span> Simplification des chiffres</h2>
+<div id="redéfinition-des-bornes" class="section level3" number="2.1.1">
+<h3 number="2.1.1"><span class="header-section-number">2.1.1</span> Redéfinition des bornes</h3>
+<p>Retour sur les distributions pour enlever les valeurs aberrantes</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(data<span class="sc">$</span>ges)</span></code></pre></div>
+<p><img src="jour4_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data<span class="sc">$</span>ges <span class="sc">&gt;</span>  <span class="dv">2</span><span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>)</span></code></pre></div>
 <pre><code>## 
-##  Pearson&#39;s Chi-squared test
-## 
-## data:  data
-## X-squared = 330.39, df = 24, p-value &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>freqLg <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(data,<span class="dv">1</span>)<span class="sc">*</span><span class="dv">100</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(freqLg, <span class="at">title =</span> <span class="st">&quot;Fréquence conditionnelle ligne&quot;</span>)</span></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="right">réanimation</th>
-<th align="right">intensifs</th>
-<th align="right">surveillance</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">32.05195</td>
-<td align="right">27.53247</td>
-<td align="right">40.41558</td>
-</tr>
-<tr class="even">
-<td align="right">24.81928</td>
-<td align="right">36.86747</td>
-<td align="right">38.31325</td>
-</tr>
-<tr class="odd">
-<td align="right">22.45467</td>
-<td align="right">33.05439</td>
-<td align="right">44.49093</td>
-</tr>
-<tr class="even">
-<td align="right">24.78754</td>
-<td align="right">21.67139</td>
-<td align="right">53.54108</td>
-</tr>
-<tr class="odd">
-<td align="right">28.35821</td>
-<td align="right">34.32836</td>
-<td align="right">37.31343</td>
-</tr>
-<tr class="even">
-<td align="right">30.23783</td>
-<td align="right">24.29219</td>
-<td align="right">45.46999</td>
-</tr>
-<tr class="odd">
-<td align="right">26.46048</td>
-<td align="right">35.28064</td>
-<td align="right">38.25888</td>
-</tr>
-<tr class="even">
-<td align="right">33.59187</td>
-<td align="right">32.14763</td>
-<td align="right">34.26050</td>
-</tr>
-<tr class="odd">
-<td align="right">29.76325</td>
-<td align="right">28.29763</td>
-<td align="right">41.93912</td>
-</tr>
-<tr class="even">
-<td align="right">27.97386</td>
-<td align="right">27.51634</td>
-<td align="right">44.50980</td>
-</tr>
-<tr class="odd">
-<td align="right">28.39433</td>
-<td align="right">31.40496</td>
-<td align="right">40.20071</td>
-</tr>
-<tr class="even">
-<td align="right">24.83829</td>
-<td align="right">32.85899</td>
-<td align="right">42.30272</td>
-</tr>
-<tr class="odd">
-<td align="right">27.55040</td>
-<td align="right">20.64753</td>
-<td align="right">51.80208</td>
-</tr>
-</tbody>
-</table>
-<p>C’est le total des khi2 partiels (dans notre exemple 224 085)</p>
-<p>degré de liberté lg -1 * col -1</p>
-<p>13 régions et 3 types de lit = quel degré de liberté ?</p>
-<p>risque 5 %</p>
-<p>lecture du khi2 330</p>
+## FALSE  TRUE 
+##   186     4</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(data<span class="sc">$</span>pop)</span></code></pre></div>
+<p><img src="jour4_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data<span class="sc">$</span>pop <span class="sc">&gt;</span> <span class="dv">3</span><span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">8</span>)</span></code></pre></div>
+<pre><code>## 
+## FALSE  TRUE 
+##   187     3</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data<span class="sc">$</span>pop, data<span class="sc">$</span>ges, </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^</span><span class="dv">7</span>,<span class="fl">1.5</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^</span><span class="dv">8</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">*</span><span class="dv">10</span><span class="sc">^</span><span class="dv">5</span>, <span class="dv">2</span> <span class="sc">*</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>))</span></code></pre></div>
+<p><img src="jour4_files/figure-html/unnamed-chunk-3-3.png" width="672" /></p>
+<p>On recherche des bornes permettant d’avoir un nuage de points “cohérent”. Avec le tableur, on fait le graphique puis on ajuste avec le filtre.</p>
 </div>
-<div id="rejet-de-h0-ou-pas" class="section level4" number="2.4.0.3">
-<h4 number="2.4.0.3"><span class="header-section-number">2.4.0.3</span> Rejet de H0 ou pas</h4>
-<p>HO hypothèse d’indépendance. son rejet implique qu’il y a une relation.</p>
-<p>Les variables lits et régions ont une relation avec une marge d’erreur de 5 %</p>
-</div>
-<div id="intensité-de-la-liaison" class="section level3" number="2.4.1">
-<h3 number="2.4.1"><span class="header-section-number">2.4.1</span> Intensité de la liaison</h3>
-<p>indicateur entre 0 et 1. 1 pour très forte intensité.</p>
-<p>Le plus simple est le coefficient de contingence peut mesurer cette relation.</p>
-<p>C’est le Khi2 rapporté à la somme Khi2 et de l’effectif total</p>
-<p><img src="img/coeff.png" /></p>
-<p><em>Savoir-faire tableur</em></p>
-<p>Utiliser les noms plutôt que les cellules fixées</p>
-<p>D’autres coefficients permet de reprendre le nombre de degrés de liberté et ainsi de s’affranchir de la taille du tableau.```</p>
-<p>Dans notre cas, il est de 0.018</p>
+<div id="changement-dunités" class="section level3" number="2.1.2">
+<h3 number="2.1.2"><span class="header-section-number">2.1.2</span> Changement d’unités</h3>
+<p>Le GES peut être divisé par 100 000 et la population par 1 000 000. Pourquoi ?</p>
+<p><img src="img/selectionData.jpg" /></p>
 </div>
 </div>
+</div>
+<div id="intensité-du-lien" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> Intensité du lien</h1>
+<div id="affichage-des-moyennes" class="section level2" number="3.1">
+<h2 number="3.1"><span class="header-section-number">3.1</span> Affichage des moyennes</h2>
+<p>On observe les quadrants, ils permettent de déterminer le sens de la corrélation.</p>
+</div>
+<div id="coefficient-de-bravais-pearson" class="section level2" number="3.2">
+<h2 number="3.2"><span class="header-section-number">3.2</span> Coefficient de Bravais-Pearson</h2>
+<p>Rajouter des colonnes pour calculer</p>
+<ul>
+<li>écarts à la moyenne (nb - moyenne du nb)</li>
+<li>carrés des écarts</li>
+<li>produit des écarts</li>
+</ul>
+<p>Puis dans un nouveau tableau</p>
+<ul>
+<li>somme des écarts à la moyenne</li>
+<li>Variance</li>
+<li>Ecart type</li>
+</ul>
+<p>puis covariance (produit des écarts / effectif)</p>
+<p>et coeff (cov / produit des écarts types)</p>
+<p><img src="img/coeffCORRELATION.jpg" /> Interprétation</p>
+<p>Le coefficient évolue de -1 à +1</p>
+<ul>
+<li><p>Si r = 0, les variables ne sont pas corrélées.</p></li>
+<li><p>Dans les autres cas, les variables sont corrélées négativement ou positivement.</p></li>
+<li><p>plus la variable est proche de 1, plus l’intensité de la relation entre les deux variables est forte.</p></li>
+</ul>
+<p>Dans notre exemple, lien moyen.</p>
+</div>
+</div>
+<div id="droite-de-régression" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> Droite de régression</h1>
+<p>La droite de régression minimise la somme des carrés des distances verticales entre chacun des points du nuage et la droite recherchée.</p>
+<p>Pour une droite aX+b</p>
+<ul>
+<li><p>a (la pente) = covariance / variance X</p></li>
+<li><p>b (ordonnée de l’origine) = moyenne de y - a * moyenne de y</p></li>
+</ul>
+<p>Dans calc, cliquer sur les points et insérer courbe de tendance</p>
+</div>
+<div id="coefficient-de-détermination" class="section level1" number="5">
+<h1 number="5"><span class="header-section-number">5</span> Coefficient de détermination</h1>
+<p>C’est le carré du coefficient de corrélation linéaire</p>
+<p>La population explique environ 17 % de l’émission du gaz à effet de serre.</p>
+<p>Les 83 % restant sont liés à d’autres facteurs.</p>
+</div>
+<div id="etude-des-résidus" class="section level1" number="6">
+<h1 number="6"><span class="header-section-number">6</span> Etude des résidus</h1>
+<p><img src="img/moindreCarre.jpg" /></p>
+<p>Identifiez deux pays et formuler une explication</p>
+<p><img src="img/residu.jpg" /></p>
 </div>
 
 <br><br><br><br><br><br><br><br><br><br><br><br>
