@@ -727,8 +727,27 @@ div.tocify {
 </div>
 <div id="statistique-bi-variée" class="section level1" number="5">
 <h1 number="5"><span class="header-section-number">5</span> Statistique bi-variée</h1>
+<div id="première-série" class="section level2" number="5.1">
+<h2 number="5.1"><span class="header-section-number">5.1</span> Première série</h2>
 <p>Faut-il conserver la variable SAU ? Pourquoi ?</p>
-<p>Faire l’analyse bi-variée de la donnée.</p>
+<p>Faire l’analyse bi-variée de la donnée selon la méthode vue en cours.</p>
+</div>
+<div id="deuxième-série" class="section level2" number="5.2">
+<h2 number="5.2"><span class="header-section-number">5.2</span> Deuxième série</h2>
+<p>PIB par habitant et GES</p>
+<p><a href="https://donnees.banquemondiale.org/indicator/NY.GDP.PCAP.PP.KD?view=chart" class="uri">https://donnees.banquemondiale.org/indicator/NY.GDP.PCAP.PP.KD?view=chart</a></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pib <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/PIB.csv&quot;</span>, <span class="at">skip =</span> <span class="dv">4</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pib <span class="ot">&lt;-</span> pib [pib<span class="sc">$</span>Indicator.Code <span class="sc">==</span> <span class="st">&quot;NY.GDP.PCAP.PP.KD&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;Country.Code&quot;</span>, <span class="st">&quot;X2015&quot;</span>)]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>ges <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/GES.csv&quot;</span>, <span class="at">skip =</span> <span class="dv">4</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>ges <span class="ot">&lt;-</span>  ges [, <span class="fu">c</span>(<span class="st">&quot;Country.Code&quot;</span>, <span class="st">&quot;X2015&quot;</span>)]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>ges <span class="ot">&lt;-</span> ges [<span class="sc">!</span><span class="fu">is.na</span>(ges<span class="sc">$</span>X2015),]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span>  <span class="fu">merge</span>(ges, pib, <span class="at">by =</span> <span class="st">&quot;Country.Code&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;code&quot;</span>, <span class="st">&quot;pib&quot;</span>, <span class="st">&quot;ges&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data [<span class="sc">!</span><span class="fu">is.na</span>(data<span class="sc">$</span>ges),]</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(data, <span class="st">&quot;data/pibges2015.csv&quot;</span>)</span></code></pre></div>
+<p>Commment traiter la relation entre le GES et le PIB ?</p>
+<p>Faire l’analyse jusqu’au point vu en cours.</p>
+</div>
 </div>
 
 <br><br><br><br><br><br><br><br><br><br><br><br>
