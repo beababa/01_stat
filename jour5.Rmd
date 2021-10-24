@@ -1,0 +1,81 @@
+---
+title: "Examen sujet"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Méthode
+
+Vous avez une source de données à étudier sous l'aspect uni et bivariée.
+
+Il y a deux éléments : le formulaire et le fichier tableur
+
+Le formulaire est à remplir et à envoyer, le fichier tableur est à déposer sur
+l'espace commun (avec votre prénom et en format libre office)
+
+Imaginez que vous chercher à convaincre un tiers de l'intérêt de votre étude, donc
+attention à votre style et à la présentation de vos tableaux !
+
+## Barême
+
+```{r}
+element <- c("soin", "univarié", "bi-varié")
+bareme <- c(4,8,8)
+df <- cbind(element, bareme)
+knitr::kable(df)
+```
+
+
+# Données
+
+## Groupe 1
+
+https://ec.europa.eu/eurostat/databrowser/view/ef_lus_unglass/default/table?lang=fr
+
+
+## Groupe 2
+
+https://www.insee.fr/fr/statistiques/2012665
+
+Faire un copier coller du tableau par région
+
+
+# Première approche
+
+Expliquer les variables
+
+De quel type sont les variables ? De quel type est le tableau ?
+
+Télécharger les variables et les mettre en forme de façon à obtenir un tableau .csv
+
+
+```{r}
+data <- read.csv("data/serre.csv")
+names(data) <- c("pays", "SAU","Legumes","Fleurs","Cultures permanentes")
+knitr::kable(data)
+```
+
+# Statistique univariée
+
+Etude de la variable SAU. Caractériser la distribution avec les valeurs centrales
+et celles de dispersion.
+Faire un graphique des fréquences et commenter la distribution
+
+# Statistique bi-variée
+
+Faut-il conserver la variable SAU ? Pourquoi ?
+
+Faire l'analyse bi-variée de la donnée.
+
+
+
+
+

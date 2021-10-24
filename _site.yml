@@ -3,14 +3,16 @@ navbar:
   left:
     - text: "Introduction"
       href: intro.html
-    - text: "Statistiques univariées"
+    - text: "univariées"
       href: jour1.html
-    - text: "Statistiques bi-variées base"
+    - text: "bi-variées base"
       href: jour2.html
     - text: "bi-variées khi 2"
       href: jour3.html 
-    - text: "bi-variées regression"
-      href: jour4.html     
+    - text: "bi-variées régression"
+      href: jour4.html    
+    - text: "examen"
+      href: jour5.html
   right:
     - icon: fa-github
       href: https://beababa.github.io/intro.html
