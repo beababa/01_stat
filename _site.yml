@@ -13,6 +13,8 @@ navbar:
       href: jour4.html    
     - text: "examen"
       href: jour5.html
+    - text: "bi-variées variance"
+      href: jour6.html   
   right:
     - icon: fa-github
       href: https://beababa.github.io/intro.html
