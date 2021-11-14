@@ -5,19 +5,21 @@ navbar:
       href: intro.html
     - text: "univariées"
       href: jour1.html
-    - text: "bi-variées base"
+    - text: "bi-variées"
       href: jour2.html
-    - text: "bi-variées khi 2"
+    - text: "khi 2"
       href: jour3.html 
-    - text: "bi-variées régression"
+    - text: "régression"
       href: jour4.html    
     - text: "examen"
       href: jour5.html
-    - text: "bi-variées variance"
+    - text: "variance"
       href: jour6.html   
+    - text: "multivariées"
+      href: jour7.html   
   right:
     - icon: fa-github
-      href: https://beababa.github.io/intro.html
+      href: https://beababa.github.io/
 output: 
   html_document:
     toc_float: TRUE  
