@@ -104,9 +104,11 @@ https://forms.gle/TNpQPtgYVjfrde5ZA
 - Variance
 https://forms.gle/vS4zZzsNfnTyDHMfA
 
-- base multivariée
+- base multivariée : ACP
 https://forms.gle/Zz5uif7jmvZWVA219
 
+- Classification
+https://forms.gle/4K7r7hPGZB89vEAF6
 
 
 # Ressources autre que la bibliographie officielle
@@ -116,12 +118,23 @@ https://forms.gle/Zz5uif7jmvZWVA219
 - http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm
 - http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm
 
+# Le devoir maison
 
-2 sites pour réfléchir
+Il s'agit de prendre minimum 4 variables socio économiques à partir de l'outil insee
+statistiques locales et de faire dessus une analyse factorielle et une classification
+en affinant au fur et à mesure (exclusion des valeurs particulières ou choix d'échantillons).
+Le devoir maison est à rendre sous forme de script R commenté (avec des #) avec le fichier de 
+données en .csv
 
-- https://neocarto.hypotheses.org/
-- https://bmericskay.github.io/portfolio/Disgressions.html
+dates :
 
-et bien sur :
+- soumission du sujet : 22/11, chaque étudiant doit proposer ses variables
 
-https://georezo.net/
+- travail sur le devoir en classe : 6/12
+
+- rendu du devoir par les étudiants : 8/12
+
+- le devoir sera rendu sur la dernière séance, le 13/12
+
+
+

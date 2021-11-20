@@ -15,7 +15,9 @@ navbar:
       href: jour5.html
     - text: "variance"
       href: jour6.html   
-    - text: "multivariées"
+    - text: "multivariées AFC"
+      href: jour7.html   
+    - text: "classification"
       href: jour7.html   
   right:
     - icon: fa-github

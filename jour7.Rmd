@@ -1,5 +1,5 @@
 ---
-title: "Mutivariées base"
+title: "Mutivariées base (analyse factorielle)"
 output:
   html_document:
     number_sections: yes
@@ -82,6 +82,7 @@ Pour chaque variable, il faut chercher s'il n'y a pas de valeur aberrante.
 ```{r}
 summary(data)
 rownames(data)
+# Suppression de Paris... voire d'autres dpts ?
 data <- data [-76,]
 ```
 
@@ -124,8 +125,8 @@ La variable standardisée a pour moyenne 0 et pour écart-type 1
 
 
 ```{r}
-data2 <- scale (data)
-pairs(data2)
+data_cr <- scale (data)
+pairs(data_cr)
 ```
 
 # Les calculs sous R
@@ -134,7 +135,7 @@ pairs(data2)
 ## Les axes factoriels
 
 ```{r}
-acp <- prcomp(data2)
+acp <- prcomp(data_cr)
 # par défaut direction négative on inverse
 acp$rotation <- -1 * acp$rotation
 acp$rotation
@@ -152,6 +153,9 @@ Le premier axe résume la variation de la moitié des valeurs des 4 variables.
 
 L'axe 3 a une haute valeur pour le logement.
 
+Le nombre d'emploi et le diplôme sont liés et s'opposent au surlogement et aux
+taux de natalité.
+
 
 ### Pour les individus (ici les départements)
 
@@ -161,7 +165,13 @@ biplot(acp, scale = 0)
 ```
 
 
-Les départements proches suivent le même modèle de données.
+Les départements proches suivent le même modèle de données. Leur position dans
+le graphique montre leur rapport aux variables.
 
+Dans le cas présent, les variables ne suivent pas les axes (problème des valeurs
+aberrantes).
 
+# Second traitement
+
+Supprimer les valeurs posant problème et relancer les calculs. Essayer d'interpréter.
 

@@ -1,0 +1,81 @@
+---
+title: "Mutivariées : classification"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Définition
+
+L'analyse factorielle et les classifications sont les deux grands types de méthodes 
+descriptives en statistiques multivariées.
+
+Les analyses factorielles résument l'information en colonnes. Les méthodes de classification
+s'attachent aux lignes.
+
+La combinaison des deux permet un résumé complet.
+
+On repart donc de la même donnée que pour l'analyse factorielle, les dpts par 
+
+- taux de natalité
+
+- nombre d'emplois locaux
+
+- diplôme
+
+- logement
+
+On utilise les noms de département plutôt que les numéros pour les intitulés
+
+```{r}
+data <- read.csv("data/data.csv", encoding = "UTF-8", dec = ",")
+rownames(data) <- data [,2]
+data <- data [,3:6]
+data <- data [!is.na(data$nb_emplois_LT)|!is.na(data$diplôme),]
+```
+
+
+
+# Traitement
+
+```{r}
+# Centrage et réduction
+data.cr <- scale(data, center = T, scale = T)
+# matrice des distances entre les individus
+data.d <- dist(data.cr)
+# classification
+cah <- hclust(data.d)
+# dendogramme
+plot(cah)
+# matérialisation des groupes
+rect.hclust(cah, k = 3)
+# découpage
+groupes.cah <- cutree(cah, k = 3)
+liste <- sort(groupes.cah)
+```
+
+# Représentation graphique
+
+Il s'agit de représenter les groupes par des couleurs sur l'ACP précédente (dans
+le premier axe)
+
+```{r}
+acp <- princomp(data.cr, cor = T, scores = T)
+plot(acp$scores[,1],acp$scores[,2], type = "p")
+text(acp$scores[,1],acp$scores[,2],col=c("red","black","blue")[groupes.cah],cex
+=1,labels=rownames(data))
+```
+
+# Deuxième traitement
+
+Retirer les valeurs aberrantes et rejouer la classification, puis analyser.
+
+
+
