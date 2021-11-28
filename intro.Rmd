@@ -128,7 +128,7 @@ données en .csv
 
 dates :
 
-- soumission du sujet : 22/11, chaque étudiant doit proposer ses variables
+- soumission du sujet : 22/11 et 29/11, chaque étudiant doit proposer ses variables
 
 - travail sur le devoir en classe : 6/12
 

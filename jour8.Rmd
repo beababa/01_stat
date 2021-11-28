@@ -68,14 +68,15 @@ le premier axe)
 
 ```{r}
 acp <- princomp(data.cr, cor = T, scores = T)
+par(bg = "lightgrey", mar = c(1,1,1,1))
 plot(acp$scores[,1],acp$scores[,2], type = "p")
-text(acp$scores[,1],acp$scores[,2],col=c("red","black","blue")[groupes.cah],cex
+text(acp$scores[,1],acp$scores[,2],col=c(topo.colors(3))[groupes.cah],cex
 =1,labels=rownames(data))
 ```
 
 # Deuxième traitement
 
-Retirer les valeurs aberrantes et rejouer la classification, puis analyser.
+Retirer les valeurs aberrantes, jouer sur la taille des groupes et rejouer la classification, puis analyser.
 
 
 
