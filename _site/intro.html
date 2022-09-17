@@ -13,7 +13,7 @@
 
 <title>Introduction</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
@@ -46,6 +46,7 @@
     </style>
 
 
+
 <style type="text/css">
   code {
     white-space: pre;
@@ -58,6 +59,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -167,6 +169,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -392,7 +397,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -451,7 +456,7 @@ div.tocify {
 
 
 <div id="intitulé-du-cours" class="section level1" number="1">
-<h1 number="1"><span class="header-section-number">1</span> Intitulé du cours</h1>
+<h1><span class="header-section-number">1</span> Intitulé du cours</h1>
 <p><em>“L5GEABIM Analyses bivariées et multivariées”</em></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/presentation.csv&quot;</span>, <span class="at">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="at">header =</span> F)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(data, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;groupe&quot;</span>, <span class="st">&quot;heures&quot;</span>, <span class="st">&quot;enseignant&quot;</span>) )</span></code></pre></div>
@@ -483,22 +488,26 @@ div.tocify {
 </table>
 </div>
 <div id="déroulé" class="section level1" number="2">
-<h1 number="2"><span class="header-section-number">2</span> Déroulé</h1>
+<h1><span class="header-section-number">2</span> Déroulé</h1>
 <p>Il va être modifié en fonction de</p>
 <ul>
-<li>votre vitesse - s’il faut prendre plus de temps sur les basiques</li>
-<li>la collaboration avec Thomas Lamy</li>
+<li>votre vitesse - s’il faut prendre plus de temps sur les
+basiques</li>
+<li>la collaboration avec l’autre enseignant</li>
 </ul>
-<p>13 cours en tout. 2 cours d’intro 7 sur la stat bi-variée 3 sur la multivariée 1 cours pour un devoir sur table au mi-semestre 1 devoir maison à rendre vers la fin du semestre</p>
+<p>13 cours en tout. 2 cours d’intro rappels stats 7 sur la stat
+bi-variée 3 sur la multivariée 1 cours pour un devoir sur table au
+mi-semestre 1 devoir maison à rendre vers la fin du semestre</p>
+<p>… et un partiel en plus !</p>
 <p>Au départ on utilise Libre Office (plutôt que Microsoft) puis R</p>
 <p>Question : quelle utilisation de R ? des cours cette année ?</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/deroule.csv&quot;</span>, <span class="at">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(data)</span></code></pre></div>
-<table>
+<table style="width:100%;">
 <colgroup>
 <col width="10%" />
-<col width="9%" />
-<col width="72%" />
+<col width="11%" />
+<col width="70%" />
 <col width="8%" />
 </colgroup>
 <thead>
@@ -512,93 +521,93 @@ div.tocify {
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="left">20/09/21</td>
+<td align="left">12/09/2022</td>
 <td align="left">statistique univariée : base</td>
 <td align="left">tableur</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="left">27/09/21</td>
+<td align="left">19/09/2022</td>
 <td align="left">statistique univariée : indicateurs</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
-<td align="left">04/10/21</td>
+<td align="left">26/09/2022</td>
 <td align="left">bivariée : base</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
-<td align="left">04/10/21</td>
+<td align="left">03/10/2022</td>
 <td align="left">contingence</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
-<td align="left">11/10/21</td>
+<td align="left">10/10/2022</td>
 <td align="left">Khi 2</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="right">6</td>
-<td align="left">18/10/21</td>
+<td align="left">17/10/2022</td>
 <td align="left">régression</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="right">7</td>
-<td align="left">25/10/21</td>
+<td align="left">24/10/2022</td>
 <td align="left">devoir sur table</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="right">8</td>
-<td align="left">08/11/21</td>
-<td align="left">initiation R</td>
+<td align="left">31/10/2022</td>
+<td align="left">Fin régression / Initiation R</td>
 <td align="left">R</td>
 </tr>
 <tr class="odd">
 <td align="right">9</td>
-<td align="left">15/11/21</td>
+<td align="left">07/11/2022</td>
 <td align="left">initiation R</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="right">10</td>
-<td align="left">22/11/21</td>
+<td align="left">14/11/2022</td>
 <td align="left">multivariée : multifactorielle + sujet de devoir</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="right">11</td>
-<td align="left">29/11/21</td>
+<td align="left">21/11/2022</td>
 <td align="left">classification</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="right">12</td>
-<td align="left">06/12/21</td>
-<td align="left">questions autour du devoir maison. Devoir à rendre le 8 au plus tard.</td>
+<td align="left">28/11/2022</td>
+<td align="left">questions autour du devoir maison. Devoir à rendre le 8
+au plus tard.</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="right">13</td>
-<td align="left">13/12/21</td>
+<td align="left">05/12/2022</td>
 <td align="left">rendu du devoir maison et bilan formation</td>
 <td align="left"></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="présentation-rapide-vous-êtes-nombreux" class="section level1" number="3">
-<h1 number="3"><span class="header-section-number">3</span> Présentation rapide (vous êtes nombreux !)</h1>
-<p>passé / présent / futur appétence pour les stats fichier framapad, <a href="https://lite.framacalc.org/9pse-coursstatsorbonne2021" class="uri">https://lite.framacalc.org/9pse-coursstatsorbonne2021</a></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cours1 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/cours1.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cours2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/cours2.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>cours1<span class="sc">$</span>session <span class="ot">&lt;-</span> <span class="st">&quot;cours1&quot;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>cours2<span class="sc">$</span>session <span class="ot">&lt;-</span> <span class="st">&quot;cours2&quot;</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(cours1)</span></code></pre></div>
+<div id="présentation-rapide-vous-êtes-nombreux" class="section level1"
+number="3">
+<h1><span class="header-section-number">3</span> Présentation rapide
+(vous êtes nombreux !)</h1>
+<p>passé / présent / futur appétence pour les stats fichier framapad, <a
+href="https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9"
+class="uri">https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9</a></p>
 <pre><code>## [1] &quot;prenom&quot;                                         
 ## [2] &quot;adresse.mail&quot;                                   
 ## [3] &quot;X20.9&quot;                                          
@@ -607,49 +616,93 @@ div.tocify {
 ## [6] &quot;futur&quot;                                          
 ## [7] &quot;appétence.pour.les.stats.0.j.adore.4.je.déteste&quot;
 ## [8] &quot;session&quot;</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(cours2)[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">&quot;prenom&quot;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>cours <span class="ot">&lt;-</span> <span class="fu">rbind</span>(cours1, cours2)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>cours <span class="ot">&lt;-</span> cours [cours<span class="sc">$</span>prenom <span class="sc">!=</span> <span class="st">&#39;&#39;</span>,]</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(cours<span class="sc">$</span>session)</span></code></pre></div>
 <pre><code>## 
 ## cours1 cours2 
 ##     28     29</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># export pour framapad</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(cours [<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,<span class="dv">8</span>)], <span class="st">&quot;data/cours.csv&quot;</span>)</span></code></pre></div>
 <p>Désormais le framapad sert à l’émargement</p>
 </div>
-<div id="pratique" class="section level1" number="4">
-<h1 number="4"><span class="header-section-number">4</span> Pratique</h1>
-<p>Les exercices sont à rendre avec son <em>prénom</em> (toujours le même svp) sous moodle dans un répertoire spécifique (en attente de validation du compte moodle)</p>
+<div id="la-donnée-du-cours" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> La donnée du cours</h1>
+<div id="la-source" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> La source</h2>
+<p><a
+href="https://www.data.gouv.fr/fr/datasets/repertoire-des-logements-locatifs-des-bailleurs-sociaux/"
+class="uri">https://www.data.gouv.fr/fr/datasets/repertoire-des-logements-locatifs-des-bailleurs-sociaux/</a></p>
+<p>Prendre le .zip de 2021, petit test d’ouverture sous moodle
+(Introduction/bases informatiques)</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/rpls2021_geolocalise_OD_REG11_DEP93.csv&quot;</span>, <span class="at">sep =</span><span class="st">&quot;;&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># distribution par commune</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table</span>(data<span class="sc">$</span>LIBCOM)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">&quot;img/rpls93.png&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">sort</span>(tab), <span class="at">las =</span> <span class="dv">2</span>, <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(tab [ <span class="fu">names</span>(tab) <span class="sc">==</span> <span class="st">&quot;Bondy&quot;</span>],<span class="dv">0</span>, <span class="at">col =</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">sort</span>(tab), <span class="st">&quot;data/dpt93RPLSCommune.csv&quot;</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># filtre sur Bondy</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>filtre <span class="ot">&lt;-</span> data [data<span class="sc">$</span>CODEPOSTAL <span class="sc">==</span> <span class="st">&quot;93140&quot;</span>,]</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(filtre, <span class="st">&quot;data/rplsBondy.csv&quot;</span>)</span></code></pre></div>
+<p><img src="img/rpls93.png" /></p>
+<p>C’est normalement ce fichier de données que nous allons utiliser pour
+le cours.</p>
 </div>
-<div id="quizz-de-cours" class="section level1" number="5">
-<h1 number="5"><span class="header-section-number">5</span> Quizz de cours</h1>
-<p>Quelques minutes en fin de chaque cours, histoire pour moi de voir s’il faut que je reprenne des notions.</p>
+</div>
+<div id="pratique" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Pratique</h1>
+<p>Lorsque l’exercice le requiert, le fichier est à rendre avec son
+<em>prénom</em> (toujours le même svp) sous moodle.</p>
+</div>
+<div id="quizz-de-cours" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Quizz de cours</h1>
+<p>Quelques minutes en fin de chaque cours, histoire pour moi de voir
+s’il faut que je reprenne des notions.</p>
 <ul>
-<li><p>Univariés <a href="https://forms.gle/vR9f156Up9zrL86B9" class="uri">https://forms.gle/vR9f156Up9zrL86B9</a></p></li>
-<li><p>Bi variés base <a href="https://forms.gle/JSEWZJJ3V1S349EZA" class="uri">https://forms.gle/JSEWZJJ3V1S349EZA</a></p></li>
-<li><p>Tableau de contingence <a href="https://forms.gle/Le8wvTBabxmw3SAg8" class="uri">https://forms.gle/Le8wvTBabxmw3SAg8</a></p></li>
-<li><p>Khi2 <a href="https://forms.gle/46Lr7fNWydQPqcCr5" class="uri">https://forms.gle/46Lr7fNWydQPqcCr5</a></p></li>
-<li><p>Régression <a href="https://forms.gle/TNpQPtgYVjfrde5ZA" class="uri">https://forms.gle/TNpQPtgYVjfrde5ZA</a></p></li>
-<li><p>Variance <a href="https://forms.gle/vS4zZzsNfnTyDHMfA" class="uri">https://forms.gle/vS4zZzsNfnTyDHMfA</a></p></li>
-<li><p>base multivariée : ACP <a href="https://forms.gle/Zz5uif7jmvZWVA219" class="uri">https://forms.gle/Zz5uif7jmvZWVA219</a></p></li>
-<li><p>Classification <a href="https://forms.gle/4K7r7hPGZB89vEAF6" class="uri">https://forms.gle/4K7r7hPGZB89vEAF6</a></p></li>
+<li><p>Univariés <a href="https://forms.gle/vR9f156Up9zrL86B9"
+class="uri">https://forms.gle/vR9f156Up9zrL86B9</a></p></li>
+<li><p>Bi variés base <a href="https://forms.gle/JSEWZJJ3V1S349EZA"
+class="uri">https://forms.gle/JSEWZJJ3V1S349EZA</a></p></li>
+<li><p>Tableau de contingence <a
+href="https://forms.gle/Le8wvTBabxmw3SAg8"
+class="uri">https://forms.gle/Le8wvTBabxmw3SAg8</a></p></li>
+<li><p>Khi2 <a href="https://forms.gle/46Lr7fNWydQPqcCr5"
+class="uri">https://forms.gle/46Lr7fNWydQPqcCr5</a></p></li>
+<li><p>Régression <a href="https://forms.gle/TNpQPtgYVjfrde5ZA"
+class="uri">https://forms.gle/TNpQPtgYVjfrde5ZA</a></p></li>
+<li><p>Variance <a href="https://forms.gle/vS4zZzsNfnTyDHMfA"
+class="uri">https://forms.gle/vS4zZzsNfnTyDHMfA</a></p></li>
+<li><p>base multivariée : ACP <a
+href="https://forms.gle/Zz5uif7jmvZWVA219"
+class="uri">https://forms.gle/Zz5uif7jmvZWVA219</a></p></li>
+<li><p>Classification <a href="https://forms.gle/4K7r7hPGZB89vEAF6"
+class="uri">https://forms.gle/4K7r7hPGZB89vEAF6</a></p></li>
 </ul>
 </div>
-<div id="ressources-autre-que-la-bibliographie-officielle" class="section level1" number="6">
-<h1 number="6"><span class="header-section-number">6</span> Ressources autre que la bibliographie officielle</h1>
+<div id="ressources-autre-que-la-bibliographie-officielle"
+class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Ressources autre que la
+bibliographie officielle</h1>
 <p>2 cours universitaires disponibles sur internet</p>
 <ul>
-<li><a href="http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm" class="uri">http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm</a></li>
-<li><a href="http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm" class="uri">http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm</a></li>
+<li><a
+href="http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm"
+class="uri">http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm</a></li>
+<li><a
+href="http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm"
+class="uri">http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm</a></li>
 </ul>
 </div>
-<div id="le-devoir-maison" class="section level1" number="7">
-<h1 number="7"><span class="header-section-number">7</span> Le devoir maison</h1>
-<p>Il s’agit de prendre minimum 4 variables socio économiques à partir de l’outil insee statistiques locales et de faire dessus une analyse factorielle et une classification en affinant au fur et à mesure (exclusion des valeurs particulières ou choix d’échantillons). Le devoir maison est à rendre sous forme de script R commenté (avec des #) avec le fichier de données en .csv</p>
+<div id="le-devoir-maison" class="section level1" number="8">
+<h1><span class="header-section-number">8</span> Le devoir maison</h1>
+<p>Il s’agit de prendre minimum 4 variables socio économiques à partir
+de l’outil insee statistiques locales et de faire dessus une analyse
+factorielle et une classification en affinant au fur et à mesure
+(exclusion des valeurs particulières ou choix d’échantillons). Le devoir
+maison est à rendre sous forme de script R commenté (avec des #) avec le
+fichier de données en .csv</p>
 <p>dates :</p>
 <ul>
-<li><p>soumission du sujet : 22/11, chaque étudiant doit proposer ses variables</p></li>
+<li><p>soumission du sujet : 22/11 et 29/11, chaque étudiant doit
+proposer ses variables</p></li>
 <li><p>travail sur le devoir en classe : 6/12</p></li>
 <li><p>rendu du devoir par les étudiants : 8/12</p></li>
 <li><p>le devoir sera rendu sur la dernière séance, le 13/12</p></li>

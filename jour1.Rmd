@@ -12,6 +12,9 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+Télécharger et ouvrir le fichier de données du cours.
+
 # Termes
 
 ## Trouver des termes pour les objets en statistiques :
@@ -45,31 +48,27 @@ https://fr.khanacademy.org/math/be-4eme-secondaire2/x213a6fc6f6c9e122:statistiqu
 
 ## Et sous un tableur
 
-### La source
-https://www.insee.fr/fr/statistiques/4487988
+#### Resultat attendu
 
-```{r}
-data <- read.csv("data/2021-09-17_deces_quotidiens_departement_csv.csv", sep =";")
-length(data$Zone)
-```
+![](img/beatrice.png)
 
-
+A déposer sur le moodle avec son prénom.png
 
 
 ### Préparation de l'exercice
 
 #### Pour obtenir un TIG avec une seule variable, quelle variable choisir et pour quels individus ?
 
-Réponse : 
-Pour un jour donné, on prend les départements (pas la France), et une colonne de total 
-pour les décès.
+Dans l'exemple proposé, on choisit pour le nom d'une résidence, la colonne de la dénomination de l'appartement et le nombre de pièces.
 
-```{r}
+```{r, echo=FALSE}
+data <- read.csv("data/rplsBondy.csv", fileEncoding = "UTF-8")
 head(data)
-choix <- data [data$Date_evenement == '01-janv.'&data$Zone != 'France', c('Zone', 'Total_deces_2020')]
+choix <- data [data$COMPLGEO == 'RESIDENCE ALBERT THOMAS', c("NUMAPPT","NBPIECE")]
 write.csv(choix, "data/choix.csv")
 knitr::kable(head(choix))
 ```
+
 Cet exercice permet d'utiliser dans le tableur :
 
 - la suppression de colonne
@@ -82,7 +81,14 @@ Cet exercice permet d'utiliser dans le tableur :
 * Touche de sélection et de déplacement
 * tri
 * utilisation de la barre d'adresse
+* utilisation des noms pour la formule
 * formule frequence, formule matricielle (CTRL + MAJ + ENTREE)
+* sélection pour exporter comme image
+
+
+
+formules du tableau
+![](img/frequence.png)
 
 
 ### Quel commentaire ?
@@ -92,18 +98,20 @@ Cet exercice permet d'utiliser dans le tableur :
 
 #### Proposer une première représentation graphique
 
-```{r}
-hist(choix$Total_deces_2020, main = "Total décès 2020", xlab = "classes", ylab = "effectif")
+```{r, echo=FALSE}
+choix <- read.csv("data/choix.csv", fileEncoding = "UTF-8")
+hist(choix$NBPIECE, breaks = c(0,1,2,3,4),
+     main = "Dénombrement nombre de pièces résidence Albert Thomas", xlab = "classes", ylab = "effectif")
+
 ```
 
-résultat avec un tableur
-![](img/histogrammeLibreOffice.jpg)
+
 
 A explorer 
 
 graphique en barres, lignes (lissage)
 
-Observer la disposition des bornes : elles sont utilisées comme des étiquettes et non pas comme une série de valeur.
+Observer la disposition des bornes : elles sont utilisées comme des étiquettes et non pas comme une série de valeurs.
 
 # Pour raffiner : les indicateurs
 
@@ -239,7 +247,7 @@ la médiane, tandis que la moyenne n'est pas pertinent en raison de ses valeurs 
 
 Les étudiants ont choisi différentes dates.Les décès sont cumulés. La forme des distributions est-elle différente selon les dates ?
 
-```{r}
+```{r, eval=FALSE}
 data <- read.csv("data/2021-09-17_deces_quotidiens_departement_csv.csv",  sep = ";", fileEncoding = "latin3")
 # on ne prend que les premiers du mois
 data <-  data [substring(data$Date_evenement,0,2) == "01",]
