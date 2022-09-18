@@ -28,7 +28,12 @@ knitr::kable(data, col.names = c("groupe", "heures", "enseignant") )
 Il va être modifié en fonction de
 
 - votre vitesse - s'il faut prendre plus de temps sur les basiques
-- la collaboration avec l'autre enseignant
+- mon enseignement - trois fois le même cours
+
+A chaque cours un exercice à faire pour le prochain cours, quelque soit l'avancement du cours.
+Utiliser les ressources internet, poser des questions,...
+
+
 
 
 13 cours en tout. 
@@ -58,13 +63,38 @@ passé / présent / futur
 appétence pour les stats
 fichier framapad, https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
 
+74 étudiants sur 3 cours
+
+Attention, 4 doublons de prénoms (Ambre, Camille, Marie et Sarah), j'ai rajouté l'initiale
+du nom de famille.
+
+```{r}
+etudiant <-  read.csv("data/etudiant.csv", fileEncoding = "UTF-8")
+tab <- table (etudiant$prénom)
+names(tab)[tab >1]
+write.csv(etudiant [, c("prénom", "groupe.TD")], "cours2.csv", fileEncoding = "UTF-8")
+par(mar = c(2,16,2,4))
+par(mfrow = c(3,2))
+for (i in 3:7){
+  par(mar = c(2,16,2,4))
+  barplot(sort(table(etudiant [,i])), border = NA,
+          horiz = T, las = 2, cex.names = 0.8, 
+          main = names (etudiant) [i])
+}
+```
+
+
 
 ```{r, echo = FALSE}
+table(etudiant$groupe.TD)
+```
+
+
+```{r, eval=FALSE, echo = FALSE}
 cours1 <- read.csv("data/cours1.csv", fileEncoding = "UTF-8")
 cours2 <- read.csv("data/cours2.csv", fileEncoding = "UTF-8")
 cours1$session <- "cours1"
 cours2$session <- "cours2"
-names(cours1)
 names(cours2)[1] <- "prenom"
 cours <- rbind(cours1, cours2)
 cours <- cours [cours$prenom != '',]
@@ -89,7 +119,7 @@ data <- read.csv("data/rpls2021_geolocalise_OD_REG11_DEP93.csv", sep =";")
 tab <- table(data$LIBCOM)
 png("img/rpls93.png")
 par(mar = c(10,4,2,2))
-barplot(sort(tab), las = 2, border = NA)
+barplot(sort(tab), las = 2, border = NA, cex.names = 0.7)
 abline(tab [ names(tab) == "Bondy"],0, col ="red")
 dev.off()
 write.csv(sort(tab), "data/dpt93RPLSCommune.csv")
@@ -109,38 +139,7 @@ Lorsque l'exercice le requiert, le fichier est à rendre avec son *prénom* (tou
 
 
 
-# Quizz de cours
-
-Quelques minutes en fin de chaque cours, histoire pour moi de voir s'il faut
-que je reprenne des notions.
-
-- Univariés
-https://forms.gle/vR9f156Up9zrL86B9
-
-- Bi variés base
-https://forms.gle/JSEWZJJ3V1S349EZA
-
-
-- Tableau de contingence
-https://forms.gle/Le8wvTBabxmw3SAg8
-
-- Khi2
-https://forms.gle/46Lr7fNWydQPqcCr5
-
-- Régression
-https://forms.gle/TNpQPtgYVjfrde5ZA
-
-- Variance
-https://forms.gle/vS4zZzsNfnTyDHMfA
-
-- base multivariée : ACP
-https://forms.gle/Zz5uif7jmvZWVA219
-
-- Classification
-https://forms.gle/4K7r7hPGZB89vEAF6
-
-
-# Ressources autre que la bibliographie officielle
+ Ressources autre que la bibliographie officielle
 
 2 cours universitaires disponibles sur internet
 
@@ -159,11 +158,9 @@ dates :
 
 - soumission du sujet : 22/11 et 29/11, chaque étudiant doit proposer ses variables
 
-- travail sur le devoir en classe : 6/12
+- travail sur le devoir en classe
 
-- rendu du devoir par les étudiants : 8/12
+- rendu du devoir par les étudiants
 
-- le devoir sera rendu sur la dernière séance, le 13/12
-
-
+- le devoir sera rendu sur la dernière séance
 

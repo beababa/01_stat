@@ -63,8 +63,8 @@ Dans l'exemple proposé, on choisit pour le nom d'une résidence, la colonne de 
 
 ```{r, echo=FALSE}
 data <- read.csv("data/rplsBondy.csv", fileEncoding = "UTF-8")
-head(data)
-choix <- data [data$COMPLGEO == 'RESIDENCE ALBERT THOMAS', c("NUMAPPT","NBPIECE")]
+choix <- data [grep("POTAGER",data$COMPLGEO), c("COMPLGEO","NUMAPPT","NBPIECE","CONSTRUCT")]
+#choix <- data [data$COMPLGEO == 'RESIDENCE ALBERT THOMAS', c("NUMAPPT","NBPIECE")]
 write.csv(choix, "data/choix.csv")
 knitr::kable(head(choix))
 ```
@@ -79,10 +79,17 @@ Cet exercice permet d'utiliser dans le tableur :
 #### Tableau de fréquences sous Libre Office : savoirs faire
 
 * Touche de sélection et de déplacement
+
 * tri
+
 * utilisation de la barre d'adresse
+
 * utilisation des noms pour la formule
+
+https://help.libreoffice.org/6.2/fr/text/scalc/guide/value_with_name.html
+
 * formule frequence, formule matricielle (CTRL + MAJ + ENTREE)
+
 * sélection pour exporter comme image
 
 
@@ -100,24 +107,105 @@ formules du tableau
 
 ```{r, echo=FALSE}
 choix <- read.csv("data/choix.csv", fileEncoding = "UTF-8")
-hist(choix$NBPIECE, breaks = c(0,1,2,3,4),
-     main = "Dénombrement nombre de pièces résidence Albert Thomas", xlab = "classes", ylab = "effectif")
+knitr::kable(table(choix$NBPIECE))
+hist(choix$NBPIECE, breaks = c(0,1,2,3,4,5),
+     main =  paste0( "Dénombrement nombre de pièces\n", choix$COMPLGEO [1], " (", choix$CONSTRUCT [1],") "),
+       xlab = "classes", ylab = "effectif")
 
 ```
 
 
-
-A explorer 
+## A explorer 
 
 graphique en barres, lignes (lissage)
 
 Observer la disposition des bornes : elles sont utilisées comme des étiquettes et non pas comme une série de valeurs.
+
+## Correction graphiques étudiants
+
+
+
+
+
+47 sur 74
+
+
+### Affichage de toutes les résidences
+
+```{r, echo = FALSE}
+data$COMPLGEO [(data$COMPLGEO == "")] <- "inconnu" 
+residence <- unique(data$COMPLGEO)
+residence [15] <- "inconnu"
+par(mar = c(4,12,4,4))
+barplot(sort(table(data$COMPLGEO)), horiz = T, 
+        main = "Nb de logements",
+        las = 2, cex.names = 0.8, border = NA)
+png("img/nbpiece.png", height = 1000, width = 1000)
+par(mfrow = c(5,3))
+for (i in 1:14){
+  print(residence [i])
+  choix <- data [data$COMPLGEO == residence [i],]
+  amplitude <- c(min(choix$NBPIECE), max(choix$NBPIECE))
+  bks <- seq(0, amplitude [2], by = 1)
+  hist(choix$NBPIECE, breaks = bks,include.lowest = F,
+     main =  paste0( choix$COMPLGEO [1], "\n(", choix$CONSTRUCT [1],") "),
+       xlab = "classes", ylab = "effectif", axes = F, border = NA)
+  axis(side=1, at=bks, labels=bks)
+  maxNBPIECES <- max(table(choix$NBPIECE))
+  axis(side = 2, at= seq(0, maxNBPIECES, by = maxNBPIECES))
+}
+dev.off()
+```
+
+![](img/nbpiece.png)
+
+
+liste des problèmes rencontrés : 
+
+### Pas grave mais attention
+
+- nom du fichier... prénom.png
+
+- attention choix de la série : résidence Carnot
+
+- envoi copie d'écran et pas image
+
+- tableau croisé dynamique plutôt que formule fréquence...
+
+### Fondamental
+
+- confusion somme et dénombrement
+
+- graphique sur le TIG et pas sur le tableau condensé
+
+- pas de paramétrage du graphique
+
+
+### Questions
+
+- autres sources
+
+- intégration directe dans le moodle
+
+
 
 # Pour raffiner : les indicateurs
 
 Nous avons déjà vu l'amplitude à travers minimum et maximum. Il y en a d'autres.
 Ils servent à résumer la série statistique
 
+
+Pour l'exemple, on prend la cité du Stade.
+
+
+```{r}
+data <- read.csv("data/rplsBondy.csv", fileEncoding = "UTF-8")
+stade <- data [ grep("STADE",data$COMPLGEO), c("NUMAPPT","NBPIECE")]
+write.csv(stade, "data/stade.csv", fileEncoding = "UTF-8")
+```
+
+
+A votre avis pourquoi ? (cf forum sur le moodle)
 
 ## Calcul :  valeurs centrales et dispersion
 
@@ -139,15 +227,7 @@ Créer une colonne rang. Et relever le rang médian
 
 ![](img/mediane.jpg)
 
-###### Sur le tableau condensé
 
-- Calcul des fréquences cumulées, 
-
-- puis des fréquences relative (fréquence cumulée / fréquence totale)
-
-- Repérer le rang 50 % en faisant jouer les bornes
-
-![](img/mediane2.jpg)
 
 
 #### savoir faire tableur
@@ -170,24 +250,33 @@ Il s'agit d'une propriété mathématique de la médiane.
 
 
 
-#### La valeur modale
-
-La valeur la plus fréquente. 
-
-Quelle utilité dans notre série ?
-
-Aucune, car il y a beaucoup de chiffres différents, la classe modale serait plutôt intéressante à mentionner si on avait une typologie agricole, par exemple.
 
 ### Dispersion : Ecart-type et variance
 
 La distribution est-elle hétérogène ?
 
-2 définitions : 
+#### 2 définitions : 
 
 - écart moyen des valeurs à leur moyenne arithmétique
 
 - moyenne du carré des écarts
 
+
+#### Une question fondamentale : pourquoi utiliser les carrés ?
+
+https://qastack.fr/stats/118/why-square-the-difference-instead-of-taking-the-absolute-value-in-standard-devia
+
+et notamment, pour l'oeil du géographe :
+
+
+
+*Une façon de penser à cela est que l’écart-type est similaire à une "distance par rapport à la moyenne".*
+
+*Comparez cela à des distances dans un espace euclidien - ceci vous donne la vraie distance, où ce que vous avez suggéré (qui, en fait, est la déviation absolue ) ressemble plus à un calcul de distance manhattan .*
+
+
+
+### Exercice en cours
 
 Toujours sans passer par les formules, mais avec un tableau *pas à pas*, créer les indicateurs.
 
@@ -201,16 +290,13 @@ liste des colonnes :
 - et à part sur une seule case : moyenne du carré des écarts (variance), l'écart type
 est la racine carrée.
 
-### Ecart interquartile
-
-Passer par le tableau des fréquences cumulées, prendre les valeurs 25 % et 75 %.
 
 ## Appliquer : apréhender quelques indicateurs 
 
 Faire un commentaire sur ce qu'indiquent les indicateurs par rapport à votre série.
 Consigner ce commentaire dans l'évaluation finale.
 
-### Corrections quelques remarques
+### Corrections quelques remarques (sur le cours de l'année dernière, décès dans les dpts / régions)
 
 L'objectif de l'exercice était d'obtenir un commentaire clair avec quelques repères
 statistiques.
@@ -243,31 +329,5 @@ Il ne s'agit pas de jour mais de nombre de décès et de nombre de départements
 la médiane, tandis que la moyenne n'est pas pertinent en raison de ses valeurs fortes*
 
 
-### Bonus
-
-Les étudiants ont choisi différentes dates.Les décès sont cumulés. La forme des distributions est-elle différente selon les dates ?
-
-```{r, eval=FALSE}
-data <- read.csv("data/2021-09-17_deces_quotidiens_departement_csv.csv",  sep = ";", fileEncoding = "latin3")
-# on ne prend que les premiers du mois
-data <-  data [substring(data$Date_evenement,0,2) == "01",]
-data$Date_evenement <- as.Date(data$Date_evenement, format = "%d-%b")
-# pb NA
-table(data$Date_evenement, useNA = "always")
-# le mois d'avril n'est pas repris. 
-data$Date_evenement [is.na(data$Date_evenement)] <- ("2021-04-01")
-# on retire France
-data <- data [data$Zone != "France",]
-data$mois <- format(data$Date_evenement, format = "%m")
-data$mois <- as.integer(data$mois)
-i <- 1
-par(mfrow = c(2,3))
-for (i in 1:12) 
-{
-  choix <- data [data$mois == i,]
-  hist(choix$Total_deces_2020, main = i, xlab = "classes", ylab = "effectif")
-}
-
-```
 
 
