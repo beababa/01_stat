@@ -39,27 +39,11 @@ knitr::opts_chunk$set(echo = TRUE)
 - Continu et classe / catégorie -> Analyse de variance
 
 
-# Exemples
+# Application : prendre 2 variables, donner l'hypothèse et la méthode
 
-Utiliser le site opendata du gouvernement, choisir une thématique.
+var 1 = NBPIECE et var 2 = SURFHAB
 
-Pour chaque exemple, justifier le traitement qu'il faudra utiliser et l'hypothèse
-de départ.
+hypothèse = plus le nombre de pièces augmente, plus la surface habitable est importante
 
-## exemple de l'exemple
-
-thématique : emploi, ancienneté au chomage et niveau de formation
-
-hypothèse : relation entre l'ancienneté au chomage et niveau de formation
-
-thématique : santé et covid, type de lits par région
-
-hypothèse : les différents type de lits sont cohérents entre les régions malgré
-les inégalités entre région
-
-thématique : logement et urbanisme, consommation énergétique bâtiment
-
-hypothèse : relation entre consommation entre énergie électrique et les autres formes d'énergie
-
-
+traitement = régression ou plutôt analyse de variance...
 

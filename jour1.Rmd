@@ -140,7 +140,7 @@ par(mar = c(4,12,4,4))
 barplot(sort(table(data$COMPLGEO)), horiz = T, 
         main = "Nb de logements",
         las = 2, cex.names = 0.8, border = NA)
-png("img/nbpiece.png", height = 1000, width = 1000)
+png("img/nbpiece.png", height = 1800, width = 1800, res = 150)
 par(mfrow = c(5,3))
 for (i in 1:14){
   print(residence [i])
@@ -178,7 +178,15 @@ liste des problèmes rencontrés :
 
 - graphique sur le TIG et pas sur le tableau condensé
 
+![](img/1erreur.png)
+
 - pas de paramétrage du graphique
+
+![](img/2erreur.JPG)
+![](img/3erreur.png)
+
+
+![](img/parametrageGraphique.png)
 
 
 ### Questions
