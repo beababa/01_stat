@@ -14,9 +14,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Données d'exemple
 
+
 hypothèse : relation entre les secteurs géographiques / les résidences et les types d'appartements (du studio au plus de 5 pièces)
 
+
 Deux distributions connues par classe quelque soit la nature des modalités.
+
+Afin de vraiment comprendre, on saisit des modalités différentes :
+- studio, T1 à T7
+- sous sol premier deuxième...etc
 
 Attention, valeur plancher 5
 
@@ -46,20 +52,21 @@ tail(tab)
 
 
 ```{r}
-```{r}
-data <- read.csv("data/lits.csv", fileEncoding = "UTF-8")
-dpt <- read.csv("data/departements-region.csv", fileEncoding = "UTF-8")
-dataM <- merge(data, dpt, by.x = "Département", by.y = "num_dep" )
-agg <- aggregate (dataM[,c("réanimation", "intensifs","surveillance")], by = list(dataM$region_name), sum)
-write.csv(agg, "data/litsRegion.csv")
+data <- read.csv("data/rplsBondy.csv", fileEncoding = "UTF-8")
+data <- data [, c("NBPIECE", "ETAGE")]
 ```
 
-Pour l'exercice, on utilise les lits par région plutôt que par dpt
 
 
 # Tableau de contingence
 
 Au sens anglais du terme, *ce qui peut exister*
+
+Par modalité, le nombre d'individus correspondant
+
+Trouver les modalités possibles pour les deux variables
+
+Utiliser l'outil de table dynamique (dans le menu données) pour le créer
 
 ## Analyse d'un tableau de contingence
 
@@ -90,15 +97,16 @@ savoir-faire tableur
 - Objectif : saisir une seule cellule et étendre la formule.
 quelle élément fixer, ligne ou colonne ?
 
-- Graphique par types de lit
+- Graphique par étage
+
 
 
 ![](img/frequenceLG.png)
 
 commentaire
 
-- répartition des régions puis lorsque ramené à une base 100, répartition des lits
-dans les régions (on peut comparer)
+- répartition des étages puis lorsque ramené à une base 100, répartition des pièces
+dans les étages (on peut comparer)
 
 - les écarts au total des types de lit sont plus parlants
 

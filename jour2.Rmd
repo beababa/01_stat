@@ -50,7 +50,8 @@ barplot(table(data$NBPIECE), main = "distribution")
 - Continu et classe / catégorie -> Analyse de variance
 
 
-# Exemples
+# Application : prendre 2 variables, donner l'hypothèse et la méthode
+
 
 Pour chaque exemple, justifier le traitement qu'il faudra utiliser et l'hypothèse
 de départ qu'il faudra mettre en doute.
@@ -62,8 +63,6 @@ hypothèse : groupe d'étudiant et réussite à l'examen (oui / non).
 hypothèse : nombre de questions en cours et notes à l'examen
 
 hypothèse : groupe d'éudiant et notes finales
-
-
 
 
 
