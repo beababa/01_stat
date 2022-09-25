@@ -29,6 +29,17 @@ knitr::opts_chunk$set(echo = TRUE)
 1. continu
 2. classe ou catégorie
 
+Comprendre la différence entre l'histogramme et le graphique à barres
+
+```{r}
+data <- read.csv("data/rplsBondy.csv", fileEncoding = "UTF-8")
+par(mfrow = c(1,2))
+hist(data$NBPIECE, main = "fréquence")
+barplot(table(data$NBPIECE), main = "distribution")
+```
+
+
+
 
 ### Trois méthodes
 
@@ -41,25 +52,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Exemples
 
-Utiliser le site opendata du gouvernement, choisir une thématique.
-
 Pour chaque exemple, justifier le traitement qu'il faudra utiliser et l'hypothèse
-de départ.
+de départ qu'il faudra mettre en doute.
 
 ## exemple de l'exemple
 
-thématique : emploi, ancienneté au chomage et niveau de formation
+hypothèse : groupe d'étudiant et réussite à l'examen (oui / non). 
 
-hypothèse : relation entre l'ancienneté au chomage et niveau de formation
+hypothèse : nombre de questions en cours et notes à l'examen
 
-thématique : santé et covid, type de lits par région
+hypothèse : groupe d'éudiant et notes finales
 
-hypothèse : les différents type de lits sont cohérents entre les régions malgré
-les inégalités entre région
 
-thématique : logement et urbanisme, consommation énergétique bâtiment
-
-hypothèse : relation entre consommation entre énergie électrique et les autres formes d'énergie
 
 
 

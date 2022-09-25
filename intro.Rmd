@@ -124,7 +124,7 @@ abline(tab [ names(tab) == "Bondy"],0, col ="red")
 dev.off()
 write.csv(sort(tab), "data/dpt93RPLSCommune.csv")
 # filtre sur Bondy
-filtre <- data [data$CODEPOSTAL == "93140",]
+filtre <- data [data$LIBCOM == "Bondy",]
 write.csv(filtre, "data/rplsBondy.csv")
 ```
 

@@ -14,12 +14,38 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Données d'exemple
 
-hypothèse : relation entre les régions et les types de lits
+hypothèse : relation entre les secteurs géographiques / les résidences et les types d'appartements (du studio au plus de 5 pièces)
 
 Deux distributions connues par classe quelque soit la nature des modalités.
 
 Attention, valeur plancher 5
 
+Travail sur la donnée : zonage par résidence, jointure
+
+```{r}
+library(sf)
+st_layers("data/logement.gpkg")
+zone <- st_read("data/logement.gpkg", "quartiersBailleurs")
+rpls2154 <- st_read("data/logement.gpkg", "rpls2154")
+# spatialisation du rpls
+rpls <- read.csv("data/rplsBondy.csv", fileEncoding = "UTF-8", 
+                 dec=",",
+                 stringsAsFactors = T)
+rpls <- rpls  [-3959,]
+data2154 <- st_as_sf(data, coords = (c("X", "Y")), epsg = 2154)
+data2154
+library(mapsf)
+mf_map(zone)
+mf_map(rpls, add = T)
+mf_map(rpls2154, add = T)
+rpls2154 <-  st_transform(rpls2154, epsg = 4326)
+st_coordinates(rpls2154)
+tab <- table(data$X, useNA = "always")
+tail(tab)
+```
+
+
+```{r}
 ```{r}
 data <- read.csv("data/lits.csv", fileEncoding = "UTF-8")
 dpt <- read.csv("data/departements-region.csv", fileEncoding = "UTF-8")
