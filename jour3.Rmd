@@ -12,7 +12,9 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Données d'exemple
+# Déroulement
+
+## Données d'exemple
 
 
 hypothèse : relation entre les secteurs géographiques / les résidences et les types d'appartements (du studio au plus de 5 pièces)
@@ -20,74 +22,124 @@ hypothèse : relation entre les secteurs géographiques / les résidences et les
 
 Deux distributions connues par classe quelque soit la nature des modalités.
 
-Afin de vraiment comprendre, on saisit des modalités différentes :
-- studio, T1 à T7
-- sous sol premier deuxième...etc
+## Différentes étapes
+
+- Tableau de contingence
+
+- calcul du khi2
+
+- comparaison avec le khi2 théorique
+
+
+# Exploration des données
+
+## Discrétisation des données
+
+Afin de vraiment comprendre, on saisit des modalités différentes : à votre avis comment va-t-on les classer ?
 
 Attention, valeur plancher 5
 
-Travail sur la donnée : zonage par résidence, jointure
 
-```{r}
+
+```{r, echo=FALSE}
 library(sf)
-st_layers("data/logement.gpkg")
 zone <- st_read("data/logement.gpkg", "quartiersBailleurs")
-rpls2154 <- st_read("data/logement.gpkg", "rpls2154")
-# spatialisation du rpls
-rpls <- read.csv("data/rplsBondy.csv", fileEncoding = "UTF-8", 
-                 dec=",",
-                 stringsAsFactors = T)
-rpls <- rpls  [-3959,]
-data2154 <- st_as_sf(data, coords = (c("X", "Y")), epsg = 2154)
-data2154
+rpls <- st_read("data/logement.gpkg", "RPLS")
+table(rpls$NBPIECE, useNA = "always")
+barplot(table(rpls$NBPIECE, useNA = "always"))
+#table(rpls$FINAN, useNA = "always")
+# recodification
+FINAN <- as.integer(names(table(rpls$FINAN)))
+equiv <- "moins pauvres"
+code <- data.frame(FINAN, equiv)
+choix <- c("très pauvres", "pauvres", "moins pauvres")
+code$equiv [ code$FINAN < 13 ] <- choix [1]
+code$equiv [ code$FINAN > 48 | code$FINAN == 13] <- choix [2]
+jointure1 <- merge  (rpls, code, by = "FINAN")
+#table(jointure$equiv)
+# pour nb pièces
+NBPIECE <-  as.integer(names(table(rpls$NBPIECE)))
+taille <- "moyen"
+code <- data.frame(NBPIECE, taille)
+code$taille [ code$NBPIECE < 3 ] <- "petit"
+code$taille [ code$NBPIECE > 4] <- "grand"
+jointure2 <- merge  (rpls, code, by = "NBPIECE")
+# zones
+inter <- st_intersection(jointure2, zone)
+rplsPieceZone <- inter [, c("taille", "NOM_IRIS"), drop = T]
+write.csv(rplsPieceZone, "data/rplsPieceZone.csv", fileEncoding = "UTF-8")
+inter <- st_intersection(jointure1, zone)
+rplsTypeZone <- inter [, c("equiv", "NOM_IRIS"), drop = T]
+write.csv(rplsTypeZone, "data/rplsTypeZone.csv", fileEncoding = "UTF-8")
+#table(rplsTypeZone$equiv,rplsTypeZone$NOM_IRIS)
+```
+
+## Cartographies de base
+
+
+### Les points logements
+
+```{r, echo=FALSE}
 library(mapsf)
 mf_map(zone)
-mf_map(rpls, add = T)
-mf_map(rpls2154, add = T)
-rpls2154 <-  st_transform(rpls2154, epsg = 4326)
-st_coordinates(rpls2154)
-tab <- table(data$X, useNA = "always")
-tail(tab)
+mf_map(jointure2, type = "typo", var = "taille", add = T)
+mf_layout("Taille appartement bailleur social", credits = "RPLS2019")
 ```
+
+
+Quel est le problème de cette cartographie ?
 
 
 ```{r}
-data <- read.csv("data/rplsBondy.csv", fileEncoding = "UTF-8")
-data <- data [, c("NBPIECE", "ETAGE")]
+zone <- st_read("data/logement.gpkg", "quartiersBailleurs")
 ```
 
+## Carte des zones
+
+```{r}
+mf_map(zone, type = "typo", var = "NOM_IRIS")
+mf_layout("Zones inventaire bailleurs sociaux", credits = "sources internes, Bondy, 2013")
+```
 
 
 # Tableau de contingence
 
 Au sens anglais du terme, *ce qui peut exister*
 
-Par modalité, le nombre d'individus correspondant
 
-Trouver les modalités possibles pour les deux variables
+## Création
 
 Utiliser l'outil de table dynamique (dans le menu données) pour le créer
+
+Résultat attendu :
+
+```{r}
+data <- read.csv("data/rplsPieceZone.csv", fileEncoding = "UTF-8")
+tab <- table(data$NOM_IRIS, data$taille)
+knitr::kable(addmargins(tab))
+```
+
+
 
 ## Analyse d'un tableau de contingence
 
 - Il faut présenter les sources, la structure et le contenu du tableau.
 
-- Lister les questions susceptibles d'être posées
-
-- Analyse des distributions marginales
+- Lister les questions susceptibles d'être posées, notamment en étudiant les fréquences conditionnelles
 
 
-## Fréquences conditionnelles en ligne et colonne
+### Format conditionnel
 
-Pour pouvoir comparer les régions, chaque groupe est ramené à une même base
+![](img/formatConditionnel.png)
+Cet outil est-il utile ici ?
+
+### Fréquences conditionnelles en ligne et colonne
+
+Pour pouvoir comparer les zones, chaque groupe est ramené à une même base
 égale à 100.
 
 ```{r}
-data <- read.csv("data/litsRegion.csv")
-data <- data [,c(-1,-2)]
-# On passe en matrice
-data <- as.matrix(data)
-freqLg <- prop.table(data,1)*100
+freqLg <- round(prop.table(table(data$NOM_IRIS, data$taille), margin = 1)*100,0)
 knitr::kable(freqLg, title = "Fréquence conditionnelle ligne")
 ```
 
@@ -97,24 +149,22 @@ savoir-faire tableur
 - Objectif : saisir une seule cellule et étendre la formule.
 quelle élément fixer, ligne ou colonne ?
 
-- Graphique par étage
-
-
+- utilisation du %
 
 ![](img/frequenceLG.png)
 
-commentaire
+analyse
 
-- répartition des étages puis lorsque ramené à une base 100, répartition des pièces
-dans les étages (on peut comparer)
+- répartition des types d'appartement puis lorsque ramené à une base 100, on peut comparer entre les zones.
 
-- les écarts au total des types de lit sont plus parlants
+- les écarts à la moyenne par type d'appartements sont plus parlants
 
 ![](img/graphEcartFreqLg.png)
 
 Qu'apporterait une étude des fréquences conditionnelles en colonnes ?
 
-## Correction du quizz sur les tableaux de contingence
+## Correction du quizz sur les tableaux de contingence de l'année dernière
+
 
 ### Données
 
@@ -172,19 +222,63 @@ La bonne réponse était qu'il n'est pas nécessaire de l'étudier.
 En effet, la répartition des lits de réanimation entre les différentes régions ne fait que réfléter l'effectif de la population de chaque région.
 Or, nous n'avons pas cette variable dans le tableau.
 
-## Effectifs théoriques et observées
+# Effectifs théoriques et observées
 
-### Analogie du jeu du dé et de la pièce
+## Analogie du jeu du dé ou test de conformité
 
-### Tableau d'indépendance
+Le dé est-il truqué ?
 
-Pour le vérifier, les distributions univariées restent inchangées.
+```{r}
+face <- seq(1,6)
+effectif <- c(15,7,4,11, 6, 17)
+knitr::kable(data.frame(face,effectif))
+```
+
+hypothèse H0 : le dé n'est pas truqué (il y a indépendance entre la face et le
+nombre de fois où elle sort)
+
+effectifs théoriques
+
+```{r}
+effectifThéorique <- rep (10,6)
+df <- data.frame(face, effectif, effectifThéorique)
+knitr::kable(df)
+```
+
+distance entre effectifs théoriques et observés
+
+Elle se mesure avec le khi2
+
+```{r}
+(ecart <- df$effectif - df$effectifThéorique)
+(distance <-  ecart^2)
+(relatif <- distance / df$effectifThéorique)
+(khi2 <- sum(relatif))
+```
+
+paramètres du test :
+
+- degré de liberté 5
+
+- Pour un risque à 0,05 (5 chances sur 100 de se tromper)
+
+le khi2 théorique est de 11,7, il est donc inférieur au khi2 observé.
+
+Quand le khi2 théorique est inférieur, le test est rejeté.
+
+Le test est rejeté avec un risque de 5 %
+
+Donc, le dé est truqué.
+
+## Sur notre série
+
+### 2 Tableaux
 
 La première case reçoit la formule :
 
 - effectif / total lg * effectif / total colonne FREQUENCE CONJOINTE
 
-- cette fréquence est multipliée par la totalité de l'effectif pour avoir l' EFFECTIF
+- cette fréquence est multipliée par la totalité de l'effectif pour avoir l' EFFECTIF THEORIQUE
 
 ![](img/effectifTheorique.png)
 
@@ -198,16 +292,6 @@ Utiliser les notions
 - sur représentation / sous représentation
 
 
-On peut également le taux de liaison, c'est à dire le rapport entre l'écart observé - théorique et l'effectif de l'observation.
-
-![](img/txliaison.png)
-
-Le commentaire sera du type : "Le nombre de lits de réanimation s'écarte de 9 % de
-la valeur théorique qui indiquerait une situation ou les deux modalités ne seraient 
-pas liés"
-
-
-![](img/grapEcartTheorieTxliaison.png)
 
 
 ## Le Khi2 
@@ -218,29 +302,52 @@ rappel : métrique euclidienne plutôt que les valeurs absolues on utilise les c
 #### Le Khi2 partiel
 
 On met les écarts rapportés à la valeur théorique d'indépendance au carré.
-Puis on divise par l'effectif.
+Puis on divise par l'effectif théorique.
+
+
 
 ![](img/khi2partiel.png)
 
 #### Le Khi2
 
+
+
 ```{r}
-data <- read.csv("data/litsRegion.csv")
-data <- data [,c(-1,-2)]
-# On passe en matrice
-data <- as.matrix(data)
-chisq.test(data)
+freq <- prop.table(tab)
+freqLg <- prop.table(tab,1)
+freqCol <- prop.table(tab,2)
+theorique <- freqLg * freqCol / sum(tab)
+theorique
+freq 
+sum(theorique)
+sum(tab)
 ```
 
 
-C'est le total des khi2 partiels (dans notre exemple 330)
+
+```{r}
+(ecart <- tab-theorique)
+(distance <-  ecart^2)
+(relatif <- distance/ theorique)
+(khi2 <- sum(relatif))
+```
+
+
+```{r}
+
+data <- as.matrix(data)
+chisq.test(tab)
+```
+
+
+C'est le total des khi2 partiels (dans notre exemple 338)
 
 On définit :
 
 - degré de liberté
 lg -1 * col -1
 
-13 régions et 3 types de lit = 24
+8 zone et 3 types d'appartements = 24
 
 - risque 1, 5 et 10 %
 
@@ -253,7 +360,7 @@ Sur internet, dans n'importe quelle table, on cherche les valeurs correspondante
 
 HO hypothèse d'indépendance. son rejet implique qu'il y a une relation.
 
-Les variables lits et régions ont une relation avec une marge d'erreur de 5 %
+Les variables nombre de pièces et zones ont une relation avec une marge d'erreur de 5 %
 
 ### Intensité de la liaison
 
@@ -269,16 +376,13 @@ C'est le Khi2 rapporté à la somme Khi2 et de l'effectif total
 
 #### Coefficient de Tschuprow
 
-D'autres coefficients permet de reprendre le nombre de degrés de liberté et ainsi de
-s'affranchir de la taille du tableau.
+D'autres coefficients permet de reprendre le nombre de degrés de liberté et ainsi de s'affranchir de la taille du tableau.
 
 Celui de Tschuprow est le khi2 calculé rapporté à l'effectif total multiplié par la racine carré du nombre de degré de liberté.
 
 ![](img/coeff.png)
 
-*Savoir-faire tableur*
 
-Utiliser les noms plutôt que les cellules fixées
 
 ### Interprétation des coefficients
 
@@ -317,5 +421,9 @@ Bien, mais je me demande de quelle anomalie il s'agit. Si je dois aller voir le 
 ## Intensité de la relation
 
 * Elle existe mais elle est très faible (Proche de 0 ; 0.018)*
+
+
+
+
 
 

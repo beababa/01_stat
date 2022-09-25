@@ -58,11 +58,22 @@ de départ qu'il faudra mettre en doute.
 
 ## exemple de l'exemple
 
-hypothèse : groupe d'étudiant et réussite à l'examen (oui / non). 
+hypothèse : groupe d'étudiants et réussite à l'examen (oui / non). 
 
 hypothèse : nombre de questions en cours et notes à l'examen
 
-hypothèse : groupe d'éudiant et notes finales
+hypothèse : groupe d'éudiants et notes finales
 
 
+## En guise d'introduction pour le khi 2
 
+
+```{r, echo=FALSE}
+data <- read.table("data/exKHI2.csv", sep = ",", row.names =1 , col.names = c("oui","non") ,fileEncoding = "UTF-8")
+knitr::kable(data)
+chisq.test(data)
+```
+
+Il existe un lien entre groupe et résultat, puisque p-value est toute petite.
+
+Certes... mais comment ?
