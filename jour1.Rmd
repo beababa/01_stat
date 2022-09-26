@@ -299,7 +299,7 @@ liste des colonnes :
 est la racine carrée.
 
 
-## Appliquer : apréhender quelques indicateurs 
+## Appliquer : appréhender quelques indicateurs 
 
 Faire un commentaire sur ce qu'indiquent les indicateurs par rapport à votre série.
 Consigner ce commentaire dans l'évaluation finale.

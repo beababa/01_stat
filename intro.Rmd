@@ -41,9 +41,13 @@ Utiliser les ressources internet, poser des questions,...
 7 sur la stat bi-variée
 3 sur la multivariée
 1 cours pour un devoir sur table au mi-semestre
-1 devoir maison à rendre vers la fin du semestre
 
-... et un partiel en plus !
+# Evaluation
+
+- 1 devoir maison à rendre vers la fin du semestre
+- 1 devoir sur table à la mi-semestre
+
+... et c'est tout ! (pas de partiel)
 
 Au départ on utilise Libre Office (plutôt que Microsoft) puis R
 
@@ -59,6 +63,9 @@ knitr::kable(data)
 
 # Présentation rapide (vous êtes nombreux !)
 
+
+## Premier cours
+
 passé / présent / futur
 appétence pour les stats
 fichier framapad, https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
@@ -72,7 +79,7 @@ du nom de famille.
 etudiant <-  read.csv("data/etudiant.csv", fileEncoding = "UTF-8")
 tab <- table (etudiant$prénom)
 names(tab)[tab >1]
-write.csv(etudiant [, c("prénom", "groupe.TD")], "cours2.csv", fileEncoding = "UTF-8")
+write.csv(etudiant [, c("prénom", "groupe.TD")], "cours1.csv", fileEncoding = "UTF-8")
 par(mar = c(2,16,2,4))
 par(mfrow = c(3,2))
 for (i in 3:7){
@@ -84,32 +91,52 @@ for (i in 3:7){
 ```
 
 
+## Présence et rendu des devoirs : chiffres clés
+
+### Effectif et cours
 
 ```{r, echo = FALSE}
-table(etudiant$groupe.TD)
+tab <- table(etudiant$groupe.TD)
+tab 
 ```
 
 
-```{r, eval=FALSE, echo = FALSE}
-cours1 <- read.csv("data/cours1.csv", fileEncoding = "UTF-8")
-cours2 <- read.csv("data/cours2.csv", fileEncoding = "UTF-8")
-cours1$session <- "cours1"
-cours2$session <- "cours2"
-names(cours2)[1] <- "prenom"
-cours <- rbind(cours1, cours2)
-cours <- cours [cours$prenom != '',]
-table(cours$session)
-# export pour framapad
-write.csv(cours [c(1:3,8)], "data/cours.csv")
+```{r,  echo = FALSE}
+i <- 2
+for (i in 2:3) {
+  nomFic <- paste0("data/cours", i, ".csv")
+  data <- read.csv(nomFic, fileEncoding = "UTF-8")
+  data <- data [data [,3] == "oui",]
+  tmp <- table(data$groupe.TD)
+  tab <- rbind(tab , tmp)
+  }
+row.names(tab) <- c("cours1", "cours2", "cours3")
+knitr::kable(tab)
+barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(3) 
+        , border = NA)
 ```
+
 
 Désormais le framapad sert à l'émargement
+https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
+
+
+### Les rendus de devoir
+
+```{r}
+rendu <- c(47,36)
+titre <- c("devoir1 (distribution)", "devoir2 (univarié)")
+barplot(rendu, names = titre)
+```
+
 
 
 # La donnée du cours
 
 ## La source
 https://www.data.gouv.fr/fr/datasets/repertoire-des-logements-locatifs-des-bailleurs-sociaux/
+
+### 2021
 
 Prendre le .zip de 2021, petit test d'ouverture sous moodle (Introduction/bases informatiques)
 
@@ -133,13 +160,18 @@ write.csv(filtre, "data/rplsBondy.csv")
 
 C'est normalement ce fichier de données que nous allons utiliser pour le cours.
 
+## 2019
+
+Il y a un problème sur la donnée, prendre plutôt le millésime 2019
+
+
 # Pratique
 
 Lorsque l'exercice le requiert, le fichier est à rendre avec son *prénom* (toujours le même svp) sous moodle.
 
 
 
- Ressources autre que la bibliographie officielle
+# Ressources autre que la bibliographie officielle
 
 2 cours universitaires disponibles sur internet
 
