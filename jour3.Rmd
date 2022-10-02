@@ -231,13 +231,20 @@ Le dé est-il truqué ?
 ```{r}
 face <- seq(1,6)
 effectif <- c(15,7,4,11, 6, 17)
+total <-  sum(effectif)
 knitr::kable(data.frame(face,effectif))
 ```
+
+Le nombre total de lancers est de 60.
+
+### Hypothèse d'indépendance
 
 hypothèse H0 : le dé n'est pas truqué (il y a indépendance entre la face et le
 nombre de fois où elle sort)
 
-effectifs théoriques
+### Effectifs théoriques
+
+Sur le total des lancers (60), chaque face aurait pû sortir 10 fois.
 
 ```{r}
 effectifThéorique <- rep (10,6)
@@ -245,9 +252,13 @@ df <- data.frame(face, effectif, effectifThéorique)
 knitr::kable(df)
 ```
 
+### Calcul du khi2
+
 distance entre effectifs théoriques et observés
 
 Elle se mesure avec le khi2
+
+On calcule l'écart, puis le carré de cet écart et on pondère par l'effectif théorique.
 
 ```{r}
 (ecart <- df$effectif - df$effectifThéorique)
@@ -256,12 +267,21 @@ Elle se mesure avec le khi2
 (khi2 <- sum(relatif))
 ```
 
-paramètres du test :
+### Test du khi2
 
-- degré de liberté 5
+#### Paramètres du test
+
+- degré de liberté : 5
+
+C'est le nombre de valeurs possibles -1 (car on peut déterminer la 6e valeur à partir des 5 autres)
 
 - Pour un risque à 0,05 (5 chances sur 100 de se tromper)
 
+### Résultat
+
+Lecture dans la table du khi2
+
+![](img/khi2table.png)
 le khi2 théorique est de 11,7, il est donc inférieur au khi2 observé.
 
 Quand le khi2 théorique est inférieur, le test est rejeté.
@@ -272,29 +292,39 @@ Donc, le dé est truqué.
 
 ## Sur notre série
 
-### 2 Tableaux
+### Ennoncer l'hypothèse H0
+
+Le type d'appartement est indépendant quartier.
+
+### Effectif théorique
 
 La première case reçoit la formule :
 
-- effectif / total lg * effectif / total colonne FREQUENCE CONJOINTE
+- (total lg / total) * total colonne
 
-- cette fréquence est multipliée par la totalité de l'effectif pour avoir l' EFFECTIF THEORIQUE
+C'est ce qu'on appelle également le produit des marges
 
 ![](img/effectifTheorique.png)
+
+
 
 ### Ecarts entre observés et théoriques
 
 Que signifie une valeur zéro ?
 
-Utiliser les notions
+Utiliser la notion
 
-- d'attraction et de répulsion pour les signes.
 - sur représentation / sous représentation
 
 
+![](img/ecartsTableauComplet.png)
+
+Les petits appartements sont sous-représentés à Blanqui et à la remise à Jorelle par rapport à une distribution identique entre les quartiers.
 
 
-## Le Khi2 
+### Le Khi2 
+
+Le khi2 va permettre de valider le rejet de l'hypothèse d'indépendance.
 
 rappel : métrique euclidienne plutôt que les valeurs absolues on utilise les carrés
 
@@ -311,31 +341,15 @@ Puis on divise par l'effectif théorique.
 #### Le Khi2
 
 
+Le total de tous les khi2 partiels
 
-```{r}
-freq <- prop.table(tab)
-freqLg <- prop.table(tab,1)
-freqCol <- prop.table(tab,2)
-theorique <- freqLg * freqCol / sum(tab)
-theorique
-freq 
-sum(theorique)
-sum(tab)
-```
+![](img/khi2partiel2.png)
 
 
 
 ```{r}
-(ecart <- tab-theorique)
-(distance <-  ecart^2)
-(relatif <- distance/ theorique)
-(khi2 <- sum(relatif))
-```
-
-
-```{r}
-
-data <- as.matrix(data)
+data <- read.csv("data/rplsPieceZone.csv")
+tab <- table(data$NOM_IRIS, data$taille)
 chisq.test(tab)
 ```
 
@@ -347,7 +361,8 @@ On définit :
 - degré de liberté
 lg -1 * col -1
 
-8 zone et 3 types d'appartements = 24
+8 zone et 3 types d'appartements = 7 * 2 = 14
+
 
 - risque 1, 5 et 10 %
 
@@ -360,7 +375,7 @@ Sur internet, dans n'importe quelle table, on cherche les valeurs correspondante
 
 HO hypothèse d'indépendance. son rejet implique qu'il y a une relation.
 
-Les variables nombre de pièces et zones ont une relation avec une marge d'erreur de 5 %
+Les variables nombre de pièces et zones ont une relation avec une marge d'erreur très faible puisque le khi2 augmente avec le risque d'erreur.
 
 ### Intensité de la liaison
 
