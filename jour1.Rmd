@@ -125,9 +125,9 @@ Observer la disposition des bornes : elles sont utilisées comme des étiquettes
 
 
 
+Exercice intitulé *dénombrement*
 
-
-47 sur 74
+47 rendus sur 74
 
 
 ### Affichage de toutes les résidences
@@ -295,47 +295,67 @@ liste des colonnes :
 - carré des écarts
 
 
-- et à part sur une seule case : moyenne du carré des écarts (variance), l'écart type
-est la racine carrée.
+- et à part sur une seule case : moyenne du carré des écarts (variance), l'écart type est la racine carrée.
 
 
 ## Appliquer : appréhender quelques indicateurs 
 
-Faire un commentaire sur ce qu'indiquent les indicateurs par rapport à votre série.
-Consigner ce commentaire dans l'évaluation finale.
+intitulé exercice *valeurs centrales et dispersion*
 
-### Corrections quelques remarques (sur le cours de l'année dernière, décès dans les dpts / régions)
+Sur une des résidences (sauf la cité du Stade) utilisée en cours, faire le graphique du TIG et indiquer la valeur centrale.
 
-L'objectif de l'exercice était d'obtenir un commentaire clair avec quelques repères
-statistiques.
-
-- inutile de mettre toutes les décimales de vos indicateurs ! cela ne sert à rien.
-
-- exemple d'un commentaire clair :
-
-*Il y a peu de départements recensant un grand nombre de décès puisque la médiane
-est assez faible, la moitié des départements compte plus de 750 décès. La
-moyenne est influencée par les départements comptant beaucoup de décès, c'est pourquoi elle est supérieure à la médiane : de rares départements connaissent un très grand
-nombre de morts*
-
-- attention à l'erreur :
-
-*Le nombre de décès est élevé dans les plus gros départements*
-
-Ce n'est pas faux mais ce n'est pas ce qui est demandé. 
-
-- faux :
-
-*mediane < moyenne ainsi il y a plus de jours avec de petits nombres de décès que 
-de jours avec des nombres importants. Il y a une distribution dysimétrique.*
-
-Il ne s'agit pas de jour mais de nombre de décès et de nombre de départements.
-
-- trop technique :
-
-*La série est assez dissymétrique, la distribution est assez proche de la valeur de
-la médiane, tandis que la moyenne n'est pas pertinent en raison de ses valeurs fortes*
+Rajouter une ligne de commentaire expliquant moyenne / médiane et écart type.
 
 
+### Corrections quelques remarques 
+
+L'objectif de l'exercice était d'obtenir un commentaire clair avec quelques repères statistiques.
 
 
+#### Les bons graphiques
+
+
+##### Un graphique du TIG
+
+![](img/4erreurBon.png)
+
+
+##### Une diagramme de répartition
+
+
+![](img/bonDevoir3.png)
+
+
+##### Quelles erreurs dans les graphiques suivants ?
+
+![](img/1erreur.png)
+![](img/2erreur.JPG)
+![](img/3erreur.png)
+
+### Les commentaires
+
+Beaucoup d'étudiants ne voient pas la nécessité d'un commentaire...
+
+#### Commentaire clair
+
+*La moyenne et la médiane sont très proches. En effet, en moyenne, les logements de la résidence possèdent 3 pièces et 50 % des logements possèdent moins de 3 pièces. On peut en déduire que la série est assez homogène.De plus, l'écart type est faible, ce qui signifie que les valeurs sont peu dispersées autour de la moyenne et donc il vient confirmer que la série est homogène.*
+
+
+#### trop technique 
+
+![](img/tropTechnique.png)
+
+
+
+#### Des commentaires intéressants
+
+
+##### Un peu confus.
+
+![](img/bonDevoir1.png)
+
+##### Une réflexion sur le terme *hétérogène*
+
+
+
+![](img/bonCommentaire.png)

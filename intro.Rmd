@@ -77,6 +77,14 @@ du nom de famille.
 
 ```{r}
 etudiant <-  read.csv("data/etudiant.csv", fileEncoding = "UTF-8")
+mailetudiant <- paste(paste0(etudiant$mail, ";"))
+tmp <- mailetudiant [1]
+for (i in 2:73){ 
+  tmp <- paste(tmp, mailetudiant [i])}
+write.csv(tmp, "data/mails.txt")
+txt <- c("a", "b")
+paste0("a", "b", ";")
+sapply(txt, paste)
 tab <- table (etudiant$prénom)
 names(tab)[tab >1]
 write.csv(etudiant [, c("prénom", "groupe.TD")], "cours1.csv", fileEncoding = "UTF-8")
@@ -113,7 +121,7 @@ for (i in 2:3) {
 row.names(tab) <- c("cours1", "cours2", "cours3")
 knitr::kable(tab)
 barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(3) 
-        , border = NA)
+        , border = NA, legend =  T)
 ```
 
 
@@ -124,10 +132,18 @@ https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
 ### Les rendus de devoir
 
 ```{r}
-rendu <- c(47,36)
-titre <- c("devoir1 (distribution)", "devoir2 (univarié)")
-barplot(rendu, names = titre)
+rendu <- c(47,36, 29)
+titre <- c("distribution", "univarié", "khi2")
+barplot(rendu, names = titre, main = "rendu devoirs (effectif 75 étudiants)")
+# les notes
+
 ```
+
+
+#### Le critère externe : des points faciles ?
+
+
+Au 3e devoir, sur 29 rendus, uniquement
 
 
 

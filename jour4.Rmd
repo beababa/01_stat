@@ -14,8 +14,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Données d'exemple
 
-https://databank.worldbank.org/indicator/SP.POP.TOTL/1ff4a498/Popular-Indicators
-https://donnees.banquemondiale.org/indicator/EN.ATM.GHGT.KT.CE
+Toujours les mêmes, mais il s'agit d'avoir deux variables continues, on va prendre
+année et surface.
 
 Comprendre les variables
 
@@ -24,26 +24,33 @@ Enoncer les hypothèses
 De quel type sont les variables ?
 
 ```{r}
-pop <- read.csv("data/POPU.csv")
-pop <- pop [pop$Series.Code =="SP.POP.TOTL", c(4,20)]
-pop$X2015..YR2015. <- as.integer(pop$X2015..YR2015.)
-pop <- pop[ !is.na(pop$X2015..YR2015.),]
-ges <- read.csv("data/GES.csv", skip = 4)
-ges <-  ges [, c("Country.Code", "X2015")]
-ges <- ges [!is.na(ges$X2015),]
-data <-  merge(ges, pop, by = "Country.Code")
-names(data) <- c("code", "ges", "pop")
-write.csv(data, "data/popges2015.csv")
+data <- read.csv("data/rplsBondy.csv")
+data <- data [, c("SURFHAB","CONSTRUCT", "COMPLGEO")] 
+summary(data)
+write.csv(data, "data/rplsSurfConst.csv")
 ```
 
 # Nuage de points
 
-```{r}
-plot(data$pop, data$ges)
-text(data$pop,data$ges,
-     labels = row.names(data$code),
-     cex = 0.6, pos = 4, col = "red")
+## Quelle présentation ?
+
+```{r, echo=T}
+plot(data$SURFHAB, data$CONSTRUCT)
 ```
+
+...ou...
+
+```{r}
+plot(data$CONSTRUCT, data$SURFHAB)
+```
+
+## Savoirs faire tableur
+
+- sélectionner uniquement les 2 colonnes de données
+
+- types de diagramme ; xy - dispersion
+
+- intervertir x et y (onglet série de données) : comprendre le rôle des deux variables
 
 
 ## Simplification des chiffres
@@ -53,39 +60,44 @@ text(data$pop,data$ges,
 Retour sur les distributions pour enlever les valeurs aberrantes
 
 ```{r}
-barplot(data$ges)
-table(data$ges >  2* 10^6)
-barplot(data$pop)
-table(data$pop > 3* 10^8)
-plot(data$pop, data$ges, 
-       xlim = c(2*10^7,1.5*10^8), ylim = c(2*10^5, 2 * 10^6))
+hist(data$SURFHAB)
+
 ```
 
 On recherche des bornes permettant d'avoir un nuage de points "cohérent".
 Avec le tableur, on fait le graphique puis on ajuste avec le filtre.
 
-### Changement d'unités
 
-Le GES peut être divisé par 100 000 et la population par 1 000 000. Pourquoi ?
-
-![](img/selectionData.jpg)
 
 # Intensité du lien
 
 ## Affichage des moyennes
 
+Savoir-faire tableur : axes secondaires
+
+Pour le premier : courbe valeur moyenne, pour le second axe secondaire
+
+![](img/courbeMoyennes.png)
+
 On observe les quadrants, ils permettent de déterminer le sens de la corrélation.
 
-## Coefficient de Bravais-Pearson
+## Covariance et coefficient de Bravais-Pearson
 
-Rajouter des colonnes pour calculer
+Savoir-faire tableur : utiliser les noms pour les colonnes construction et surface
 
-- écarts à la moyenne (nb - moyenne du nb)
-- carrés des écarts
+
+### Premier temps
+
+On rajoute des colonnes pour chaque variable:
+- écart à la moyenne
+- carré
+et pour les deux variables
 - produit des écarts
 
-Puis dans un nouveau tableau
+### Deuxième temps
 
+Dans un nouveau tableau, pour chaque variable
+- moyenne
 - somme des écarts à la moyenne 
 - Variance
 - Ecart type
@@ -95,7 +107,7 @@ puis covariance (produit des écarts / effectif)
 et coeff (cov / produit des écarts types)
 
 ![](img/coeffCORRELATION.jpg)
-Interprétation
+### Interprétation
 
 Le coefficient évolue de -1 à +1
 
@@ -108,6 +120,12 @@ Le coefficient évolue de -1 à +1
 
 Dans notre exemple, lien moyen.
 
+```{r}
+varCorr <- data [, c( "SURFHAB", "CONSTRUCT")]
+cor(varCorr)
+```
+
+
 # Droite de régression
 
 La droite de régression minimise la somme des carrés des distances verticales entre chacun des points du nuage et la droite recherchée.
@@ -119,6 +137,15 @@ Pour une droite aX+b
 - b (ordonnée de l'origine) = moyenne de y - a * moyenne de y
 
 
+```{r}
+plot(data$CONSTRUCT, data$SURFHAB, 
+       xlim = c(1935,2022), ylim = c(c(0, 125)))
+data <- data [data$SURFHAB < 120 | data$CONSTRUCT > 1935, ]
+lm <- lm(data$SURFHAB~data$CONSTRUCT)
+abline(lm, lty =2)
+```
+
+
 Dans calc, cliquer sur les points et insérer courbe de tendance
 
 
@@ -126,15 +153,25 @@ Dans calc, cliquer sur les points et insérer courbe de tendance
 
 C'est le carré du coefficient de corrélation linéaire
 
-La population explique environ 17 % de l'émission du gaz à effet de serre.
+```{r}
+cor(varCorr)^2
+```
 
-Les 83 % restant sont liés à d'autres facteurs.
+
+La surface habitable explique environ 10 % de l'année de construction.
+
+Les 90 % restant sont liés à d'autres facteurs.
 
 # Etude des résidus
 
 ![](img/moindreCarre.jpg)
 
 
-Identifiez deux pays et formuler une explication
+Identifiez graphiquement 2 points éloignés de la droite de régression et tenter un 
+commentaire.
+
 
 ![](img/residu.jpg)
+
+
+

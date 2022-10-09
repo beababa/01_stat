@@ -163,27 +163,343 @@ analyse
 
 Qu'apporterait une étude des fréquences conditionnelles en colonnes ?
 
-## Correction du quizz sur les tableaux de contingence de l'année dernière
 
+
+# Khi2 : un exemple sur un dé truqué
+
+Le dé est-il truqué ?
+
+```{r}
+face <- seq(1,6)
+effectif <- c(15,7,4,11, 6, 17)
+total <-  sum(effectif)
+knitr::kable(data.frame(face,effectif))
+```
+
+Le nombre total de lancers est de 60.
+
+## Hypothèse d'indépendance
+
+hypothèse H0 : le dé n'est pas truqué (il y a indépendance entre la face et le
+nombre de fois où elle sort)
+
+## Effectifs théoriques
+
+Sur le total des lancers (60), chaque face aurait pû sortir 10 fois.
+
+```{r}
+effectifThéorique <- rep (10,6)
+df <- data.frame(face, effectif, effectifThéorique)
+knitr::kable(df)
+```
+
+## Calcul du khi2
+
+distance entre effectifs théoriques et observés
+
+Elle se mesure avec le khi2
+
+On calcule l'écart, puis le carré de cet écart et on pondère par l'effectif théorique.
+
+```{r}
+(ecart <- df$effectif - df$effectifThéorique)
+(distance <-  ecart^2)
+(relatif <- distance / df$effectifThéorique)
+(khi2 <- sum(relatif))
+```
+
+## Test du khi2
+
+### Paramètres du test
+
+- degré de liberté : 5
+
+C'est le nombre de valeurs possibles -1 (car on peut déterminer la 6e valeur à partir des 5 autres)
+
+- Pour un risque à 0,05 (5 chances sur 100 de se tromper)
+
+### Résultat
+
+Lecture dans la table du khi2
+
+![](img/khi2table.png)
+le khi2 théorique est de 11,7, il est donc inférieur au khi2 observé.
+
+Quand le khi2 théorique est inférieur, le test est rejeté.
+
+Le test est rejeté avec un risque de 5 %
+
+Donc, le dé est truqué.
+
+# Retour à la comparaison secteur / type d'appartement
+
+## Ennoncer l'hypothèse H0
+
+Le type d'appartement est indépendant quartier.
+
+## Effectif théorique
+
+La première case reçoit la formule :
+
+- (total lg / total) * total colonne
+
+C'est ce qu'on appelle également le produit des marges
+
+![](img/effectifTheorique.png)
+
+
+
+ ## Ecarts entre observés et théoriques
+
+Que signifie une valeur zéro ?
+
+Utiliser la notion
+
+- sur représentation / sous représentation
+
+
+![](img/ecartsTableauComplet.png)
+
+Les petits appartements sont sous-représentés à Blanqui et à la remise à Jorelle par rapport à une distribution identique entre les quartiers.
+
+
+## Le Khi2 
+
+Le khi2 va permettre de valider le rejet de l'hypothèse d'indépendance.
+
+rappel : métrique euclidienne plutôt que les valeurs absolues on utilise les carrés
+
+
+### Le Khi2 partiel
+
+On met les écarts rapportés à la valeur théorique d'indépendance au carré.
+Puis on divise par l'effectif théorique.
+
+
+
+![](img/khi2partiel.png)
+
+### Le Khi2
+
+
+Le total de tous les khi2 partiels
+
+![](img/khi2partiel2.png)
+
+
+
+```{r}
+data <- read.csv("data/rplsPieceZone.csv")
+tab <- table(data$NOM_IRIS, data$taille)
+test <- chisq.test(tab)
+test$expected
+```
+
+
+C'est le total des khi2 partiels (dans notre exemple 338)
+
+On définit :
+
+- degré de liberté
+lg -1 * col -1
+
+8 zone et 3 types d'appartements = 7 * 2 = 14
+
+
+- risque 1, 5 et 10 %
+
+Sur internet, dans n'importe quelle table, on cherche les valeurs correspondantes.
+
+### Rejet de H0 ou pas
+
+
+![](img/test.png)
+
+HO hypothèse d'indépendance. son rejet implique qu'il y a une relation.
+
+Les variables nombre de pièces et zones ont une relation avec une marge d'erreur très faible puisque le khi2 augmente quand le risque d'erreur baisse.
+
+Les logiciels de stats proposent le risque limite, la valeur de bascule entre le rejet et l'acceptation de l'hypothèse nulle.
+
+
+# Pourquoi le khi2 ?
+
+## Les fréquences conditionnelles suffisent-t-elles ?
+
+Comparaison des 2 tableaux
+
+Estimation des écarts fondés sur la pondération des masses
+
+## Le khi2 met en évidence les variations faibles autour de la moyenne
+
+A partir de quand le khi2 devient inférieur ?
+
+Et si on retire la Remise à Jorelle ?
+
+
+```{r}
+tab2 <- tab [-c(6),]
+tab2
+chisq.test(tab2)
+```
+
+En faisant d'autres essais, le khi2 diminue autour de 100, mais reste largement au dessus du khi2 théorique (entre 33 et 42)
+
+## Et en carto...
+
+Graphique
+
+```{r}
+
+dimnames(tab)
+plot(tab, main = "type d'appartement par quartier",col= terrain.colors(3), border = NA, las = 2)
+```
+
+Carte des contributions au khi2
+
+
+```{r}
+names(test)
+chi2partiel <- round(((test$observed - test$expected)^2 / test$expected),0)
+chi2partielSomme <- apply(chi2partiel, 1,sum)
+chi2partielFreq <- chi2partielSomme/ sum(chi2partielSomme)
+hist(chi2partielFreq)
+```
+
+```{r}
+df <- data.frame(NOM_IRIS = names(chi2partielFreq),
+                 contrib = chi2partielFreq, row.names = NULL
+                 )
+jointure <- merge(zone, df, by ="NOM_IRIS")
+jointure$num <- rownames(jointure)
+mf_init(zone)
+mf_map(jointure, type = "choro", border = "antiquewhite2", var = "contrib", add = T)
+mf_map(jointure2, pch = 20, col = "antiquewhite3",border = NA, add = T)
+mf_label(jointure, var = "num", overlap = FALSE, col= "white",bg ="black", halo = T, cex = 1.5)
+mf_layout("Taille appartement bailleur social : contribution au chi2", credits = "RPLS2019")
+```
+
+Cette carte permet de commencer à classifier les quartiers par rapport à un modèle d'indépendance, une répartition des logements sociaux type.
+Il serait sans doute intéressant de répéter l'opération mais sur chaque résidence pour avoir une cartographie plus fine du territoire.
+
+# Un autre exemple : type de logement social et quartier
+
+## Barème
+
+![](img/barème.png)
+
+Importance des commentaires, même non demandés, ils donnaient un sens à tous ces chiffres !
+
+J'avais mis tableau juste pour le khi2, j'ai fini par noté si le tableau était présent ou pas.
 
 ### Données
 
-#### Mauvaise réponse
+#### Mauvaises réponses (mais intéressantes)
 
-* Il y a 3 variables : les lits de réanimation, les lits intensifs et les lits de surveillance, tout cela par région*
+*Dans chacun des 8 quartiers (IRIS) de Bondy, le nombre de foyers pauvres et leur degré de pauvreté*
 
+- il manque le terme *variable* et le type *categorie*, ceci dit la réponse est juste et surtout élégante.
+
+
+*Notre base de données est composée de 3 variables, la 1e, l'identifiant.. la 2e est une variable de catégorie et la dernière nomIRIS est une variable de catégorie. La base de données permet de comprendre si les IRIS qui apparaissent dans le tableaur sont des IRIS qui s'en sortent plutôt bien moins bien et pas du tout.*
+
+- attention aux termes ! *base de données*
+
+- La première variable est la population et non pas une variable comme les autres
+
+- la formulation de l'hypothèse est maladroite (mais elle est là, du coup je l'ai noté comme commentaire du tableau de contingence)
 
 #### Bonne réponse
 
-* Les lits par région *
+*Les zones et le type de logement social*
 
 #### Très bonne réponse
 
 
-* Il y a 2 variables : les régions et le type de lit (réanimation, surveillance et intensif)
-Ces deux données sont de type catégorie.*
+*Il y a 2 variables : les zones de logements sociaux et le type de logement social (moins pauvre, pauvre et très pauvres). Ces deux variables sont de type catégorie.*
 
-### Hypothèse
+#### Très très bonne réponse
+
+*Nous avons deux variables, la première, le financement et la seconde, le zonage par regroupement d'IRIS, la donnée FINAN du tableau est de type catégorielle (Très pauvre, pauvre, moins pauvre). Elle décrit le type de financement par appartement (càd le loyer versé).*
+
+
+- recodage FINAN en equiv
+- inventaire de logement social, de l'iris à la zone.
+
+
+Deux étudiants ont mis en titre *Type de financement et zone géographique*, impeccable !
+
+
+## Tableau de contingence
+
+
+Une première observation du tableau nous permet de noter des chiffres très disparates d'un quartier à l'autre. La très grosse majorité des logements sociaux quelque soit le quartier sont de type *pauvres*.
+Les *très pauvres* et *pauvres* représentent la même quantité.
+Seul le quartier des Merisiers a quasiment autant de logements *très pauvres*, *moins pauvres*. 
+
+## Effectifs théoriques
+
+Il s'agit de mesurer relativement à la répartition des logements, l'effectif au hasard.
+Ainsi, on voit bien que les logements *très  pauvres* et *moins pauvres* sont en quantité égale dans toutes les zones.
+
+
+## Calcul du khi2
+
+Le khi2 calculé est largement supérieur au khi2 du tableau.
+
+```{r}
+data <- read.csv("data/rplsTypeZone.csv", fileEncoding = "UTF-8")
+tab <- table(data$NOM_IRIS, data$equiv)
+khi2 <- chisq.test(tab)
+khi2$expected
+khi2
+```
+
+Donc il y n'y a pas d'indépendance entre les variables.
+
+### Unique exemple de réponse
+
+
+*On peut donc voir que le test n'est pas valide, le khi2 calculé étant supérieur au khi2 théorique, l'hypothèse du lien entre le financement des logements (maison) et des IRIS est donc nulle*
+
+
+Analyse de cette réponse.
+
+
+(j'ai quand même mis deux points, le truc n'est pas facile et j'attendais un essai)
+
+
+
+### Ce que j'attend désormais
+
+Si on regarde la contribution de chaque zone au modèle, on voit qu'un quartier
+se singularise complètement par rapport aux autres, De Lattre de Tassigny possède autant de logement *moins pauvre* que *pauvre*. Du coup il contribue pour quasiment la moitié au khi2.
+Centre-ville et Noue Caillet ont une sur représentation de logements très pauvres.
+Tous les autres quartiers s'écartent moins du modèle.
+
+
+```{r}
+khi2partiel <- (khi2$observed - khi2$expected) ^2 / khi2$expected
+contrib <- round(apply(khi2partiel,1,sum)/sum(khi2partiel),2)
+hist(contrib)
+```
+
+## Cartographie
+
+
+```{r}
+library(mapsf)
+df <- data.frame(NOM_IRIS = names(contrib),
+                 contrib = contrib, row.names = NULL
+                 )
+jointure <- merge(zone, df, by ="NOM_IRIS")
+jointure$num <- rownames(jointure)
+mf_init(zone)
+mf_map(jointure, type = "choro", breaks = c(0, 0.1, 0.2,0.50), border = "antiquewhite2", var = "contrib", add = T)
+mf_map(jointure2, pch = 20, col = "antiquewhite3",border = NA, add = T)
+mf_label(jointure, var = "num", overlap = FALSE, col= "white",bg ="black", halo = T, cex = 1.5)
+mf_layout("Type appartement bailleur social : contribution au chi2", credits = "RPLS2019")
+```
 
 
 #### Mauvaise réponse
@@ -222,223 +538,5 @@ La bonne réponse était qu'il n'est pas nécessaire de l'étudier.
 En effet, la répartition des lits de réanimation entre les différentes régions ne fait que réfléter l'effectif de la population de chaque région.
 Or, nous n'avons pas cette variable dans le tableau.
 
-# Effectifs théoriques et observées
 
-## Analogie du jeu du dé ou test de conformité
-
-Le dé est-il truqué ?
-
-```{r}
-face <- seq(1,6)
-effectif <- c(15,7,4,11, 6, 17)
-total <-  sum(effectif)
-knitr::kable(data.frame(face,effectif))
-```
-
-Le nombre total de lancers est de 60.
-
-### Hypothèse d'indépendance
-
-hypothèse H0 : le dé n'est pas truqué (il y a indépendance entre la face et le
-nombre de fois où elle sort)
-
-### Effectifs théoriques
-
-Sur le total des lancers (60), chaque face aurait pû sortir 10 fois.
-
-```{r}
-effectifThéorique <- rep (10,6)
-df <- data.frame(face, effectif, effectifThéorique)
-knitr::kable(df)
-```
-
-### Calcul du khi2
-
-distance entre effectifs théoriques et observés
-
-Elle se mesure avec le khi2
-
-On calcule l'écart, puis le carré de cet écart et on pondère par l'effectif théorique.
-
-```{r}
-(ecart <- df$effectif - df$effectifThéorique)
-(distance <-  ecart^2)
-(relatif <- distance / df$effectifThéorique)
-(khi2 <- sum(relatif))
-```
-
-### Test du khi2
-
-#### Paramètres du test
-
-- degré de liberté : 5
-
-C'est le nombre de valeurs possibles -1 (car on peut déterminer la 6e valeur à partir des 5 autres)
-
-- Pour un risque à 0,05 (5 chances sur 100 de se tromper)
-
-### Résultat
-
-Lecture dans la table du khi2
-
-![](img/khi2table.png)
-le khi2 théorique est de 11,7, il est donc inférieur au khi2 observé.
-
-Quand le khi2 théorique est inférieur, le test est rejeté.
-
-Le test est rejeté avec un risque de 5 %
-
-Donc, le dé est truqué.
-
-## Sur notre série
-
-### Ennoncer l'hypothèse H0
-
-Le type d'appartement est indépendant quartier.
-
-### Effectif théorique
-
-La première case reçoit la formule :
-
-- (total lg / total) * total colonne
-
-C'est ce qu'on appelle également le produit des marges
-
-![](img/effectifTheorique.png)
-
-
-
-### Ecarts entre observés et théoriques
-
-Que signifie une valeur zéro ?
-
-Utiliser la notion
-
-- sur représentation / sous représentation
-
-
-![](img/ecartsTableauComplet.png)
-
-Les petits appartements sont sous-représentés à Blanqui et à la remise à Jorelle par rapport à une distribution identique entre les quartiers.
-
-
-### Le Khi2 
-
-Le khi2 va permettre de valider le rejet de l'hypothèse d'indépendance.
-
-rappel : métrique euclidienne plutôt que les valeurs absolues on utilise les carrés
-
-
-#### Le Khi2 partiel
-
-On met les écarts rapportés à la valeur théorique d'indépendance au carré.
-Puis on divise par l'effectif théorique.
-
-
-
-![](img/khi2partiel.png)
-
-#### Le Khi2
-
-
-Le total de tous les khi2 partiels
-
-![](img/khi2partiel2.png)
-
-
-
-```{r}
-data <- read.csv("data/rplsPieceZone.csv")
-tab <- table(data$NOM_IRIS, data$taille)
-chisq.test(tab)
-```
-
-
-C'est le total des khi2 partiels (dans notre exemple 338)
-
-On définit :
-
-- degré de liberté
-lg -1 * col -1
-
-8 zone et 3 types d'appartements = 7 * 2 = 14
-
-
-- risque 1, 5 et 10 %
-
-Sur internet, dans n'importe quelle table, on cherche les valeurs correspondantes.
-
-#### Rejet de H0 ou pas
-
-
-![](img/test.png)
-
-HO hypothèse d'indépendance. son rejet implique qu'il y a une relation.
-
-Les variables nombre de pièces et zones ont une relation avec une marge d'erreur très faible puisque le khi2 augmente avec le risque d'erreur.
-
-### Intensité de la liaison
-
-indicateur entre 0 et 1. 1 pour très forte intensité.
-
-
-#### Coefficient de contingence
-
-Le plus simple est le coefficient de contingence peut mesurer cette relation.
-
-C'est le Khi2 rapporté à la somme Khi2 et de l'effectif total
-
-
-#### Coefficient de Tschuprow
-
-D'autres coefficients permet de reprendre le nombre de degrés de liberté et ainsi de s'affranchir de la taille du tableau.
-
-Celui de Tschuprow est le khi2 calculé rapporté à l'effectif total multiplié par la racine carré du nombre de degré de liberté.
-
-![](img/coeff.png)
-
-
-
-### Interprétation des coefficients
-
-Ils sont très faibles, donc même si les variables sont dépendantes l'une de l'autre, l'intensité de la relation est faible.
-
-# Correction du quizz
-
-## Ecarts entre observés et théoriques
-
-Penser à utiliser les terme attraction / répulsion ou sur et sous représentation.
-
-
-### Bonne réponse
-
-
-
-Sera bonne toute réponse commentant le graphique.
-
-#### exemple
-
-* Il y a par exemple, une sur représentation du nombre de lits intensifs dans les régions PACA et Centre Val de Loire ainsi qu'une anomalie sur le nombre de lits en Bretagne *
-
-Bien, mais je me demande de quelle anomalie il s'agit. Si je dois aller voir le graphique pour la comprendre, ce n'est pas bon.
-
-#### Meilleur exemple
-
-
-* En PACA, les lits de surveillance sont sous représentés tandis qu'en Ile de France, ils sont sur représentés *
-
-* La région PACA est répulsive pour les lits de surveillance au contraire de l'Ile de France*
-
-## Rejet de l'hypothèse
-
-* On constate que le khi2 calculé est supérieur au khi2 théorique donc nous ne sommes pas dans une situation de hasard *
-
-## Intensité de la relation
-
-* Elle existe mais elle est très faible (Proche de 0 ; 0.018)*
-
-
-
-
-
-
+## Effectif théorique
