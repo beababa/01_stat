@@ -72,19 +72,16 @@ fichier framapad, https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
 
 74 étudiants sur 3 cours
 
-Attention, 4 doublons de prénoms (Ambre, Camille, Marie et Sarah), j'ai rajouté l'initiale
+Attention, 5 doublons de prénoms (Ambre, Camille, Marie, Roxane et Sarah), j'ai rajouté l'initiale
 du nom de famille.
 
-```{r}
+```{r, echo=FALSE}
 etudiant <-  read.csv("data/etudiant.csv", fileEncoding = "UTF-8")
 mailetudiant <- paste(paste0(etudiant$mail, ";"))
 tmp <- mailetudiant [1]
 for (i in 2:73){ 
   tmp <- paste(tmp, mailetudiant [i])}
 write.csv(tmp, "data/mails.txt")
-txt <- c("a", "b")
-paste0("a", "b", ";")
-sapply(txt, paste)
 tab <- table (etudiant$prénom)
 names(tab)[tab >1]
 write.csv(etudiant [, c("prénom", "groupe.TD")], "cours1.csv", fileEncoding = "UTF-8")
@@ -105,7 +102,6 @@ for (i in 3:7){
 
 ```{r, echo = FALSE}
 tab <- table(etudiant$groupe.TD)
-tab 
 ```
 
 

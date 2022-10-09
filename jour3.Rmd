@@ -390,7 +390,7 @@ Il serait sans doute intéressant de répéter l'opération mais sur chaque rés
 
 Importance des commentaires, même non demandés, ils donnaient un sens à tous ces chiffres !
 
-J'avais mis tableau juste pour le khi2, j'ai fini par noté si le tableau était présent ou pas.
+J'avais mis tableau juste pour le khi2, j'ai fini par noter si le tableau était présent ou pas.
 
 ### Données
 
@@ -502,41 +502,4 @@ mf_layout("Type appartement bailleur social : contribution au chi2", credits = "
 ```
 
 
-#### Mauvaise réponse
 
-* Il serait logique que chaque région ait une capacité adaptée à sa population*
-
-Il n'y a pas de variable population dans les données donc pas d'hypothèse autour de la population.
-
-#### Bonne réponse
-
-
-* Les répartitions de type de lit ne sont pas les mêmes entre les régions*
-
-### Fréquences conditionnelles en ligne
-
-#### Mauvaise réponse
-
-* On peut voir sur la même base qui est 100 la différence pour les 3 données pour une seule région*
-
-
-Il manque des exemples précis.
-
-#### Bonne réponse
-
-* Les régions ont une plus forte proportion de lits de surveillance que des autres types de lit (42 % en moyenne). 
-Les lits intensifs et de réanimation sont en part égales.
-Mais il y a des différences entre les régions. Par exemple, la Bretagne compte beaucoup de lits de réanimation. A l'inverse, l'Ile de France en a peu.
-La PAC et le centre val de Loire ont moins de lits de surveillance.
-Donc les répartitions sont différentes entre région.*
-
-
-
-### Fréquences conditionnelles en colonne
-
-La bonne réponse était qu'il n'est pas nécessaire de l'étudier.
-En effet, la répartition des lits de réanimation entre les différentes régions ne fait que réfléter l'effectif de la population de chaque région.
-Or, nous n'avons pas cette variable dans le tableau.
-
-
-## Effectif théorique
