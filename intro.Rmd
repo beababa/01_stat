@@ -10,6 +10,7 @@ editor_options:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(eval  = TRUE)
+knitr::opts_chunk$set(echo  = FALSE)
 ``` 
 
 
@@ -107,16 +108,16 @@ tab <- table(etudiant$groupe.TD)
 
 ```{r,  echo = FALSE}
 i <- 2
-for (i in 2:3) {
+for (i in 2:4) {
   nomFic <- paste0("data/cours", i, ".csv")
   data <- read.csv(nomFic, fileEncoding = "UTF-8")
   data <- data [data [,3] == "oui",]
   tmp <- table(data$groupe.TD)
   tab <- rbind(tab , tmp)
   }
-row.names(tab) <- c("cours1", "cours2", "cours3")
+row.names(tab) <- c("cours1", "cours2", "cours3", "cours4")
 knitr::kable(tab)
-barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(3) 
+barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(4) 
         , border = NA, legend =  T)
 ```
 
@@ -130,17 +131,33 @@ https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
 ```{r}
 rendu <- c(47,36, 29)
 titre <- c("distribution", "univarié", "khi2")
-barplot(rendu, names = titre, main = "rendu devoirs (effectif 75 étudiants)")
-# les notes
-
+barplot(rendu, names = titre, main = "rendu devoirs (effectif 75 étudiants environ)")
 ```
 
 
-#### Le critère externe : des points faciles ?
+#### Les notes de devoir
 
 
-Au 3e devoir, sur 29 rendus, uniquement
+- Le critère externe : des points faciles ?
 
+
+Au 3e devoir, sur 29 rendus, la moitié (15) ne mettent pas le bon nom, ni la bonne extension.
+
+- Distribution des totaux
+
+```{r}
+devoir <- read.csv("data/notes.csv", fileEncoding = "UTF-8", dec=",", na.strings = NA)
+hist(devoir$Total...25., main = "Répartion du cumul des notes des 3 devoirs (max 25)", freq = F, border = NA)
+densite <- density(devoir$Total...25. )
+lines(densite, col = "red", lwd = 3)
+```
+
+Ajustement des limites
+
+```{r}
+hist(devoir$Total...25., main = "Répartion du cumul des notes des 3 devoirs (min 5, max 25)", freq = F, border = NA,xlim = c(5,25), ylim = c(0,0.05))
+lines(densite, col = "red", lwd = 3)
+```
 
 
 # La donnée du cours
