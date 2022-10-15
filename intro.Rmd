@@ -189,9 +189,21 @@ write.csv(filtre, "data/rplsBondy.csv")
 
 C'est normalement ce fichier de données que nous allons utiliser pour le cours.
 
+
 ## 2019
 
 Il y a un problème sur la donnée, prendre plutôt le millésime 2019
+
+
+```{r}
+rpls2019 <- read.csv2("G:/Mon Drive/05_DATA/05_HABITAT/RPLS2019_detail_IDF_DEP_93.csv")
+rpls2021<- read.csv2("G:/Mon Drive/05_DATA/05_HABITAT/RPLS2021_detail_IDF_DEP_93.csv")
+```
+
+```{r}
+head(rpls2019)
+head(rpls2021)
+```
 
 
 # Pratique
