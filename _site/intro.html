@@ -13,7 +13,7 @@
 
 <title>Introduction</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
@@ -135,15 +135,11 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
-  }
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -450,67 +446,73 @@ mi-semestre</p>
 <tr class="odd">
 <td align="right">3</td>
 <td align="left">26/09/2022</td>
-<td align="left">bivariée : base</td>
+<td align="left">bivariée : base + contingence</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
-<td align="right">4</td>
+<td align="right">NA</td>
 <td align="left">03/10/2022</td>
-<td align="left">contingence</td>
+<td align="left">ABSENCE</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
-<td align="right">5</td>
+<td align="right">4</td>
 <td align="left">10/10/2022</td>
 <td align="left">Khi 2</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
-<td align="right">6</td>
+<td align="right">5</td>
 <td align="left">17/10/2022</td>
-<td align="left">régression</td>
+<td align="left">Régression / variance Partie 1</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
-<td align="right">7</td>
+<td align="right">6</td>
 <td align="left">24/10/2022</td>
 <td align="left">devoir sur table</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
-<td align="right">8</td>
+<td align="right">NA</td>
 <td align="left">31/10/2022</td>
-<td align="left">Fin régression / Initiation R</td>
+<td align="left">CONGES</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="left">07/11/2022</td>
+<td align="left">Regression / variance Partie 2</td>
 <td align="left">R</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">14/11/2022</td>
+<td align="left">initiation R</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="right">9</td>
-<td align="left">07/11/2022</td>
-<td align="left">initiation R</td>
+<td align="left">21/11/2022</td>
+<td align="left">multivariée : multifactorielle + sujet de devoir</td>
 <td align="left"></td>
 </tr>
 <tr class="even">
 <td align="right">10</td>
-<td align="left">14/11/2022</td>
-<td align="left">multivariée : multifactorielle + sujet de devoir</td>
+<td align="left">28/11/2022</td>
+<td align="left">classification</td>
 <td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="right">11</td>
-<td align="left">21/11/2022</td>
-<td align="left">classification</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="right">12</td>
-<td align="left">28/11/2022</td>
+<td align="left">05/12/2022</td>
 <td align="left">questions autour du devoir maison. Devoir à rendre le 8
 au plus tard.</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
-<td align="right">13</td>
-<td align="left">05/12/2022</td>
+<tr class="even">
+<td align="right">12</td>
+<td align="left">12/12/2022</td>
 <td align="left">rendu du devoir maison et bilan formation</td>
 <td align="left"></td>
 </tr>
@@ -527,7 +529,7 @@ number="4">
 href="https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9"
 class="uri">https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9</a></p>
 <p>74 étudiants sur 3 cours</p>
-<p>Attention, 5 doublons de prénoms (Ambre, Camille, Marie, Roxane et
+<p>Attention, 5 doublons de prénoms (Ambre, Camille, Marie, Antonin et
 Sarah), j’ai rajouté l’initiale du nom de famille.</p>
 <pre><code>## character(0)</code></pre>
 <p><img src="intro_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
@@ -553,7 +555,7 @@ cours</h3>
 <td align="left">cours1</td>
 <td align="right">24</td>
 <td align="right">21</td>
-<td align="right">29</td>
+<td align="right">28</td>
 </tr>
 <tr class="even">
 <td align="left">cours2</td>
@@ -570,8 +572,8 @@ cours</h3>
 <tr class="even">
 <td align="left">cours4</td>
 <td align="right">14</td>
-<td align="right">16</td>
-<td align="right">1</td>
+<td align="right">18</td>
+<td align="right">25</td>
 </tr>
 </tbody>
 </table>
@@ -591,13 +593,14 @@ devoir</h4>
 <li>Le critère externe : des points faciles ?</li>
 </ul>
 <p>Au 3e devoir, sur 29 rendus, la moitié (15) ne mettent pas le bon
-nom, ni la bonne extension.</p>
+nom, ni la bonne extension. Au 4e, sur 14, 10 ont utilisé bon nom et
+bonne extension.</p>
 <ul>
 <li>Distribution des totaux</li>
 </ul>
-<p><img src="intro_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<p>Ajustement des limites</p>
-<p><img src="intro_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre><code>## [1] 1</code></pre>
+<p><img src="intro_files/figure-html/unnamed-chunk-7-1.png" width="672" /><img src="intro_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<p>Beaucoup de notes très faibles, mais pas seulement.</p>
 </div>
 </div>
 </div>
@@ -617,11 +620,19 @@ class="uri">https://www.data.gouv.fr/fr/datasets/repertoire-des-logements-locati
 <p>C’est normalement ce fichier de données que nous allons utiliser pour
 le cours.</p>
 </div>
-</div>
-<div id="section-1" class="section level2" number="5.2">
-<h2><span class="header-section-number">5.2</span> 2019</h2>
+<div id="section-1" class="section level3" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> 2019</h3>
 <p>Il y a un problème sur la donnée, prendre plutôt le millésime
 2019</p>
+<pre><code>## Linking to GEOS 3.9.1, GDAL 3.3.2, PROJ 7.2.1; sf_use_s2() is TRUE</code></pre>
+<pre><code>## Deleting layer `rpls2019&#39; using driver `GPKG&#39;
+## Writing layer `rpls2019&#39; to data source `data/data.gpkg&#39; using driver `GPKG&#39;
+## Writing 9390 features with 72 fields and geometry type Point.</code></pre>
+<pre><code>## Deleting layer `rpls2021&#39; using driver `GPKG&#39;
+## Writing layer `rpls2021&#39; to data source `data/data.gpkg&#39; using driver `GPKG&#39;
+## Writing 6534 features with 73 fields and geometry type Point.</code></pre>
+<p><img src="intro_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
 </div>
 </div>
 <div id="pratique" class="section level1" number="6">
@@ -645,20 +656,7 @@ class="uri">http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm</a></
 </div>
 <div id="le-devoir-maison" class="section level1" number="8">
 <h1><span class="header-section-number">8</span> Le devoir maison</h1>
-<p>Il s’agit de prendre minimum 4 variables socio économiques à partir
-de l’outil insee statistiques locales et de faire dessus une analyse
-factorielle et une classification en affinant au fur et à mesure
-(exclusion des valeurs particulières ou choix d’échantillons). Le devoir
-maison est à rendre sous forme de script R commenté (avec des #) avec le
-fichier de données en .csv</p>
-<p>dates :</p>
-<ul>
-<li><p>soumission du sujet : 22/11 et 29/11, chaque étudiant doit
-proposer ses variables</p></li>
-<li><p>travail sur le devoir en classe</p></li>
-<li><p>rendu du devoir par les étudiants</p></li>
-<li><p>le devoir sera rendu sur la dernière séance</p></li>
-</ul>
+<p>A définir le 21/11</p>
 </div>
 
 <br><br><br><br><br><br><br><br><br><br><br><br>

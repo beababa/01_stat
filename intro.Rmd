@@ -11,6 +11,7 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(eval  = TRUE)
 knitr::opts_chunk$set(echo  = FALSE)
+knitr::opts_chunk$set(warning  = FALSE)
 ``` 
 
 
@@ -73,7 +74,7 @@ fichier framapad, https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
 
 74 étudiants sur 3 cours
 
-Attention, 5 doublons de prénoms (Ambre, Camille, Marie, Roxane et Sarah), j'ai rajouté l'initiale
+Attention, 5 doublons de prénoms (Ambre, Camille, Marie, Antonin et Sarah), j'ai rajouté l'initiale
 du nom de famille.
 
 ```{r, echo=FALSE}
@@ -129,9 +130,10 @@ https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
 ### Les rendus de devoir
 
 ```{r}
-rendu <- c(47,36, 29)
-titre <- c("distribution", "univarié", "khi2")
-barplot(rendu, names = titre, main = "rendu devoirs (effectif 75 étudiants environ)")
+rendu <- c(47,36, 29, 14)
+titre <- c("distribution", "univarié", "khi2", "khi2bis")
+p <- barplot(rendu, names = titre, main = "rendu devoirs (effectif 75 étudiants environ)")
+text(p, y = rendu - 1, labels = rendu )
 ```
 
 
@@ -142,23 +144,28 @@ barplot(rendu, names = titre, main = "rendu devoirs (effectif 75 étudiants envi
 
 
 Au 3e devoir, sur 29 rendus, la moitié (15) ne mettent pas le bon nom, ni la bonne extension.
+Au 4e, sur 14, 10 ont utilisé bon nom et bonne extension.
 
 - Distribution des totaux
 
 ```{r}
-devoir <- read.csv("data/notes.csv", fileEncoding = "UTF-8", dec=",", na.strings = NA)
-hist(devoir$Total...25., main = "Répartion du cumul des notes des 3 devoirs (max 25)", freq = F, border = NA)
-densite <- density(devoir$Total...25. )
-lines(densite, col = "red", lwd = 3)
+devoir <- read.csv("data/notes.csv", fileEncoding = "UTF-8", dec=",", na.strings = '-')
+res <- (apply(devoir [,2:5], 1, sum, na.rm = T))
+resSansZero <- res [res  !=0]
+min(resSansZero)
+densite <- density(res)
+densite2 <- density(resSansZero)
+hist(res, main = "Répartion du cumul des notes des 4 devoirs (max 17, 87 obs)", 
+     xlab = "notes", ylab = "nb", freq = T,border = NA)
+abline(v = mean(res),  col = "red")
+abline(v = median(res),  col = "red", lty = 2)
+hist(resSansZero, main = "Sans zéro (59 obs)", freq = T,border = NA,
+     xlab = "notes", ylab = "nb")
+abline(v = mean(resSansZero),  col = "red")
+abline(v = median(resSansZero),  col = "red", lty = 2)
 ```
 
-Ajustement des limites
-
-```{r}
-hist(devoir$Total...25., main = "Répartion du cumul des notes des 3 devoirs (min 5, max 25)", freq = F, border = NA,xlim = c(5,25), ylim = c(0,0.05))
-lines(densite, col = "red", lwd = 3)
-```
-
+Beaucoup de notes très faibles, mais pas seulement.
 
 # La donnée du cours
 
@@ -190,19 +197,39 @@ write.csv(filtre, "data/rplsBondy.csv")
 C'est normalement ce fichier de données que nous allons utiliser pour le cours.
 
 
-## 2019
+### 2019
 
 Il y a un problème sur la donnée, prendre plutôt le millésime 2019
 
 
 ```{r}
-rpls2019 <- read.csv2("G:/Mon Drive/05_DATA/05_HABITAT/RPLS2019_detail_IDF_DEP_93.csv")
-rpls2021<- read.csv2("G:/Mon Drive/05_DATA/05_HABITAT/RPLS2021_detail_IDF_DEP_93.csv")
+rpls2019 <- read.csv2("data/RPLS2019_detail_IDF_DEP_93.csv")
+head(rpls2019)
+
+rpls2021<- read.csv2("data/rpls2021_geolocalise_OD_REG11_DEP93.csv")
 ```
 
 ```{r}
-head(rpls2019)
-head(rpls2021)
+library(sf)
+rpls2019 <- rpls2019 [rpls2019$CODEPOSTAL == '93140',]
+rpls2021 <- rpls2021 [rpls2021$CODEPOSTAL == '93140',]
+# spatialisation des données
+rpls2019 <- st_as_sf(rpls2019, coords = c("X", "Y"), crs = 2154)
+rpls2021 <- st_as_sf(rpls2021, coords = c("X", "Y"), crs = 2154)
+write.csv(rpls2019, "data/rpls2019.csv", fileEncoding = "UTF-8")
+st_write(rpls2019, "data/data.gpkg", "rpls2019", delete_layer = T)
+st_write(rpls2021, "data/data.gpkg", "rpls2021", delete_layer = T)
+```
+
+
+```{r}
+
+library(mapsf)
+mf_map(rpls2019, pch= 20, col = "red")
+mf_map(rpls2021, col = "green", alpha = 0.8, add = T)
+mf_legend(type = "typo", pos = "topright", val = c("2019", "2021"), pal = c("red", "green"), border = NA,
+          title = "")
+mf_layout("Comparaison rpls 2019 et 2021", credits = "RPLS")
 ```
 
 
@@ -221,19 +248,4 @@ Lorsque l'exercice le requiert, le fichier est à rendre avec son *prénom* (tou
 
 # Le devoir maison
 
-Il s'agit de prendre minimum 4 variables socio économiques à partir de l'outil insee
-statistiques locales et de faire dessus une analyse factorielle et une classification
-en affinant au fur et à mesure (exclusion des valeurs particulières ou choix d'échantillons).
-Le devoir maison est à rendre sous forme de script R commenté (avec des #) avec le fichier de 
-données en .csv
-
-dates :
-
-- soumission du sujet : 22/11 et 29/11, chaque étudiant doit proposer ses variables
-
-- travail sur le devoir en classe
-
-- rendu du devoir par les étudiants
-
-- le devoir sera rendu sur la dernière séance
-
+A définir le 21/11

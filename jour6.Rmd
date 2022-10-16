@@ -37,7 +37,7 @@ Question : observer la donnée .csv et comprendre comment elle fonctionne.
 
 ## Hypothèse 
 
-Le niveau départemental permet de résumer l'hétérogénéïté de la richesse dans la région.
+Le niveau départemental permet de résumer l’hétérogénéité de la richesse dans la région.
 
 On prend donc le fichier communal et on va utiliser commme variable le revenu médian.
 

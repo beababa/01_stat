@@ -9,32 +9,33 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 # Données d'exemple
 
-Toujours les mêmes, mais il s'agit d'avoir deux variables continues, on va prendre
-année et surface.
+Toujours les mêmes, mais il s'agit d'avoir deux variables continues, on va prend année et surface.
 
 Comprendre les variables
 
-Enoncer les hypothèses
+Enoncer les hypothèses possibles de la comparaison, attention variable explicative (Y) et à expliquer (X)
 
-De quel type sont les variables ?
+(cf moodle exercice *Introduction =régression*)
+
 
 ```{r}
-data <- read.csv("data/rplsBondy.csv")
-data <- data [, c("SURFHAB","CONSTRUCT", "COMPLGEO")] 
+data <- read.csv("data/rpls2019.csv", fileEncoding = "UTF-8", dec =".")
+data <- data [, c("SURFHAB","CONSTRUCT", "COMPLGEO","X","Y")] 
 summary(data)
-write.csv(data, "data/rplsSurfConst.csv")
+write.csv(na.omit(data), "data/rplsSurfConst.csv")
 ```
 
 # Nuage de points
 
-## Quelle présentation ?
+## Quelle représentation ?
 
-```{r, echo=T}
+```{r, echo=F}
+data <- read.csv("data/rplsSurfConst.csv")
 plot(data$SURFHAB, data$CONSTRUCT)
 ```
 
@@ -44,13 +45,17 @@ plot(data$SURFHAB, data$CONSTRUCT)
 plot(data$CONSTRUCT, data$SURFHAB)
 ```
 
+variable explicative et expliquée.
+
 ## Savoirs faire tableur
 
 - sélectionner uniquement les 2 colonnes de données
 
 - types de diagramme ; xy - dispersion
 
-- intervertir x et y (onglet série de données) : comprendre le rôle des deux variables
+- intervertir x et y (onglet série de données) 
+
+![](img/inversionxy.jpg)
 
 
 ## Simplification des chiffres
@@ -61,29 +66,48 @@ Retour sur les distributions pour enlever les valeurs aberrantes
 
 ```{r}
 hist(data$SURFHAB)
-
+hist(data$CONSTRUCT)
 ```
 
 On recherche des bornes permettant d'avoir un nuage de points "cohérent".
 Avec le tableur, on fait le graphique puis on ajuste avec le filtre.
 
+```{r}
+data <- data [data$SURFHAB %in% c(20:120) ,]
+data <- data [data$CONSTRUCT > 1930,]
+plot(data$CONSTRUCT, data$SURFHAB)
+```
 
 
-# Intensité du lien
 
-## Affichage des moyennes
+# Droite de régression
 
-Savoir-faire tableur : axes secondaires
+La droite de régression minimise la somme des carrés des distances verticales entre chacun des points du nuage et la droite recherchée.
 
-Pour le premier : courbe valeur moyenne, pour le second axe secondaire
+Pour une droite aX+b
 
-![](img/courbeMoyennes.png)
+- a (la pente) = covariance / variance X
 
-On observe les quadrants, ils permettent de déterminer le sens de la corrélation.
+- b (ordonnée de l'origine) = moyenne de y - a * moyenne de y
 
-## Covariance et coefficient de Bravais-Pearson
 
-Savoir-faire tableur : utiliser les noms pour les colonnes construction et surface
+```{r}
+plot(data$CONSTRUCT, data$SURFHAB)
+lm <- lm(data$SURFHAB~data$CONSTRUCT)
+abline(lm, lty =2, lwd = 1, col = "red")
+```
+
+
+Dans calc, cliquer sur les points et insérer courbe de tendance
+(on peut également afficher l'équation de la droite.)
+
+Visuellement, on voit bien qu'il existe un lien entre les deux variables, mais la pente de la droite n'est pas très forte. 
+
+Il s'agit maintenant de mesurer précisemment l'intensité du lien à l'aide de calculs.
+
+# Intensité du lien : covariance et coefficient de Bravais-Pearson
+
+Savoir-faire tableur : utiliser les noms pour les colonnes construction et surface etc...
 
 
 ### Premier temps
@@ -98,13 +122,16 @@ et pour les deux variables
 
 Dans un nouveau tableau, pour chaque variable
 - moyenne
-- somme des écarts à la moyenne 
+- carré de la somme des écarts à la moyenne 
 - Variance
 - Ecart type
 
-puis covariance (produit des écarts / effectif)
+puis covariance (produit des écarts / nb de valeurs)
 
 et coeff (cov / produit des écarts types)
+
+
+![](img/formules.jpg)
 
 ![](img/coeffCORRELATION.jpg)
 ### Interprétation
@@ -125,28 +152,6 @@ varCorr <- data [, c( "SURFHAB", "CONSTRUCT")]
 cor(varCorr)
 ```
 
-
-# Droite de régression
-
-La droite de régression minimise la somme des carrés des distances verticales entre chacun des points du nuage et la droite recherchée.
-
-Pour une droite aX+b
-
-- a (la pente) = covariance / variance X
-
-- b (ordonnée de l'origine) = moyenne de y - a * moyenne de y
-
-
-```{r}
-plot(data$CONSTRUCT, data$SURFHAB, 
-       xlim = c(1935,2022), ylim = c(c(0, 125)))
-data <- data [data$SURFHAB < 120 | data$CONSTRUCT > 1935, ]
-lm <- lm(data$SURFHAB~data$CONSTRUCT)
-abline(lm, lty =2)
-```
-
-
-Dans calc, cliquer sur les points et insérer courbe de tendance
 
 
 # Coefficient de détermination
@@ -172,6 +177,26 @@ commentaire.
 
 
 ![](img/residu.jpg)
+# cartographie des résidus
+
+```{r}
+library(sf)
+library(mapsf)
+residus <- rstudent(lm)
+hist(residus)
+# on calcule les résidus
+data <- cbind(data, residus)
+datasf <- st_as_sf(data, coords = c("X","Y"), crs = 2154)
+dataResidu <- datasf [datasf$residus < -2 | datasf$residus > + 2, drop = F]
+
+zone <- st_read("data/logement.gpkg", "quartiersBailleurs", quiet = T)
+mf_map(zone, border = "antiquewhite1", col = "antiquewhite3")
+mf_map(datasf, pch = 20, col = "green", add = T)
+mf_map(dataResidu, pch = 20, col = "red", add = T)
+mf_legend(type = "typo", val = c("résidus", "residus remarquables"), title ="",
+          pal = c("green", "red"))
+mf_layout("année construction et surface appartement : étude des résidus", credits = "RPLS2019")
+```
 
 
 

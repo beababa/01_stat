@@ -9,7 +9,8 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
 ```
 
 # Déroulement
@@ -37,16 +38,17 @@ Deux distributions connues par classe quelque soit la nature des modalités.
 
 Afin de vraiment comprendre, on saisit des modalités différentes : à votre avis comment va-t-on les classer ?
 
-Attention, valeur plancher 5
+
+Attention, valeur plancher 5 pour le calcul du khi2
 
 
 
 ```{r, echo=FALSE}
 library(sf)
-zone <- st_read("data/logement.gpkg", "quartiersBailleurs")
-rpls <- st_read("data/logement.gpkg", "RPLS")
+zone <- st_read("data/logement.gpkg", "quartiersBailleurs", quiet = T)
+rpls <- st_read("data/logement.gpkg", "RPLS", quiet = T)
 table(rpls$NBPIECE, useNA = "always")
-barplot(table(rpls$NBPIECE, useNA = "always"))
+barplot(table(rpls$NBPIECE, useNA = "always"), col = c("cyan", "cyan", "darkolivegreen2", "darkolivegreen2", "cornsilk2","cornsilk2","cornsilk2","cornsilk2","cornsilk2"), border = NA)
 #table(rpls$FINAN, useNA = "always")
 # recodification
 FINAN <- as.integer(names(table(rpls$FINAN)))
@@ -57,6 +59,10 @@ code$equiv [ code$FINAN < 13 ] <- choix [1]
 code$equiv [ code$FINAN > 48 | code$FINAN == 13] <- choix [2]
 jointure1 <- merge  (rpls, code, by = "FINAN")
 #table(jointure$equiv)
+```
+
+
+```{r, echo=FALSE}
 # pour nb pièces
 NBPIECE <-  as.integer(names(table(rpls$NBPIECE)))
 taille <- "moyen"
@@ -73,6 +79,8 @@ rplsTypeZone <- inter [, c("equiv", "NOM_IRIS"), drop = T]
 write.csv(rplsTypeZone, "data/rplsTypeZone.csv", fileEncoding = "UTF-8")
 #table(rplsTypeZone$equiv,rplsTypeZone$NOM_IRIS)
 ```
+
+
 
 ## Cartographies de base
 
@@ -153,7 +161,7 @@ quelle élément fixer, ligne ou colonne ?
 
 ![](img/frequenceLG.png)
 
-analyse
+Analyse
 
 - répartition des types d'appartement puis lorsque ramené à une base 100, on peut comparer entre les zones.
 
@@ -201,7 +209,7 @@ Elle se mesure avec le khi2
 
 On calcule l'écart, puis le carré de cet écart et on pondère par l'effectif théorique.
 
-```{r}
+```{r, echo = T}
 (ecart <- df$effectif - df$effectifThéorique)
 (distance <-  ecart^2)
 (relatif <- distance / df$effectifThéorique)
@@ -231,11 +239,11 @@ Le test est rejeté avec un risque de 5 %
 
 Donc, le dé est truqué.
 
-# Retour à la comparaison secteur / type d'appartement
+# Khi2 : Retour à la comparaison secteur / type d'appartement
 
 ## Ennoncer l'hypothèse H0
 
-Le type d'appartement est indépendant quartier.
+Le type d'appartement est indépendant du quartier.
 
 ## Effectif théorique
 
@@ -249,7 +257,7 @@ C'est ce qu'on appelle également le produit des marges
 
 
 
- ## Ecarts entre observés et théoriques
+## Ecarts entre observés et théoriques
 
 Que signifie une valeur zéro ?
 
