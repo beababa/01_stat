@@ -12,24 +12,251 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Méthode
+# Préparation des données
 
-Vous avez une source de données à étudier sous l'aspect uni et bivariée.
+## Sujet 1 : données RPLS - Communes 93
 
-Il y a deux éléments : le formulaire et le fichier tableur
+Identification des communes
 
-Le formulaire est à remplir et à envoyer, le fichier tableur est à déposer sur
-l'espace commun (avec votre prénom et en format libre office)
+```{r}
+data <- read.csv2("data/rpls2021_geolocalise_OD_REG11_DEP93.csv",  fileEncoding = "ASCII")
+#116 644
+head(data)
+table(data$LIBCOM)
+ee <- c("Bagnolet", "Bobigny", "Les Lilas", "Bondy", "Le PrC)-Saint-Gervais", "Montreuil", "Noisy-le-Sec", "Romainville", "Pantin")
+ee <- sort(ee)
+eeOK <- gsub("C)", "é", ee)
+dataee <- data [data$LIBCOM %in% ee,]
+# 41788
+```
 
-Imaginez que vous chercher à convaincre un tiers de l'intérêt de votre étude, donc
-attention à votre style et à la présentation de vos tableaux !
+données population insee
+
+
+```{r}
+communes <- read.csv2("data/donnees_communes.csv", fileEncoding = "UTF-8")
+communeEe <- communes [communes$COM %in% eeOK & communes$CODREG == 11, ]
+communeEe <- communeEe [ order(communeEe$COM),]
+
+```
+
+
+
+
+
+Recodage (fonctions)
+
+
+
+```{r}
+# recodification
+recoder <- function (data) {
+  FINAN <- as.integer(names(table(data$FINAN)))
+  FINANcode <- "moins pauvres"
+  code <- data.frame(FINAN, FINANcode)
+  choix <- c("très pauvres", "pauvres", "moins pauvres")
+  code$FINANcode [ code$FINAN < 13 ] <- choix [1]
+  code$FINANcode [ code$FINAN > 48 | code$FINAN == 13] <- choix [2]
+  jointure1 <- merge  (data, code, by = "FINAN")
+  data <- jointure1
+  NBPIECE <-  as.integer(names(table(data$NBPIECE)))
+  taille <- "moyen"
+  code <- data.frame(NBPIECE, taille)
+  code$taille [ code$NBPIECE < 3 ] <- "petit"
+  code$taille [ code$NBPIECE > 4] <- "grand"
+  jointure2 <- merge  (data, code, by = "NBPIECE")
+  return(jointure2)
+}
+```
+
+
+```{r}
+dataee <- recoder(dataee) 
+```
+
+
+Un fichier par commune
+
+
+```{r}
+liste <- split.data.frame(dataee, dataee$LIBCOM)
+i <- 1
+for (i in 1:length(liste)) {
+  df <- liste [[i]]
+  print(df$LIBCOM [1]) 
+  print(length (df$LIBCOM))
+  write.csv(df ,paste0("data/ee_", df$LIBCOM [1], ".csv"), fileEncoding = "UTF-8", na = "NA")
+}
+```
+
+verif
+
+```{r}
+fic <- list.files("data/", "^ee")
+i <- 1
+nb <- NULL
+par(mfrow = c(3,3))
+for (i in 1:length(fic)){
+  data <- read.csv(paste0("data/",fic [i]), fileEncoding = "UTF-8")
+  tmp <- length(data$NBPIECE)
+  nb <- c(nb, tmp)
+  barplot(table(data$NBPIECE), main = paste0(fic [i], " ", tmp))
+}
+df <- data.frame(ee,nb, communeEe$PTOT)
+names(df) <- c("commune", "logements_sociaux", "population")
+write.csv(df,"data/tabEE.csv", fileEncoding = "UTF-8")
+```
+
+
+
+
+
+## Sujet 2 : données RPLS - Communes de 60 M hbts en Ile de France
+
+Identification des communes
+
+```{r}
+communes <- read.csv2("data/donnees_communes.csv", fileEncoding = "UTF-8")
+communes [communes$COM == 'Bondy',]
+IDF <- communes [communes$PTOT < 60000 & communes$PTOT > 50000 & communes$CODREG == 11, ]
+# uniquement 1 commune par département
+sorted_IDF <- IDF [order (IDF$CODDEP),]
+extrIDF <- sorted_IDF [!duplicated(sorted_IDF$CODDEP),]
+extrIDF <- extrIDF [order(extrIDF$COM),]
+```
+
+```{r}
+library(sf)
+library(mapsf)
+geo <- st_read("data/communes-20210101.shp")
+dpt <- st_read("data/DEPARTEMENT_CARTO.shp")
+extrIDF
+jointure <- merge(geo, extrIDF, by.x = "nom", by.y = "COM")
+jointure <- jointure [jointure$insee != "60145",]
+jointure
+png("img/idf.png")
+mf_init(jointure)
+mf_map(dpt, col = "antiquewhite1", border = "antiquewhite3", add = T)
+mf_map(jointure, col = "red", border = NA, add = T)
+mf_label(jointure, var="nom")
+mf_layout("Villes proposées en Île de France", credits = "insee")
+dev.off()
+```
+
+![](img/idf.png)
+
+
+
+```{r}
+fic <- list.files("data/", "REG11")
+choix <- extrIDF$COM
+choix
+extrIDF
+fic
+i <- 5
+for (i in 1:length(fic)){
+  tmp <- read.csv2(paste0("data/", fic [i]), fileEncoding = "ASCII")
+  # encodage ASCII sf pour Clamart en mac
+  tmp <- recoder(tmp)
+  table(tmp$LIBCOM)
+  tmp <- tmp [tmp$LIBCOM %in% choix,]
+  write.csv(tmp, paste0("data/idf_", tmp$LIBCOM [1],".csv"), fileEncoding = "UTF-8")
+}
+```
+
+Vérification
+
+Test sur les NBPIECES
+
+```{r}
+fic <- list.files("data/", "idf")
+fic
+par(mfrow = c(3,3))
+nb <- NULL
+for (i in 1:length(fic)){
+  data <- read.csv(paste0("data/",fic [i]), fileEncoding = "UTF-8")
+  tmp <- length(data$NBPIECE)
+  nb <- c(nb, tmp)
+  #data$NBPIECE <- as.integer(data$NBPIECE)
+  barplot(table(data$NBPIECE), main = paste0(fic [i], " ", tmp))
+}
+df <- data.frame(commune = choix,  logements_sociaux = nb, pop = extrIDF$PTOT )
+write.csv(df, "data/tabIDF.csv", fileEncoding = "UTF-8")
+```
+
+
+## Sujet 3 : données RPLS - Communes de 60 M hbts en France
+
+
+Identification des communes
+
+```{r}
+fr <- communes [communes$PTOT < 60000 & communes$PTOT > 50000 & communes$CODREG != 11, ]
+sorted_fr <- fr [order(fr$REG),]
+extrFr <- sorted_fr [!duplicated(sorted_fr$REG),]
+# manque le fichier PACA
+extrFr <- extrFr [-9,]
+extrFr <- extrFr [order (extrFr$COM),]
+extrFr$COM [extrFr$COM == "Saint-André"] <- "Saint-AndrC)"
+extrFr
+```
+
+
+```{r}
+# affichage par région
+fic <- list.files("data/rplsREG", "OD")
+fic
+# affichage des communes sur les memes régions
+choix <- extrFr[order(extrFr$CODREG), ]
+choix$COM
+i <- 1
+par(mfrow = c(2,4))
+for (i in 1:length(fic)){
+  if (i %in% c(1,2,4,5,6,8)){tmp <- read.csv2(paste0("data/rplsREG/",  fic [i]), fileEncoding = "ASCII")}
+  if (i %in% c(3,7)) {tmp <- read.csv2(paste0("data/rplsREG/",  fic [i])  )}   
+  tmp <- tmp [tmp$LIBCOM %in% extrFr$COM,] 
+  table(tmp$LIBCOM)
+  tmp <- recoder(tmp)
+  barplot(table(tmp$NBPIECE), main = paste0(tmp$LIBCOM [1], " ", length(tmp$NBPIECE)))
+  write.csv(tmp, paste0("data/fr_", tmp$LIBCOM [1],".csv"), fileEncoding = "UTF-8", dec = ",", na = "NA")
+}
+```
+
+
+
+Vérification
+
+
+```{r}
+fic <- list.files("data/", "fr_")
+choix
+choix <- choix [-c(3,7),]
+choix
+par(mfrow = c(2,4))
+nb <- NULL
+i <- 1
+for (i in 1:length(fic)){
+
+  data <- read.csv(paste0("data/",fic [i]), fileEncoding = "UTF-8")
+  tmp <- length(data$NBPIECE)
+  table(data$NBPIECE)
+  nb <- c(nb, tmp)
+  #data$NBPIECE <- as.integer(data$NBPIECE)
+  barplot(table(data$NBPIECE), main = paste0(fic [i], " ", tmp))
+}
+df <- data.frame(commune = choix$COM, region = choix$REG, logements_sociaux = nb, pop = choix$PTOT )
+write.csv(df, "data/tabFR.csv", fileEncoding = "UTF-8")
+```
+
+
+
 
 ## Barême
 
 ```{r}
-element <- c("soin", "univarié", "bi-varié")
-bareme <- c(4,8,8)
-df <- cbind(element, bareme)
+element <- c("soin", "description des données", "univarié", "bi-varié", "comparaison")
+bareme <- c(2,4,4,4,2)
+df <- data.frame(element, bareme)
 knitr::kable(df)
 ```
 
