@@ -197,10 +197,60 @@ extrFr <- sorted_fr [!duplicated(sorted_fr$REG),]
 # manque le fichier PACA
 extrFr <- extrFr [-9,]
 extrFr <- extrFr [order (extrFr$COM),]
-extrFr$COM [extrFr$COM == "Saint-André"] <- "Saint-AndrC)"
+#extrFr$COM [extrFr$COM == "Saint-André"] <- "Saint-AndrC)"
 extrFr
 ```
 
+Cartographie
+
+```{r}
+library(sf)
+library(mapsf)
+geo <- st_read("data/communes-20220101.shp")
+region <- st_read("data/regions-20180101.shp")
+extrFr
+jointure <- merge(geo, extrFr, by.x = "nom", by.y = "COM")
+jointure [, c("nom", "insee")]
+jointure <- jointure [-c(5:7,9:12),]
+jointureDOM <- jointure [c(3,5),]
+jointure<- jointure [-c(3,5),]
+
+png("img/fr.png")
+mf_init(jointure)
+mf_map(region, col = "antiquewhite1", border = "antiquewhite3", add = T)
+mf_map(jointure, col = "red", border = NA, add = T)
+mf_label(jointure, var="nom")
+mf_layout("Villes proposées en France (Hors Réunion et Guadeloupe)", credits = "insee")
+dev.off()
+```
+
+
+```{r}
+monde <- st_read("data/TM_WORLD_BORDERS-0.3.shp")
+png("img/frGuadeloupe.png", res = 100)
+lesAbymes <- st_centroid(jointureDOM [1,])
+mf_init(st_buffer(lesAbymes, 5000000))
+mf_map(monde, col = "antiquewhite1", border = "antiquewhite3", add = T)
+mf_map(jointureDOM, col = "red", border = NA, add = T)
+mf_label(jointureDOM, var="nom")
+mf_layout("Villes proposées en France (Guadeloupe)", credits = "insee")
+dev.off()
+```
+
+```{r}
+png("img/frReunion.png", res = 100)
+stAndre <- st_centroid(jointureDOM [2,])
+mf_init(st_buffer(stAndre, 5000000))
+mf_map(monde, col = "antiquewhite1", border = "antiquewhite3", add = T)
+mf_map(jointureDOM, col = "red", border = NA, add = T)
+mf_label(jointureDOM, var="nom")
+mf_layout("Villes proposées en France (Réunion)", credits = "insee")
+dev.off()
+```
+
+![](img/frGuadeloupe.png)
+
+![](img/frReunion.png)
 
 ```{r}
 # affichage par région
