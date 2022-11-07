@@ -17,40 +17,44 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Théorie
 
 - le khi2, la régression, et la variance
-- démarche générale
+
+- démarche générale 
+
+Avec le khi2, on a vu surtout le test et sa significativité.
+
+Avec la régression, on a abordé l'intensité et le coefficient de détermination.
+
+Avec la variance, nous allons aborder test, significativité et intensité.
 
 ## Outils
 
 - xls ou csv
+
 - libre office ou R
 
 # Donnée et objet de l'exercice
 
-https://www.insee.fr/fr/statistiques/5009218#consulter
+Suite à l'examen, on a 3 séries de communes, dans Est Ensemble, en Ile de France et sur la France.
+On va tester s'il y a une répartition spatiale spécifique du logement social dans chacun de ces ensembles spatiaux.
 
-![](img/06_donnee.png)
+La variance est en effet très souvent utilisée en géographie pour tester des groupements spatiaux.
 
-Le but de l'exercice est de décrire l'organisation spatiale en Ile de France. La 
-variance est très souvent utilisée en géographie pour tester des groupements spatiaux.
-
-Question : observer la donnée .csv et comprendre comment elle fonctionne.
 
 ## Hypothèse 
 
-Le niveau départemental permet de résumer l’hétérogénéité de la richesse dans la région.
+D'après vos résultats, c'est le rapport entre les différents types de logement social qui serait spécifique.
+Il y a moins de logements sociaux intermédiaires (les "moins pauvres") ailleurs qu'à Bondy. Y-a-t-il une spécificité en Ile de France ?
 
-On prend donc le fichier communal et on va utiliser commme variable le revenu médian.
+R va nous permettre de mettre en place la donnée d'exemple.
 
-## Filtrer la donnée
+## Préparer la donnée
 
+### Que faut-il faire ?
 
-```{r, eval = FALSE}
-data <- read.csv2("data/FILO2018_DEC_COM.csv")
-names(data)
-data <- data [, c("CODGEO", "Q218")]
-data <- data [substr(data$CODGEO, 1,2) %in% c("75","77","78","91","92","93","94","95"),] 
-write.csv(data, "data/inegalite.csv", fileEncoding = "UTF-8")
-```
+Lire les fichiers 
+Calculer le nombre de logements intermédiaires rapportés au total des logements sociaux.
+Enregistrer ce rapport dans un fichier
+
 
 ### Remarques sur R
 
@@ -60,34 +64,74 @@ write.csv(data, "data/inegalite.csv", fileEncoding = "UTF-8")
 
 - la complétion avec tabulation
 
-### Résultat
 
-on a filtré la donnée de façon beaucoup plus rapide qu'avec un tableur et surtout
-on a gardé la trace des manipulations, le script.
+Parcours du script et exercice moodle pour voir si c'est compris.
+
+### Le script
+
+
+On regroupe toutes les données en un seul fichier
+
+```{r, eval=FALSE}
+fic <- list.files ("data/", "^ee|^fr|^idf")
+data <- NULL
+for (i in 1:length(fic)){
+  tmp <- read.csv(paste0("data/", fic [i]), fileEncoding = "UTF-8")
+  zone <- substring(fic [i],0,2)
+  tmp <- cbind(zone, tmp)
+  data <- rbind(data, tmp)
+}
+data <- data [, c("LIBCOM", "zone", "FINANcode")]
+write.csv(data,"data/total.csv", fileEncoding = "UTF-8")
+```
+
+Le fichier total fait plus de 113 M lignes.
+
+On calcule le rapport entre le logement intermédiaire pour chaque ville.
+
+```{r}
+# lecture du fichier. Quelle remarque faire ?
+data <-  read.csv("data/total.csv", fileEncoding = "UTF-8")
+# concaténation zone et nom ville
+data$loc <- paste0(data$zone,"_", data$LIBCOM)
+str(data)
+# dénombrement
+tab <- table(data$loc,data$FINANcode)
+# on met les marges
+tab <- addmargins(tab,2)
+# on affiche
+knitr::kable(tab)
+# calcul du rapport
+rapport <- tab [,1]/ tab[,4]
+```
+
+On reconstitue la donnée sur laquelle on va travailler, c'est à dire un tableau
+avec zone, ville et le rapport logement intermédiaire et logement total.
+
+```{r}
+zone <- substring(names(rapport), 1,2)
+ville <- substring(names(rapport),4,25)
+data <- data.frame(ville, zone, rapport)
+# On regarde la tête du fichier
+head(data)
+```
 
 
 # Représentation graphique
 
 La boite à moustaches permet de comparer rapidement des distributions.
 
-On simplifie également le revenu médian
 
 ```{r}
-data <- read.csv("data/inegalite.csv")
-data$DEP <- substr (data$CODGEO,1,2)
-boxplot(data$Q218~data$DEP)
+boxplot(data$rapport~data$zone)
 # avec un peu de présentation
-# On divise par 10 000 le revenu
-data$Q218s <- data$Q218 / 10000
-boxplot(data$Q218s~data$DEP, xlab ="Département", ylab="Revenu médian en 2018 (dizaine de milliers)",
+# On multiplie  par 100 le rapport pour avoir un %
+data$rapport <- data$rapport * 100
+boxplot(data$rapport~data$zone, xlab ="Zone", ylab="% logement intermédiaire",
         col=rainbow(8))
 ```
 
-
-Petite précision, la mesure de centralité utilisée pour les revenus est la médiane
-car il s'agit toujours de distributions dissymétriques.
-
-Attention, il ne s'agit pas du revenu médian des individus !
+Faire le commentaire avec les étudiants (exercice moodle)
 
 # La variance
 
@@ -97,16 +141,21 @@ Attention, il ne s'agit pas du revenu médian des individus !
 Pour mémoire, la variance est le carré de la somme des écarts à la moyenne.
 
 Dans le tableur, nous aurions fait une série de tableaux de calcul autour des 
-écarts à la moyennes (en mettant des carrés).
+écarts à la moyennes (en mettant des carrés). Dans r, c'est une formule var.
 
 ```{r}
-tapply(data$Q218s, data$DEP,var)
-# verif pour le cas du 77 par exemple
-dataSel <- data [data$DEP == '77',]
-mean((dataSel$Q218s - mean(dataSel$Q218s))^2)
+var(data$rapport)
+# Variance pour chaque zone, on utilise un tapply
+tapply(data$rapport, data$zone,var)
+# verif pour le cas d'Est Ensemble par exemple
+dataSel <- data [data$zone == 'ee',]
+mean((dataSel$rapport - mean(dataSel$rapport))^2)
+var(dataSel$rapport)
 ```
+Le résultat est légèrement différent, car le logiciel pondère la variance en soustrayant 1 à l'effectif. Plus la série est grande, moins cela a d'importance.
+A notre niveau, nous appelons variation la grandeur donnée par R.
 
-## Analyse de la variance
+## Analyse de la variation / variance
 
 La variation est une quantité qui se décompose en :
 
@@ -114,61 +163,101 @@ La variation est une quantité qui se décompose en :
 
 - les variations entre les groupes (variation inter groupe)
 
+La variation totale est la somme des deux. La significativité et l'intensité sont calculées avec ces trois grandeurs.
+
 ### La formule ANOVA dans R
+
+ANalyse Ordinaire de la VAriance (= variation)
 
 Sous R, il suffit de lancer une formule.
 
 ```{r}
-data$DEP <- as.factor(data$DEP)
-modele <- lm (Q218s ~ DEP, data = data)
+# transformation en variable de catégorie
+data$zone <- as.factor(data$zone)
+modele <- lm (rapport ~ zone, data = data)
 anova(modele)
 ```
 
 
 Sum Sq = la somme des carrés des écarts (SCE)
 
-Mean Sq =  la moyenne des carrés des écarts, c'est la variance.
+Mean Sq =  la moyenne des carrés des écarts, c'est la variation.
 
-La première ligne c'est pour la variation inter-groupe , la deuxième c'est pour l'intérieur
-des groupes (l'intra)
+La première ligne c'est pour la variation inter-groupe , la deuxième c'est pour l'intérieur des groupes (l'intra)
 
+Que dire ce ces chiffres ?
+
+Comme pour le khi2, on peut faire un test et calculer l'intensité.
 
 ### Significativité
 
-F value = Test de Fisher, c'est le test de significativité pour la variance.
+F value = Test de Fisher, c'est le test de significativité pour la variation.
 
-Le test est mesuré par le rapport entre la variance intergroupe et la variance intragroupe
-(avec les degrés de liberté).
+Le test est mesuré par le rapport entre la variation intergroupe et la variation intragroupe (avec les degrés de liberté).
 
-Concernant les degré de liberté pour les données intra, on prend tous les effectis et on enlève
-le nombre de départements
+Si ce rapport est élevé, cela signifie que la variation intergroupe est importante relativement à la variation intra, donc qu'il y a une vraie différence entre les moyennes des groupes.
+
+Concernant les degré de liberté pour les données intra, on prend tous les effectifs et on enlève le nombre de zone (cf les 2 chiffres df)
+
+
+#### Comme pour le khi2, observé et théorique
+
+Comme pour le khi2, on compare à un test obtenu par le hasard (donc une table).
+
+![](img/fisher.jpg)
+F calculé
 
 ```{r}
-1272-8
+Ftable <- qf(p=.05, df1=2, df2=20, lower.tail=FALSE)
+Fcalcule <- 28 / 14
+```
+
+Le F théorique est supérieur au F calculé pour un risque de 5 %
+
+Il y a indépendance entre les zones et la part de logement intermédiaire.
+
+### Avec R, importance de la p-value
+
+Le chiffre le plus rapide à analyser, c'est la p-value, il indique la taille de la différence entre les moyennes des 3 groupes.
+
+Plus il est petit, plus il y a de différence, plus il est gros, plus les moyennes se ressemblent et donc l'hypothèse d'indépendance peut être rejetée.
+
+C'est la même logique que pour le khi2 (cf exemple khi2 dans l'introduction aux bivariées). 
+
+Dans notre cas, la pvalue indique un risque de 17 %. Concrètement, il faudrait aller chercher la table du risque à 17 % de Fisher.
+
+```{r}
+qf(p=.17, df1=2, df2=20, lower.tail=FALSE)
 ```
 
 
-Comme pour le khi2, on compare à un test obtenu par le hasard (donc une table).
-La relation est significative (la p-value est très petite). Il y a un risque de se
-tromper presque nul.
-Il n'y a pas d'indépendance entre les départements et les revenus.
+On a 17 chances sur 100 de se tromper si on rejette l'indépendance, c'est beaucoup.
 
+Les 3 zonages ne correspondant pas à une répartition spécifique du logement intermédiaire. 
 
 ### Intensité
 
-On mesure l'intensité, la proportion de la variation expliquée par les modalités
-dans la variation totale (entre 0 et 1)
+On mesure quand même l'intensité, la proportion de la variation expliquée par les modalités dans la variation totale (entre 0 et 1)
+
+variation intergroupe / variation totale
 
 
 ```{r}
-15/(15+0.2)
+28/(28 +14)
 ```
 
-L'intensité est très forte, plus de 98 % de la variation est expliquée par la structure
-départementale.
+L'intensité est forte, plus de 66 % de la variation est expliquée par la structure des zones.
+Attention, comme le test a été rejeté avec un risque d'erreur très fort, il faut tout de suite relativiser l'intensité.
 
 
-
+```{r, echo=FALSE, eval=FALSE}
+note <- read.csv("data/noteExamen.csv")
+table(note$GROUPE, note$NOTE)
+summary(note$NOTE)
+boxplot(note$NOTE~note$GROUPE)
+modele <- lm (NOTE ~ GROUPE, data = note)
+anova(modele)
+```
 
 
 

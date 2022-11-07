@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Identification des communes
 
 ```{r}
-data <- read.csv2("data/rpls2021_geolocalise_OD_REG11_DEP93.csv",  fileEncoding = "ASCII")
+data <- read.csv2("data/gros/rpls2021_geolocalise_OD_REG11_DEP93.csv",  fileEncoding = "ASCII")
 #116 644
 head(data)
 table(data$LIBCOM)
@@ -148,7 +148,7 @@ dev.off()
 
 
 ```{r}
-fic <- list.files("data/", "REG11")
+fic <- list.files("data/gros/", "REG11")
 choix <- extrIDF$COM
 choix
 extrIDF
@@ -318,72 +318,13 @@ knitr::kable(df)
 ```
 
 
-# Données
+# Elements de corrections
 
-## Groupe 1
+## soins (3)
 
-https://ec.europa.eu/eurostat/databrowser/view/ef_lus_unglass/default/table?lang=fr
+"Bonjour, Monsieur le Directeur Général des Services Techniques"....
 
+## Présentation des données
 
-## Groupe 2
-
-https://www.insee.fr/fr/statistiques/2012665
-
-Faire un copier coller du tableau par région
-
-
-# Première approche
-
-Expliquer les variables
-
-De quel type sont les variables ? De quel type est le tableau ?
-
-Télécharger les variables et les mettre en forme de façon à obtenir un tableau .csv
-
-
-```{r}
-data <- read.csv("data/serre.csv")
-names(data) <- c("pays", "SAU","Legumes","Fleurs","Cultures permanentes")
-knitr::kable(data)
-```
-
-# Statistique univariée
-
-Etude de la variable SAU. Caractériser la distribution avec les valeurs centrales
-et celles de dispersion.
-Faire un graphique des fréquences et commenter la distribution
-
-# Statistique bi-variée
-
-## Première série
-
-Faut-il conserver la variable SAU ? Pourquoi ?
-
-Faire l'analyse bi-variée de la donnée selon la méthode vue en cours.
-
-## Deuxième série
-
-PIB par habitant et GES
-
-https://donnees.banquemondiale.org/indicator/NY.GDP.PCAP.PP.KD?view=chart
-
-
-
-```{r}
-pib <- read.csv("data/PIB.csv", skip = 4)
-pib <- pib [pib$Indicator.Code == "NY.GDP.PCAP.PP.KD", c("Country.Code", "X2015")]
-ges <- read.csv("data/GES.csv", skip = 4)
-ges <-  ges [, c("Country.Code", "X2015")]
-ges <- ges [!is.na(ges$X2015),]
-data <-  merge(ges, pib, by = "Country.Code")
-names(data) <- c("code", "pib", "ges")
-data <- data [!is.na(data$ges),]
-write.csv(data, "data/pibges2015.csv")
-```
-
-
-
-Commment traiter la relation entre le GES et le PIB ?
-
-Faire l'analyse jusqu'au point vu en cours.
-
+Qu'est ce que le RPLS ?
+Combien de données disponibles ? (cf le dictionnaire des données)
