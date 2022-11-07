@@ -210,16 +210,23 @@ geo <- st_read("data/communes-20220101.shp")
 region <- st_read("data/regions-20180101.shp")
 extrFr
 jointure <- merge(geo, extrFr, by.x = "nom", by.y = "COM")
+# enregistrement jointure car fichier communes trop gros
+st_write(jointure, "data/examen.gpkg","jointureFr", delete_layer = T)
+```
+
+
+```{r}
+jointure <- st_read("data/examen.gpkg", "jointureFr")
 jointure [, c("nom", "insee")]
 jointure <- jointure [-c(5:7,9:12),]
 jointureDOM <- jointure [c(3,5),]
 jointure<- jointure [-c(3,5),]
-
+regionfr <- region [-c(1,3,8,12,14),]
 png("img/fr.png")
-mf_init(jointure)
+mf_init(regionfr)
 mf_map(region, col = "antiquewhite1", border = "antiquewhite3", add = T)
 mf_map(jointure, col = "red", border = NA, add = T)
-mf_label(jointure, var="nom")
+mf_label(jointure, var="nom", cex = 0.8, pos = 2 )
 mf_layout("Villes proposées en France (Hors Réunion et Guadeloupe)", credits = "insee")
 dev.off()
 ```
