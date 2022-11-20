@@ -41,14 +41,23 @@ Et ainsi de suite ...
 
 ## Recherche
 
+Comparaison donnée RPLS et insee à la base communes avec un outil très intuitif
+
 https://statistiques-locales.insee.fr
 
-Partir d'une hypothèse fictive
+Partir d'une hypothèse fictive autour du logement social. On a vu par exemple que
 
-Par exemple, le nombre d'emploi par département dépend du taux de natalité et du
-nombre de diplômés et des conditions de logements.
+- l'année de construction ne permettait pas d'expliquer la surface habitable, 
+ou que
+- souvent les ménages les plus modestes n'obtenaient pas les grands appartements.
+
+Quelles peuvent être les autres facteurs pour ces deux états de fait ?
 
 Constituer le tableau à partir de l'outil.
+
+Quels sont les zonages proposées ?
+
+Quel serait une agrégation intéressante ? (essayer de faire l'échantillon proposé)
 
 Attention, exporter en  .ods pour convertir en  .csv après. L'import en .csv direct
 ne semble pas fonctionner.

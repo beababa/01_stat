@@ -120,6 +120,9 @@ head(data)
 # Représentation graphique
 
 La boite à moustaches permet de comparer rapidement des distributions.
+Les moustaches montrent les 1ers et 9e déciles. Les limites des boites correspondent au 1e et 3e quartile
+Le trait indique la médiane.
+Les valeurs aberrantes sont les points isolés.
 
 
 ```{r}
@@ -129,16 +132,33 @@ boxplot(data$rapport~data$zone)
 data$rapport <- data$rapport * 100
 boxplot(data$rapport~data$zone, xlab ="Zone", ylab="% logement intermédiaire",
         col=rainbow(8))
+moyenne <- tapply(data$rapport, data$zone, mean)
+points(moyenne, pch = 8,  col="black", cex = 2)
+pt <- data [data$zone == "fr" & data$rapport > 600,]
 ```
 
-Faire le commentaire avec les étudiants (exercice moodle)
+Ce graphique permet de comparer les 3 séries.
+Les variations entre les groupes sont-elles plus importantes que les 
+variations au sein des groupes eux-mêmes ?
+A priori, en île de France, l'amplitude est très étendue et la distribution est plus symétrique que les 2 premières (la médiane est quasiment au centre de la boite).
+Est Ensemble et la France s'opposent par contre assez bien : il y a beaucoup de communes avec logements intermédiaires, alors qu'en France, il n'y en a moins.
+
+
+Il existe une valeur aberrante en France
+
+```{r}
+data [data$zone == "fr",]
+```
+
+La commune de Vaulx-en-Velin possède une part très importante de logement intermédiaire. 
+
 
 # La variance
 
 
 ## Rappel
 
-Pour mémoire, la variance est le carré de la somme des écarts à la moyenne.
+Pour mémoire, la variance est le carré de la moyenne des écarts à la moyenne.
 
 Dans le tableur, nous aurions fait une série de tableaux de calcul autour des 
 écarts à la moyennes (en mettant des carrés). Dans r, c'est une formule var.
@@ -152,6 +172,7 @@ dataSel <- data [data$zone == 'ee',]
 mean((dataSel$rapport - mean(dataSel$rapport))^2)
 var(dataSel$rapport)
 ```
+
 Le résultat est légèrement différent, car le logiciel pondère la variance en soustrayant 1 à l'effectif. Plus la série est grande, moins cela a d'importance.
 A notre niveau, nous appelons variation la grandeur donnée par R.
 
@@ -164,6 +185,10 @@ La variation est une quantité qui se décompose en :
 - les variations entre les groupes (variation inter groupe)
 
 La variation totale est la somme des deux. La significativité et l'intensité sont calculées avec ces trois grandeurs.
+
+significativité = rapport inter / intra
+
+intensité = rapport inter / total
 
 ### La formule ANOVA dans R
 
@@ -195,7 +220,7 @@ F value = Test de Fisher, c'est le test de significativité pour la variation.
 
 Le test est mesuré par le rapport entre la variation intergroupe et la variation intragroupe (avec les degrés de liberté).
 
-Si ce rapport est élevé, cela signifie que la variation intergroupe est importante relativement à la variation intra, donc qu'il y a une vraie différence entre les moyennes des groupes.
+Si ce rapport est élevé, cela signifie que la variation intergroupe est importante relativement à la variation intra, donc qu'il y a une vraie différence entre les écarts à la moyenne des groupes.
 
 Concernant les degré de liberté pour les données intra, on prend tous les effectifs et on enlève le nombre de zone (cf les 2 chiffres df)
 
@@ -220,7 +245,7 @@ Il y a indépendance entre les zones et la part de logement intermédiaire.
 
 Le chiffre le plus rapide à analyser, c'est la p-value, il indique la taille de la différence entre les moyennes des 3 groupes.
 
-Plus il est petit, plus il y a de différence, plus il est gros, plus les moyennes se ressemblent et donc l'hypothèse d'indépendance peut être rejetée.
+Plus il est petit, plus il y a de différence, plus il est gros, plus les écarts aux moyennes se ressemblent et donc l'hypothèse d'indépendance peut être rejetée.
 
 C'est la même logique que pour le khi2 (cf exemple khi2 dans l'introduction aux bivariées). 
 
@@ -252,14 +277,22 @@ Attention, comme le test a été rejeté avec un risque d'erreur très fort, il 
 
 ```{r, echo=FALSE, eval=FALSE}
 note <- read.csv("data/noteExamen.csv")
-table(note$GROUPE, note$NOTE)
 summary(note$NOTE)
+par(mfrow = c(2,1))
 boxplot(note$NOTE~note$GROUPE)
 modele <- lm (NOTE ~ GROUPE, data = note)
 anova(modele)
+45/ (45 +15)
 ```
 
 
-
+```{r, echo=FALSE, eval=FALSE}
+note <- read.csv("data/noteDSTsimplifie.csv", fileEncoding = "UTF-8")
+summary(note$note)
+boxplot(note$note~note$groupe)
+modele <- lm (note ~ groupe, data = note)
+anova(modele)
+65/(65+12)
+```
 
 

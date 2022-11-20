@@ -109,16 +109,16 @@ tab <- table(etudiant$groupe.TD)
 
 ```{r,  echo = FALSE}
 i <- 2
-for (i in 2:4) {
+for (i in 2:5) {
   nomFic <- paste0("data/cours", i, ".csv")
   data <- read.csv(nomFic, fileEncoding = "UTF-8")
   data <- data [data [,3] == "oui",]
   tmp <- table(data$groupe.TD)
   tab <- rbind(tab , tmp)
   }
-row.names(tab) <- c("cours1", "cours2", "cours3", "cours4")
+row.names(tab) <- c("cours1", "cours2", "cours3", "cours4", "cours5")
 knitr::kable(tab)
-barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(4) 
+barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(5) 
         , border = NA, legend =  T)
 ```
 
@@ -127,17 +127,16 @@ Désormais le framapad sert à l'émargement
 https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
 
 
-### Les rendus de devoir
-
+### Les rendus d'exercices
 ```{r}
-rendu <- c(47,36, 29, 14)
-titre <- c("distribution", "univarié", "khi2", "khi2bis")
-p <- barplot(rendu, names = titre, main = "rendu devoirs (effectif 75 étudiants environ)")
+rendu <- c(47,36, 29, 14,14)
+titre <- c("distribution", "univarié", "khi2", "khi2bis", "regression")
+p <- barplot(rendu, names = titre, main = "rendu devoirs (effectif 75 étudiants environ)", border = NA)
 text(p, y = rendu - 1, labels = rendu )
 ```
 
 
-#### Les notes de devoir
+#### Les notes des exercices
 
 
 - Le critère externe : des points faciles ?
@@ -177,7 +176,7 @@ https://www.data.gouv.fr/fr/datasets/repertoire-des-logements-locatifs-des-baill
 Prendre le .zip de 2021, petit test d'ouverture sous moodle (Introduction/bases informatiques)
 
 ```{r, eval=FALSE}
-data <- read.csv("data/rpls2021_geolocalise_OD_REG11_DEP93.csv", sep =";")
+data <- read.csv("data/gros/rpls2021_geolocalise_OD_REG11_DEP93.csv", sep =";")
 # distribution par commune
 tab <- table(data$LIBCOM)
 png("img/rpls93.png")
@@ -203,10 +202,9 @@ Il y a un problème sur la donnée, prendre plutôt le millésime 2019
 
 
 ```{r}
-rpls2019 <- read.csv2("data/RPLS2019_detail_IDF_DEP_93.csv")
+rpls2019 <- read.csv2("data/gros/RPLS2019_detail_IDF_DEP_93.csv")
 head(rpls2019)
-
-rpls2021<- read.csv2("data/rpls2021_geolocalise_OD_REG11_DEP93.csv")
+rpls2021<- read.csv2("data/gros/rpls2021_geolocalise_OD_REG11_DEP93.csv")
 ```
 
 ```{r}
@@ -245,6 +243,8 @@ Lorsque l'exercice le requiert, le fichier est à rendre avec son *prénom* (tou
 
 - http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm
 - http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm
+
+
 
 # Le devoir maison
 
