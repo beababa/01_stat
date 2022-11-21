@@ -15,10 +15,10 @@ navbar:
       href: jour5.html
     - text: "variance"
       href: jour6.html   
-    - text: "multivariées AFC"
+    - text: "multivariées base"
       href: jour7.html   
-    - text: "classification"
-      href: jour7.html   
+    - text: "factorielle et classification"
+      href: jour8.html   
   right:
     - icon: fa-github
       href: https://beababa.github.io/

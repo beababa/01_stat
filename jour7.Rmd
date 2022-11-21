@@ -1,5 +1,5 @@
 ---
-title: "Mutivariées base (analyse factorielle)"
+title: "Mutivariées base"
 output:
   html_document:
     number_sections: yes
@@ -15,35 +15,45 @@ knitr::opts_chunk$set(echo = TRUE)
 # Attention définition !
 
 On parle ici d'analyse factorielle. Il ne s'agit pas de facteur explicatif mais de
-synthèse.
+synthèse, de description.
 
 
-
-
-## En géométrie
-
-Les axes factoriels rendent comptent le mieux possible de la
-dispersion du nuage de points.
-
-Un facteur regroupe des informations communes à plusieurs variables.
-
-Le premier axe prend en compte le maximum d'information.
-
-Le deuxième prend en compte le maximum d'information à partir des résidus du premier.
-
-Et ainsi de suite ...
-
-... d'où l'importance de l'informatique pour traiter du multicritère !
 
 
 
 # La donnée
+
+Il s’agit d’émettre une hypothèse, mais aussi de rendre les variables comparables entre elles.
 
 ## Recherche
 
 Comparaison donnée RPLS et insee à la base communes avec un outil très intuitif
 
 https://statistiques-locales.insee.fr
+
+
+### Exploration autour de l'outil
+
+Chercher à construire un tableau au niveau des *communes* avec
+
+![](img/statLocaleHasard.jpg)
+
+
+Quels sont les outils de l'interface à utiliser ?
+
+
+## Hypothèse multivariée
+
+### La première
+
+
+Formuler une hypothèse avec les 4 variables sélectionnées.
+
+Par exemple, nous allons voir si le nombre d’entreprises a un lien avec - le nombre de résidences principales (recrutement local) - la part des non diplomes (les non diplomés vont sur un emploi proche) - et l’implantation des maisons france service (les maisons france service permettent le développement de l’emploi local)
+
+(exercice moodle)
+
+### Autour du logement social
 
 Partir d'une hypothèse fictive autour du logement social. On a vu par exemple que
 
@@ -55,29 +65,35 @@ Quelles peuvent être les autres facteurs pour ces deux états de fait ?
 
 Constituer le tableau à partir de l'outil.
 
-Quels sont les zonages proposées ?
-
-Quel serait une agrégation intéressante ? (essayer de faire l'échantillon proposé)
-
-Attention, exporter en  .ods pour convertir en  .csv après. L'import en .csv direct
-ne semble pas fonctionner.
-
-Du coup, en profiter pour :
-
-- supprimer les lignes inutiles
-- raccourcir les libellés
-- enregistrer en UTF-8 (c'est le format universel)
-
 ```{r}
-data <- read.csv("data/data.csv", encoding = "UTF-8", dec = ",")
+data <- read.csv("data/dataMultivarie.csv", encoding = "UTF-8", dec = ".", na.strings = "N/A")
+# voir la structure du fichier
 str(data)
 # rownames
 rownames(data) <- data [,1]
 data <- data [,3:6]
 pairs(data)
 ```
+La donnée est trop lourde pour nos machines. On va juste le faire sur la région parisienne, c’est à dire les dpts 75, 77, 78, 91, 92, 93, 94, et 95
 
-Qu'en pensez-vous ? Est-il possible de comparer ces variables ?
+
+```{r}
+data <- read.csv("data/dataMultivarie.csv", encoding = "UTF-8", dec = ".", na.strings = "N/A")
+data$dpt <- substring(data$Code,1,2)
+data <- data [data$dpt %in% c(75, 77, 78, 91, 92, 93, 94,95),]
+```
+
+Refaire les étiquettes et le pairs
+
+```{r, echo = FALSE}
+rownames(data) <- data [,1]
+data <- data [,3:6]
+pairs(data)
+```
+
+
+
+Qu’en pensez-vous ? Est-il possible de comparer ces variables ?
 
 ## Normaliser sa donnée
 
@@ -91,25 +107,24 @@ Pour chaque variable, il faut chercher s'il n'y a pas de valeur aberrante.
 ```{r}
 summary(data)
 rownames(data)
-# Suppression de Paris... voire d'autres dpts ?
-data <- data [-76,]
+# Suppression de valeur extrême nbEntreprises, autres suppressions ?
+data [data$nbEntreprises > 500000,]
+data <- data [data$nbEntreprises < 500000,]
 ```
 
+Refaire la commande pairs
 
 Les coefficients de variation permettent également une première approche
 
 
 ```{r}
-# suppression des NA
-data[is.na(data$nb_emplois_LT ),]
-data[is.na(data$diplôme ),]
-data <- data [!is.na(data$nb_emplois_LT)|!is.na(data$diplôme),]
+data <- data [!is.na(data$nonDiplomes),]
 coeffVariation <- function (x) {mean(x)/sd(x)}
 coeff <- sapply(data, coeffVariation)
 sd <- sapply(data, sd)
 moy <- sapply(data, mean)
 tab <- cbind(moy,sd, coeff)
-round(tab,0)
+round(tab,2)
 ```
 
 
@@ -137,6 +152,24 @@ La variable standardisée a pour moyenne 0 et pour écart-type 1
 data_cr <- scale (data)
 pairs(data_cr)
 ```
+
+## Les axes en géométrie
+
+Les axes factoriels rendent comptent le mieux possible de la
+dispersion du nuage de points.
+
+Un facteur regroupe des informations communes à plusieurs variables.
+
+Le premier axe prend en compte le maximum d'information.
+
+Le deuxième prend en compte le maximum d'information à partir des résidus du premier.
+
+Et ainsi de suite ...
+
+... d'où l'importance de l'informatique pour traiter du multicritère !
+
+
+![](img/axes.png)
 
 # Les calculs sous R
 
