@@ -118,11 +118,19 @@ row.names(tab) <- substring(fic,1,6)
 knitr::kable(tab)
 ```
 
+Graphique
+
+```{r}
+barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(nb) 
+        , border = NA, legend =  T)
+```
+
 
 
 
 
 ### Les rendus d'exercices
+
 ```{r}
 rendu <- c(47,36, 29, 14,14,11,4)
 titre <- c("distribution", "univarié", "khi2", "khi2bis", "regression", "boxplot", "variance")
@@ -216,9 +224,11 @@ st_write(rpls2021, "data/data.gpkg", "rpls2021", delete_layer = T, quiet = T)
 ```
 
 
-```{r}
+```{r, eval=FALSE}
 library(sf)
-rpls2019 <- st_read("data/data.gpkg", "rpls2019",fileEncoding = "UTF-8", quiet = T)
+st_layers("data/data.gpkg")
+rpls2019 <- st_read("data/data.gpkg", "rpls",fileEncoding = "UTF-8", quiet = T)
+
 rpls2021 <- st_read("data/data.gpkg", "rpls2021",fileEncoding = "UTF-8", quiet = T)
 library(mapsf)
 mf_map(rpls2019, pch= 20, col = "red")
