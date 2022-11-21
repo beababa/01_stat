@@ -275,24 +275,53 @@ L'intensité est forte, plus de 66 % de la variation est expliquée par la struc
 Attention, comme le test a été rejeté avec un risque d'erreur très fort, il faut tout de suite relativiser l'intensité.
 
 
-```{r, echo=FALSE, eval=FALSE}
+# Exercice d'application
+
+## Hypothèse
+
+Il s'agit d'observer s'il y a une variation entre les groupes en terme de notation.
+L'hypothèse est que le groupe 2 aura des meilleurs notes car le cours du groupe 1 sert de brouillon, et le groupe 3 digère.
+On ajoute également les notes du DST supplémentaire (5 étudiants seulement)
+
+## Script
+
+```{r,echo=FALSE, eval=FALSE}
 note <- read.csv("data/noteExamen.csv")
 summary(note$NOTE)
 par(mfrow = c(2,1))
 boxplot(note$NOTE~note$GROUPE)
 modele <- lm (NOTE ~ GROUPE, data = note)
 anova(modele)
-45/ (45 +15)
+65/(65+12)
 ```
 
 
-```{r, echo=FALSE, eval=FALSE}
+```{r}
 note <- read.csv("data/noteDSTsimplifie.csv", fileEncoding = "UTF-8")
 summary(note$note)
 boxplot(note$note~note$groupe)
 modele <- lm (note ~ groupe, data = note)
 anova(modele)
-65/(65+12)
+45/ (45 +15)
 ```
 
+## Commentaires
 
+### Boite à moustaches
+
+Il existe des différences entre les groupes, la variation des notes au sein de chaque groupe est différente. Seul le 3e groupe a une distribution symétrique.
+
+Le premier groupe a des notes de faible amplitudes mais avec 3 notes très fortes.
+Et le 2e groupe a beaucoup de notes basses.
+
+La variance entre les groupes risque donc d'être plus importante que la variance intragroupe.
+
+### Pvalue
+
+Le chiffre de la p-value (0.039) est bas. Donc la relation est significative.
+H0 est rejetée avec un risque de 4 %.
+
+
+### Intensité
+
+L'intensité est forte, plus de 75 % de la variation est expliquée par la structure en groupe.
