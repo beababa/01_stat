@@ -10,7 +10,7 @@ editor_options:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(eval  = TRUE)
-knitr::opts_chunk$set(echo  = FALSE)
+knitr::opts_chunk$set(echo  = TRUE)
 knitr::opts_chunk$set(warning  = FALSE)
 ``` 
 
@@ -46,8 +46,8 @@ Utiliser les ressources internet, poser des questions,...
 
 # Evaluation
 
-- 1 devoir maison à rendre vers la fin du semestre
-- 1 devoir sur table à la mi-semestre
+- 1 devoir maison à rendre vers la fin du semestre (coeff1)
+- 1 devoir sur table à la mi-semestre (coeff2)
 
 ... et c'est tout ! (pas de partiel)
 
@@ -65,19 +65,18 @@ knitr::kable(data)
 
 # Présentation rapide (vous êtes nombreux !)
 
+Le framapad sert à l'émargement https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
 
-## Premier cours
+Quelques repères pour les 3 groupes
 
-passé / présent / futur
-appétence pour les stats
-fichier framapad, https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
+## Qui sont les étudiants ?
 
-74 étudiants sur 3 cours
+- 74 étudiants sur 3 cours
 
-Attention, 5 doublons de prénoms (Ambre, Camille, Marie, Antonin et Sarah), j'ai rajouté l'initiale
+- Attention, 5 doublons de prénoms (Ambre, Camille, Marie, Antonin et Sarah), j'ai rajouté l'initiale
 du nom de famille.
 
-```{r, echo=FALSE}
+```{r}
 etudiant <-  read.csv("data/etudiant.csv", fileEncoding = "UTF-8")
 mailetudiant <- paste(paste0(etudiant$mail, ";"))
 tmp <- mailetudiant [1]
@@ -102,36 +101,33 @@ for (i in 3:7){
 
 ### Effectif et cours
 
-```{r, echo = FALSE}
+```{r}
 tab <- table(etudiant$groupe.TD)
-```
-
-
-```{r,  echo = FALSE}
 i <- 2
-for (i in 2:5) {
+fic <- list.files("data/", pattern = "cours")
+# on recherche le fichier le plus haut
+nb <- max(as.integer(substring(fic, 6,6)))
+for (i in 2:nb) {
   nomFic <- paste0("data/cours", i, ".csv")
   data <- read.csv(nomFic, fileEncoding = "UTF-8")
   data <- data [data [,3] == "oui",]
   tmp <- table(data$groupe.TD)
   tab <- rbind(tab , tmp)
-  }
-row.names(tab) <- c("cours1", "cours2", "cours3", "cours4", "cours5")
+}
+row.names(tab) <- substring(fic,1,6)
 knitr::kable(tab)
-barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(5) 
-        , border = NA, legend =  T)
 ```
 
 
-Désormais le framapad sert à l'émargement
-https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
+
 
 
 ### Les rendus d'exercices
 ```{r}
-rendu <- c(47,36, 29, 14,14)
-titre <- c("distribution", "univarié", "khi2", "khi2bis", "regression")
-p <- barplot(rendu, names = titre, main = "rendu devoirs (effectif 75 étudiants environ)", border = NA)
+rendu <- c(47,36, 29, 14,14,11,4)
+titre <- c("distribution", "univarié", "khi2", "khi2bis", "regression", "boxplot", "variance")
+par(mar = c(8,6,6,6))
+p <- barplot(rendu, names = titre, cex.names = 0.8, las = 2, main = "rendu devoirs (effectif 75 étudiants environ)", border = NA)
 text(p, y = rendu - 1, labels = rendu )
 ```
 
@@ -201,13 +197,13 @@ C'est normalement ce fichier de données que nous allons utiliser pour le cours.
 Il y a un problème sur la donnée, prendre plutôt le millésime 2019
 
 
-```{r}
+```{r, eval=FALSE}
 rpls2019 <- read.csv2("data/gros/RPLS2019_detail_IDF_DEP_93.csv")
 head(rpls2019)
 rpls2021<- read.csv2("data/gros/rpls2021_geolocalise_OD_REG11_DEP93.csv")
 ```
 
-```{r}
+```{r, eval=FALSE}
 library(sf)
 rpls2019 <- rpls2019 [rpls2019$CODEPOSTAL == '93140',]
 rpls2021 <- rpls2021 [rpls2021$CODEPOSTAL == '93140',]
@@ -215,13 +211,15 @@ rpls2021 <- rpls2021 [rpls2021$CODEPOSTAL == '93140',]
 rpls2019 <- st_as_sf(rpls2019, coords = c("X", "Y"), crs = 2154)
 rpls2021 <- st_as_sf(rpls2021, coords = c("X", "Y"), crs = 2154)
 write.csv(rpls2019, "data/rpls2019.csv", fileEncoding = "UTF-8")
-st_write(rpls2019, "data/data.gpkg", "rpls2019", delete_layer = T)
-st_write(rpls2021, "data/data.gpkg", "rpls2021", delete_layer = T)
+st_write(rpls2019, "data/data.gpkg", "rpls2019", delete_layer = T, quiet = T)
+st_write(rpls2021, "data/data.gpkg", "rpls2021", delete_layer = T, quiet = T)
 ```
 
 
 ```{r}
-
+library(sf)
+rpls2019 <- st_read("data/data.gpkg", "rpls2019",fileEncoding = "UTF-8", quiet = T)
+rpls2021 <- st_read("data/data.gpkg", "rpls2021",fileEncoding = "UTF-8", quiet = T)
 library(mapsf)
 mf_map(rpls2019, pch= 20, col = "red")
 mf_map(rpls2021, col = "green", alpha = 0.8, add = T)
@@ -248,4 +246,21 @@ Lorsque l'exercice le requiert, le fichier est à rendre avec son *prénom* (tou
 
 # Le devoir maison
 
-A définir le 21/11
+A partir de l’outil statistiques locales de l’INSEE, définir 4 variables pouvant servir de base à une analyse exploratoire autour du logement social.
+
+Faire une analyse factorielle et une classification autour des données choisies.
+
+Livrables :
+
+    - un script R commenté
+
+    - un fichier de données .csv
+
+    - un .pdf expliquant la démarche avec les principaux résultats
+
+Ces 3 fichiers avec le prénom de l’étudiant.
+
+barème : 4 points pour le soin / 8 pour le script R / 8 pour le .pdf
+
+
+
