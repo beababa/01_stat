@@ -9,7 +9,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
@@ -105,13 +105,12 @@ formules du tableau
 
 #### Proposer une première représentation graphique
 
-```{r, echo=FALSE}
+```{r}
 choix <- read.csv("data/choix.csv", fileEncoding = "UTF-8")
 knitr::kable(table(choix$NBPIECE))
 hist(choix$NBPIECE, breaks = c(0,1,2,3,4,5),
      main =  paste0( "Dénombrement nombre de pièces\n", choix$COMPLGEO [1], " (", choix$CONSTRUCT [1],") "),
        xlab = "classes", ylab = "effectif")
-
 ```
 
 
@@ -132,14 +131,34 @@ Exercice intitulé *dénombrement*
 
 ### Affichage de toutes les résidences
 
-```{r, echo = FALSE}
-data$COMPLGEO [(data$COMPLGEO == "")] <- "inconnu" 
+```{r}
+library("sf")
+library("mapsf")
+dataResidence <- data [, c("COMPLGEO", "NBPIECE", "X", "Y")]
+tab <- table (dataResidence$COMPLGEO)
+names(tab)
+# verif X et spatialisation
+summary(dataResidence$Y)
+dataResidencesf <- st_as_sf(dataResidence, coords = c("X", "Y"), crs = st_crs(2154))
+table(dataResidencesf$COMPLGEO)
+# centroid des polygones, on agrège par résidence, envlp convexe puis centroid)
+agg <- aggregate(dataResidencesf [, "COMPLGEO"], by = list(dataResidencesf$COMPLGEO), length)
+enveloppe <- st_convex_hull(agg )
+ctr <- st_centroid(enveloppe)
+mf_map(ctr, add = T)
+ctr <- ctr [order (ctr$COMPLGEO),]
+etik <- ctr [ctr$COMPLGEO > 50,]
+# carto
+mf_map(rpls2019sf)
+mf_label(etik, var = "Group.1", overlap = F,cex = 0.6, halo = 1, bg = "antiquewhite1", offset = 2 )
+mf_layout("Principales résidences HLM à Bondy (+ de 50 logements)", credits = "RPLS 2019")
+# graphique
 residence <- unique(data$COMPLGEO)
-residence [15] <- "inconnu"
 par(mar = c(4,12,4,4))
 barplot(sort(table(data$COMPLGEO)), horiz = T, 
         main = "Nb de logements",
         las = 2, cex.names = 0.8, border = NA)
+
 png("img/nbpiece.png", height = 1800, width = 1800, res = 150)
 par(mfrow = c(5,3))
 for (i in 1:14){

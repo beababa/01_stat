@@ -18,6 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 1. Hypothèse
 2. Le tableau de données
+3. La significativité de la relation : existe-t-elle ?
 3. L'intensité
 4. Les écarts au modèle
 5. Explication géographique
@@ -33,6 +34,7 @@ Comprendre la différence entre l'histogramme et le graphique à barres
 
 ```{r}
 data <- read.csv("data/rplsBondy.csv", fileEncoding = "UTF-8")
+str(data)
 par(mfrow = c(1,2))
 hist(data$NBPIECE, main = "fréquence")
 barplot(table(data$NBPIECE), main = "distribution")

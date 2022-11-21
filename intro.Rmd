@@ -191,7 +191,7 @@ dev.off()
 write.csv(sort(tab), "data/dpt93RPLSCommune.csv")
 # filtre sur Bondy
 filtre <- data [data$LIBCOM == "Bondy",]
-write.csv(filtre, "data/rplsBondy.csv")
+write.csv(filtre, "data/rplsBondy.csv", fileEncoding = "UTF-8")
 ```
 
 
@@ -206,31 +206,31 @@ Il y a un problème sur la donnée, prendre plutôt le millésime 2019
 
 
 ```{r, eval=FALSE}
-rpls2019 <- read.csv2("data/gros/RPLS2019_detail_IDF_DEP_93.csv")
+rpls2019 <- read.csv2("data/gros/RPLS2019_detail_IDF_DEP_93.csv", dec = ",")
 head(rpls2019)
-rpls2021<- read.csv2("data/gros/rpls2021_geolocalise_OD_REG11_DEP93.csv")
+rpls2021<- read.csv2("data/gros/rpls2021_geolocalise_OD_REG11_DEP93.csv", dec = ",")
 ```
 
 ```{r, eval=FALSE}
 library(sf)
 rpls2019 <- rpls2019 [rpls2019$CODEPOSTAL == '93140',]
 rpls2021 <- rpls2021 [rpls2021$CODEPOSTAL == '93140',]
+# verif x y complet
+summary(rpls2019$Y)
 # spatialisation des données
-rpls2019 <- st_as_sf(rpls2019, coords = c("X", "Y"), crs = 2154)
-rpls2021 <- st_as_sf(rpls2021, coords = c("X", "Y"), crs = 2154)
-write.csv(rpls2019, "data/rpls2019.csv", fileEncoding = "UTF-8")
-st_write(rpls2019, "data/data.gpkg", "rpls2019", delete_layer = T, quiet = T)
-st_write(rpls2021, "data/data.gpkg", "rpls2021", delete_layer = T, quiet = T)
+rpls2019sf <- st_as_sf(rpls2019, coords = c("X", "Y"), crs = st_crs(2154))
+rpls2021sf <- st_as_sf(rpls2021, coords = c("X", "Y"), crs = st_crs(2154))
+write.csv(rpls2019, "data/rplsBondy.csv", fileEncoding = "UTF-8")
+st_write(rpls2019sf, "data/data.gpkg", "rpls2019", delete_layer = T)
+st_write(rpls2021sf, "data/data.gpkg", "rpls2021", delete_layer = T, quiet = T)
 ```
 
 
 ```{r, eval=FALSE}
 library(sf)
-st_layers("data/data.gpkg")
-rpls2019 <- st_read("data/data.gpkg", "rpls",fileEncoding = "UTF-8", quiet = T)
-
-rpls2021 <- st_read("data/data.gpkg", "rpls2021",fileEncoding = "UTF-8", quiet = T)
 library(mapsf)
+rpls2019 <- st_read("data/data.gpkg", "rpls2019",  stringsAsFactors = FALSE)
+rpls2021 <- st_read("data/data.gpkg", "rpls2021")
 mf_map(rpls2019, pch= 20, col = "red")
 mf_map(rpls2021, col = "green", alpha = 0.8, add = T)
 mf_legend(type = "typo", pos = "topright", val = c("2019", "2021"), pal = c("red", "green"), border = NA,
@@ -252,11 +252,13 @@ Lorsque l'exercice le requiert, le fichier est à rendre avec son *prénom* (tou
 - http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm
 - http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm
 
+Pour R, la base de tout est 
 
+R et espace (https://archives.framabook.org/r-et-espace/index.html)
 
 # Le devoir maison
 
-A partir de l’outil statistiques locales de l’INSEE, définir 4 variables pouvant servir de base à une analyse exploratoire autour du logement social.
+A partir de l’outil *statistiques locales* de l’INSEE, définir 4 variables pouvant servir de base à une analyse exploratoire autour du logement social.
 
 Faire une analyse factorielle et une classification autour des données choisies.
 
