@@ -12,13 +12,17 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Sujet
+
+Pour les 3 groupes, l’exercice était le même, il fallait choisir une commune dans un lot proposé et en faire une analyse uni et bivariée. Il fallait également justifier son choix, présenter ses données, et comparer avec le cas de Bondy.
+
 # Préparation des données
 
 ## Sujet 1 : données RPLS - Communes 93
 
-Identification des communes
+- Identification des communes
 
-```{r}
+```{r, eval=FALSE}
 data <- read.csv2("data/gros/rpls2021_geolocalise_OD_REG11_DEP93.csv",  fileEncoding = "ASCII")
 #116 644
 head(data)
@@ -30,10 +34,10 @@ dataee <- data [data$LIBCOM %in% ee,]
 # 41788
 ```
 
-données population insee
+- données population insee
 
 
-```{r}
+```{r, eval=FALSE}
 communes <- read.csv2("data/donnees_communes.csv", fileEncoding = "UTF-8")
 communeEe <- communes [communes$COM %in% eeOK & communes$CODREG == 11, ]
 communeEe <- communeEe [ order(communeEe$COM),]
@@ -44,11 +48,11 @@ communeEe <- communeEe [ order(communeEe$COM),]
 
 
 
-Recodage (fonctions)
+- Recodage (fonctions)
 
 
 
-```{r}
+```{r, eval = FALSE}
 # recodification
 recoder <- function (data) {
   FINAN <- as.integer(names(table(data$FINAN)))
@@ -70,15 +74,19 @@ recoder <- function (data) {
 ```
 
 
-```{r}
+```{r, eval=FALSE}
 dataee <- recoder(dataee) 
 ```
 
 
-Un fichier par commune
+- Cartographie
+
+![](img/ee.png)
+
+- Un fichier par commune
 
 
-```{r}
+```{r, eval = FALSE}
 liste <- split.data.frame(dataee, dataee$LIBCOM)
 i <- 1
 for (i in 1:length(liste)) {
@@ -89,9 +97,12 @@ for (i in 1:length(liste)) {
 }
 ```
 
-verif
+- Vérification
 
-```{r}
+Pour tous les fichiers, on sort le nombre de logements sociaux et la population
+
+
+```{r, eval = FALSE}
 fic <- list.files("data/", "^ee")
 i <- 1
 nb <- NULL
@@ -107,6 +118,9 @@ names(df) <- c("commune", "logements_sociaux", "population")
 write.csv(df,"data/tabEE.csv", fileEncoding = "UTF-8")
 ```
 
+```{r}
+read.csv("data/tabEE.csv", fileEncoding = "UTF-8")
+```
 
 
 
@@ -115,7 +129,7 @@ write.csv(df,"data/tabEE.csv", fileEncoding = "UTF-8")
 
 Identification des communes
 
-```{r}
+```{r, eval=FALSE}
 communes <- read.csv2("data/donnees_communes.csv", fileEncoding = "UTF-8")
 communes [communes$COM == 'Bondy',]
 IDF <- communes [communes$PTOT < 60000 & communes$PTOT > 50000 & communes$CODREG == 11, ]
@@ -125,7 +139,7 @@ extrIDF <- sorted_IDF [!duplicated(sorted_IDF$CODDEP),]
 extrIDF <- extrIDF [order(extrIDF$COM),]
 ```
 
-```{r}
+```{r, eval = FALSE}
 library(sf)
 library(mapsf)
 geo <- st_read("data/communes-20210101.shp")
@@ -147,7 +161,7 @@ dev.off()
 
 
 
-```{r}
+```{r, eval = FALSE}
 fic <- list.files("data/gros/", "REG11")
 choix <- extrIDF$COM
 choix
@@ -164,11 +178,11 @@ for (i in 1:length(fic)){
 }
 ```
 
-Vérification
+- Vérification
 
 Test sur les NBPIECES
 
-```{r}
+```{r, eval = FALSE}
 fic <- list.files("data/", "idf")
 fic
 par(mfrow = c(3,3))
@@ -190,7 +204,7 @@ write.csv(df, "data/tabIDF.csv", fileEncoding = "UTF-8")
 
 Identification des communes
 
-```{r}
+```{r, eval=FALSE}
 fr <- communes [communes$PTOT < 60000 & communes$PTOT > 50000 & communes$CODREG != 11, ]
 sorted_fr <- fr [order(fr$REG),]
 extrFr <- sorted_fr [!duplicated(sorted_fr$REG),]
@@ -203,7 +217,7 @@ extrFr
 
 Cartographie
 
-```{r}
+```{r,  eval=FALSE}
 library(sf)
 library(mapsf)
 geo <- st_read("data/communes-20220101.shp")
@@ -215,7 +229,7 @@ st_write(jointure, "data/examen.gpkg","jointureFr", delete_layer = T)
 ```
 
 
-```{r}
+```{r,  eval=FALSE}
 jointure <- st_read("data/examen.gpkg", "jointureFr")
 jointure [, c("nom", "insee")]
 jointure <- jointure [-c(5:7,9:12),]
@@ -231,8 +245,9 @@ mf_layout("Villes proposées en France (Hors Réunion et Guadeloupe)", credits =
 dev.off()
 ```
 
+![](img/fr.png)
 
-```{r}
+```{r,  eval=FALSE}
 monde <- st_read("data/TM_WORLD_BORDERS-0.3.shp")
 png("img/frGuadeloupe.png", res = 100)
 lesAbymes <- st_centroid(jointureDOM [1,])
@@ -244,7 +259,7 @@ mf_layout("Villes proposées en France (Guadeloupe)", credits = "insee")
 dev.off()
 ```
 
-```{r}
+```{r,  eval=FALSE}
 png("img/frReunion.png", res = 100)
 stAndre <- st_centroid(jointureDOM [2,])
 mf_init(st_buffer(stAndre, 5000000))
@@ -259,7 +274,7 @@ dev.off()
 
 ![](img/frReunion.png)
 
-```{r}
+```{r,  eval=FALSE}
 # affichage par région
 fic <- list.files("data/rplsREG", "OD")
 fic
@@ -284,7 +299,7 @@ for (i in 1:length(fic)){
 Vérification
 
 
-```{r}
+```{r, eval=FALSE}
 fic <- list.files("data/", "fr_")
 choix
 choix <- choix [-c(3,7),]
@@ -310,21 +325,62 @@ write.csv(df, "data/tabFR.csv", fileEncoding = "UTF-8")
 
 ## Barême
 
+### Global
+
 ```{r}
 element <- c("soin", "description des données", "univarié", "bi-varié", "comparaison")
-bareme <- c(2,4,4,4,2)
+bareme <- c(2,5,5,5,2)
 df <- data.frame(element, bareme)
 knitr::kable(df)
 ```
 
+### Détail
+
+```{r}
+element2 <- c("pdf / presentation", "mots clés / description", "graphiques / indicateurs / commentaires", "graphiques / indicateurs / commentaires", "tentative / OK") 
+df$element2 <- element2
+knitr::kable(df)
+```
+
+
 
 # Elements de corrections
 
-## soins (3)
+Une correction type est disponible sur le moodle. Les remarques qui suivent sont issues des copies d’étudiants.
+
+## soins
+
+### Prénom.pdf
+
+Ce n’était pas dur et pourtant…
+
+
+```{r}
+data <- read.csv("data/statsExamen.csv")
+knitr::kable(data)
+```
+
+### A qui s'adresse-t-on ?
 
 "Bonjour, Monsieur le Directeur Général des Services Techniques"....
 
+-1 pt pour l’étudiante qui avait eu 20 au 2e passage
+
+
 ## Présentation des données
 
-Qu'est ce que le RPLS ?
-Combien de données disponibles ? (cf le dictionnaire des données)
+### Justification du choix
+
+Il s’agissait de justifier le choix mais également de dire d’où venait le RPLS. J’ai adapté le barème en conséquence.
+
+![](img/examIntro.jpg)
+
+Est-ce suffisant ?
+
+### Autre justification
+
+
+![](img/examComparaison.jpg)
+
+### Qu'est ce que le RPLS ?
+
