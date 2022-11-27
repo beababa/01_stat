@@ -9,7 +9,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Données d'exemple
@@ -24,7 +24,7 @@ Enoncer les hypothèses possibles de la comparaison, attention variable explicat
 
 
 ```{r}
-data <- read.csv("data/rpls2019.csv", fileEncoding = "UTF-8", dec =".")
+data <- read.csv("data/rplsBondy.csv", fileEncoding = "UTF-8", dec =".")
 data <- data [, c("SURFHAB","CONSTRUCT", "COMPLGEO","X","Y")] 
 summary(data)
 write.csv(na.omit(data), "data/rplsSurfConst.csv")
@@ -74,7 +74,7 @@ Avec le tableur, on fait le graphique puis on ajuste avec le filtre.
 
 ```{r}
 data <- data [data$SURFHAB %in% c(20:120) ,]
-data <- data [data$CONSTRUCT > 1930,]
+data <- data [data$CONSTRUCT > 1945,]
 plot(data$CONSTRUCT, data$SURFHAB)
 ```
 
@@ -88,11 +88,15 @@ Pour une droite aX+b
 
 - a (la pente) = covariance / variance X
 
-- b (ordonnée de l'origine) = moyenne de y - a * moyenne de y
+- b (ordonnée de l'origine) = moyenne de Y - a * moyenne de X
+
+![](img/regression.jpg)
+La distance MP doit être minimale d'où le terme *droite des moindres carrées*
 
 
 ```{r}
 plot(data$CONSTRUCT, data$SURFHAB)
+# modèle de régression
 lm <- lm(data$SURFHAB~data$CONSTRUCT)
 abline(lm, lty =2, lwd = 1, col = "red")
 ```
@@ -112,18 +116,26 @@ Savoir-faire tableur : utiliser les noms pour les colonnes construction et surfa
 
 ### Premier temps
 
-On rajoute des colonnes pour chaque variable:
+On rajoute des colonnes pour chaque variable :
+
 - écart à la moyenne
-- carré
+
+- carré ( = *distance* plutôt que *différence*)
+
 et pour les deux variables
-- produit des écarts
+
+- produit des écarts (pour étudier le rapport entre 2 variables, techniquement on utiliser une division ou une multiplication)
 
 ### Deuxième temps
 
 Dans un nouveau tableau, pour chaque variable
+
 - moyenne
+
 - carré de la somme des écarts à la moyenne 
+
 - Variance
+
 - Ecart type
 
 puis covariance (produit des écarts / nb de valeurs)
@@ -134,6 +146,7 @@ et coeff (cov / produit des écarts types)
 ![](img/formules.jpg)
 
 ![](img/coeffCORRELATION.jpg)
+
 ### Interprétation
 
 Le coefficient évolue de -1 à +1
@@ -145,7 +158,7 @@ Le coefficient évolue de -1 à +1
 
 - plus la variable est proche de 1, plus l'intensité de la relation entre les deux variables est forte.
 
-Dans notre exemple, lien moyen.
+Dans notre exemple, lien faible
 
 ```{r}
 varCorr <- data [, c( "SURFHAB", "CONSTRUCT")]
@@ -163,7 +176,7 @@ cor(varCorr)^2
 ```
 
 
-La surface habitable explique environ 10 % de l'année de construction.
+La surface habitable explique moins de 10 % de l'année de construction.
 
 Les 90 % restant sont liés à d'autres facteurs.
 
