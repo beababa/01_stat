@@ -1,5 +1,5 @@
 ---
-title: "Mutivariées : analyse factorielle et classification"
+title: "Multivariées : analyse factorielle et classification"
 output:
   html_document:
     number_sections: yes
@@ -60,11 +60,12 @@ Et ainsi de suite ...
 ```{r}
 data_cr <- read.csv("data/base_cr", row.names = 1, fileEncoding = "UTF-8")
 str(data_cr)
-acp <- prcomp(data_cr)
-# par défaut direction négative on inverse
-acp$rotation <- -1 * acp$rotation
+acp <- prcomp(data_cr, scale =  F)
 acp$rotation
 ```
+
+
+
 
 La taille des axes illustre leur importance (voir commentaire graphique)
 
@@ -105,7 +106,7 @@ Ici, toutes les variables semblent avoir la même importance
 
 - oppositions des axes
 
-2 variables s'opposent, par exemple le nombre d'entreprises est presque en opposition*
+2 variables s'opposent, par exemple le nombre d'entreprises est presque en opposition
 avec le le nombre de non diplômés.
 
 - axes voisins 
@@ -125,7 +126,7 @@ Dans le cas présent, il faudrait pouvoir examiner mieux les variables, on peut 
 des zoomes.
 
 ```{r}
-biplot(acp, col = c("black", "red"), scale = 0, xlim = c(-1, 0), ylim = c(-2,0))
+biplot(acp, col = c("black", "red"), scale = 0, xlim = c(0, 3), ylim = c(0,3))
 ```
 
 Par exemple, les communes autour de l'axe IFS se distinguent par rapport à cette variable.
@@ -140,10 +141,10 @@ Supprimer les valeurs posant problème et relancer les calculs. Essayer d'interp
 # Classification
 
 ```{r, eval=F}
-# Centrage et réduction
-data.cr <- scale(data, center = T, scale = T)
+# Centrage et réduction : on repart du fichier
+data_cr <- read.csv("data/base_cr", row.names = 1, fileEncoding = "UTF-8")
 # matrice des distances entre les individus
-data.d <- dist(data.cr)
+data.d <- dist(data_cr)
 # classification
 cah <- hclust(data.d)
 # dendogramme
@@ -155,32 +156,29 @@ dev.off()
 # découpage
 groupes.cah <- cutree(cah, k = 3)
 liste <- sort(groupes.cah)
-head(liste)
+table(liste)
+tail(liste,28)
 ```
 
 ![](img/dendo.png)
 
 
-# Représentation graphique
+# Représentation graphique analyse factorielle et classification
 
 Il s'agit de représenter les groupes par des couleurs sur l'ACP précédente (dans
 le premier axe)
 
 ```{r, eval = F}
 data_cr <- read.csv("data/base_cr", row.names = 1, fileEncoding = "UTF-8")
-acp <- princomp(data_cr, cor = T, scores = T)
+acp <- princomp(data_cr, cor = F, scores = T)
 par(bg = "lightgrey", mar = c(1,1,1,1))
 plot(acp$scores[,1],acp$scores[,2], type = "p")
 text(acp$scores[,1],acp$scores[,2],col=c(topo.colors(3))[groupes.cah],cex
 =1,labels=rownames(data))
 ```
 
-
 ![](img/cah2.png)
 
-# Deuxième traitement
+## Deuxième traitement
 
-Retirer les valeurs aberrantes, jouer sur la taille des groupes et rejouer la classification, puis analyser.
-
-
-
+Retirer les valeurs aberrantes, ici les groupes 2 et 3, jouer sur la taille des groupes et rejouer la classification, puis analyser.
