@@ -106,7 +106,8 @@ tab <- table(etudiant$groupe.TD)
 i <- 2
 fic <- list.files("data/", pattern = "cours")
 # on recherche le fichier le plus haut
-nb <- max(as.integer(substring(fic, 6,6)))
+nb <- max(as.integer(substring(fic, 6,7)))
+tmp <- NULL
 for (i in 2:nb) {
   nomFic <- paste0("data/cours", i, ".csv")
   data <- read.csv(nomFic, fileEncoding = "UTF-8")
@@ -114,7 +115,7 @@ for (i in 2:nb) {
   tmp <- table(data$groupe.TD)
   tab <- rbind(tab , tmp)
 }
-row.names(tab) <- substring(fic,1,6)
+row.names(tab) <- paste0("cours ",seq(1,nb, by = 1))
 knitr::kable(tab)
 ```
 
@@ -243,17 +244,20 @@ mf_layout("Comparaison rpls 2019 et 2021", credits = "RPLS")
 Au niveau de la France, entière, on calcule le nombre de logements sociaux
 à l'échelle de la commune pour 2019.
 
+Voir également, la référence au niveau du département (pour 10 M hbts)
+
 https://www.insee.fr/fr/statistiques/2134423#titre-bloc-1
 
-Référence au niveau du département (pour 10 M hbts)
+### Agrégation
 
 L'agrégation du nombre d'appartements permet d'avoir les données au niveau communal.
 
 
-```{r}
+```{r, eval = FALSE}
 fic <- list.files("data/gros", "RPLS2019")
 nb <- length(fic)
 # on a 25 fichiers pour la France entière
+# on crée une fonction pour lire et dénombrer le nb d'appartements par commune
 denombrer <- function(fic){
   zone <- substring(fic, 17,99)
   data <- read.csv2(paste0("data/gros/",fic))
@@ -264,7 +268,7 @@ denombrer <- function(fic){
   return(df)
 }
 liste <- lapply(fic, denombrer)
-# éclatement de la liste
+# éclatement de la liste, transformation en dataframe
 df <- NULL
 for (i in 1:nb) {
   LIBCOM <- liste [[i]][,1]
@@ -274,25 +278,54 @@ for (i in 1:nb) {
   tmp  <- data.frame(LIBCOM, nb, zone)
   df <- rbind(df, tmp)
 }
-tab <- table(df$zone)
-hist(tab)
-# Nb de communes par zone. On observe de grandes disparités.
-# On supprime les communes avec peu de logements sociaux
-summary(df$nb)
-hist(df$nb, breaks = c(0,7, 22, 322,85, 47000))
+# on enregistrer le fichier 
+write.csv(df, "data/rplsFrSansCOG.csv", fileEncoding = "UTF-8")
+```
+
+### Observation du nombre d'appartements par zone, par commune
+
+
+#### Communes par zone
+
+```{r}
+data <- read.csv("data/rplsFrSansCOG.csv", fileEncoding = "UTF-8")
+tab <- table(data$zone)
+barplot(tab, main = "Nb de communes avec logement social par zone",
+     xlab = "zone", ylab = "nb de communes", las = 2)
+```
+
+En province, il y a également des logements sociaux répartis sur un ensemble plus grand
+de communes.
+Les régions avec le nombre le plus importants de communes avec des logements sociaux
+sont Auvergne-Rhône Alpes et Nouvelle Aquitaine.
+
+
+#### Nombre de logements sociaux par commune
+
+L'amplitude de la variable est très importante.
+
+```{r}
+summary(data$nb)
+hist(data$nb, breaks = c(0,7, 22, 322,85, 47000))
 # c'est illisible, étendue trop grande, trop de données
-df <- df [df$nb > 2000,]
-summary(df$nb)
+data2000 <- data [data$nb > 2000,]
+summary(data2000$nb)
 # Médiane et moyenne se rapprochent
-hist(df$nb)
+hist(data2000$nb)
 # identification des communes
-df [df$nb > 20000,]
-# le maximum c'est Toulouse...
-#jointure et carto
-# pour pouvoir utiliser la donnée le nom ne suffit pas, il faut le COG
+data [(data$nb > 20000),]
+```
+
+Le maximum c'est Toulouse...
+
+### Jointure
+
+On fait d'abord une jointure au niveau du libellé de la commune, que l'on vérifie par
+rapport à la zone.
+
+```{r}
 cog <- read.csv("data/communes-01012019.csv", fileEncoding = "UTF-8")
-str(cog)
-jointure <- merge(df, cog, by.x = "LIBCOM", by.y =  "libelle")
+jointure <- merge(data, cog, by.x = "LIBCOM", by.y =  "libelle")
 str(jointure)
 # on ne retiendra que les lignes où correspondance deux derniers chiffres correspondent
 jointure$reg2 <- sub("reg", "", jointure$zone)
@@ -302,18 +335,30 @@ jointure$corresp <- ifelse(jointure$reg == jointure$reg2, "ok", "non")
 table(jointure$corresp)
 # 10 communes perdues
 res <- jointure [jointure$corresp == "ok",]
-write.csv(res, "data/fr2000.csv", fileEncoding = "UTF-8")
 ```
 
-
-Pb 91
+Suppression des doublons sur LIBCOM et zone
 
 ```{r}
-fic <- fic [4]
-data <- read.csv2(paste0("data/gros/",fic))
-str(data)
-summary(data$CODEPOSTAL)
+fr <- read.csv("data/frVerif.csv", fileEncoding = "UTF-8")
+names(data)
+# 20 communes perdues
+data$cle <- paste0(data [,"LIBCOM"], data[, "zone"])
+doublons <- data  [!duplicated(data$cle),]
+write.csv(doublons, "data/pbDoublon.csv", fileEncoding = "UTF-8")
+# verif sur Allonnes
+fr [fr$LIBCOM == "Allonnes",]
+doublons [doublons$LIBCOM == "Allonnes",]
 ```
+
+10222 communes au lieu de 10567.
+Observation data finale
+
+```{r}
+data <- read.csv("data/pbDoublon.csv", fileEncoding = "UTF-8")
+data [data$LIBCOM == "Allonnes",]
+```
+
 
 
 # Pratique
@@ -337,6 +382,9 @@ R et espace (https://archives.framabook.org/r-et-espace/index.html)
 
 A partir de l’outil *statistiques locales* de l’INSEE, définir 4 variables pouvant servir de base à une analyse exploratoire autour du logement social.
 
+Il y aura donc au mimimum 5 variables, les 4 de l'INSEE et la 5e du rpls fourni sur
+le moodle.
+
 Faire une analyse factorielle et une classification autour des données choisies.
 
 Livrables :
@@ -350,6 +398,3 @@ Livrables :
 Ces 3 fichiers avec le prénom de l’étudiant.
 
 barème : 4 points pour le soin / 8 pour le script R / 8 pour le .pdf
-
-
-
