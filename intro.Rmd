@@ -274,8 +274,11 @@ for (i in 1:nb) {
   tmp  <- data.frame(LIBCOM, nb, zone)
   df <- rbind(df, tmp)
 }
+# récupération du fichier final
+df <- read.csv("data/fr.csv", fileEncoding = "UTF-8")
 tab <- table(df$zone)
-hist(tab)
+tab
+hist(tab, xlab = "nb de communes par zone", ylab = "nb d'occurences")
 # Nb de communes par zone. On observe de grandes disparités.
 # On supprime les communes avec peu de logements sociaux
 summary(df$nb)
@@ -290,7 +293,7 @@ df [df$nb > 20000,]
 # le maximum c'est Toulouse...
 #jointure et carto
 # pour pouvoir utiliser la donnée le nom ne suffit pas, il faut le COG
-cog <- read.csv("data/communes-01012019.csv", fileEncoding = "UTF-8")
+cog <- read.csv("data/communes-01012019.csv", encoding = "UTF-8")
 str(cog)
 jointure <- merge(df, cog, by.x = "LIBCOM", by.y =  "libelle")
 str(jointure)
@@ -302,7 +305,7 @@ jointure$corresp <- ifelse(jointure$reg == jointure$reg2, "ok", "non")
 table(jointure$corresp)
 # 10 communes perdues
 res <- jointure [jointure$corresp == "ok",]
-write.csv(res, "data/fr2000.csv", fileEncoding = "UTF-8")
+write.csv(res, "data/fr.csv", fileEncoding = "UTF-8")
 ```
 
 
@@ -314,6 +317,22 @@ data <- read.csv2(paste0("data/gros/",fic))
 str(data)
 summary(data$CODEPOSTAL)
 ```
+
+
+On ouvre le fichier sous le tableur et on le met en forme
+- suppression des NA
+- quelques doublons (à analyser)
+
+
+Dernière vérif
+
+```{r}
+rpls <- read.csv("data/frVerif.csv", fileEncoding = "UTF-8")
+summary(rpls$nb)
+tab <- table(rpls$zone)
+barplot(tab, las = 2)
+```
+
 
 
 # Pratique
