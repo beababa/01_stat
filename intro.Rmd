@@ -171,6 +171,18 @@ abline(v = median(resSansZero),  col = "red", lty = 2)
 
 Beaucoup de notes très faibles, mais pas seulement.
 
+
+
+#### Notes finales
+
+
+```{r}
+note <- read.csv("data/noteFin.csv", fileEncoding = "UTF-8", na.strings = "en attente", dec = ",")
+summary(note$note.sur.20)
+hist(note$note.sur.20, main = "Etalement note finale")
+```
+
+
 # La donnée du cours
 
 ## La source
