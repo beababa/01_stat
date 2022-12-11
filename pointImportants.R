@@ -43,10 +43,6 @@ acp <- prcomp(data_cr, scale =  F)
 acp$rotation
 biplot(acp, col = c("blue", "red"), scale = 0, xlim = c(-2, 2), ylim = c(-2,4))
 
-
-# différences prcomp et 
-
-# pb rotation
 data_cr <- read.csv("data/base_cr", row.names = 1, fileEncoding = "UTF-8")
 str(data_cr)
 acp <- prcomp(data_cr, scale =  F)
