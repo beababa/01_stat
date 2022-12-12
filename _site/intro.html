@@ -798,9 +798,10 @@ bonne extension.</p>
 <p><img src="intro_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
 <p>Beaucoup de notes très faibles, mais pas seulement.</p>
 </div>
-<div id="notes-finales" class="section level4" number="4.2.2.2">
-<h4><span class="header-section-number">4.2.2.2</span> Notes
-finales</h4>
+</div>
+</div>
+<div id="notes-finales" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Notes finales</h2>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>note <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/noteFin.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="at">na.strings =</span> <span class="st">&quot;en attente&quot;</span>, <span class="at">dec =</span> <span class="st">&quot;,&quot;</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(note<span class="sc">$</span>note.sur<span class="fl">.20</span>)</span></code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
@@ -814,8 +815,6 @@ finales</h4>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(resSansZero<span class="sc">$</span>note.sur<span class="fl">.20</span>, <span class="at">main =</span> <span class="st">&quot;Etalement note finale - 73 obs&quot;</span>, <span class="at">freq =</span> T, <span class="at">border =</span> <span class="cn">NA</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(resSansZero<span class="sc">$</span>note.sur<span class="fl">.20</span>, <span class="at">na.rm =</span> T),  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="intro_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
-</div>
-</div>
 </div>
 </div>
 <div id="la-donnée-du-cours" class="section level1" number="5">

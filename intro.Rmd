@@ -173,7 +173,7 @@ Beaucoup de notes très faibles, mais pas seulement.
 
 
 
-#### Notes finales
+## Notes finales
 
 
 ```{r}
