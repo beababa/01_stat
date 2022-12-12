@@ -1,0 +1,84 @@
+# Points importants pour le devoir maison
+#########################################"
+
+
+# Import de fichier
+data <- read.csv('data/pbNA.csv', fileEncoding = "UTF-8", dec = ".")
+str(data)
+# Cela ne fonctionne pas, il faut des numériques, on fait une recherche autour du motif N/A
+i <- grep("N/A", data$taille.menages)
+data [i,]
+# Il y a deux sortes de NA, la ligne d'import sera donc :
+data <- read.csv('data/pbNA.csv', fileEncoding = "UTF-8", dec =".",
+                 na.strings = c("N/A - résultat non disponible", "N/A - division par 0"))
+
+
+
+# fusion avec le fichier
+data <- read.csv2("data/dataMultivariee2.csv", fileEncoding = "UTF-8", skip = 2,
+                  na.strings = c("N/A"), dec =".")
+rpls <- read.csv("data/rplsFr.csv", fileEncoding = "UTF-8")
+length(rpls$Code)
+length(data$Code)
+jointure <- merge(rpls, data, by = "Code")
+length(rpls$Code)-length(jointure$Code)
+# Question 1 : pourquoi commence t on par le fichier rpls ?
+jointure <- jointure [order (jointure$Code),]
+# Question 2 : pourquoi 37 communes manquantes ?
+i <- setdiff(rpls$Code, jointure$Code)
+rpls [rpls$Code %in% i,]
+data [grep("Paris", data$Libellé),]
+data [grep("Lyon", data$Libellé),]
+# Donc Paris / Lyon / Marseille automatiquement hors jeu
+rpls [grep ("Marseille", rpls$LIBCOM),]
+# ... et même pas de RPLS à Marseille ?
+
+
+# Comment repérer des valeurs ?
+# grep, which, filtre
+
+data_cr <- read.csv("data/base_cr", row.names = 1, fileEncoding = "UTF-8")
+str(data_cr)
+acp <- prcomp(data_cr, scale =  F)
+acp$rotation
+biplot(acp, col = c("blue", "red"), scale = 0, xlim = c(-2, 2), ylim = c(-2,4))
+
+
+# différences prcomp et 
+
+# pb rotation
+data_cr <- read.csv("data/base_cr", row.names = 1, fileEncoding = "UTF-8")
+str(data_cr)
+acp <- prcomp(data_cr, scale =  F)
+acp$rotation
+biplot(acp, col = c("blue", "red"), scale = 0, xlim = c(-2, 2), ylim = c(-2,4))
+biplot(acp, col = c("blue", "red"), scale = 0, xlim = c(0, 3), ylim = c(0,3))
+# on prend 2 valeurs rapprochées 92025 et 64 445 (Colombes et Pau)
+jointure [ jointure$Code %in% c("92025", "64445"),]
+# Elles ont effectivement des profils très similaires. mais une variation RP et RPLS
+jointure [ jointure$Code %in% c("80021"),]
+# Amiens est plus importante, et les variables sont plus importantes également mais
+# il y a un déficit de rpls par rapport à Pau
+which(rownames (data_cr) == "80021")
+data_cr [ 18,]
+
+
+
+# Avec les groupes
+# Centrage et réduction : on repart du fichier
+data_cr <- read.csv("data/base_cr", row.names = 1, fileEncoding = "UTF-8")
+# matrice des distances entre les individus
+data.d <- dist(data_cr)
+# classification
+cah <- hclust(data.d)
+# découpage
+groupes.cah <- cutree(cah, k = 8)
+liste <- sort(groupes.cah)
+acp <- princomp(data_cr, cor = F, scores = T)
+par(bg = "lightgrey", mar = c(1,1,1,1))
+plot(acp$scores[,1],acp$scores[,2], type = "p")
+text(acp$scores[,1],acp$scores[,2],col=c(topo.colors(8))[groupes.cah],cex
+     =1,labels=rownames(data))
+# Oy sonT Amiens Pau et Colombes ?
+
+
