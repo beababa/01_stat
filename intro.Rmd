@@ -173,13 +173,18 @@ Beaucoup de notes très faibles, mais pas seulement.
 
 
 
-#### Notes finales
+## Notes finales
 
 
 ```{r}
 note <- read.csv("data/noteFin.csv", fileEncoding = "UTF-8", na.strings = "en attente", dec = ",")
 summary(note$note.sur.20)
-hist(note$note.sur.20, main = "Etalement note finale")
+hist(note$note.sur.20, main = "Etalement note finale - 95 obs", freq = T, border = NA)
+resSansZero <- note [note$note.sur.20  !=0,]
+abline(v = mean(note$note.sur.20, na.rm = T),  col = "red")
+ mean(note$note.sur.20)
+hist(resSansZero$note.sur.20, main = "Etalement note finale - 73 obs", freq = T, border = NA)
+abline(v = mean(resSansZero$note.sur.20, na.rm = T),  col = "red", lty = 2)
 ```
 
 
@@ -336,7 +341,7 @@ On fait d'abord une jointure au niveau du libellé de la commune, que l'on véri
 rapport à la zone.
 
 ```{r}
-cog <- read.csv("data/communes-01012019.csv", fileEncoding = "UTF-8")
+cog <- read.csv("data/communes-01012019.csv", encoding = "UTF-8")
 jointure <- merge(data, cog, by.x = "LIBCOM", by.y =  "libelle")
 str(jointure)
 # on ne retiendra que les lignes où correspondance deux derniers chiffres correspondent

@@ -574,6 +574,29 @@ variables, on peut effectuer des zoomes.</p>
 <p><img src="jour8_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>Par exemple, les communes autour de l’axe IFS se distinguent par
 rapport à cette variable.</p>
+<p>Dans notre cas, nous repérons Meaux et Bondy (77284), observons la
+ligne.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/base.csv&quot;</span>, <span class="at">row.names =</span> <span class="dv">1</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>data [data<span class="sc">$</span>Code <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;77284&quot;</span>,<span class="st">&quot;93010&quot;</span>,<span class="st">&quot;22278&quot;</span>),]</span></code></pre></div>
+<pre><code>##      Code       LIBCOM   nb       zone      Libellé
+## 25  22278 Saint-Brieuc 4772      reg53 Saint-Brieuc
+## 170 77284        Meaux 9213 IDF_DEP_77        Meaux
+## 249 93010        Bondy 9390 IDF_DEP_93        Bondy
+##     Unités.légales..en.nombre..2021 Résidences.principales.2019
+## 25                             3069                       22554
+## 170                            4346                       22980
+## 249                            4100                       20268
+##     Part.des.non.diplômés.chez.les.20.24.ans.sortis.des.études..2018
+## 25                                                              20.0
+## 170                                                             20.7
+## 249                                                             27.7
+##     Implantations.France.Services..IFS...en.nombre..2021
+## 25                                                     2
+## 170                                                    2
+## 249                                                    1</code></pre>
+<p>Clairement, Meaux et Bondy ont le même profil. Par contre, Saint
+Brieuc est moins dynamique économiquement et a moins de logement social.
+Saint Brieuc est pourtant placé à proximité des deux autres.</p>
 </div>
 </div>
 </div>
@@ -586,23 +609,23 @@ Essayer d’interpréter.</p>
 </div>
 <div id="classification" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Classification</h1>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Centrage et réduction : on repart du fichier</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>data_cr <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/base_cr&quot;</span>, <span class="at">row.names =</span> <span class="dv">1</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># matrice des distances entre les individus</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>data.d <span class="ot">&lt;-</span> <span class="fu">dist</span>(data_cr)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># classification</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>cah <span class="ot">&lt;-</span> <span class="fu">hclust</span>(data.d)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># dendogramme</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">&quot;img/dendo.png&quot;</span>)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cah)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># matérialisation des groupes</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="fu">rect.hclust</span>(cah, <span class="at">k =</span> <span class="dv">3</span>)</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co"># découpage</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>groupes.cah <span class="ot">&lt;-</span> <span class="fu">cutree</span>(cah, <span class="at">k =</span> <span class="dv">3</span>)</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>liste <span class="ot">&lt;-</span> <span class="fu">sort</span>(groupes.cah)</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(liste)</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(liste,<span class="dv">28</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Centrage et réduction : on repart du fichier</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>data_cr <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/base_cr&quot;</span>, <span class="at">row.names =</span> <span class="dv">1</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># matrice des distances entre les individus</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>data.d <span class="ot">&lt;-</span> <span class="fu">dist</span>(data_cr)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># classification</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>cah <span class="ot">&lt;-</span> <span class="fu">hclust</span>(data.d)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># dendogramme</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">&quot;img/dendo.png&quot;</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cah)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># matérialisation des groupes</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">rect.hclust</span>(cah, <span class="at">k =</span> <span class="dv">3</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co"># découpage</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>groupes.cah <span class="ot">&lt;-</span> <span class="fu">cutree</span>(cah, <span class="at">k =</span> <span class="dv">3</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>liste <span class="ot">&lt;-</span> <span class="fu">sort</span>(groupes.cah)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(liste)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(liste,<span class="dv">28</span>)</span></code></pre></div>
 <p><img src="img/dendo.png" /></p>
 </div>
 <div id="représentation-graphique-analyse-factorielle-et-classification"
@@ -611,12 +634,12 @@ class="section level1" number="4">
 graphique analyse factorielle et classification</h1>
 <p>Il s’agit de représenter les groupes par des couleurs sur l’ACP
 précédente (dans le premier axe)</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data_cr <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/base_cr&quot;</span>, <span class="at">row.names =</span> <span class="dv">1</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>acp <span class="ot">&lt;-</span> <span class="fu">princomp</span>(data_cr, <span class="at">cor =</span> F, <span class="at">scores =</span> T)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">bg =</span> <span class="st">&quot;lightgrey&quot;</span>, <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(acp<span class="sc">$</span>scores[,<span class="dv">1</span>],acp<span class="sc">$</span>scores[,<span class="dv">2</span>], <span class="at">type =</span> <span class="st">&quot;p&quot;</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(acp<span class="sc">$</span>scores[,<span class="dv">1</span>],acp<span class="sc">$</span>scores[,<span class="dv">2</span>],<span class="at">col=</span><span class="fu">c</span>(<span class="fu">topo.colors</span>(<span class="dv">3</span>))[groupes.cah],cex</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="ot">=</span><span class="dv">1</span>,<span class="at">labels=</span><span class="fu">rownames</span>(data))</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data_cr <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/base_cr&quot;</span>, <span class="at">row.names =</span> <span class="dv">1</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>acp <span class="ot">&lt;-</span> <span class="fu">princomp</span>(data_cr, <span class="at">cor =</span> F, <span class="at">scores =</span> T)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">bg =</span> <span class="st">&quot;lightgrey&quot;</span>, <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(acp<span class="sc">$</span>scores[,<span class="dv">1</span>],acp<span class="sc">$</span>scores[,<span class="dv">2</span>], <span class="at">type =</span> <span class="st">&quot;p&quot;</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(acp<span class="sc">$</span>scores[,<span class="dv">1</span>],acp<span class="sc">$</span>scores[,<span class="dv">2</span>],<span class="at">col=</span><span class="fu">c</span>(<span class="fu">topo.colors</span>(<span class="dv">3</span>))[groupes.cah],cex</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="ot">=</span><span class="dv">1</span>,<span class="at">labels=</span><span class="fu">rownames</span>(data))</span></code></pre></div>
 <p><img src="img/cah2.png" /></p>
 <div id="deuxième-traitement" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Deuxième

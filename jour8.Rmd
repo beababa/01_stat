@@ -131,6 +131,16 @@ biplot(acp, col = c("black", "red"), scale = 0, xlim = c(0, 3), ylim = c(0,3))
 
 Par exemple, les communes autour de l'axe IFS se distinguent par rapport à cette variable.
 
+Dans notre cas, nous repérons Meaux et Bondy (77284), observons la ligne.
+
+```{r}
+data <- read.csv("data/base.csv", row.names = 1, fileEncoding = "UTF-8")
+data [data$Code %in% c("77284","93010","22278"),]
+```
+
+Clairement, Meaux et Bondy ont le même profil.
+Par contre, Saint Brieuc est moins dynamique économiquement et a moins de logement social.
+Saint Brieuc est pourtant placé à proximité des deux autres.
 
 ## Second traitement
 
@@ -178,6 +188,18 @@ text(acp$scores[,1],acp$scores[,2],col=c(topo.colors(3))[groupes.cah],cex
 ```
 
 ![](img/cah2.png)
+
+En bas à droite, Nantes et Bordeaux représentent un groupe.
+
+```{r}
+data [data$Code %in% c("33063", "44109"),]
+data_cr [data_cr$Code %in% c("33063", "44109"),]
+tmp <- data_cr [rownames(data_cr) %in% c("33063","44109"),]
+pairs(tmp)
+```
+
+Il ne semble pas y avoir de point commun dans leur
+profil hormis l'idée que les correlations entre les variables n'existent pas.
 
 ## Deuxième traitement
 
