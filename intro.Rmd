@@ -15,7 +15,7 @@ knitr::opts_chunk$set(warning  = FALSE)
 ``` 
 
 
-# Intitulé du cours
+# Intitulé et déroulé du cours
 
 *"L5GEABIM Analyses bivariées et multivariées"*
 
@@ -25,35 +25,6 @@ knitr::kable(data, col.names = c("groupe", "heures", "enseignant") )
 ```
 
 
-# Déroulé
-
-Il va être modifié en fonction de
-
-- votre vitesse - s'il faut prendre plus de temps sur les basiques
-- mon enseignement - trois fois le même cours
-
-A chaque cours un exercice à faire pour le prochain cours, quelque soit l'avancement du cours.
-Utiliser les ressources internet, poser des questions,...
-
-
-
-
-13 cours en tout. 
-2 cours d'intro rappels stats
-7 sur la stat bi-variée
-3 sur la multivariée
-1 cours pour un devoir sur table au mi-semestre
-
-# Evaluation
-
-- 1 devoir maison à rendre vers la fin du semestre (coeff1)
-- 1 devoir sur table à la mi-semestre (coeff2)
-
-... et c'est tout ! (pas de partiel)
-
-Au départ on utilise Libre Office (plutôt que Microsoft) puis R
-
-Question : quelle utilisation de R ? des cours cette année ?
 
 ```{r}
 data <- read.csv("data/deroule.csv", encoding = "UTF-8")
@@ -61,13 +32,53 @@ knitr::kable(data)
 ```
 
 
+# La donnée
+
+## Où les trouver ?
+
+Au départ les données sur les élections disponibles
+
+https://www.data.gouv.fr/fr/pages/donnees-des-elections/
+
+intérêt de la maille du bureau de vote
+
+Chercher *REU* au niveau de la zone de recherche de data.gouv, quelles perspectives pour les chercheurs ?
+
+
+## Préparer les données
+
+On utilise pour le cours le fichier par bureau de vote des présidentielles 2022
+
+Cet exercice permet d'utiliser dans le tableur :
+
+- l'ouverture d'un fichier txt pour le transformer en csv
+- la suppression de colonne
+- les 3 raccourcis clavier : CTRL + * , CTRL + C, CTRL + V
+- Touche de sélection et de déplacement
+- tri
+- filtre
+
+L'objectif est que chaque étudiant choisisse une ville (avec au moins 5 bureaux
+de vote)
+
+
+```{r}
+data2022 <- read.csv2("data/gros/resultats-par-niveau-burvot-t1-france-entiere(1).csv", fileEncoding = "Latin1", header = F,skip = 1)
+var <- 
+str(data2022)
+bondy2022 <- data2022 [ data2022$V6 == "Bondy",]
+write.csv(bondy2022, "data/bondy2022.csv", fileEncoding = "UTF-8")
+data2002 <- read.csv2("data/gros/PR02_BVot_T1T2.csv", fileEncoding= "Latin1",header=F,skip=18)
+var <- c("ville","bv"	,"inscrits"	,"votants",	"exprimes",	"numCandidat",	"nom",	"nb")
+#data2022 <- data2022 [, c(4:10),13]
+str(data2002)
+bondy2002 <- data2022 [ data2002$V4 == "Bondy",]
+write.csv(bondy2002, "data/bondy2002.csv", fileEncoding = "UTF-8")
+```
+
 
 
 # Présentation rapide (vous êtes nombreux !)
-
-Le framapad sert à l'émargement https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
-
-Quelques repères pour les 3 groupes
 
 ## Qui sont les étudiants ?
 
@@ -101,7 +112,7 @@ for (i in 3:7){
 
 ### Effectif et cours
 
-```{r}
+```{r, eval=FALSE}
 tab <- table(etudiant$groupe.TD)
 i <- 2
 fic <- list.files("data/", pattern = "cours")
@@ -121,7 +132,7 @@ knitr::kable(tab)
 
 Graphique
 
-```{r}
+```{r, eval=FALSE}
 barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(nb) 
         , border = NA, legend =  F)
 ```
@@ -152,7 +163,7 @@ Au 4e, sur 14, 10 ont utilisé bon nom et bonne extension.
 
 - Distribution des totaux
 
-```{r}
+```{r, eval=FALSE}
 devoir <- read.csv("data/notes.csv", fileEncoding = "UTF-8", dec=",", na.strings = '-')
 res <- (apply(devoir [,2:5], 1, sum, na.rm = T))
 resSansZero <- res [res  !=0]
@@ -176,7 +187,7 @@ Beaucoup de notes très faibles, mais pas seulement.
 ## Notes finales
 
 
-```{r}
+```{r, eval=FALSE}
 note <- read.csv("data/noteFin.csv", fileEncoding = "UTF-8", na.strings = "en attente", dec = ",")
 summary(note$note.sur.20)
 hist(note$note.sur.20, main = "Etalement note finale - 95 obs", freq = T, border = NA)
@@ -186,201 +197,6 @@ abline(v = mean(note$note.sur.20, na.rm = T),  col = "red")
 hist(resSansZero$note.sur.20, main = "Etalement note finale - 73 obs", freq = T, border = NA)
 abline(v = mean(resSansZero$note.sur.20, na.rm = T),  col = "red", lty = 2)
 ```
-
-
-# La donnée du cours
-
-## La source
-https://www.data.gouv.fr/fr/datasets/repertoire-des-logements-locatifs-des-bailleurs-sociaux/
-
-### 2021
-
-Prendre le .zip de 2021, petit test d'ouverture sous moodle (Introduction/bases informatiques)
-
-```{r, eval=FALSE}
-data <- read.csv("data/gros/rpls2021_geolocalise_OD_REG11_DEP93.csv", sep =";")
-# distribution par commune
-tab <- table(data$LIBCOM)
-png("img/rpls93.png")
-par(mar = c(10,4,2,2))
-barplot(sort(tab), las = 2, border = NA, cex.names = 0.7)
-abline(tab [ names(tab) == "Bondy"],0, col ="red")
-dev.off()
-write.csv(sort(tab), "data/dpt93RPLSCommune.csv")
-# filtre sur Bondy
-filtre <- data [data$LIBCOM == "Bondy",]
-write.csv(filtre, "data/rplsBondy.csv", fileEncoding = "UTF-8")
-```
-
-
-![](img/rpls93.png)
-
-C'est normalement ce fichier de données que nous allons utiliser pour le cours.
-
-
-### 2019
-
-Il y a un problème sur la donnée, prendre plutôt le millésime 2019
-
-
-```{r, eval=FALSE}
-rpls2019 <- read.csv2("data/gros/RPLS2019_detail_IDF_DEP_93.csv", dec = ",")
-head(rpls2019)
-rpls2021<- read.csv2("data/gros/rpls2021_geolocalise_OD_REG11_DEP93.csv", dec = ",")
-```
-
-```{r, eval=FALSE}
-library(sf)
-rpls2019 <- rpls2019 [rpls2019$CODEPOSTAL == '93140',]
-rpls2021 <- rpls2021 [rpls2021$CODEPOSTAL == '93140',]
-# verif x y complet
-summary(rpls2019$Y)
-# spatialisation des données
-rpls2019sf <- st_as_sf(rpls2019, coords = c("X", "Y"), crs = st_crs(2154))
-rpls2021sf <- st_as_sf(rpls2021, coords = c("X", "Y"), crs = st_crs(2154))
-write.csv(rpls2019, "data/rplsBondy.csv", fileEncoding = "UTF-8")
-st_write(rpls2019sf, "data/data.gpkg", "rpls2019", delete_layer = T)
-st_write(rpls2021sf, "data/data.gpkg", "rpls2021", delete_layer = T, quiet = T)
-```
-
-
-```{r, eval=FALSE}
-library(sf)
-library(mapsf)
-rpls2019 <- st_read("data/data.gpkg", "rpls2019",  stringsAsFactors = FALSE)
-rpls2021 <- st_read("data/data.gpkg", "rpls2021")
-mf_map(rpls2019, pch= 20, col = "red")
-mf_map(rpls2021, col = "green", alpha = 0.8, add = T)
-mf_legend(type = "typo", pos = "topright", val = c("2019", "2021"), pal = c("red", "green"), border = NA,
-          title = "")
-mf_layout("Comparaison rpls 2019 et 2021", credits = "RPLS")
-```
-
-## RPLS France entière
-
-Au niveau de la France, entière, on calcule le nombre de logements sociaux
-à l'échelle de la commune pour 2019.
-
-Voir également, la référence au niveau du département (pour 10 M hbts)
-
-https://www.insee.fr/fr/statistiques/2134423#titre-bloc-1
-
-### Agrégation
-
-L'agrégation du nombre d'appartements permet d'avoir les données au niveau communal.
-
-
-```{r, eval = FALSE}
-fic <- list.files("data/gros", "RPLS2019")
-nb <- length(fic)
-# on a 25 fichiers pour la France entière
-# on crée une fonction pour lire et dénombrer le nb d'appartements par commune
-denombrer <- function(fic){
-  zone <- substring(fic, 17,99)
-  data <- read.csv2(paste0("data/gros/",fic))
-  tab <- table(data$LIBCOM)
-  df <- data.frame(tab)
-  names(df) <- c("code", "nb")
-  df$zone <- zone
-  return(df)
-}
-liste <- lapply(fic, denombrer)
-# éclatement de la liste, transformation en dataframe
-df <- NULL
-for (i in 1:nb) {
-  LIBCOM <- liste [[i]][,1]
-  nb <- liste [[i]][,2]
-  zone <- liste [[i]][,3]
-  zone <- gsub( ".csv","", zone)
-  tmp  <- data.frame(LIBCOM, nb, zone)
-  df <- rbind(df, tmp)
-}
-# on enregistrer le fichier 
-write.csv(df, "data/rplsFrSansCOG.csv", fileEncoding = "UTF-8")
-```
-
-### Observation du nombre d'appartements par zone, par commune
-
-
-#### Communes par zone
-
-```{r}
-data <- read.csv("data/rplsFrSansCOG.csv", fileEncoding = "UTF-8")
-tab <- table(data$zone)
-barplot(tab, main = "Nb de communes avec logement social par zone",
-     xlab = "zone", ylab = "nb de communes", las = 2)
-```
-
-En province, il y a également des logements sociaux répartis sur un ensemble plus grand
-de communes.
-Les régions avec le nombre le plus importants de communes avec des logements sociaux
-sont Auvergne-Rhône Alpes et Nouvelle Aquitaine.
-
-
-#### Nombre de logements sociaux par commune
-
-L'amplitude de la variable est très importante.
-
-```{r}
-summary(data$nb)
-hist(data$nb, breaks = c(0,7, 22, 322,85, 47000))
-# c'est illisible, étendue trop grande, trop de données
-data2000 <- data [data$nb > 2000,]
-summary(data2000$nb)
-# Médiane et moyenne se rapprochent
-hist(data2000$nb)
-# identification des communes
-data [(data$nb > 20000),]
-```
-
-Le maximum c'est Toulouse...
-
-### Jointure
-
-On fait d'abord une jointure au niveau du libellé de la commune, que l'on vérifie par
-rapport à la zone.
-
-```{r}
-cog <- read.csv("data/communes-01012019.csv", encoding = "UTF-8")
-jointure <- merge(data, cog, by.x = "LIBCOM", by.y =  "libelle")
-str(jointure)
-# on ne retiendra que les lignes où correspondance deux derniers chiffres correspondent
-jointure$reg2 <- sub("reg", "", jointure$zone)
-jointure$reg2 <- sub("IDF_DEP_..", "11", jointure$reg2)
-jointure$corresp <- NULL
-jointure$corresp <- ifelse(jointure$reg == jointure$reg2, "ok", "non")
-table(jointure$corresp)
-# 10 communes perdues
-res <- jointure [jointure$corresp == "ok",]
-```
-
-Suppression des doublons sur LIBCOM et zone
-
-```{r}
-fr <- read.csv("data/frVerif.csv", fileEncoding = "UTF-8")
-names(data)
-# 20 communes perdues
-data$cle <- paste0(data [,"LIBCOM"], data[, "zone"])
-doublons <- data  [!duplicated(data$cle),]
-write.csv(doublons, "data/pbDoublon.csv", fileEncoding = "UTF-8")
-# verif sur Allonnes
-fr [fr$LIBCOM == "Allonnes",]
-doublons [doublons$LIBCOM == "Allonnes",]
-```
-
-10222 communes au lieu de 10567.
-Observation data finale
-
-```{r}
-data <- read.csv("data/pbDoublon.csv", fileEncoding = "UTF-8")
-data [data$LIBCOM == "Allonnes",]
-```
-
-
-
-# Pratique
-
-Lorsque l'exercice le requiert, le fichier est à rendre avec son *prénom* (toujours le même svp) sous moodle.
 
 
 
@@ -395,23 +211,3 @@ Pour R, la base de tout est
 
 R et espace (https://archives.framabook.org/r-et-espace/index.html)
 
-# Le devoir maison
-
-A partir de l’outil *statistiques locales* de l’INSEE, définir 4 variables pouvant servir de base à une analyse exploratoire autour du logement social.
-
-Il y aura donc au mimimum 5 variables, les 4 de l'INSEE et la 5e du rpls fourni sur
-le moodle.
-
-Faire une analyse factorielle et une classification autour des données choisies.
-
-Livrables :
-
-    - un script R commenté
-
-    - un fichier de données .csv
-
-    - un .pdf expliquant la démarche avec les principaux résultats
-
-Ces 3 fichiers avec le prénom de l’étudiant.
-
-barème : 4 points pour le soin / 8 pour le script R / 8 pour le .pdf
