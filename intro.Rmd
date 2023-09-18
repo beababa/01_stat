@@ -88,7 +88,7 @@ write.csv(bondy2002, "data/bondy2002.csv", fileEncoding = "UTF-8")
 du nom de famille.
 
 ```{r}
-# lecture des fichiers de présence et concaténation 
+# lecture des fichiers du 1er cours et concaténation 
 fic <- list.files("data/", pattern = "cours")
 etudiant <- NULL
 for (i in 1:length(fic)) {
@@ -98,16 +98,23 @@ for (i in 1:length(fic)) {
 }
 # elimination vides
 etudiant <- etudiant [etudiant$prénom!="",]
-(tab <- table(etudiant$prénom))
-table(etudiant$groupe, useNA = "always")
 ```
 
+### Problème des doublons de prénoms
 
+Chaque exercice est rendu avec le prénom comme nom de fichier. Cela ne fonctionne
+que si les prénoms sont uniques. La solution est d'ajouter la 1e lettre du nom de 
+famille en cas de doublon.
 
 ```{r}
 names(tab)[tab >1]
 etudiant [etudiant$prénom == 'Hugo',]
 etudiant$prénom [etudiant$prénom == 'Hugo'] <- c("HugoH","HugoD")
+```
+
+Sauvegarde pour l'émargement prochain
+
+```{r}
 write.csv(etudiant [, c("prénom", "groupe")], "data/emargement1.csv", fileEncoding = "UTF-8")
 ```
 
@@ -230,4 +237,6 @@ abline(v = mean(resSansZero$note.sur.20, na.rm = T),  col = "red", lty = 2)
 Pour R, la base de tout est 
 
 R et espace (https://archives.framabook.org/r-et-espace/index.html)
+
+
 
