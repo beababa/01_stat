@@ -1,34 +1,4 @@
-name: "L5GEABIM Analyses bivariées et multivariées"
-navbar:
-  left:
-    - text: "Introduction"
-      href: intro.html
-    - text: "univariées"
-      href: jour1.html
-    - text: "bi-variées"
-      href: jour2.html
-    - text: "khi 2"
-      href: jour3.html 
-    - text: "régression"
-      href: jour4.html    
-    - text: "examen"
-      href: jour5.html
-    - text: "variance"
-      href: jour6.html   
-    - text: "multivariées base"
-      href: jour7.html   
-    - text: "factorielle et classification"
-      href: jour8.html   
-  right:
-    - icon: fa-github
-      href: https://beababa.github.io/
-output: 
-  html_document:
-    toc_float: TRUE  
-    theme: united
-    highlight: tango
-    include:
-      after_body: footer.html
-    number_sections: yes
-    exclude: [data-raw, data]
-    css: css/styles.css
+https://beababa.github.io/intro.html
+
+
+https://lite.framacalc.org/coursStatSorbonne2023

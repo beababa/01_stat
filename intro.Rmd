@@ -9,7 +9,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(eval  = TRUE)
+knitr::opts_chunk$set(eval  = FALSE)
 knitr::opts_chunk$set(echo  = TRUE)
 knitr::opts_chunk$set(warning  = FALSE)
 ``` 
@@ -27,7 +27,7 @@ knitr::kable(data, col.names = c("groupe", "heures", "enseignant") )
 
 
 ```{r}
-data <- read.csv("data/deroule.csv", encoding = "UTF-8")
+data <- read.csv("data/deroule2023.csv", encoding = "UTF-8")
 knitr::kable(data)
 ```
 
@@ -63,9 +63,9 @@ de vote)
 
 
 ```{r}
-data2022 <- read.csv2("data/gros/resultats-par-niveau-burvot-t1-france-entiere(1).csv", fileEncoding = "Latin1", header = F,skip = 1)
-var <- 
-str(data2022)
+data2022 <- read.csv2("data/gros/resultats-par-niveau-burvot-t1-france-entiere.csv", fileEncoding = "Latin1", header = F,skip = 1)
+names(data2022)
+str(data2022,1)
 bondy2022 <- data2022 [ data2022$V6 == "Bondy",]
 write.csv(bondy2022, "data/bondy2022.csv", fileEncoding = "UTF-8")
 data2002 <- read.csv2("data/gros/PR02_BVot_T1T2.csv", fileEncoding= "Latin1",header=F,skip=18)
@@ -88,22 +88,41 @@ write.csv(bondy2002, "data/bondy2002.csv", fileEncoding = "UTF-8")
 du nom de famille.
 
 ```{r}
-etudiant <-  read.csv("data/etudiant.csv", fileEncoding = "UTF-8")
-mailetudiant <- paste(paste0(etudiant$mail, ";"))
-tmp <- mailetudiant [1]
-for (i in 2:73){ 
-  tmp <- paste(tmp, mailetudiant [i])}
-write.csv(tmp, "data/mails.txt")
-tab <- table (etudiant$prénom)
+# lecture des fichiers de présence et concaténation 
+fic <- list.files("data/", pattern = "cours")
+etudiant <- NULL
+for (i in 1:length(fic)) {
+  tmp <-  read.csv(paste0("data/",fic[i]), fileEncoding = "UTF-8")
+  tmp$groupe <- i
+  etudiant <- rbind(tmp, etudiant) 
+}
+# elimination vides
+etudiant <- etudiant [etudiant$prénom!="",]
+(tab <- table(etudiant$prénom))
+table(etudiant$groupe, useNA = "always")
+```
+
+
+
+```{r}
 names(tab)[tab >1]
-write.csv(etudiant [, c("prénom", "groupe.TD")], "cours1.csv", fileEncoding = "UTF-8")
-par(mar = c(2,16,2,4))
-par(mfrow = c(3,2))
-for (i in 3:7){
+etudiant [etudiant$prénom == 'Hugo',]
+etudiant$prénom [etudiant$prénom == 'Hugo'] <- c("HugoH","HugoD")
+write.csv(etudiant [, c("prénom", "groupe")], "data/emargement1.csv", fileEncoding = "UTF-8")
+```
+
+
+```{r}
+#par(mar = c(2,16,2,4))
+#par(mfrow = c(3,2))
+fic <- list.files("data/", pattern = "emargement")
+ind <- length(fic)
+for (i in 1:ind){
   par(mar = c(2,16,2,4))
-  barplot(sort(table(etudiant [,i])), border = NA,
-          horiz = T, las = 2, cex.names = 0.8, 
-          main = names (etudiant) [i])
+  presence <- read.csv(paste0("data/", fic), fileEncoding = "UTF-8")
+  barplot(table(etudiant$groupe), border = NA,
+          horiz = F, las = 2, cex.names = 0.8, 
+          main = "groupe Etudiants")
 }
 ```
 
@@ -133,7 +152,8 @@ knitr::kable(tab)
 Graphique
 
 ```{r, eval=FALSE}
-barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(nb) 
+tab <- table(etudiant$groupe)
+barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(2) 
         , border = NA, legend =  F)
 ```
 
