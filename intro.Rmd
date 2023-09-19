@@ -28,15 +28,17 @@ knitr::kable(data, col.names = c("groupe", "heures", "enseignant") )
 Il va être modifié en fonction de
 
 - votre vitesse - s'il faut prendre plus de temps sur les basiques
-- la collaboration avec Thomas Lamy
+- la collaboration avec l'autre enseignant
 
 
 13 cours en tout. 
-2 cours d'intro
+2 cours d'intro rappels stats
 7 sur la stat bi-variée
 3 sur la multivariée
 1 cours pour un devoir sur table au mi-semestre
 1 devoir maison à rendre vers la fin du semestre
+
+... et un partiel en plus !
 
 Au départ on utilise Libre Office (plutôt que Microsoft) puis R
 
@@ -54,10 +56,10 @@ knitr::kable(data)
 
 passé / présent / futur
 appétence pour les stats
-fichier framapad, https://lite.framacalc.org/9pse-coursstatsorbonne2021
+fichier framapad, https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
 
 
-```{r}
+```{r, echo = FALSE}
 cours1 <- read.csv("data/cours1.csv", fileEncoding = "UTF-8")
 cours2 <- read.csv("data/cours2.csv", fileEncoding = "UTF-8")
 cours1$session <- "cours1"
@@ -70,13 +72,40 @@ table(cours$session)
 # export pour framapad
 write.csv(cours [c(1:3,8)], "data/cours.csv")
 ```
+
 Désormais le framapad sert à l'émargement
 
 
+# La donnée du cours
+
+## La source
+https://www.data.gouv.fr/fr/datasets/repertoire-des-logements-locatifs-des-bailleurs-sociaux/
+
+Prendre le .zip de 2021, petit test d'ouverture sous moodle (Introduction/bases informatiques)
+
+```{r, eval=FALSE}
+data <- read.csv("data/rpls2021_geolocalise_OD_REG11_DEP93.csv", sep =";")
+# distribution par commune
+tab <- table(data$LIBCOM)
+png("img/rpls93.png")
+par(mar = c(10,4,2,2))
+barplot(sort(tab), las = 2, border = NA)
+abline(tab [ names(tab) == "Bondy"],0, col ="red")
+dev.off()
+write.csv(sort(tab), "data/dpt93RPLSCommune.csv")
+# filtre sur Bondy
+filtre <- data [data$CODEPOSTAL == "93140",]
+write.csv(filtre, "data/rplsBondy.csv")
+```
+
+
+![](img/rpls93.png)
+
+C'est normalement ce fichier de données que nous allons utiliser pour le cours.
+
 # Pratique
 
-Les exercices sont à rendre avec son *prénom* (toujours le même svp) sous moodle dans
-un répertoire spécifique (en attente de validation du compte moodle)
+Lorsque l'exercice le requiert, le fichier est à rendre avec son *prénom* (toujours le même svp) sous moodle.
 
 
 
