@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Introduction</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Introduction</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#intitulé-et-déroulé-du-cours"
+id="toc-intitulé-et-déroulé-du-cours"><span
+class="toc-section-number">1</span> Intitulé et déroulé du
+cours</a></li>
+<li><a href="#la-donnée" id="toc-la-donnée"><span
+class="toc-section-number">2</span> La donnée</a>
+<ul>
+<li><a href="#où-les-trouver" id="toc-où-les-trouver"><span
+class="toc-section-number">2.1</span> Où les trouver ?</a></li>
+<li><a href="#préparer-les-données" id="toc-préparer-les-données"><span
+class="toc-section-number">2.2</span> Préparer les données</a></li>
+</ul></li>
+<li><a href="#présentation-rapide-vous-êtes-nombreux"
+id="toc-présentation-rapide-vous-êtes-nombreux"><span
+class="toc-section-number">3</span> Présentation rapide (vous êtes
+nombreux !)</a>
+<ul>
+<li><a href="#qui-sont-les-étudiants"
+id="toc-qui-sont-les-étudiants"><span
+class="toc-section-number">3.1</span> Qui sont les étudiants ?</a></li>
+<li><a href="#présence-et-rendu-des-devoirs-chiffres-clés"
+id="toc-présence-et-rendu-des-devoirs-chiffres-clés"><span
+class="toc-section-number">3.2</span> Présence et rendu des devoirs :
+chiffres clés</a>
+<ul>
+<li><a href="#effectif-et-cours" id="toc-effectif-et-cours"><span
+class="toc-section-number">3.2.1</span> Effectif et cours</a></li>
+<li><a href="#les-rendus-dexercices"
+id="toc-les-rendus-dexercices"><span
+class="toc-section-number">3.2.2</span> Les rendus d’exercices</a></li>
+</ul></li>
+<li><a href="#notes-finales" id="toc-notes-finales"><span
+class="toc-section-number">3.3</span> Notes finales</a></li>
+</ul></li>
+<li><a href="#ressources-autre-que-la-bibliographie-officielle"
+id="toc-ressources-autre-que-la-bibliographie-officielle"><span
+class="toc-section-number">4</span> Ressources autre que la
+bibliographie officielle</a></li>
+</ul>
+</div>
+
+<div id="intitulé-et-déroulé-du-cours" class="section level1"
+number="1">
+<h1><span class="header-section-number">1</span> Intitulé et déroulé du
+cours</h1>
+<p><em>“L5GEABIM Analyses bivariées et multivariées”</em></p>
+<pre class="r"><code>data &lt;- read.csv(&quot;data/presentation.csv&quot;, encoding = &quot;UTF-8&quot;, header = F)
+knitr::kable(data, col.names = c(&quot;groupe&quot;, &quot;heures&quot;, &quot;enseignant&quot;) )</code></pre>
+<pre class="r"><code>data &lt;- read.csv(&quot;data/deroule2023.csv&quot;, encoding = &quot;UTF-8&quot;)
+knitr::kable(data)</code></pre>
+</div>
+<div id="la-donnée" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> La donnée</h1>
+<div id="où-les-trouver" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Où les trouver ?</h2>
+<p>Au départ les données sur les élections disponibles</p>
+<p><a href="https://www.data.gouv.fr/fr/pages/donnees-des-elections/"
+class="uri">https://www.data.gouv.fr/fr/pages/donnees-des-elections/</a></p>
+<p>intérêt de la maille du bureau de vote</p>
+<p>Chercher <em>REU</em> au niveau de la zone de recherche de data.gouv,
+quelles perspectives pour les chercheurs ?</p>
+</div>
+<div id="préparer-les-données" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Préparer les
+données</h2>
+<p>On utilise pour le cours le fichier par bureau de vote des
+présidentielles 2022</p>
+<p>Cet exercice permet d’utiliser dans le tableur :</p>
+<ul>
+<li>l’ouverture d’un fichier txt pour le transformer en csv</li>
+<li>la suppression de colonne</li>
+<li>les 3 raccourcis clavier : CTRL + * , CTRL + C, CTRL + V</li>
+<li>Touche de sélection et de déplacement</li>
+<li>tri</li>
+<li>filtre</li>
+</ul>
+<p>L’objectif est que chaque étudiant choisisse une ville (avec au moins
+5 bureaux de vote)</p>
+<pre class="r"><code>data2022 &lt;- read.csv2(&quot;data/gros/resultats-par-niveau-burvot-t1-france-entiere.csv&quot;, fileEncoding = &quot;Latin1&quot;, header = F,skip = 1)
+names(data2022)
+str(data2022,1)
+bondy2022 &lt;- data2022 [ data2022$V6 == &quot;Bondy&quot;,]
+write.csv(bondy2022, &quot;data/bondy2022.csv&quot;, fileEncoding = &quot;UTF-8&quot;)
+data2002 &lt;- read.csv2(&quot;data/gros/PR02_BVot_T1T2.csv&quot;, fileEncoding= &quot;Latin1&quot;,header=F,skip=18)
+var &lt;- c(&quot;ville&quot;,&quot;bv&quot;   ,&quot;inscrits&quot; ,&quot;votants&quot;, &quot;exprimes&quot;, &quot;numCandidat&quot;,  &quot;nom&quot;,  &quot;nb&quot;)
+#data2022 &lt;- data2022 [, c(4:10),13]
+str(data2002)
+bondy2002 &lt;- data2022 [ data2002$V4 == &quot;Bondy&quot;,]
+write.csv(bondy2002, &quot;data/bondy2002.csv&quot;, fileEncoding = &quot;UTF-8&quot;)</code></pre>
+</div>
+</div>
+<div id="présentation-rapide-vous-êtes-nombreux" class="section level1"
+number="3">
+<h1><span class="header-section-number">3</span> Présentation rapide
+(vous êtes nombreux !)</h1>
+<div id="qui-sont-les-étudiants" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Qui sont les
+étudiants ?</h2>
+<ul>
+<li><p>74 étudiants sur 3 cours</p></li>
+<li><p>Attention, 5 doublons de prénoms (Ambre, Camille, Marie, Antonin
+et Sarah), j’ai rajouté l’initiale du nom de famille.</p></li>
+</ul>
+<pre class="r"><code># lecture des fichiers de présence et concaténation 
+fic &lt;- list.files(&quot;data/&quot;, pattern = &quot;cours&quot;)
+etudiant &lt;- NULL
+for (i in 1:length(fic)) {
+  tmp &lt;-  read.csv(paste0(&quot;data/&quot;,fic[i]), fileEncoding = &quot;UTF-8&quot;)
+  tmp$groupe &lt;- i
+  etudiant &lt;- rbind(tmp, etudiant) 
+}
+# elimination vides
+etudiant &lt;- etudiant [etudiant$prénom!=&quot;&quot;,]
+(tab &lt;- table(etudiant$prénom))
+table(etudiant$groupe, useNA = &quot;always&quot;)</code></pre>
+<pre class="r"><code>names(tab)[tab &gt;1]
+etudiant [etudiant$prénom == &#39;Hugo&#39;,]
+etudiant$prénom [etudiant$prénom == &#39;Hugo&#39;] &lt;- c(&quot;HugoH&quot;,&quot;HugoD&quot;)
+write.csv(etudiant [, c(&quot;prénom&quot;, &quot;groupe&quot;)], &quot;data/emargement1.csv&quot;, fileEncoding = &quot;UTF-8&quot;)</code></pre>
+<pre class="r"><code>#par(mar = c(2,16,2,4))
+#par(mfrow = c(3,2))
+fic &lt;- list.files(&quot;data/&quot;, pattern = &quot;emargement&quot;)
+ind &lt;- length(fic)
+for (i in 1:ind){
+  par(mar = c(2,16,2,4))
+  presence &lt;- read.csv(paste0(&quot;data/&quot;, fic), fileEncoding = &quot;UTF-8&quot;)
+  barplot(table(etudiant$groupe), border = NA,
+          horiz = F, las = 2, cex.names = 0.8, 
+          main = &quot;groupe Etudiants&quot;)
+}</code></pre>
+</div>
+<div id="présence-et-rendu-des-devoirs-chiffres-clés"
+class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Présence et rendu des
+devoirs : chiffres clés</h2>
+<div id="effectif-et-cours" class="section level3" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Effectif et
+cours</h3>
+<pre class="r"><code>tab &lt;- table(etudiant$groupe.TD)
+i &lt;- 2
+fic &lt;- list.files(&quot;data/&quot;, pattern = &quot;cours&quot;)
+# on recherche le fichier le plus haut
+nb &lt;- max(as.integer(substring(fic, 6,7)))
+tmp &lt;- NULL
+for (i in 2:nb) {
+  nomFic &lt;- paste0(&quot;data/cours&quot;, i, &quot;.csv&quot;)
+  data &lt;- read.csv(nomFic, fileEncoding = &quot;UTF-8&quot;)
+  data &lt;- data [data [,3] == &quot;oui&quot;,]
+  tmp &lt;- table(data$groupe.TD)
+  tab &lt;- rbind(tab , tmp)
+}
+row.names(tab) &lt;- paste0(&quot;cours &quot;,seq(1,nb, by = 1))
+knitr::kable(tab)</code></pre>
+<p>Graphique</p>
+<pre class="r"><code>tab &lt;- table(etudiant$groupe)
+barplot(tab, beside = T, main = &quot;nombre d&#39;étudiants par groupe et par cours&quot;, xlab = &quot;groupe&quot;, ylab = &quot;nb&quot;, col = terrain.colors(2) 
+        , border = NA, legend =  F)</code></pre>
+</div>
+<div id="les-rendus-dexercices" class="section level3" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> Les rendus
+d’exercices</h3>
+<pre class="r"><code>rendu &lt;- c(47,36, 29, 14,14,11,4,5)
+titre &lt;- c(&quot;distribution&quot;, &quot;univarié&quot;, &quot;khi2&quot;, &quot;khi2bis&quot;, &quot;regression&quot;, &quot;boxplot&quot;, &quot;variance&quot;, &quot;4 variables&quot;)
+par(mar = c(8,6,6,6))
+p &lt;- barplot(rendu, names = titre, cex.names = 0.8, las = 2, main = &quot;rendu devoirs (effectif 75 étudiants environ)&quot;, border = NA)
+text(p, y = rendu - 1, labels = rendu )</code></pre>
+<div id="les-notes-des-exercices" class="section level4"
+number="3.2.2.1">
+<h4><span class="header-section-number">3.2.2.1</span> Les notes des
+exercices</h4>
+<ul>
+<li>Le critère externe : des points faciles ?</li>
+</ul>
+<p>Au 3e devoir, sur 29 rendus, la moitié (15) ne mettent pas le bon
+nom, ni la bonne extension. Au 4e, sur 14, 10 ont utilisé bon nom et
+bonne extension.</p>
+<ul>
+<li>Distribution des totaux</li>
+</ul>
+<pre class="r"><code>devoir &lt;- read.csv(&quot;data/notes.csv&quot;, fileEncoding = &quot;UTF-8&quot;, dec=&quot;,&quot;, na.strings = &#39;-&#39;)
+res &lt;- (apply(devoir [,2:5], 1, sum, na.rm = T))
+resSansZero &lt;- res [res  !=0]
+min(resSansZero)
+densite &lt;- density(res)
+densite2 &lt;- density(resSansZero)
+hist(res, main = &quot;Répartion du cumul des notes des 4 devoirs (max 17, 87 obs)&quot;, 
+     xlab = &quot;notes&quot;, ylab = &quot;nb&quot;, freq = T,border = NA)
+abline(v = mean(res),  col = &quot;red&quot;)
+abline(v = median(res),  col = &quot;red&quot;, lty = 2)
+hist(resSansZero, main = &quot;Sans zéro (59 obs)&quot;, freq = T,border = NA,
+     xlab = &quot;notes&quot;, ylab = &quot;nb&quot;)
+abline(v = mean(resSansZero),  col = &quot;red&quot;)
+abline(v = median(resSansZero),  col = &quot;red&quot;, lty = 2)</code></pre>
+<p>Beaucoup de notes très faibles, mais pas seulement.</p>
+</div>
+</div>
+</div>
+<div id="notes-finales" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Notes finales</h2>
+<pre class="r"><code>note &lt;- read.csv(&quot;data/noteFin.csv&quot;, fileEncoding = &quot;UTF-8&quot;, na.strings = &quot;en attente&quot;, dec = &quot;,&quot;)
+summary(note$note.sur.20)
+hist(note$note.sur.20, main = &quot;Etalement note finale - 95 obs&quot;, freq = T, border = NA)
+resSansZero &lt;- note [note$note.sur.20  !=0,]
+abline(v = mean(note$note.sur.20, na.rm = T),  col = &quot;red&quot;)
+ mean(note$note.sur.20)
+hist(resSansZero$note.sur.20, main = &quot;Etalement note finale - 73 obs&quot;, freq = T, border = NA)
+abline(v = mean(resSansZero$note.sur.20, na.rm = T),  col = &quot;red&quot;, lty = 2)</code></pre>
+</div>
+</div>
+<div id="ressources-autre-que-la-bibliographie-officielle"
+class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Ressources autre que la
+bibliographie officielle</h1>
+<p>2 cours universitaires disponibles sur internet</p>
+<ul>
+<li><a
+href="http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm"
+class="uri">http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm</a></li>
+<li><a
+href="http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm"
+class="uri">http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm</a></li>
+</ul>
+<p>Pour R, la base de tout est</p>
+<p>R et espace (<a
+href="https://archives.framabook.org/r-et-espace/index.html"
+class="uri">https://archives.framabook.org/r-et-espace/index.html</a>)</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
