@@ -1,0 +1,302 @@
+---
+title: "Statistique univariée"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Télécharger et ouvrir le fichier de données du cours.
+
+# Termes
+
+## Trouver des termes pour les objets en statistiques
+
+exemples
+
+- variable, 
+
+- observation,
+
+- valeur
+
+A vous !
+
+On retiendra pour le moment uniquement les termes : individu / population / variable et modalité
+
+## distinguer tableau complet, tig, tableau condensé
+
+Individu -> Modalité
+
+Modalité -> Individus
+
+# L'essentiel : la forme d'une distribution
+
+## Abscisses et ordonnées
+
+![](img/distribution.jpg)
+
+
+## Tiges et feuilles
+
+discrétisation la plus rudimentaire
+
+https://fr.khanacademy.org/math/be-4eme-secondaire2/x213a6fc6f6c9e122:statistiques-1/x213a6fc6f6c9e122:graphiques-statistiques/a/stem-and-leaf-plots-review
+
+
+## Et sous un tableur
+
+#### Resultat attendu
+
+![](img/graph2.png)
+
+
+
+Et non pas :
+
+![](img/graph1.png)
+
+
+
+### Préparation de l'exercice
+
+#### Pour obtenir un TIG avec une seule variable, quelle variable choisir et pour quels individus ?
+
+Dans l'exemple proposé du cous, on choisit la colonne de la dénomination des bureaux (1 à 32) et les
+abstentions à Bondy
+
+
+Cet exercice permet d'utiliser dans le tableur :
+
+* utilisation de la barre d'adresse
+
+* formule frequence, formule matricielle (CTRL + MAJ + ENTREE)
+
+
+formules du tableau
+
+![](img/frequence.png)
+
+
+### Quel commentaire ?
+
+- étendue
+- forme de la distribution
+
+
+
+
+## A explorer 
+
+graphique en barres, lignes (lissage)
+
+Observer la disposition des bornes : elles sont utilisées comme des étiquettes et non pas comme une série de valeurs.
+
+## Correction graphiques étudiants
+
+En fonction du rendu
+
+# Pour raffiner : les indicateurs
+
+Nous avons déjà vu l'amplitude à travers minimum et maximum. Il y en a d'autres.
+Ils servent à résumer la série statistique
+
+
+Pour l'exemple, on prend la commune choisie et tous les résultats des candidats dans
+chaque bureau de vote
+
+
+```{r}
+bondy2002 <- read.csv("data/bondy2002.csv", fileEncoding = "UTF-8")
+str(bondy2002)
+table(bondy2002$bv)
+```
+
+Le tableau de 2002 se présente différemment de celui de 2022.
+
+## Calcul :  valeurs centrales et dispersion
+
+### Valeurs centrales
+
+Il s'agit de caractériser une distribution par son centre.
+
+#### Moyenne et médiane
+
+##### Calcul
+
+Le calcul de la moyenne est connu. Celui de la médiane beaucoup moins.
+
+
+
+###### Sur le tableau complet
+
+Créer une colonne rang. Et relever le rang médian
+
+![](img/mediane.jpg)
+
+
+
+
+#### savoir faire tableur
+
+- valeur fixe et relative (utilisation du $ et F4)
+
+- au niveau graphique, rajout d'un axe par le menu insertion après double clic sur 
+le graphique (onglet positionnement, menu déroulant valeur)
+
+
+##### Que retenir ?
+
+###### Expliquer ces phrases issues du Chadule
+
+- La médiane est dans une distribution la valeur la plus *proche* de toutes les autres
+
+Il s'agit d'une propriété mathématique de la médiane. 
+
+- les valeurs extrêmes *décentrent* la moyenne
+
+##### Rapport entre médiane et moyenne
+
+Que peut-on dire de la forme de la distribution 
+
+- si la moyenne est égale à la médiane ?
+
+- si moyenne > médiane
+
+-  si médiane > moyenne
+
+
+```{r}
+candidat <- unique(bondy2002$nom)
+png("img/medmoy.png")
+par(mfrow=c(4,4))
+for (i in 1:length(candidat)){
+  tmp <- bondy2002 [bondy2002$nom == candidat [i],]
+  moy <- mean(tmp$nb)
+  med <- median(tmp$nb)
+  hist(tmp$nb, main = candidat  [i])
+  abline(v = moy, col = 'blue')
+  abline(v = med, col = 'red')
+}
+dev.off()
+```
+
+![](img/medmoy.png)
+
+Chercher à caractériser les voix pour les différents candidats en fonction de la médiane / moyenne
+
+### Dispersion : Ecart-type et variance
+
+La distribution est-elle hétérogène ?
+
+```{r}
+png("img/ecartType.png")
+par(mfrow=c(4,4))
+for (i in 1:length(candidat)){
+  tmp <- bondy2002 [bondy2002$nom == candidat [i],]
+  sigma <- sd(tmp$nb)
+  med <- median(tmp$nb)
+  hist(tmp$nb, main = paste0(candidat  [i], " ", round(sigma,0)))
+}
+dev.off()
+```
+
+
+![](img/ecartType.png)
+
+#### 2 définitions : 
+
+- écart moyen des valeurs à leur moyenne arithmétique
+
+- moyenne du carré des écarts
+
+
+#### Une question fondamentale : pourquoi utiliser les carrés ?
+
+https://qastack.fr/stats/118/why-square-the-difference-instead-of-taking-the-absolute-value-in-standard-devia
+
+et notamment, pour l'oeil du géographe :
+
+
+
+*Une façon de penser à cela est que l’écart-type est similaire à une "distance par rapport à la moyenne".*
+
+*Comparez cela à des distances dans un espace euclidien - ceci vous donne la vraie distance, où ce que vous avez suggéré (qui, en fait, est la déviation absolue ) ressemble plus à un calcul de distance manhattan .*
+
+
+
+### Utilisation du tableur
+
+Toujours sans passer par les formules, mais avec un tableau *pas à pas*, créer les indicateurs.
+
+liste des colonnes :
+
+- écart à la moyenne
+
+- carré des écarts
+
+
+- et à part sur une seule case : moyenne du carré des écarts (variance), l'écart type est la racine carrée.
+
+
+
+
+### Corrections quelques remarques (2022)
+
+L'objectif de l'exercice était d'obtenir un commentaire clair avec quelques repères statistiques.
+
+
+#### Les bons graphiques
+
+
+##### Un graphique du TIG
+
+![](img/4erreurBon.png)
+
+
+##### Une diagramme de répartition
+
+
+![](img/bonDevoir3.png)
+
+
+##### Quelles erreurs dans les graphiques suivants ?
+
+![](img/1erreur.png)
+![](img/2erreur.JPG)
+![](img/3erreur.png)
+
+### Les commentaires
+
+Beaucoup d'étudiants ne voient pas la nécessité d'un commentaire...
+
+#### Commentaire clair
+
+*La moyenne et la médiane sont très proches. En effet, en moyenne, les logements de la résidence possèdent 3 pièces et 50 % des logements possèdent moins de 3 pièces. On peut en déduire que la série est assez homogène.De plus, l'écart type est faible, ce qui signifie que les valeurs sont peu dispersées autour de la moyenne et donc il vient confirmer que la série est homogène.*
+
+
+#### trop technique 
+
+![](img/tropTechnique.png)
+
+
+
+#### Des commentaires intéressants
+
+
+##### Un peu confus.
+
+![](img/bonDevoir1.png)
+
+##### Une réflexion sur le terme *hétérogène*
+
+
+
+![](img/bonCommentaire.png)

@@ -1,0 +1,214 @@
+---
+title: "Introduction"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval  = TRUE)
+knitr::opts_chunk$set(echo  = TRUE)
+knitr::opts_chunk$set(warning  = FALSE)
+``` 
+
+
+# Intitulé et déroulé du cours
+
+*"L5GEABIM Analyses bivariées et multivariées"*
+
+```{r}
+data <- read.csv("data/presentation.csv", encoding = "UTF-8", header = F)
+knitr::kable(data, col.names = c("groupe", "heures", "enseignant") )
+```
+
+
+
+```{r}
+data <- read.csv("data/deroule.csv", encoding = "UTF-8")
+knitr::kable(data)
+```
+
+
+# La donnée
+
+## Où les trouver ?
+
+Au départ les données sur les élections disponibles
+
+https://www.data.gouv.fr/fr/pages/donnees-des-elections/
+
+intérêt de la maille du bureau de vote
+
+Chercher *REU* au niveau de la zone de recherche de data.gouv, quelles perspectives pour les chercheurs ?
+
+
+## Préparer les données
+
+On utilise pour le cours le fichier par bureau de vote des présidentielles 2022
+
+Cet exercice permet d'utiliser dans le tableur :
+
+- l'ouverture d'un fichier txt pour le transformer en csv
+- la suppression de colonne
+- les 3 raccourcis clavier : CTRL + * , CTRL + C, CTRL + V
+- Touche de sélection et de déplacement
+- tri
+- filtre
+
+L'objectif est que chaque étudiant choisisse une ville (avec au moins 5 bureaux
+de vote)
+
+
+```{r}
+data2022 <- read.csv2("data/gros/resultats-par-niveau-burvot-t1-france-entiere(1).csv", fileEncoding = "Latin1", header = F,skip = 1)
+str(data2022)
+bondy2022 <- data2022 [ data2022$V6 == "Bondy",]
+write.csv(bondy2022, "data/bondy2022.csv", fileEncoding = "UTF-8")
+data2002 <- read.csv2("data/gros/PR02_BVot_T1T2.csv", fileEncoding= "Latin1",header=F,skip=18)
+str(data2002)
+data2002 <- data2002 [, c(4,5,6:8,10,13)]
+var <- c("ville","bv"	,"inscrits"	,"votants",	"exprimes",	"nom",	"nb")
+names(data2002) <- var
+str(data2002)
+bondy2002 <- data2002 [ data2002$ville == "Bondy",]
+write.csv(bondy2002, "data/bondy2002.csv", fileEncoding = "UTF-8")
+```
+
+
+
+# Présentation rapide (vous êtes nombreux !)
+
+## Qui sont les étudiants ?
+
+- 74 étudiants sur 3 cours
+
+- Attention, 5 doublons de prénoms (Ambre, Camille, Marie, Antonin et Sarah), j'ai rajouté l'initiale
+du nom de famille.
+
+```{r}
+etudiant <-  read.csv("data/etudiant.csv", fileEncoding = "UTF-8")
+mailetudiant <- paste(paste0(etudiant$mail, ";"))
+tmp <- mailetudiant [1]
+for (i in 2:73){ 
+  tmp <- paste(tmp, mailetudiant [i])}
+write.csv(tmp, "data/mails.txt")
+tab <- table (etudiant$prénom)
+names(tab)[tab >1]
+write.csv(etudiant [, c("prénom", "groupe.TD")], "cours1.csv", fileEncoding = "UTF-8")
+par(mar = c(2,16,2,4))
+par(mfrow = c(3,2))
+for (i in 3:7){
+  par(mar = c(2,16,2,4))
+  barplot(sort(table(etudiant [,i])), border = NA,
+          horiz = T, las = 2, cex.names = 0.8, 
+          main = names (etudiant) [i])
+}
+```
+
+
+## Présence et rendu des devoirs : chiffres clés
+
+### Effectif et cours
+
+```{r, eval=FALSE}
+tab <- table(etudiant$groupe.TD)
+i <- 2
+fic <- list.files("data/", pattern = "cours")
+# on recherche le fichier le plus haut
+nb <- max(as.integer(substring(fic, 6,7)))
+tmp <- NULL
+for (i in 2:nb) {
+  nomFic <- paste0("data/cours", i, ".csv")
+  data <- read.csv(nomFic, fileEncoding = "UTF-8")
+  data <- data [data [,3] == "oui",]
+  tmp <- table(data$groupe.TD)
+  tab <- rbind(tab , tmp)
+}
+row.names(tab) <- paste0("cours ",seq(1,nb, by = 1))
+knitr::kable(tab)
+```
+
+Graphique
+
+```{r, eval=FALSE}
+barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(nb) 
+        , border = NA, legend =  F)
+```
+
+
+
+
+
+### Les rendus d'exercices
+
+```{r}
+rendu <- c(47,36, 29, 14,14,11,4,5)
+titre <- c("distribution", "univarié", "khi2", "khi2bis", "regression", "boxplot", "variance", "4 variables")
+par(mar = c(8,6,6,6))
+p <- barplot(rendu, names = titre, cex.names = 0.8, las = 2, main = "rendu devoirs (effectif 75 étudiants environ)", border = NA)
+text(p, y = rendu - 1, labels = rendu )
+```
+
+
+#### Les notes des exercices
+
+
+- Le critère externe : des points faciles ?
+
+
+Au 3e devoir, sur 29 rendus, la moitié (15) ne mettent pas le bon nom, ni la bonne extension.
+Au 4e, sur 14, 10 ont utilisé bon nom et bonne extension.
+
+- Distribution des totaux
+
+```{r, eval=FALSE}
+devoir <- read.csv("data/notes.csv", fileEncoding = "UTF-8", dec=",", na.strings = '-')
+res <- (apply(devoir [,2:5], 1, sum, na.rm = T))
+resSansZero <- res [res  !=0]
+min(resSansZero)
+densite <- density(res)
+densite2 <- density(resSansZero)
+hist(res, main = "Répartion du cumul des notes des 4 devoirs (max 17, 87 obs)", 
+     xlab = "notes", ylab = "nb", freq = T,border = NA)
+abline(v = mean(res),  col = "red")
+abline(v = median(res),  col = "red", lty = 2)
+hist(resSansZero, main = "Sans zéro (59 obs)", freq = T,border = NA,
+     xlab = "notes", ylab = "nb")
+abline(v = mean(resSansZero),  col = "red")
+abline(v = median(resSansZero),  col = "red", lty = 2)
+```
+
+Beaucoup de notes très faibles, mais pas seulement.
+
+
+
+## Notes finales
+
+
+```{r, eval=FALSE}
+note <- read.csv("data/noteFin.csv", fileEncoding = "UTF-8", na.strings = "en attente", dec = ",")
+summary(note$note.sur.20)
+hist(note$note.sur.20, main = "Etalement note finale - 95 obs", freq = T, border = NA)
+resSansZero <- note [note$note.sur.20  !=0,]
+abline(v = mean(note$note.sur.20, na.rm = T),  col = "red")
+ mean(note$note.sur.20)
+hist(resSansZero$note.sur.20, main = "Etalement note finale - 73 obs", freq = T, border = NA)
+abline(v = mean(resSansZero$note.sur.20, na.rm = T),  col = "red", lty = 2)
+```
+
+
+
+# Ressources autre que la bibliographie officielle
+
+2 cours universitaires disponibles sur internet
+
+- http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm
+- http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm
+
+Pour R, la base de tout est 
+
+R et espace (https://archives.framabook.org/r-et-espace/index.html)
+
