@@ -99,62 +99,166 @@ graphique en barres, lignes (lissage)
 
 Observer la disposition des bornes : elles sont utilisées comme des étiquettes et non pas comme une série de valeurs.
 
-## Correction graphiques étudiants
+## Correction exercice dénombrement des inscrits
 
-En fonction du rendu
+
+Des retours très nombreux.
+
+```{r}
+communes <- c("Annemasse", "Tasson la demi lune", "Clamart", "Epinay-sur-Seine",
+              "Santes", "Thionville", "Vitry-Sur-Seine", "Massy", "Montpon-Ménestérol", "Choisy-le-Roi", "Malakoff", "Caluire-et-Cuire", "Dieppe",
+              "Levallois-Perret", "Achères", "Neuily-Sur-Seine", "Nice", "Rueil-Malmaison", "Romainville", "Lagnieu", "Sannois", "Arpajon-sur-Cère",
+              "Limeil-Brévannes", "Saint-Maur", "Miribel", "Caen", "Ivry-sur-Seine", "Noirmoutier en l'île", "Orsay", "Amiens", "Troyes", "Meung-sur-Loire", "Guipavas", "Auxerre", "Issy-les-Moulineaux", "Saint-Ouen")
+
+```
+
+36 communes pour 55 étudiants. 
+
+### Commentaires généraux qui valent pour tous les exercices et surtout le DST
+
+
+#### Pour la forme 
+
+Le mieux traitement de texte dans lequel on insère un 
+graphique image.
+
+Attention aux nombreuses pages inutiles si on passe directement du tableur
+au traitement de texte.
+
+
+#### Concision du commentaire
+
+
+![](img/trop.png)
+
+même si, un strict respect de la consigne donnait :
+
+
+![](img/tropTechnique.png)
+
+
+Prochain exercice, commentaire plus court. 2 phrases maximum, aller à l'essentiel.
+
+*Il y a plus de petits bureaux de vote que de gros* (ou l'inverse)
+
+Ou plus osé :
+
+*La ville ne maîtrise pas le nombre d'électeurs par bureaux de vote*
+
+Ou plus profond, répondre à la question : quelle est la répartition idéale pour les bureaux de vote ? Est-ce que mon exemple le respecte ?
+
+![](img/oui.png)
+
+
+#### Vocabulaire
+
+Revenir sur le terme : formule *fréquence et son graphique*
+
+Diagramme de fréquence, histogramme...
+
+Le mieux : *Discrétisation des bureaux de vote en fonction des inscrits*
+(cf le manuel Béguin Pumain)
+
+![](img/raleigh.png)
+
+
+### Plus précisemment
+
+####  Problème sur les classes dans le graphique 
+
+Il faut afficher les bornes.
+  
+  
+  ![]](img/faux)
+
+
+Affichage de l'histogramme dans R
+
+```{r}
+data <- read.csv("data/bondy2022.csv")
+hist(data$V8)
+```
+
+
+
+![](img/inscrits2002.png)
+
+
+#### Quelle opération fallait-il faire sur le fichier 2002 ?
+
+
+![](img/miseEnFormeDonnee.png)
+
+
+
+
+
 
 # Pour raffiner : les indicateurs
 
 Nous avons déjà vu l'amplitude à travers minimum et maximum. Il y en a d'autres.
 Ils servent à résumer la série statistique
 
+Nous allons montrer comment calculer médiane, moyenne et écart type dans le tableur. 
 
-Pour l'exemple, on prend la commune choisie et tous les résultats des candidats dans
-chaque bureau de vote
+Pour l'exemple, on prend la commune choisie l'abstention (votants / inscrits) puis tous les résultats des candidats dans
+chaque bureau de vote.
 
 
 ```{r}
 bondy2002 <- read.csv("data/bondy2002.csv", fileEncoding = "UTF-8")
 str(bondy2002)
 table(bondy2002$bv)
+# extraction abstention
+data <- bondy2002 [bondy2002$nom == "MEGRET",]
+png("img/inscrits2002.png")
+inscrits <- data$inscrits
+hist(inscrits)
+dev.off()
+abs <- round( (data$votants / data$inscrits) *100, 0)
+write.csv(abs,"data/abstention2002.csv", 
+          fileEncoding = "UTF-8")
 ```
 
 Le tableau de 2002 se présente différemment de celui de 2022.
 
 ## Calcul :  valeurs centrales et dispersion
 
-### Valeurs centrales
+### Valeurs centrales : moyenne et médiane
 
 Il s'agit de caractériser une distribution par son centre.
 
-#### Moyenne et médiane
-
-##### Calcul
+#### Calcul
 
 Le calcul de la moyenne est connu. Celui de la médiane beaucoup moins.
 
-
-
-###### Sur le tableau complet
-
-Créer une colonne rang. Et relever le rang médian
+Sur le tableau complet, créer une colonne rang. Et relever le rang médian
 
 ![](img/mediane.jpg)
 
 
 
 
-#### savoir faire tableur
+#### Savoir faire tableur
 
 - valeur fixe et relative (utilisation du $ et F4)
 
 - au niveau graphique, rajout d'un axe par le menu insertion après double clic sur 
 le graphique (onglet positionnement, menu déroulant valeur)
 
+```{r}
+moy <- mean(abs)
+med <- median(abs)
+hist(abs, main = "Distribution des abstentions")
+abline(v = moy, col = 'blue')
+abline(v = med, col = 'red')
+```
 
-##### Que retenir ?
+Pour la variable abstention, quelle est l'indicateur le plus utile ?
 
-###### Expliquer ces phrases issues du Chadule
+#### Que retenir ?
+
+##### Expliquer ces phrases issues du Chadule
 
 - La médiane est dans une distribution la valeur la plus *proche* de toutes les autres
 
@@ -210,6 +314,7 @@ dev.off()
 
 
 ![](img/ecartType.png)
+Commenter l'écart type le plus élevé
 
 #### 2 définitions : 
 
@@ -267,7 +372,7 @@ L'objectif de l'exercice était d'obtenir un commentaire clair avec quelques rep
 ![](img/bonDevoir3.png)
 
 
-##### Quelles erreurs dans les graphiques suivants ?
+, ##### Quelles erreurs dans les graphiques suivants ?
 
 ![](img/1erreur.png)
 ![](img/2erreur.JPG)

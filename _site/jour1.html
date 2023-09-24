@@ -200,10 +200,19 @@ class="toc-section-number">2.3.2</span> Quel commentaire ?</a></li>
 </ul></li>
 <li><a href="#a-explorer" id="toc-a-explorer"><span
 class="toc-section-number">2.4</span> A explorer</a></li>
-<li><a href="#correction-graphiques-étudiants"
-id="toc-correction-graphiques-étudiants"><span
-class="toc-section-number">2.5</span> Correction graphiques
-étudiants</a></li>
+<li><a href="#correction-exercice-dénombrement-des-inscrits"
+id="toc-correction-exercice-dénombrement-des-inscrits"><span
+class="toc-section-number">2.5</span> Correction exercice dénombrement
+des inscrits</a>
+<ul>
+<li><a
+href="#commentaires-généraux-qui-valent-pour-tous-les-exercices-et-surtout-le-dst"
+id="toc-commentaires-généraux-qui-valent-pour-tous-les-exercices-et-surtout-le-dst"><span
+class="toc-section-number">2.5.1</span> Commentaires généraux qui valent
+pour tous les exercices et surtout le DST</a></li>
+<li><a href="#plus-précisemment" id="toc-plus-précisemment"><span
+class="toc-section-number">2.5.2</span> Plus précisemment</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#pour-raffiner-les-indicateurs"
 id="toc-pour-raffiner-les-indicateurs"><span
@@ -214,8 +223,10 @@ id="toc-calcul-valeurs-centrales-et-dispersion"><span
 class="toc-section-number">3.1</span> Calcul : valeurs centrales et
 dispersion</a>
 <ul>
-<li><a href="#valeurs-centrales" id="toc-valeurs-centrales"><span
-class="toc-section-number">3.1.1</span> Valeurs centrales</a></li>
+<li><a href="#valeurs-centrales-moyenne-et-médiane"
+id="toc-valeurs-centrales-moyenne-et-médiane"><span
+class="toc-section-number">3.1.1</span> Valeurs centrales : moyenne et
+médiane</a></li>
 <li><a href="#dispersion-ecart-type-et-variance"
 id="toc-dispersion-ecart-type-et-variance"><span
 class="toc-section-number">3.1.2</span> Dispersion : Ecart-type et
@@ -323,11 +334,80 @@ ENTREE)</p></li>
 <p>Observer la disposition des bornes : elles sont utilisées comme des
 étiquettes et non pas comme une série de valeurs.</p>
 </div>
-<div id="correction-graphiques-étudiants" class="section level2"
-number="2.5">
-<h2><span class="header-section-number">2.5</span> Correction graphiques
-étudiants</h2>
-<p>En fonction du rendu</p>
+<div id="correction-exercice-dénombrement-des-inscrits"
+class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Correction exercice
+dénombrement des inscrits</h2>
+<p>Des retours très nombreux.</p>
+<pre class="r"><code>communes &lt;- c(&quot;Annemasse&quot;, &quot;Tasson la demi lune&quot;, &quot;Clamart&quot;, &quot;Epinay-sur-Seine&quot;,
+              &quot;Santes&quot;, &quot;Thionville&quot;, &quot;Vitry-Sur-Seine&quot;, &quot;Massy&quot;, &quot;Montpon-Ménestérol&quot;, &quot;Choisy-le-Roi&quot;, &quot;Malakoff&quot;, &quot;Caluire-et-Cuire&quot;, &quot;Dieppe&quot;,
+              &quot;Levallois-Perret&quot;, &quot;Achères&quot;, &quot;Neuily-Sur-Seine&quot;, &quot;Nice&quot;, &quot;Rueil-Malmaison&quot;, &quot;Romainville&quot;, &quot;Lagnieu&quot;, &quot;Sannois&quot;, &quot;Arpajon-sur-Cère&quot;,
+              &quot;Limeil-Brévannes&quot;, &quot;Saint-Maur&quot;, &quot;Miribel&quot;, &quot;Caen&quot;, &quot;Ivry-sur-Seine&quot;, &quot;Noirmoutier en l&#39;île&quot;, &quot;Orsay&quot;, &quot;Amiens&quot;, &quot;Troyes&quot;, &quot;Meung-sur-Loire&quot;, &quot;Guipavas&quot;, &quot;Auxerre&quot;, &quot;Issy-les-Moulineaux&quot;, &quot;Saint-Ouen&quot;)</code></pre>
+<p>36 communes pour 55 étudiants.</p>
+<div
+id="commentaires-généraux-qui-valent-pour-tous-les-exercices-et-surtout-le-dst"
+class="section level3" number="2.5.1">
+<h3><span class="header-section-number">2.5.1</span> Commentaires
+généraux qui valent pour tous les exercices et surtout le DST</h3>
+<div id="pour-la-forme" class="section level4" number="2.5.1.1">
+<h4><span class="header-section-number">2.5.1.1</span> Pour la
+forme</h4>
+<p>Le mieux traitement de texte dans lequel on insère un graphique
+image.</p>
+<p>Attention aux nombreuses pages inutiles si on passe directement du
+tableur au traitement de texte.</p>
+</div>
+<div id="concision-du-commentaire" class="section level4"
+number="2.5.1.2">
+<h4><span class="header-section-number">2.5.1.2</span> Concision du
+commentaire</h4>
+<p><img src="img/trop.png" /></p>
+<p>même si, un strict respect de la consigne donnait :</p>
+<p><img src="img/tropTechnique.png" /></p>
+<p>Prochain exercice, commentaire plus court. 2 phrases maximum, aller à
+l’essentiel.</p>
+<p><em>Il y a plus de petits bureaux de vote que de gros</em> (ou
+l’inverse)</p>
+<p>Ou plus osé :</p>
+<p><em>La ville ne maîtrise pas le nombre d’électeurs par bureaux de
+vote</em></p>
+<p>Ou plus profond, répondre à la question : quelle est la répartition
+idéale pour les bureaux de vote ? Est-ce que mon exemple le respecte
+?</p>
+<p><img src="img/oui.png" /></p>
+</div>
+<div id="vocabulaire" class="section level4" number="2.5.1.3">
+<h4><span class="header-section-number">2.5.1.3</span> Vocabulaire</h4>
+<p>Revenir sur le terme : formule <em>fréquence et son
+graphique</em></p>
+<p>Diagramme de fréquence, histogramme…</p>
+<p>Le mieux : <em>Discrétisation des bureaux de vote en fonction des
+inscrits</em> (cf le manuel Béguin Pumain)</p>
+<p><img src="img/raleigh.png" /></p>
+</div>
+</div>
+<div id="plus-précisemment" class="section level3" number="2.5.2">
+<h3><span class="header-section-number">2.5.2</span> Plus
+précisemment</h3>
+<div id="problème-sur-les-classes-dans-le-graphique"
+class="section level4" number="2.5.2.1">
+<h4><span class="header-section-number">2.5.2.1</span> Problème sur les
+classes dans le graphique</h4>
+<p>Il faut afficher les bornes.</p>
+<p>[]](img/faux)</p>
+<p>Affichage de l’histogramme dans R</p>
+<pre class="r"><code>data &lt;- read.csv(&quot;data/bondy2022.csv&quot;)
+hist(data$V8)</code></pre>
+<p><img src="jour1_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="img/inscrits2002.png" /></p>
+</div>
+<div id="quelle-opération-fallait-il-faire-sur-le-fichier-2002"
+class="section level4" number="2.5.2.2">
+<h4><span class="header-section-number">2.5.2.2</span> Quelle opération
+fallait-il faire sur le fichier 2002 ?</h4>
+<p><img src="img/miseEnFormeDonnee.png" /></p>
+</div>
+</div>
 </div>
 </div>
 <div id="pour-raffiner-les-indicateurs" class="section level1"
@@ -336,8 +416,11 @@ number="3">
 indicateurs</h1>
 <p>Nous avons déjà vu l’amplitude à travers minimum et maximum. Il y en
 a d’autres. Ils servent à résumer la série statistique</p>
-<p>Pour l’exemple, on prend la commune choisie et tous les résultats des
-candidats dans chaque bureau de vote</p>
+<p>Nous allons montrer comment calculer médiane, moyenne et écart type
+dans le tableur.</p>
+<p>Pour l’exemple, on prend la commune choisie l’abstention (votants /
+inscrits) puis tous les résultats des candidats dans chaque bureau de
+vote.</p>
 <pre class="r"><code>bondy2002 &lt;- read.csv(&quot;data/bondy2002.csv&quot;, fileEncoding = &quot;UTF-8&quot;)
 str(bondy2002)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    306 obs. of  8 variables:
@@ -353,33 +436,37 @@ str(bondy2002)</code></pre>
 <pre><code>## 
 ##  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 
 ## 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18 18</code></pre>
+<pre class="r"><code># extraction abstention
+data &lt;- bondy2002 [bondy2002$nom == &quot;MEGRET&quot;,]
+png(&quot;img/inscrits2002.png&quot;)
+inscrits &lt;- data$inscrits
+hist(inscrits)
+dev.off()</code></pre>
+<pre><code>## png 
+##   2</code></pre>
+<pre class="r"><code>abs &lt;- round( (data$votants / data$inscrits) *100, 0)
+write.csv(abs,&quot;data/abstention2002.csv&quot;, 
+          fileEncoding = &quot;UTF-8&quot;)</code></pre>
 <p>Le tableau de 2002 se présente différemment de celui de 2022.</p>
 <div id="calcul-valeurs-centrales-et-dispersion" class="section level2"
 number="3.1">
 <h2><span class="header-section-number">3.1</span> Calcul : valeurs
 centrales et dispersion</h2>
-<div id="valeurs-centrales" class="section level3" number="3.1.1">
-<h3><span class="header-section-number">3.1.1</span> Valeurs
-centrales</h3>
+<div id="valeurs-centrales-moyenne-et-médiane" class="section level3"
+number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Valeurs centrales :
+moyenne et médiane</h3>
 <p>Il s’agit de caractériser une distribution par son centre.</p>
-<div id="moyenne-et-médiane" class="section level4" number="3.1.1.1">
-<h4><span class="header-section-number">3.1.1.1</span> Moyenne et
-médiane</h4>
-<div id="calcul" class="section level5" number="3.1.1.1.1">
-<h5><span class="header-section-number">3.1.1.1.1</span> Calcul</h5>
+<div id="calcul" class="section level4" number="3.1.1.1">
+<h4><span class="header-section-number">3.1.1.1</span> Calcul</h4>
 <p>Le calcul de la moyenne est connu. Celui de la médiane beaucoup
 moins.</p>
-<div id="sur-le-tableau-complet" class="section level6"
-number="3.1.1.1.1.1">
-<h6><span class="header-section-number">3.1.1.1.1.1</span> Sur le
-tableau complet</h6>
-<p>Créer une colonne rang. Et relever le rang médian</p>
+<p>Sur le tableau complet, créer une colonne rang. Et relever le rang
+médian</p>
 <p><img src="img/mediane.jpg" /></p>
 </div>
-</div>
-</div>
 <div id="savoir-faire-tableur" class="section level4" number="3.1.1.2">
-<h4><span class="header-section-number">3.1.1.2</span> savoir faire
+<h4><span class="header-section-number">3.1.1.2</span> Savoir faire
 tableur</h4>
 <ul>
 <li><p>valeur fixe et relative (utilisation du $ et F4)</p></li>
@@ -387,13 +474,22 @@ tableur</h4>
 double clic sur le graphique (onglet positionnement, menu déroulant
 valeur)</p></li>
 </ul>
-<div id="que-retenir" class="section level5" number="3.1.1.2.1">
-<h5><span class="header-section-number">3.1.1.2.1</span> Que retenir
-?</h5>
-<div id="expliquer-ces-phrases-issues-du-chadule" class="section level6"
-number="3.1.1.2.1.1">
-<h6><span class="header-section-number">3.1.1.2.1.1</span> Expliquer ces
-phrases issues du Chadule</h6>
+<pre class="r"><code>moy &lt;- mean(abs)
+med &lt;- median(abs)
+hist(abs, main = &quot;Distribution des abstentions&quot;)
+abline(v = moy, col = &#39;blue&#39;)
+abline(v = med, col = &#39;red&#39;)</code></pre>
+<p><img src="jour1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Pour la variable abstention, quelle est l’indicateur le plus utile
+?</p>
+</div>
+<div id="que-retenir" class="section level4" number="3.1.1.3">
+<h4><span class="header-section-number">3.1.1.3</span> Que retenir
+?</h4>
+<div id="expliquer-ces-phrases-issues-du-chadule" class="section level5"
+number="3.1.1.3.1">
+<h5><span class="header-section-number">3.1.1.3.1</span> Expliquer ces
+phrases issues du Chadule</h5>
 <ul>
 <li>La médiane est dans une distribution la valeur la plus
 <em>proche</em> de toutes les autres</li>
@@ -403,10 +499,9 @@ phrases issues du Chadule</h6>
 <li>les valeurs extrêmes <em>décentrent</em> la moyenne</li>
 </ul>
 </div>
-</div>
 <div id="rapport-entre-médiane-et-moyenne" class="section level5"
-number="3.1.1.2.2">
-<h5><span class="header-section-number">3.1.1.2.2</span> Rapport entre
+number="3.1.1.3.2">
+<h5><span class="header-section-number">3.1.1.3.2</span> Rapport entre
 médiane et moyenne</h5>
 <p>Que peut-on dire de la forme de la distribution</p>
 <ul>
@@ -450,7 +545,8 @@ for (i in 1:length(candidat)){
 dev.off()</code></pre>
 <pre><code>## png 
 ##   2</code></pre>
-<p><img src="img/ecartType.png" /></p>
+<p><img src="img/ecartType.png" /> Commenter l’écart type le plus
+élevé</p>
 <div id="définitions" class="section level4" number="3.1.2.1">
 <h4><span class="header-section-number">3.1.2.1</span> 2 définitions
 :</h4>
@@ -507,11 +603,7 @@ number="3.1.4.1.2">
 <h5><span class="header-section-number">3.1.4.1.2</span> Une diagramme
 de répartition</h5>
 <p><img src="img/bonDevoir3.png" /></p>
-</div>
-<div id="quelles-erreurs-dans-les-graphiques-suivants"
-class="section level5" number="3.1.4.1.3">
-<h5><span class="header-section-number">3.1.4.1.3</span> Quelles erreurs
-dans les graphiques suivants ?</h5>
+<p>, ##### Quelles erreurs dans les graphiques suivants ?</p>
 <p><img src="img/1erreur.png" /> <img src="img/2erreur.JPG" /> <img
 src="img/3erreur.png" /></p>
 </div>
