@@ -176,7 +176,7 @@ Affichage de l'histogramme dans R
 
 ```{r}
 data <- read.csv("data/bondy2022.csv")
-hist(data$V8)
+hist(data$Inscrits)
 ```
 
 

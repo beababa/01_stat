@@ -27,7 +27,7 @@ knitr::kable(data, col.names = c("groupe", "heures", "enseignant") )
 
 
 ```{r}
-data <- read.csv("data/deroule.csv", encoding = "UTF-8")
+data <- read.csv("data/deroule2023.csv", encoding = "UTF-8")
 knitr::kable(data)
 ```
 
@@ -61,11 +61,12 @@ Cet exercice permet d'utiliser dans le tableur :
 L'objectif est que chaque étudiant choisisse une ville (avec au moins 5 bureaux
 de vote)
 
+Pour 2022, on rajoute les étiquettes des colonnes manquantes
 
 ```{r}
-data2022 <- read.csv2("data/gros/resultats-par-niveau-burvot-t1-france-entiere(1).csv", fileEncoding = "Latin1", header = F,skip = 1)
+data2022 <- read.csv2("data/gros/resultats-par-niveau-burvot-t1-france-entiere.csv", fileEncoding = "Latin1", header = T)
 str(data2022)
-bondy2022 <- data2022 [ data2022$V6 == "Bondy",]
+bondy2022 <- data2022 [ data2022$Libellé.de.la.commune == "Bondy",]
 write.csv(bondy2022, "data/bondy2022.csv", fileEncoding = "UTF-8")
 data2002 <- read.csv2("data/gros/PR02_BVot_T1T2.csv", fileEncoding= "Latin1",header=F,skip=18)
 str(data2002)
@@ -85,28 +86,28 @@ write.csv(bondy2002, "data/bondy2002.csv", fileEncoding = "UTF-8")
 
 - 74 étudiants sur 3 cours
 
-- Attention, 5 doublons de prénoms (Ambre, Camille, Marie, Antonin et Sarah), j'ai rajouté l'initiale
-du nom de famille.
+Les questions posées sont sur le passé / présent / futur des étudiants, leur appétence en stats et 
+le nombre d'années depuis le dernier apprentissage.
+
 
 ```{r}
-etudiant <-  read.csv("data/etudiant.csv", fileEncoding = "UTF-8")
-mailetudiant <- paste(paste0(etudiant$mail, ";"))
-tmp <- mailetudiant [1]
-for (i in 2:73){ 
-  tmp <- paste(tmp, mailetudiant [i])}
-write.csv(tmp, "data/mails.txt")
-tab <- table (etudiant$prénom)
-names(tab)[tab >1]
-write.csv(etudiant [, c("prénom", "groupe.TD")], "cours1.csv", fileEncoding = "UTF-8")
+etudiant <-  read.csv("data/cours1.csv", fileEncoding = "UTF-8")
+names(etudiant)
+names(etudiant)[8:9] <- c("appétence", "nb d'années")
+png("img/quisontils.png")
 par(mar = c(2,16,2,4))
 par(mfrow = c(3,2))
-for (i in 3:7){
+for (i in 5:9){
   par(mar = c(2,16,2,4))
   barplot(sort(table(etudiant [,i])), border = NA,
           horiz = T, las = 2, cex.names = 0.8, 
           main = names (etudiant) [i])
 }
+dev.off()
 ```
+
+
+![](img/quisontils.png)
 
 
 ## Présence et rendu des devoirs : chiffres clés
@@ -114,20 +115,21 @@ for (i in 3:7){
 ### Effectif et cours
 
 ```{r, eval=FALSE}
-tab <- table(etudiant$groupe.TD)
-i <- 2
 fic <- list.files("data/", pattern = "cours")
 # on recherche le fichier le plus haut
 nb <- max(as.integer(substring(fic, 6,7)))
 tmp <- NULL
-for (i in 2:nb) {
+tab <- NULL
+for (i in 1:nb) {
   nomFic <- paste0("data/cours", i, ".csv")
   data <- read.csv(nomFic, fileEncoding = "UTF-8")
-  data <- data [data [,3] == "oui",]
-  tmp <- table(data$groupe.TD)
+  data <- data [data [,2] == "oui",]
+  tmp <- table(data$groupe)
   tab <- rbind(tab , tmp)
 }
+tab
 row.names(tab) <- paste0("cours ",seq(1,nb, by = 1))
+paste0("cours ",seq(1,nb, by = 1))
 knitr::kable(tab)
 ```
 
@@ -145,7 +147,7 @@ barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", x
 ### Les rendus d'exercices
 
 ```{r}
-rendu <- c(47,36, 29, 14,14,11,4,5)
+rendu <- c(56,0, 0, 0,0,0,0,0)
 titre <- c("distribution", "univarié", "khi2", "khi2bis", "regression", "boxplot", "variance", "4 variables")
 par(mar = c(8,6,6,6))
 p <- barplot(rendu, names = titre, cex.names = 0.8, las = 2, main = "rendu devoirs (effectif 75 étudiants environ)", border = NA)
