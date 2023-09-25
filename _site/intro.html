@@ -16,7 +16,7 @@
 <script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -29,9 +29,12 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -42,22 +45,107 @@
   ul.task-list{list-style: none;}
     </style>
 
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
   }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
 }
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
 </script>
 
 
 
 
-
-
+<link rel="stylesheet" href="css/styles.css" type="text/css" />
 
 
 
@@ -91,6 +179,76 @@ pre code {
 </style>
 
 
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
 
 <!-- tabsets -->
 
@@ -152,6 +310,69 @@ pre code {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -161,7 +382,66 @@ pre code {
 <div class="container-fluid main-container">
 
 
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
 
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="intro.html">Introduction</a>
+</li>
+<li>
+  <a href="jour1.html">univariées</a>
+</li>
+<li>
+  <a href="jour2.html">bivariées</a>
+</li>
+<li>
+  <a href="jour3.html">khi 2</a>
+</li>
+<li>
+  <a href="jour3.html">régression</a>
+</li>
+<li>
+  <a href="jour3.html">examen</a>
+</li>
+<li>
+  <a href="jour3.html">variance</a>
+</li>
+<li>
+  <a href="jour3.html">multivariées</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/beababa/coursP8">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
 
 <div id="header">
 
@@ -171,56 +451,14 @@ pre code {
 
 </div>
 
-<div id="TOC">
-<ul>
-<li><a href="#intitulé-et-déroulé-du-cours"
-id="toc-intitulé-et-déroulé-du-cours"><span
-class="toc-section-number">1</span> Intitulé et déroulé du
-cours</a></li>
-<li><a href="#la-donnée" id="toc-la-donnée"><span
-class="toc-section-number">2</span> La donnée</a>
-<ul>
-<li><a href="#où-les-trouver" id="toc-où-les-trouver"><span
-class="toc-section-number">2.1</span> Où les trouver ?</a></li>
-<li><a href="#préparer-les-données" id="toc-préparer-les-données"><span
-class="toc-section-number">2.2</span> Préparer les données</a></li>
-</ul></li>
-<li><a href="#présentation-rapide-vous-êtes-nombreux"
-id="toc-présentation-rapide-vous-êtes-nombreux"><span
-class="toc-section-number">3</span> Présentation rapide (vous êtes
-nombreux !)</a>
-<ul>
-<li><a href="#qui-sont-les-étudiants"
-id="toc-qui-sont-les-étudiants"><span
-class="toc-section-number">3.1</span> Qui sont les étudiants ?</a></li>
-<li><a href="#présence-et-rendu-des-devoirs-chiffres-clés"
-id="toc-présence-et-rendu-des-devoirs-chiffres-clés"><span
-class="toc-section-number">3.2</span> Présence et rendu des devoirs :
-chiffres clés</a>
-<ul>
-<li><a href="#effectif-et-cours" id="toc-effectif-et-cours"><span
-class="toc-section-number">3.2.1</span> Effectif et cours</a></li>
-<li><a href="#les-rendus-dexercices"
-id="toc-les-rendus-dexercices"><span
-class="toc-section-number">3.2.2</span> Les rendus d’exercices</a></li>
-</ul></li>
-<li><a href="#notes-finales" id="toc-notes-finales"><span
-class="toc-section-number">3.3</span> Notes finales</a></li>
-</ul></li>
-<li><a href="#ressources-autre-que-la-bibliographie-officielle"
-id="toc-ressources-autre-que-la-bibliographie-officielle"><span
-class="toc-section-number">4</span> Ressources autre que la
-bibliographie officielle</a></li>
-</ul>
-</div>
 
 <div id="intitulé-et-déroulé-du-cours" class="section level1"
 number="1">
 <h1><span class="header-section-number">1</span> Intitulé et déroulé du
 cours</h1>
 <p><em>“L5GEABIM Analyses bivariées et multivariées”</em></p>
-<pre class="r"><code>data &lt;- read.csv(&quot;data/presentation.csv&quot;, encoding = &quot;UTF-8&quot;, header = F)
-knitr::kable(data, col.names = c(&quot;groupe&quot;, &quot;heures&quot;, &quot;enseignant&quot;) )</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/presentation.csv&quot;</span>, <span class="at">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="at">header =</span> F)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(data, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;groupe&quot;</span>, <span class="st">&quot;heures&quot;</span>, <span class="st">&quot;enseignant&quot;</span>) )</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -247,8 +485,8 @@ knitr::kable(data, col.names = c(&quot;groupe&quot;, &quot;heures&quot;, &quot;e
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>data &lt;- read.csv(&quot;data/deroule2023.csv&quot;, encoding = &quot;UTF-8&quot;)
-knitr::kable(data)</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/deroule2023.csv&quot;</span>, <span class="at">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(data)</span></code></pre></div>
 <table>
 <colgroup>
 <col width="8%" />
@@ -391,8 +629,8 @@ présidentielles 2022</p>
 <p>L’objectif est que chaque étudiant choisisse une ville (avec au moins
 5 bureaux de vote)</p>
 <p>Pour 2022, on rajoute les étiquettes des colonnes manquantes</p>
-<pre class="r"><code>data2022 &lt;- read.csv2(&quot;data/gros/resultats-par-niveau-burvot-t1-france-entiere.csv&quot;, fileEncoding = &quot;Latin1&quot;, header = T)
-str(data2022)</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data2022 <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="st">&quot;data/gros/resultats-par-niveau-burvot-t1-france-entiere.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;Latin1&quot;</span>, <span class="at">header =</span> T)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data2022)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    69682 obs. of  105 variables:
 ##  $ Code.du.département          : chr  &quot;1&quot; &quot;1&quot; &quot;1&quot; &quot;1&quot; ...
 ##  $ Libellé.du.département       : chr  &quot;Ain&quot; &quot;Ain&quot; &quot;Ain&quot; &quot;Ain&quot; ...
@@ -494,10 +732,10 @@ str(data2022)</code></pre>
 ##  $ X..Voix.Exp.10               : num  0.58 1.75 0.95 0.48 0.32 0.57 1.13 0.93 0.64 0.34 ...
 ##  $ N.Panneau.11                 : int  12 12 12 12 12 12 12 12 12 12 ...
 ##   [list output truncated]</code></pre>
-<pre class="r"><code>bondy2022 &lt;- data2022 [ data2022$Libellé.de.la.commune == &quot;Bondy&quot;,]
-write.csv(bondy2022, &quot;data/bondy2022.csv&quot;, fileEncoding = &quot;UTF-8&quot;)
-data2002 &lt;- read.csv2(&quot;data/gros/PR02_BVot_T1T2.csv&quot;, fileEncoding= &quot;Latin1&quot;,header=F,skip=18)
-str(data2002)</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>bondy2022 <span class="ot">&lt;-</span> data2022 [ data2022<span class="sc">$</span>Libellé.de.la.commune <span class="sc">==</span> <span class="st">&quot;Bondy&quot;</span>,]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(bondy2022, <span class="st">&quot;data/bondy2022.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>data2002 <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="st">&quot;data/gros/PR02_BVot_T1T2.csv&quot;</span>, <span class="at">fileEncoding=</span> <span class="st">&quot;Latin1&quot;</span>,<span class="at">header=</span>F,<span class="at">skip=</span><span class="dv">18</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data2002)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    1154537 obs. of  13 variables:
 ##  $ V1 : int  1 1 1 1 1 1 1 1 1 1 ...
 ##  $ V2 : chr  &quot;01&quot; &quot;01&quot; &quot;01&quot; &quot;01&quot; ...
@@ -512,10 +750,10 @@ str(data2002)</code></pre>
 ##  $ V11: chr  &quot;CORINNE&quot; &quot;DANIEL&quot; &quot;FRANCOIS&quot; &quot;JACQUES&quot; ...
 ##  $ V12: chr  &quot;LEPA&quot; &quot;GLUC&quot; &quot;BAYR&quot; &quot;CHIR&quot; ...
 ##  $ V13: int  9 1 30 66 82 12 28 23 60 6 ...</code></pre>
-<pre class="r"><code>data2002 &lt;- data2002 [, c(4,5,6:8,10,13)]
-var &lt;- c(&quot;ville&quot;,&quot;bv&quot;   ,&quot;inscrits&quot; ,&quot;votants&quot;, &quot;exprimes&quot;, &quot;nom&quot;,  &quot;nb&quot;)
-names(data2002) &lt;- var
-str(data2002)</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data2002 <span class="ot">&lt;-</span> data2002 [, <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span><span class="sc">:</span><span class="dv">8</span>,<span class="dv">10</span>,<span class="dv">13</span>)]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>var <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ville&quot;</span>,<span class="st">&quot;bv&quot;</span>   ,<span class="st">&quot;inscrits&quot;</span> ,<span class="st">&quot;votants&quot;</span>, <span class="st">&quot;exprimes&quot;</span>, <span class="st">&quot;nom&quot;</span>,  <span class="st">&quot;nb&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data2002) <span class="ot">&lt;-</span> var</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data2002)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    1154537 obs. of  7 variables:
 ##  $ ville   : chr  &quot;L&#39;Abergement-Clémenciat&quot; &quot;L&#39;Abergement-Clémenciat&quot; &quot;L&#39;Abergement-Clémenciat&quot; &quot;L&#39;Abergement-Clémenciat&quot; ...
 ##  $ bv      : chr  &quot;0001&quot; &quot;0001&quot; &quot;0001&quot; &quot;0001&quot; ...
@@ -524,8 +762,8 @@ str(data2002)</code></pre>
 ##  $ exprimes: int  427 427 427 427 427 427 427 427 427 427 ...
 ##  $ nom     : chr  &quot;LEPAGE&quot; &quot;GLUCKSTEIN&quot; &quot;BAYROU&quot; &quot;CHIRAC&quot; ...
 ##  $ nb      : int  9 1 30 66 82 12 28 23 60 6 ...</code></pre>
-<pre class="r"><code>bondy2002 &lt;- data2002 [ data2002$ville == &quot;Bondy&quot;,]
-write.csv(bondy2002, &quot;data/bondy2002.csv&quot;, fileEncoding = &quot;UTF-8&quot;)</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>bondy2002 <span class="ot">&lt;-</span> data2002 [ data2002<span class="sc">$</span>ville <span class="sc">==</span> <span class="st">&quot;Bondy&quot;</span>,]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(bondy2002, <span class="st">&quot;data/bondy2002.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="présentation-rapide-vous-êtes-nombreux" class="section level1"
@@ -541,8 +779,8 @@ number="3">
 <p>Les questions posées sont sur le passé / présent / futur des
 étudiants, leur appétence en stats et le nombre d’années depuis le
 dernier apprentissage.</p>
-<pre class="r"><code>etudiant &lt;-  read.csv(&quot;data/cours1.csv&quot;, fileEncoding = &quot;UTF-8&quot;)
-names(etudiant)</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>etudiant <span class="ot">&lt;-</span>  <span class="fu">read.csv</span>(<span class="st">&quot;data/cours1.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(etudiant)</span></code></pre></div>
 <pre><code>##  [1] &quot;X&quot;                                                
 ##  [2] &quot;presence&quot;                                         
 ##  [3] &quot;prénom&quot;                                           
@@ -553,17 +791,17 @@ names(etudiant)</code></pre>
 ##  [8] &quot;appétence.stats..passionnément.4...pas.du.tout.1.&quot;
 ##  [9] &quot;dernière.année.apprentissage.stats..en.nb.années.&quot;
 ## [10] &quot;groupe&quot;</code></pre>
-<pre class="r"><code>names(etudiant)[8:9] &lt;- c(&quot;appétence&quot;, &quot;nb d&#39;années&quot;)
-png(&quot;img/quisontils.png&quot;)
-par(mar = c(2,16,2,4))
-par(mfrow = c(3,2))
-for (i in 5:9){
-  par(mar = c(2,16,2,4))
-  barplot(sort(table(etudiant [,i])), border = NA,
-          horiz = T, las = 2, cex.names = 0.8, 
-          main = names (etudiant) [i])
-}
-dev.off()</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(etudiant)[<span class="dv">8</span><span class="sc">:</span><span class="dv">9</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;appétence&quot;</span>, <span class="st">&quot;nb d&#39;années&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">&quot;img/quisontils.png&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">16</span>,<span class="dv">2</span>,<span class="dv">4</span>))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">2</span>))</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">9</span>){</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">16</span>,<span class="dv">2</span>,<span class="dv">4</span>))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">barplot</span>(<span class="fu">sort</span>(<span class="fu">table</span>(etudiant [,i])), <span class="at">border =</span> <span class="cn">NA</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">horiz =</span> T, <span class="at">las =</span> <span class="dv">2</span>, <span class="at">cex.names =</span> <span class="fl">0.8</span>, </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">main =</span> <span class="fu">names</span> (etudiant) [i])</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <pre><code>## png 
 ##   2</code></pre>
 <p><img src="img/quisontils.png" /></p>
@@ -575,34 +813,34 @@ devoirs : chiffres clés</h2>
 <div id="effectif-et-cours" class="section level3" number="3.2.1">
 <h3><span class="header-section-number">3.2.1</span> Effectif et
 cours</h3>
-<pre class="r"><code>fic &lt;- list.files(&quot;data/&quot;, pattern = &quot;cours&quot;)
-# on recherche le fichier le plus haut
-nb &lt;- max(as.integer(substring(fic, 6,7)))
-tmp &lt;- NULL
-tab &lt;- NULL
-for (i in 1:nb) {
-  nomFic &lt;- paste0(&quot;data/cours&quot;, i, &quot;.csv&quot;)
-  data &lt;- read.csv(nomFic, fileEncoding = &quot;UTF-8&quot;)
-  data &lt;- data [data [,2] == &quot;oui&quot;,]
-  tmp &lt;- table(data$groupe)
-  tab &lt;- rbind(tab , tmp)
-}
-tab
-row.names(tab) &lt;- paste0(&quot;cours &quot;,seq(1,nb, by = 1))
-paste0(&quot;cours &quot;,seq(1,nb, by = 1))
-knitr::kable(tab)</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fic <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;data/&quot;</span>, <span class="at">pattern =</span> <span class="st">&quot;cours&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># on recherche le fichier le plus haut</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>nb <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">as.integer</span>(<span class="fu">substring</span>(fic, <span class="dv">6</span>,<span class="dv">7</span>)))</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb) {</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  nomFic <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;data/cours&quot;</span>, i, <span class="st">&quot;.csv&quot;</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(nomFic, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> data [data [,<span class="dv">2</span>] <span class="sc">==</span> <span class="st">&quot;oui&quot;</span>,]</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> <span class="fu">table</span>(data<span class="sc">$</span>groupe)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tab , tmp)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>tab</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(tab) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;cours &quot;</span>,<span class="fu">seq</span>(<span class="dv">1</span>,nb, <span class="at">by =</span> <span class="dv">1</span>))</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;cours &quot;</span>,<span class="fu">seq</span>(<span class="dv">1</span>,nb, <span class="at">by =</span> <span class="dv">1</span>))</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
 <p>Graphique</p>
-<pre class="r"><code>barplot(tab, beside = T, main = &quot;nombre d&#39;étudiants par groupe et par cours&quot;, xlab = &quot;groupe&quot;, ylab = &quot;nb&quot;, col = terrain.colors(nb) 
-        , border = NA, legend =  F)</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(tab, <span class="at">beside =</span> T, <span class="at">main =</span> <span class="st">&quot;nombre d&#39;étudiants par groupe et par cours&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;groupe&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;nb&quot;</span>, <span class="at">col =</span> <span class="fu">terrain.colors</span>(nb) </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>        , <span class="at">border =</span> <span class="cn">NA</span>, <span class="at">legend =</span>  F)</span></code></pre></div>
 </div>
 <div id="les-rendus-dexercices" class="section level3" number="3.2.2">
 <h3><span class="header-section-number">3.2.2</span> Les rendus
 d’exercices</h3>
-<pre class="r"><code>rendu &lt;- c(56,0, 0, 0,0,0,0,0)
-titre &lt;- c(&quot;distribution&quot;, &quot;univarié&quot;, &quot;khi2&quot;, &quot;khi2bis&quot;, &quot;regression&quot;, &quot;boxplot&quot;, &quot;variance&quot;, &quot;4 variables&quot;)
-par(mar = c(8,6,6,6))
-p &lt;- barplot(rendu, names = titre, cex.names = 0.8, las = 2, main = &quot;rendu devoirs (effectif 75 étudiants environ)&quot;, border = NA)
-text(p, y = rendu - 1, labels = rendu )</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rendu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">56</span>,<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>titre <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;distribution&quot;</span>, <span class="st">&quot;univarié&quot;</span>, <span class="st">&quot;khi2&quot;</span>, <span class="st">&quot;khi2bis&quot;</span>, <span class="st">&quot;regression&quot;</span>, <span class="st">&quot;boxplot&quot;</span>, <span class="st">&quot;variance&quot;</span>, <span class="st">&quot;4 variables&quot;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">8</span>,<span class="dv">6</span>,<span class="dv">6</span>,<span class="dv">6</span>))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">barplot</span>(rendu, <span class="at">names =</span> titre, <span class="at">cex.names =</span> <span class="fl">0.8</span>, <span class="at">las =</span> <span class="dv">2</span>, <span class="at">main =</span> <span class="st">&quot;rendu devoirs (effectif 75 étudiants environ)&quot;</span>, <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(p, <span class="at">y =</span> rendu <span class="sc">-</span> <span class="dv">1</span>, <span class="at">labels =</span> rendu )</span></code></pre></div>
 <p><img src="intro_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <div id="les-notes-des-exercices" class="section level4"
 number="3.2.2.1">
@@ -617,34 +855,34 @@ bonne extension.</p>
 <ul>
 <li>Distribution des totaux</li>
 </ul>
-<pre class="r"><code>devoir &lt;- read.csv(&quot;data/notes.csv&quot;, fileEncoding = &quot;UTF-8&quot;, dec=&quot;,&quot;, na.strings = &#39;-&#39;)
-res &lt;- (apply(devoir [,2:5], 1, sum, na.rm = T))
-resSansZero &lt;- res [res  !=0]
-min(resSansZero)
-densite &lt;- density(res)
-densite2 &lt;- density(resSansZero)
-hist(res, main = &quot;Répartion du cumul des notes des 4 devoirs (max 17, 87 obs)&quot;, 
-     xlab = &quot;notes&quot;, ylab = &quot;nb&quot;, freq = T,border = NA)
-abline(v = mean(res),  col = &quot;red&quot;)
-abline(v = median(res),  col = &quot;red&quot;, lty = 2)
-hist(resSansZero, main = &quot;Sans zéro (59 obs)&quot;, freq = T,border = NA,
-     xlab = &quot;notes&quot;, ylab = &quot;nb&quot;)
-abline(v = mean(resSansZero),  col = &quot;red&quot;)
-abline(v = median(resSansZero),  col = &quot;red&quot;, lty = 2)</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>devoir <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/notes.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="at">dec=</span><span class="st">&quot;,&quot;</span>, <span class="at">na.strings =</span> <span class="st">&#39;-&#39;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> (<span class="fu">apply</span>(devoir [,<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">1</span>, sum, <span class="at">na.rm =</span> T))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>resSansZero <span class="ot">&lt;-</span> res [res  <span class="sc">!=</span><span class="dv">0</span>]</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(resSansZero)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>densite <span class="ot">&lt;-</span> <span class="fu">density</span>(res)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>densite2 <span class="ot">&lt;-</span> <span class="fu">density</span>(resSansZero)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(res, <span class="at">main =</span> <span class="st">&quot;Répartion du cumul des notes des 4 devoirs (max 17, 87 obs)&quot;</span>, </span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;notes&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;nb&quot;</span>, <span class="at">freq =</span> T,<span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(res),  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">median</span>(res),  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(resSansZero, <span class="at">main =</span> <span class="st">&quot;Sans zéro (59 obs)&quot;</span>, <span class="at">freq =</span> T,<span class="at">border =</span> <span class="cn">NA</span>,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;notes&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;nb&quot;</span>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(resSansZero),  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">median</span>(resSansZero),  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p>Beaucoup de notes très faibles, mais pas seulement.</p>
 </div>
 </div>
 </div>
 <div id="notes-finales" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> Notes finales</h2>
-<pre class="r"><code>note &lt;- read.csv(&quot;data/noteFin.csv&quot;, fileEncoding = &quot;UTF-8&quot;, na.strings = &quot;en attente&quot;, dec = &quot;,&quot;)
-summary(note$note.sur.20)
-hist(note$note.sur.20, main = &quot;Etalement note finale - 95 obs&quot;, freq = T, border = NA)
-resSansZero &lt;- note [note$note.sur.20  !=0,]
-abline(v = mean(note$note.sur.20, na.rm = T),  col = &quot;red&quot;)
- mean(note$note.sur.20)
-hist(resSansZero$note.sur.20, main = &quot;Etalement note finale - 73 obs&quot;, freq = T, border = NA)
-abline(v = mean(resSansZero$note.sur.20, na.rm = T),  col = &quot;red&quot;, lty = 2)</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>note <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/noteFin.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="at">na.strings =</span> <span class="st">&quot;en attente&quot;</span>, <span class="at">dec =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(note<span class="sc">$</span>note.sur<span class="fl">.20</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(note<span class="sc">$</span>note.sur<span class="fl">.20</span>, <span class="at">main =</span> <span class="st">&quot;Etalement note finale - 95 obs&quot;</span>, <span class="at">freq =</span> T, <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>resSansZero <span class="ot">&lt;-</span> note [note<span class="sc">$</span>note.sur<span class="fl">.20</span>  <span class="sc">!=</span><span class="dv">0</span>,]</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(note<span class="sc">$</span>note.sur<span class="fl">.20</span>, <span class="at">na.rm =</span> T),  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">mean</span>(note<span class="sc">$</span>note.sur<span class="fl">.20</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(resSansZero<span class="sc">$</span>note.sur<span class="fl">.20</span>, <span class="at">main =</span> <span class="st">&quot;Etalement note finale - 73 obs&quot;</span>, <span class="at">freq =</span> T, <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(resSansZero<span class="sc">$</span>note.sur<span class="fl">.20</span>, <span class="at">na.rm =</span> T),  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="ressources-autre-que-la-bibliographie-officielle"
@@ -666,8 +904,12 @@ href="https://archives.framabook.org/r-et-espace/index.html"
 class="uri">https://archives.framabook.org/r-et-espace/index.html</a>)</p>
 </div>
 
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<small><p>L5GEABIM Analyses bivariées et multivariées</p></small>
 
 
+</div>
+</div>
 
 </div>
 
@@ -700,6 +942,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
