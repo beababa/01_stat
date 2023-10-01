@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Introduction</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="css/styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="intro.html">Introduction</a>
+</li>
+<li>
+  <a href="jour1.html">univariées</a>
+</li>
+<li>
+  <a href="jour2.html">bivariées</a>
+</li>
+<li>
+  <a href="jour3.html">khi 2</a>
+</li>
+<li>
+  <a href="jour3.html">régression</a>
+</li>
+<li>
+  <a href="jour3.html">examen</a>
+</li>
+<li>
+  <a href="jour3.html">variance</a>
+</li>
+<li>
+  <a href="jour3.html">multivariées</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/beababa/coursP8">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Introduction</h1>
+
+</div>
+
+
+<div id="intitulé-et-déroulé-du-cours" class="section level1"
+number="1">
+<h1><span class="header-section-number">1</span> Intitulé et déroulé du
+cours</h1>
+<p><em>“L5GEABIM Analyses bivariées et multivariées”</em></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/presentation.csv&quot;</span>, <span class="at">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="at">header =</span> F)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(data, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;groupe&quot;</span>, <span class="st">&quot;heures&quot;</span>, <span class="st">&quot;enseignant&quot;</span>) )</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">groupe</th>
+<th align="left">heures</th>
+<th align="left">enseignant</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Gr. 1</td>
+<td align="left">8h - 9h30</td>
+<td align="left">Béatrice MARANGET</td>
+</tr>
+<tr class="even">
+<td align="left">Gr. 2</td>
+<td align="left">9h30 - 11h</td>
+<td align="left">Béatrice MARANGET</td>
+</tr>
+<tr class="odd">
+<td align="left">Gr. 3</td>
+<td align="left">14h - 15h30</td>
+<td align="left">Béatrice MARANGET</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/deroule2023.csv&quot;</span>, <span class="at">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(data)</span></code></pre></div>
+<table>
+<colgroup>
+<col width="8%" />
+<col width="7%" />
+<col width="60%" />
+<col width="6%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Num.cours</th>
+<th align="left">date</th>
+<th align="left">thème</th>
+<th align="left">outil</th>
+<th align="right">exercice..nb.pts.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">18/09/23</td>
+<td align="left">statistique univariée : base</td>
+<td align="left">tableur</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">25/09/23</td>
+<td align="left">statistique univariée : indicateurs</td>
+<td align="left"></td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">02/10/23</td>
+<td align="left">bivariée : base + contingence</td>
+<td align="left"></td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">09/10/23</td>
+<td align="left">Khi 2</td>
+<td align="left"></td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="left">16/10/23</td>
+<td align="left">régression</td>
+<td align="left"></td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">23/10/23</td>
+<td align="left">devoir sur table</td>
+<td align="left"></td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="left">30/10/23</td>
+<td align="left">CONGES</td>
+<td align="left"></td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">06/11/23</td>
+<td align="left">initiation R</td>
+<td align="left">R</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="left">13/11/23</td>
+<td align="left">initiation R / variance</td>
+<td align="left"></td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="left">20/11/23</td>
+<td align="left">multivariée : choix des variables + sujet DM</td>
+<td align="left"></td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="left">27/11/23</td>
+<td align="left">multivariée : analyse factorielle et
+classification</td>
+<td align="left"></td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">12</td>
+<td align="left">04/12/23</td>
+<td align="left">questions autour du devoir maison. Devoir à rendre le 8
+au plus tard.</td>
+<td align="left"></td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">13</td>
+<td align="left">11/12/23</td>
+<td align="left">rendu du devoir maison et bilan formation</td>
+<td align="left"></td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="la-donnée" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> La donnée</h1>
+<div id="où-les-trouver" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Où les trouver ?</h2>
+<p>Au départ les données sur les élections disponibles</p>
+<p><a href="https://www.data.gouv.fr/fr/pages/donnees-des-elections/"
+class="uri">https://www.data.gouv.fr/fr/pages/donnees-des-elections/</a></p>
+<p>intérêt de la maille du bureau de vote</p>
+<p>Chercher <em>REU</em> au niveau de la zone de recherche de data.gouv,
+quelles perspectives pour les chercheurs ?</p>
+</div>
+<div id="préparer-les-données" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Préparer les
+données</h2>
+<p>On utilise pour le cours le fichier par bureau de vote des
+présidentielles 2022</p>
+<p>Cet exercice permet d’utiliser dans le tableur :</p>
+<ul>
+<li>l’ouverture d’un fichier txt pour le transformer en csv</li>
+<li>la suppression de colonne</li>
+<li>les 3 raccourcis clavier : CTRL + * , CTRL + C, CTRL + V</li>
+<li>Touche de sélection et de déplacement</li>
+<li>tri</li>
+<li>filtre</li>
+</ul>
+<p>L’objectif est que chaque étudiant choisisse une ville (avec au moins
+5 bureaux de vote)</p>
+<p>Pour 2022, on rajoute les étiquettes des colonnes manquantes</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data2022 <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="st">&quot;data/gros/resultats-par-niveau-burvot-t1-france-entiere.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;Latin1&quot;</span>, <span class="at">header =</span> T)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data2022)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    69682 obs. of  105 variables:
+##  $ Code.du.département          : chr  &quot;1&quot; &quot;1&quot; &quot;1&quot; &quot;1&quot; ...
+##  $ Libellé.du.département       : chr  &quot;Ain&quot; &quot;Ain&quot; &quot;Ain&quot; &quot;Ain&quot; ...
+##  $ Code.de.la.circonscription   : int  4 5 5 5 5 5 5 5 5 5 ...
+##  $ Libellé.de.la.circonscription: chr  &quot;4ème circonscription&quot; &quot;5ème circonscription&quot; &quot;5ème circonscription&quot; &quot;5ème circonscription&quot; ...
+##  $ Code.de.la.commune           : int  1 2 4 4 4 4 4 4 4 4 ...
+##  $ Libellé.de.la.commune        : chr  &quot;L&#39;Abergement-Clémenciat&quot; &quot;L&#39;Abergement-de-Varey&quot; &quot;Ambérieu-en-Bugey&quot; &quot;Ambérieu-en-Bugey&quot; ...
+##  $ Code.du.b.vote               : chr  &quot;1&quot; &quot;1&quot; &quot;1&quot; &quot;2&quot; ...
+##  $ Inscrits                     : int  645 213 1129 1128 1213 933 1047 1152 1034 1129 ...
+##  $ Abstentions                  : int  108 38 266 265 246 224 324 278 247 228 ...
+##  $ X..Abs.Ins                   : num  16.7 17.8 23.6 23.5 20.3 ...
+##  $ Votants                      : int  537 175 863 863 967 709 723 874 787 901 ...
+##  $ X..Vot.Ins                   : num  83.3 82.2 76.4 76.5 79.7 ...
+##  $ Blancs                       : int  16 3 18 15 10 8 11 8 9 9 ...
+##  $ X..Blancs.Ins                : num  2.48 1.41 1.59 1.33 0.82 0.86 1.05 0.69 0.87 0.8 ...
+##  $ X..Blancs.Vot                : num  2.98 1.71 2.09 1.74 1.03 1.13 1.52 0.92 1.14 1 ...
+##  $ Nuls                         : int  1 1 5 6 8 4 5 10 2 6 ...
+##  $ X..Nuls.Ins                  : num  0.16 0.47 0.44 0.53 0.66 0.43 0.48 0.87 0.19 0.53 ...
+##  $ X..Nuls.Vot                  : num  0.19 0.57 0.58 0.7 0.83 0.56 0.69 1.14 0.25 0.67 ...
+##  $ Exprimés                     : int  520 171 840 842 949 697 707 856 776 886 ...
+##  $ X..Exp.Ins                   : num  80.6 80.3 74.4 74.7 78.2 ...
+##  $ X..Exp.Vot                   : num  96.8 97.7 97.3 97.6 98.1 ...
+##  $ N.Panneau                    : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ Sexe                         : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...
+##  $ Nom                          : chr  &quot;ARTHAUD&quot; &quot;ARTHAUD&quot; &quot;ARTHAUD&quot; &quot;ARTHAUD&quot; ...
+##  $ Prénom                       : chr  &quot;Nathalie&quot; &quot;Nathalie&quot; &quot;Nathalie&quot; &quot;Nathalie&quot; ...
+##  $ Voix                         : int  3 2 4 6 8 4 7 4 3 2 ...
+##  $ X..Voix.Ins                  : num  0.47 0.94 0.35 0.53 0.66 0.43 0.67 0.35 0.29 0.18 ...
+##  $ X..Voix.Exp                  : num  0.58 1.17 0.48 0.71 0.84 0.57 0.99 0.47 0.39 0.23 ...
+##  $ N.Panneau.1                  : int  2 2 2 2 2 2 2 2 2 2 ...
+##  $ Sexe.1                       : chr  &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; ...
+##  $ Nom.1                        : chr  &quot;ROUSSEL&quot; &quot;ROUSSEL&quot; &quot;ROUSSEL&quot; &quot;ROUSSEL&quot; ...
+##  $ Prénom.1                     : chr  &quot;Fabien&quot; &quot;Fabien&quot; &quot;Fabien&quot; &quot;Fabien&quot; ...
+##  $ Voix.1                       : int  6 7 30 13 18 21 22 24 22 23 ...
+##  $ X..Voix.Ins.1                : num  0.93 3.29 2.66 1.15 1.48 2.25 2.1 2.08 2.13 2.04 ...
+##  $ X..Voix.Exp.1                : num  1.15 4.09 3.57 1.54 1.9 3.01 3.11 2.8 2.84 2.6 ...
+##  $ N.Panneau.2                  : int  3 3 3 3 3 3 3 3 3 3 ...
+##  $ Sexe.2                       : chr  &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; ...
+##  $ Nom.2                        : chr  &quot;MACRON&quot; &quot;MACRON&quot; &quot;MACRON&quot; &quot;MACRON&quot; ...
+##  $ Prénom.2                     : chr  &quot;Emmanuel&quot; &quot;Emmanuel&quot; &quot;Emmanuel&quot; &quot;Emmanuel&quot; ...
+##  $ Voix.2                       : int  150 50 159 201 229 156 132 175 189 212 ...
+##  $ X..Voix.Ins.2                : num  23.3 23.5 14.1 17.8 18.9 ...
+##  $ X..Voix.Exp.2                : num  28.9 29.2 18.9 23.9 24.1 ...
+##  $ N.Panneau.3                  : int  4 4 4 4 4 4 4 4 4 4 ...
+##  $ Sexe.3                       : chr  &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; ...
+##  $ Nom.3                        : chr  &quot;LASSALLE&quot; &quot;LASSALLE&quot; &quot;LASSALLE&quot; &quot;LASSALLE&quot; ...
+##  $ Prénom.3                     : chr  &quot;Jean&quot; &quot;Jean&quot; &quot;Jean&quot; &quot;Jean&quot; ...
+##  $ Voix.3                       : int  18 10 24 19 28 16 19 20 19 32 ...
+##  $ X..Voix.Ins.3                : num  2.79 4.69 2.13 1.68 2.31 1.71 1.81 1.74 1.84 2.83 ...
+##  $ X..Voix.Exp.3                : num  3.46 5.85 2.86 2.26 2.95 2.3 2.69 2.34 2.45 3.61 ...
+##  $ N.Panneau.4                  : int  5 5 5 5 5 5 5 5 5 5 ...
+##  $ Sexe.4                       : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...
+##  $ Nom.4                        : chr  &quot;LE PEN&quot; &quot;LE PEN&quot; &quot;LE PEN&quot; &quot;LE PEN&quot; ...
+##  $ Prénom.4                     : chr  &quot;Marine&quot; &quot;Marine&quot; &quot;Marine&quot; &quot;Marine&quot; ...
+##  $ Voix.4                       : int  149 23 237 210 227 172 178 207 188 227 ...
+##  $ X..Voix.Ins.4                : num  23.1 10.8 21 18.6 18.7 ...
+##  $ X..Voix.Exp.4                : num  28.6 13.4 28.2 24.9 23.9 ...
+##  $ N.Panneau.5                  : int  6 6 6 6 6 6 6 6 6 6 ...
+##  $ Sexe.5                       : chr  &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; ...
+##  $ Nom.5                        : chr  &quot;ZEMMOUR&quot; &quot;ZEMMOUR&quot; &quot;ZEMMOUR&quot; &quot;ZEMMOUR&quot; ...
+##  $ Prénom.5                     : chr  &quot;Éric&quot; &quot;Éric&quot; &quot;Éric&quot; &quot;Éric&quot; ...
+##  $ Voix.5                       : int  43 14 69 68 74 40 46 67 74 92 ...
+##  $ X..Voix.Ins.5                : num  6.67 6.57 6.11 6.03 6.1 4.29 4.39 5.82 7.16 8.15 ...
+##  $ X..Voix.Exp.5                : num  8.27 8.19 8.21 8.08 7.8 ...
+##  $ N.Panneau.6                  : int  7 7 7 7 7 7 7 7 7 7 ...
+##  $ Sexe.6                       : chr  &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; ...
+##  $ Nom.6                        : chr  &quot;MÉLENCHON&quot; &quot;MÉLENCHON&quot; &quot;MÉLENCHON&quot; &quot;MÉLENCHON&quot; ...
+##  $ Prénom.6                     : chr  &quot;Jean-Luc&quot; &quot;Jean-Luc&quot; &quot;Jean-Luc&quot; &quot;Jean-Luc&quot; ...
+##  $ Voix.6                       : int  66 41 216 194 227 202 226 210 159 170 ...
+##  $ X..Voix.Ins.6                : num  10.2 19.2 19.1 17.2 18.7 ...
+##  $ X..Voix.Exp.6                : num  12.7 24 25.7 23 23.9 ...
+##  $ N.Panneau.7                  : int  8 8 8 8 8 8 8 8 8 8 ...
+##  $ Sexe.7                       : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...
+##  $ Nom.7                        : chr  &quot;HIDALGO&quot; &quot;HIDALGO&quot; &quot;HIDALGO&quot; &quot;HIDALGO&quot; ...
+##  $ Prénom.7                     : chr  &quot;Anne&quot; &quot;Anne&quot; &quot;Anne&quot; &quot;Anne&quot; ...
+##  $ Voix.7                       : int  5 3 15 19 16 8 6 18 10 20 ...
+##  $ X..Voix.Ins.7                : num  0.78 1.41 1.33 1.68 1.32 0.86 0.57 1.56 0.97 1.77 ...
+##  $ X..Voix.Exp.7                : num  0.96 1.75 1.79 2.26 1.69 1.15 0.85 2.1 1.29 2.26 ...
+##  $ N.Panneau.8                  : int  9 9 9 9 9 9 9 9 9 9 ...
+##  $ Sexe.8                       : chr  &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; ...
+##  $ Nom.8                        : chr  &quot;JADOT&quot; &quot;JADOT&quot; &quot;JADOT&quot; &quot;JADOT&quot; ...
+##  $ Prénom.8                     : chr  &quot;Yannick&quot; &quot;Yannick&quot; &quot;Yannick&quot; &quot;Yannick&quot; ...
+##  $ Voix.8                       : int  30 10 25 46 65 15 24 51 33 28 ...
+##  $ X..Voix.Ins.8                : num  4.65 4.69 2.21 4.08 5.36 1.61 2.29 4.43 3.19 2.48 ...
+##  $ X..Voix.Exp.8                : num  5.77 5.85 2.98 5.46 6.85 2.15 3.39 5.96 4.25 3.16 ...
+##  $ N.Panneau.9                  : int  10 10 10 10 10 10 10 10 10 10 ...
+##  $ Sexe.9                       : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...
+##  $ Nom.9                        : chr  &quot;PÉCRESSE&quot; &quot;PÉCRESSE&quot; &quot;PÉCRESSE&quot; &quot;PÉCRESSE&quot; ...
+##  $ Prénom.9                     : chr  &quot;Valérie&quot; &quot;Valérie&quot; &quot;Valérie&quot; &quot;Valérie&quot; ...
+##  $ Voix.9                       : int  26 8 40 42 35 33 23 43 45 48 ...
+##  $ X..Voix.Ins.9                : num  4.03 3.76 3.54 3.72 2.89 3.54 2.2 3.73 4.35 4.25 ...
+##  $ X..Voix.Exp.9                : num  5 4.68 4.76 4.99 3.69 4.73 3.25 5.02 5.8 5.42 ...
+##  $ N.Panneau.10                 : int  11 11 11 11 11 11 11 11 11 11 ...
+##  $ Sexe.10                      : chr  &quot;M&quot; &quot;M&quot; &quot;M&quot; &quot;M&quot; ...
+##  $ Nom.10                       : chr  &quot;POUTOU&quot; &quot;POUTOU&quot; &quot;POUTOU&quot; &quot;POUTOU&quot; ...
+##  $ Prénom.10                    : chr  &quot;Philippe&quot; &quot;Philippe&quot; &quot;Philippe&quot; &quot;Philippe&quot; ...
+##  $ Voix.10                      : int  3 3 8 4 3 4 8 8 5 3 ...
+##  $ X..Voix.Ins.10               : num  0.47 1.41 0.71 0.35 0.25 0.43 0.76 0.69 0.48 0.27 ...
+##  $ X..Voix.Exp.10               : num  0.58 1.75 0.95 0.48 0.32 0.57 1.13 0.93 0.64 0.34 ...
+##  $ N.Panneau.11                 : int  12 12 12 12 12 12 12 12 12 12 ...
+##   [list output truncated]</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>bondy2022 <span class="ot">&lt;-</span> data2022 [ data2022<span class="sc">$</span>Libellé.de.la.commune <span class="sc">==</span> <span class="st">&quot;Bondy&quot;</span>,]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(bondy2022, <span class="st">&quot;data/bondy2022.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>data2002 <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="st">&quot;data/gros/PR02_BVot_T1T2.csv&quot;</span>, <span class="at">fileEncoding=</span> <span class="st">&quot;Latin1&quot;</span>,<span class="at">header=</span>F,<span class="at">skip=</span><span class="dv">18</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data2002)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    1154537 obs. of  13 variables:
+##  $ V1 : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ V2 : chr  &quot;01&quot; &quot;01&quot; &quot;01&quot; &quot;01&quot; ...
+##  $ V3 : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ V4 : chr  &quot;L&#39;Abergement-Clémenciat&quot; &quot;L&#39;Abergement-Clémenciat&quot; &quot;L&#39;Abergement-Clémenciat&quot; &quot;L&#39;Abergement-Clémenciat&quot; ...
+##  $ V5 : chr  &quot;0001&quot; &quot;0001&quot; &quot;0001&quot; &quot;0001&quot; ...
+##  $ V6 : int  563 563 563 563 563 563 563 563 563 563 ...
+##  $ V7 : int  442 442 442 442 442 442 442 442 442 442 ...
+##  $ V8 : int  427 427 427 427 427 427 427 427 427 427 ...
+##  $ V9 : int  2 3 4 5 6 7 8 9 10 11 ...
+##  $ V10: chr  &quot;LEPAGE&quot; &quot;GLUCKSTEIN&quot; &quot;BAYROU&quot; &quot;CHIRAC&quot; ...
+##  $ V11: chr  &quot;CORINNE&quot; &quot;DANIEL&quot; &quot;FRANCOIS&quot; &quot;JACQUES&quot; ...
+##  $ V12: chr  &quot;LEPA&quot; &quot;GLUC&quot; &quot;BAYR&quot; &quot;CHIR&quot; ...
+##  $ V13: int  9 1 30 66 82 12 28 23 60 6 ...</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data2002 <span class="ot">&lt;-</span> data2002 [, <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span><span class="sc">:</span><span class="dv">8</span>,<span class="dv">10</span>,<span class="dv">13</span>)]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>var <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ville&quot;</span>,<span class="st">&quot;bv&quot;</span>   ,<span class="st">&quot;inscrits&quot;</span> ,<span class="st">&quot;votants&quot;</span>, <span class="st">&quot;exprimes&quot;</span>, <span class="st">&quot;nom&quot;</span>,  <span class="st">&quot;nb&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data2002) <span class="ot">&lt;-</span> var</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data2002)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    1154537 obs. of  7 variables:
+##  $ ville   : chr  &quot;L&#39;Abergement-Clémenciat&quot; &quot;L&#39;Abergement-Clémenciat&quot; &quot;L&#39;Abergement-Clémenciat&quot; &quot;L&#39;Abergement-Clémenciat&quot; ...
+##  $ bv      : chr  &quot;0001&quot; &quot;0001&quot; &quot;0001&quot; &quot;0001&quot; ...
+##  $ inscrits: int  563 563 563 563 563 563 563 563 563 563 ...
+##  $ votants : int  442 442 442 442 442 442 442 442 442 442 ...
+##  $ exprimes: int  427 427 427 427 427 427 427 427 427 427 ...
+##  $ nom     : chr  &quot;LEPAGE&quot; &quot;GLUCKSTEIN&quot; &quot;BAYROU&quot; &quot;CHIRAC&quot; ...
+##  $ nb      : int  9 1 30 66 82 12 28 23 60 6 ...</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>bondy2002 <span class="ot">&lt;-</span> data2002 [ data2002<span class="sc">$</span>ville <span class="sc">==</span> <span class="st">&quot;Bondy&quot;</span>,]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(bondy2002, <span class="st">&quot;data/bondy2002.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="présentation-rapide-vous-êtes-nombreux" class="section level1"
+number="3">
+<h1><span class="header-section-number">3</span> Présentation rapide
+(vous êtes nombreux !)</h1>
+<div id="qui-sont-les-étudiants" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Qui sont les
+étudiants ?</h2>
+<ul>
+<li>74 étudiants sur 3 cours</li>
+</ul>
+<p>Les questions posées sont sur le passé / présent / futur des
+étudiants, leur appétence en stats et le nombre d’années depuis le
+dernier apprentissage.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>etudiant <span class="ot">&lt;-</span>  <span class="fu">read.csv</span>(<span class="st">&quot;data/cours1.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(etudiant)</span></code></pre></div>
+<pre><code>##  [1] &quot;X&quot;                                                
+##  [2] &quot;presence&quot;                                         
+##  [3] &quot;prénom&quot;                                           
+##  [4] &quot;nom&quot;                                              
+##  [5] &quot;passé&quot;                                            
+##  [6] &quot;présent&quot;                                          
+##  [7] &quot;futur&quot;                                            
+##  [8] &quot;appétence.stats..passionnément.4...pas.du.tout.1.&quot;
+##  [9] &quot;dernière.année.apprentissage.stats..en.nb.années.&quot;
+## [10] &quot;groupe&quot;</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(etudiant)[<span class="dv">8</span><span class="sc">:</span><span class="dv">9</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;appétence&quot;</span>, <span class="st">&quot;nb d&#39;années&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">&quot;img/quisontils.png&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">16</span>,<span class="dv">2</span>,<span class="dv">4</span>))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">2</span>))</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">9</span>){</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">16</span>,<span class="dv">2</span>,<span class="dv">4</span>))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">barplot</span>(<span class="fu">sort</span>(<span class="fu">table</span>(etudiant [,i])), <span class="at">border =</span> <span class="cn">NA</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">horiz =</span> T, <span class="at">las =</span> <span class="dv">2</span>, <span class="at">cex.names =</span> <span class="fl">0.8</span>, </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">main =</span> <span class="fu">names</span> (etudiant) [i])</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<pre><code>## png 
+##   2</code></pre>
+<p><img src="img/quisontils.png" /></p>
+</div>
+<div id="présence-et-rendu-des-devoirs-chiffres-clés"
+class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Présence et rendu des
+devoirs : chiffres clés</h2>
+<div id="effectif-et-cours" class="section level3" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Effectif et
+cours</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fic <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;data/&quot;</span>, <span class="at">pattern =</span> <span class="st">&quot;cours&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># on recherche le fichier le plus haut</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>nb <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">as.integer</span>(<span class="fu">substring</span>(fic, <span class="dv">6</span>,<span class="dv">7</span>)))</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nb) {</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  nomFic <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;data/cours&quot;</span>, i, <span class="st">&quot;.csv&quot;</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(nomFic, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> data [data [,<span class="dv">2</span>] <span class="sc">==</span> <span class="st">&quot;oui&quot;</span>,]</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  tmp <span class="ot">&lt;-</span> <span class="fu">table</span>(data<span class="sc">$</span>groupe)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tab , tmp)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>tab</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(tab) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;cours &quot;</span>,<span class="fu">seq</span>(<span class="dv">1</span>,nb, <span class="at">by =</span> <span class="dv">1</span>))</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="fu">paste0</span>(<span class="st">&quot;cours &quot;</span>,<span class="fu">seq</span>(<span class="dv">1</span>,nb, <span class="at">by =</span> <span class="dv">1</span>))</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
+<p>Graphique</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(tab, <span class="at">beside =</span> T, <span class="at">main =</span> <span class="st">&quot;nombre d&#39;étudiants par groupe et par cours&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;groupe&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;nb&quot;</span>, <span class="at">col =</span> <span class="fu">terrain.colors</span>(nb) </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>        , <span class="at">border =</span> <span class="cn">NA</span>, <span class="at">legend =</span>  F)</span></code></pre></div>
+</div>
+<div id="les-rendus-dexercices" class="section level3" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> Les rendus
+d’exercices</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rendu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">56</span>,<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>titre <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;distribution&quot;</span>, <span class="st">&quot;univarié&quot;</span>, <span class="st">&quot;khi2&quot;</span>, <span class="st">&quot;khi2bis&quot;</span>, <span class="st">&quot;regression&quot;</span>, <span class="st">&quot;boxplot&quot;</span>, <span class="st">&quot;variance&quot;</span>, <span class="st">&quot;4 variables&quot;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">8</span>,<span class="dv">6</span>,<span class="dv">6</span>,<span class="dv">6</span>))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">barplot</span>(rendu, <span class="at">names =</span> titre, <span class="at">cex.names =</span> <span class="fl">0.8</span>, <span class="at">las =</span> <span class="dv">2</span>, <span class="at">main =</span> <span class="st">&quot;rendu devoirs (effectif 75 étudiants environ)&quot;</span>, <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(p, <span class="at">y =</span> rendu <span class="sc">-</span> <span class="dv">1</span>, <span class="at">labels =</span> rendu )</span></code></pre></div>
+<p><img src="intro_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div id="les-notes-des-exercices" class="section level4"
+number="3.2.2.1">
+<h4><span class="header-section-number">3.2.2.1</span> Les notes des
+exercices</h4>
+<ul>
+<li>Le critère externe : des points faciles ?</li>
+</ul>
+<p>Au 3e devoir, sur 29 rendus, la moitié (15) ne mettent pas le bon
+nom, ni la bonne extension. Au 4e, sur 14, 10 ont utilisé bon nom et
+bonne extension.</p>
+<ul>
+<li>Distribution des totaux</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>devoir <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/notes.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="at">dec=</span><span class="st">&quot;,&quot;</span>, <span class="at">na.strings =</span> <span class="st">&#39;-&#39;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> (<span class="fu">apply</span>(devoir [,<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>], <span class="dv">1</span>, sum, <span class="at">na.rm =</span> T))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>resSansZero <span class="ot">&lt;-</span> res [res  <span class="sc">!=</span><span class="dv">0</span>]</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(resSansZero)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>densite <span class="ot">&lt;-</span> <span class="fu">density</span>(res)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>densite2 <span class="ot">&lt;-</span> <span class="fu">density</span>(resSansZero)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(res, <span class="at">main =</span> <span class="st">&quot;Répartion du cumul des notes des 4 devoirs (max 17, 87 obs)&quot;</span>, </span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;notes&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;nb&quot;</span>, <span class="at">freq =</span> T,<span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(res),  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">median</span>(res),  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(resSansZero, <span class="at">main =</span> <span class="st">&quot;Sans zéro (59 obs)&quot;</span>, <span class="at">freq =</span> T,<span class="at">border =</span> <span class="cn">NA</span>,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;notes&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;nb&quot;</span>)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(resSansZero),  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">median</span>(resSansZero),  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p>Beaucoup de notes très faibles, mais pas seulement.</p>
+</div>
+</div>
+</div>
+<div id="notes-finales" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Notes finales</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>note <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/noteFin.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>, <span class="at">na.strings =</span> <span class="st">&quot;en attente&quot;</span>, <span class="at">dec =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(note<span class="sc">$</span>note.sur<span class="fl">.20</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(note<span class="sc">$</span>note.sur<span class="fl">.20</span>, <span class="at">main =</span> <span class="st">&quot;Etalement note finale - 95 obs&quot;</span>, <span class="at">freq =</span> T, <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>resSansZero <span class="ot">&lt;-</span> note [note<span class="sc">$</span>note.sur<span class="fl">.20</span>  <span class="sc">!=</span><span class="dv">0</span>,]</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(note<span class="sc">$</span>note.sur<span class="fl">.20</span>, <span class="at">na.rm =</span> T),  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">mean</span>(note<span class="sc">$</span>note.sur<span class="fl">.20</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(resSansZero<span class="sc">$</span>note.sur<span class="fl">.20</span>, <span class="at">main =</span> <span class="st">&quot;Etalement note finale - 73 obs&quot;</span>, <span class="at">freq =</span> T, <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(resSansZero<span class="sc">$</span>note.sur<span class="fl">.20</span>, <span class="at">na.rm =</span> T),  <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="ressources-autre-que-la-bibliographie-officielle"
+class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Ressources autre que la
+bibliographie officielle</h1>
+<p>2 cours universitaires disponibles sur internet</p>
+<ul>
+<li><a
+href="http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm"
+class="uri">http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm</a></li>
+<li><a
+href="http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm"
+class="uri">http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm</a></li>
+</ul>
+<p>Pour R, la base de tout est</p>
+<p>R et espace (<a
+href="https://archives.framabook.org/r-et-espace/index.html"
+class="uri">https://archives.framabook.org/r-et-espace/index.html</a>)</p>
+</div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<small><p>L5GEABIM Analyses bivariées et multivariées</p></small>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

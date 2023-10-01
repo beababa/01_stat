@@ -1,4 +1,32 @@
-https://beababa.github.io/intro.html
-
-
-https://lite.framacalc.org/coursStatSorbonne2023
+name: "stats"
+navbar:
+  left:
+    - text: "Introduction"
+      href: intro.html
+    - text: "univariées"
+      href: jour1.html
+    - text: "bivariées"
+      href: jour2.html
+    - text: "khi 2"
+      href: jour3.html   
+    - text: "régression"
+      href: jour3.html 
+    - text: "examen"
+      href: jour3.html 
+    - text: "variance"
+      href: jour3.html 
+    - text: "multivariées"
+      href: jour3.html 
+  right:
+    - icon: fa-github
+      href: https://github.com/beababa/coursP8
+output: 
+  html_document:
+    toc_float: TRUE  
+    theme: united
+    highlight: tango
+    include:
+      after_body: footer.html
+    number_sections: yes
+    exclude: [data-raw, data]
+    css: css/styles.css
