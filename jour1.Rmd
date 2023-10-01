@@ -353,55 +353,79 @@ liste des colonnes :
 
 
 
-### Corrections quelques remarques (2022)
+### Corrections quelques remarques 
 
 L'objectif de l'exercice était d'obtenir un commentaire clair avec quelques repères statistiques.
 
+![](img/bonmed.png)
 
-#### Les bons graphiques
-
-
-##### Un graphique du TIG
-
-![](img/4erreurBon.png)
-
-
-##### Une diagramme de répartition
-
-
-![](img/bonDevoir3.png)
-
-
-, ##### Quelles erreurs dans les graphiques suivants ?
-
-![](img/1erreur.png)
-![](img/2erreur.JPG)
-![](img/3erreur.png)
-
-### Les commentaires
-
-Beaucoup d'étudiants ne voient pas la nécessité d'un commentaire...
-
-#### Commentaire clair
-
-*La moyenne et la médiane sont très proches. En effet, en moyenne, les logements de la résidence possèdent 3 pièces et 50 % des logements possèdent moins de 3 pièces. On peut en déduire que la série est assez homogène.De plus, l'écart type est faible, ce qui signifie que les valeurs sont peu dispersées autour de la moyenne et donc il vient confirmer que la série est homogène.*
-
-
-#### trop technique 
-
-![](img/tropTechnique.png)
+![](img/indicComplet.png)
+![](img/indicAppui.png)
 
 
 
-#### Des commentaires intéressants
+
+##### Quelles erreurs  ?
 
 
-##### Un peu confus.
+##### Facile à évaluer
 
-![](img/bonDevoir1.png)
+- Mise en forme : zéro
 
-##### Une réflexion sur le terme *hétérogène*
+Pas d'export direct de vos tableaux excel, svp !
+
+étudiants exportant leur .pdf en entier 5
+
+1 page suffit, quelques lignes de commentaire pas technique
+
+A l'inverse, penser quand même à mettre ville, année, et candidat
 
 
+- Pas de respect de la consigne : zéro
 
-![](img/bonCommentaire.png)
+exemple : variable des inscrits, graphique de la fréquence.
+
+
+* Le plus original :
+
+![](img/indicOriginal.png)
+
+Pourquoi prendre le carré des moyennes ?
+
+* le plus incompréhensible :
+
+![](img/mauvaisindic.png)
+
+* attention aux commentaires trop techniques
+
+
+![](img/indicTechnique.png)
+
+##### Non pris en compte
+
+- Affichage de la médiane : ce n'est pas très facile sous le tableur.
+
+
+- graphique du TIG et forme de la distribution
+
+Attention, le graphique du TIG ne permet pas de voir la forme de la distribution.
+
+Du coup, sans doute beaucoup d'étudiants n'ont pas osé parler de symétrie / dissymétrie. 
+
+Le candidat a un petit nombre de votes dans beaucoup de bureaux, les valeurs faibles tirent la moyenne vers le bas,  moyenne < médiane (cas Taubira)
+Le candidat a un grand nombre de votes dans beaucoup de bureaux, les valeurs fortes tirent la moyenne vers le haut,  moyenne > médiane (cas Chevènement)
+
+Dans les 2 cas, on analyse la médiane, c'est elle qui est la valeur centrale la plus représentative.
+
+##### Erreurs intéressantes par rapport à l'écart type
+
+
+- Sauf cas extrême, L'écart type ne peut pas avoir le même ordre de grandeur que la moyenne / médiane.
+
+- Attention, ce n'est pas parce que médiane et moyenne se confondent que l'écart type est petit...
+
+- La taille de l'écart type est à rapporter à l'indicateur central pour qualifier son importance.
+
+ex : écart type 25 sur une moyenne / médiane autour de 100
+
+
