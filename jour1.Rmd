@@ -169,7 +169,7 @@ Le mieux : *Discrétisation des bureaux de vote en fonction des inscrits*
 Il faut afficher les bornes.
   
   
-  ![]](img/faux)
+  ![](img/faux.png)
 
 
 Affichage de l'histogramme dans R
@@ -262,7 +262,8 @@ Pour la variable abstention, quelle est l'indicateur le plus utile ?
 
 - La médiane est dans une distribution la valeur la plus *proche* de toutes les autres
 
-Il s'agit d'une propriété mathématique de la médiane. 
+Il s'agit d'une propriété mathématique de la médiane. Si la distribution est disymétrique, cette valeur est le vrai centre de 
+la distribution.
 
 - les valeurs extrêmes *décentrent* la moyenne
 
@@ -424,8 +425,11 @@ Dans les 2 cas, on analyse la médiane, c'est elle qui est la valeur centrale la
 
 - Attention, ce n'est pas parce que médiane et moyenne se confondent que l'écart type est petit...
 
+ex : vote pour un candidat clivant mais peu réprésentatif : 10 voix par bureau en moyenne.
+mais 5 bureaux avec 20 voix et 5 autres avec 0 voix
+Dans ce cas, la valeur de la moyenne (10) est égale à celle de l'écart type.
+
 - La taille de l'écart type est à rapporter à l'indicateur central pour qualifier son importance.
 
-ex : écart type 25 sur une moyenne / médiane autour de 100
-
+ex : écart type 25 sur une moyenne autour de 100
 

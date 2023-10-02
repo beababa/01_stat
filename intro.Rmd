@@ -80,6 +80,34 @@ write.csv(bondy2002, "data/bondy2002.csv", fileEncoding = "UTF-8")
 
 
 
+
+## Les données des étudiants
+
+Chaque étudiant a choisi une ville pour ses données.
+
+```{r}
+ville <- read.csv("data/cours2.csv")
+ville <- ville [,3]
+villeModif <- read.csv("data/cours3.csv")
+ville <- c(ville, villeModif [,4])
+# tts les villes ont
+ville <- na.omit(ville)
+# recodage pour le zéro
+nb <- nchar(ville)
+df <- data.frame(cbind(ville, nb))
+df$ville [df$nb == 4 ]<- paste0("0", df$ville [df$nb == 4 ] )
+df$nb <- nchar(df$ville)
+table(df$nb)
+df <- df [!(df$nb != 5),]
+# liste des villes utilisées
+library(sf)
+fr <- st_read("data/gros/COMMUNE.shp")
+```
+
+
+
+
+
 # Présentation rapide (vous êtes nombreux !)
 
 ## Qui sont les étudiants ?
@@ -115,7 +143,8 @@ dev.off()
 ### Effectif et cours
 
 ```{r, eval=FALSE}
-fic <- list.files("data/", pattern = "cours")
+fic <- list.files("data/", pattern = "^cours")
+fic
 # on recherche le fichier le plus haut
 nb <- max(as.integer(substring(fic, 6,7)))
 tmp <- NULL
@@ -147,8 +176,8 @@ barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", x
 ### Les rendus d'exercices
 
 ```{r}
-rendu <- c(56,0, 0, 0,0,0,0,0)
-titre <- c("distribution", "univarié", "khi2", "khi2bis", "regression", "boxplot", "variance", "4 variables")
+rendu <- c(56,59, 0, 0,0,0,0,0)
+titre <- c("distribution", "univarié", "contingence", "khi2", "regression", "boxplot", "variance", "4 variables")
 par(mar = c(8,6,6,6))
 p <- barplot(rendu, names = titre, cex.names = 0.8, las = 2, main = "rendu devoirs (effectif 75 étudiants environ)", border = NA)
 text(p, y = rendu - 1, labels = rendu )
@@ -160,30 +189,23 @@ text(p, y = rendu - 1, labels = rendu )
 
 - Le critère externe : des points faciles ?
 
-
-Au 3e devoir, sur 29 rendus, la moitié (15) ne mettent pas le bon nom, ni la bonne extension.
-Au 4e, sur 14, 10 ont utilisé bon nom et bonne extension.
+le nom du fichier
+le temps du rendu (avant la limite)
 
 - Distribution des totaux
 
-```{r, eval=FALSE}
-devoir <- read.csv("data/notes.csv", fileEncoding = "UTF-8", dec=",", na.strings = '-')
-res <- (apply(devoir [,2:5], 1, sum, na.rm = T))
-resSansZero <- res [res  !=0]
-min(resSansZero)
-densite <- density(res)
-densite2 <- density(resSansZero)
-hist(res, main = "Répartion du cumul des notes des 4 devoirs (max 17, 87 obs)", 
-     xlab = "notes", ylab = "nb", freq = T,border = NA)
-abline(v = mean(res),  col = "red")
-abline(v = median(res),  col = "red", lty = 2)
-hist(resSansZero, main = "Sans zéro (59 obs)", freq = T,border = NA,
-     xlab = "notes", ylab = "nb")
-abline(v = mean(resSansZero),  col = "red")
-abline(v = median(resSansZero),  col = "red", lty = 2)
+```{r, eval=T}
+res <- read.csv("data/exo.csv",  na.strings = '-', fileEncoding = "UTF-8")
+# recodage : si note 2, alors note1 = 0 si NA
+res$denombrement [is.na(res$denombrement )& !is.na(res$univarié)] <- 0
+res$denombrement [ is.na(res$univarié)] <- NA
+# graphique
+par(mfrow= c(2,2))
+for (i in (1:length(res))){
+  barplot(table(res[,i]), main = names(res)[i])
+}
 ```
 
-Beaucoup de notes très faibles, mais pas seulement.
 
 
 
