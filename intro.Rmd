@@ -102,6 +102,15 @@ df <- df [!(df$nb != 5),]
 # liste des villes utilisées
 library(sf)
 fr <- st_read("data/gros/COMMUNE.shp")
+# jointure ville code insee pour les résultats
+data2022 <- read.csv2("data/gros/resultats-par-niveau-burvot-t1-france-entiere.csv", fileEncoding = "Latin1", header = T)
+names(data2022)
+str(data2022$Code.de.la.commune)
+# transformation en données texte
+data2022$code <- as.character(data2022$code)
+data2022$nbCar <- nchar(data2022$Code.de.la.commune)
+table(data2022$nbCar)
+paste0(data2022$Code.du.département, data2022$Code.de.la.commune)
 ```
 
 

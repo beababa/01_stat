@@ -153,3 +153,11 @@ Le test est rejeté avec un risque de 5 %
 
 Donc, le dé est truqué.
 
+
+# Mise en pratique sur les résultats des votes 2002
+
+https://jeanpaullaurent.fr/media/docetud/table_khi2_complete.pdf
+
+reference à une table de khi2 avec beaucoup de degrés de liberté
+
+
