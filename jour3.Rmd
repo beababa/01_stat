@@ -11,6 +11,7 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(eval = FALSE)
 ```
 
 # Déroulement
@@ -84,6 +85,73 @@ Analyse après avoir mis le format conditionnel.
 ![](img/ecMoyenne.png)
 
 Qu'apporterait une étude des fréquences conditionnelles en colonnes ?
+
+# Tableau de contingence : correction
+
+## Manipulation du tableau
+
+Il fallait travailler sur les élections 2022. 
+Le tableau est présenté en longueur.
+
+Pour pouvoir obtenir un tableau de contingence :
+
+- Récupérer le nom de chaque candidat avec une formule
+
+
+![](img/continRecup.png)
+- faire une recopie incrémentée sur la droite
+
+- transposer le tableau et faire une copie spéciale valeurs uniquement (CTRL + MAJ + V)
+
+- poser un filtre et récupérer uniquement les noms des candidats
+
+![](img/continFiltre.png)
+
+- ne pas oublier de faire un copier - coller du tableau final en transposant
+
+## Correction rapide
+
+### Description de la donnée
+
+Il s'agit des résultats de la présidentielle sur 2022 à Bondy (chiffres du ministère de l'intérieur via data.gouv.fr)
+
+La donnée comporte 2 variables :
+
+- les 32 bureaux de vote
+-  les 12 candidats
+
+### Graphique
+
+![](img/continGraphique.png)
+Remarquer le titre
+
+au niveau de la présentation des séries, la boite de dialogue *plages de données* permet de classer les séries
+
+![](img/continEtik.png)
+
+### Analyse
+
+Sur les 12 candidats, 3 arrivent en tête dans tous les bureaux avec cependant un 
+vote majoritaire pour Mélenchon dans l'échantillon des 4 bureaux. Les voies se répartissent de manière quasiment homogène sur les 9 autres candidats.
+Même si les bureaux restent différents, les répartitions des votes se ressemblent. Les différences entre bureaux étaient plus marquées en 2002.
+
+
+### Observations sur les villes choisies
+
+
+```{r}
+data <- st_read("data/geo.gpkg", "data2022")
+ind <- grep("^Voix", names(data))
+data <- data [,c(1:4,ind)]
+nb <-length(unique(data$INSEE_COM))
+cog <-unique(data$INSEE_COM)
+i <- 2
+for (i in 1:nb) {
+  tmp <- data [data$INSEE_COM == cog [i], ]
+  tmp <- st_drop_geometry(tmp)
+  apply(tmp, 1, sum)
+}
+```
 
 
 
@@ -216,12 +284,7 @@ Le total de tous les khi2 partiels
 
 
 
-```{r}
-data <- read.csv("data/rplsPieceZone.csv")
-tab <- table(data$NOM_IRIS, data$taille)
-test <- chisq.test(tab)
-test$expected
-```
+
 
 
 C'est le total des khi2 partiels (dans notre exemple 768)
@@ -264,32 +327,38 @@ Les logiciels de stats proposent le risque limite, la valeur de bascule entre le
 
 Comparaison des 2 tableaux
 
+Fréquence conditionnelle en ligne
+
+
+![](img/tabFreqLg.png)
+
+![](img/tabObsTheo.png)
+
 Estimation des écarts fondés sur la pondération des masses
 
 ## Le khi2 met en évidence les variations faibles autour de la moyenne
 
 A partir de quand le khi2 devient inférieur ?
 
-Et si on retire la Remise à Jorelle ?
+Si on prend les résultats de l'élection 2022 où il apparaît que le vote pivot est celui de Mélenchon, le calcul du khi2
+
+
+
 
 
 ```{r}
-tab2 <- tab [-c(6),]
-tab2
+tab <- read.table("data/tabBondy2022.csv", row.names = 1, header = T, sep = ",")
+tab
+(test <-chisq.test(tab))
+# On supprime le vote Mélenchon
+names(tab)
+tab2 <- tab [-c(7),]
 chisq.test(tab2)
 ```
 
-En faisant d'autres essais, le khi2 diminue autour de 100, mais reste largement au dessus du khi2 théorique (entre 33 et 42)
+Le khi2 diminue légèrement, mais reste largement au dessus du khi2 théorique (environ 560)
 
 ## Et en carto...
-
-Graphique
-
-```{r}
-
-dimnames(tab)
-plot(tab, main = "type d'appartement par quartier",col= terrain.colors(3), border = NA, las = 2)
-```
 
 Carte des contributions au khi2
 
@@ -299,154 +368,36 @@ names(test)
 chi2partiel <- round(((test$observed - test$expected)^2 / test$expected),0)
 chi2partielSomme <- apply(chi2partiel, 1,sum)
 chi2partielFreq <- chi2partielSomme/ sum(chi2partielSomme)
-hist(chi2partielFreq)
+hist(chi2partielFreq*100, main = "Distribution des khi2 partiels (%)")
 ```
 
+Beaucoup de petits khi2 (correspond aux petits candidats)
+
 ```{r}
-df <- data.frame(NOM_IRIS = names(chi2partielFreq),
-                 contrib = chi2partielFreq, row.names = NULL
+df <- data.frame(bv = names(chi2partielFreq),
+                 contrib = chi2partielFreq*100, row.names = NULL
                  )
-jointure <- merge(zone, df, by ="NOM_IRIS")
-jointure$num <- rownames(jointure)
-mf_init(zone)
-mf_map(jointure, type = "choro", border = "antiquewhite2", var = "contrib", add = T)
-mf_map(jointure2, pch = 20, col = "antiquewhite3",border = NA, add = T)
-mf_label(jointure, var = "num", overlap = FALSE, col= "white",bg ="black", halo = T, cex = 1.5)
-mf_layout("Taille appartement bailleur social : contribution au chi2", credits = "RPLS2019")
-```
-
-Cette carte permet de commencer à classifier les quartiers par rapport à un modèle d'indépendance, une répartition des logements sociaux type.
-Il serait sans doute intéressant de répéter l'opération mais sur chaque résidence pour avoir une cartographie plus fine du territoire.
-
-# Un autre exemple en exercice
-
-on caractérise les bureaux de vote de façon sommaire. Pour Bondy, il s'agit de distinguer
-- quartiers Nord
-- centre ville
-et - quartiers sud
-
-Vous êtes libres de vos zones à partir des cartes diffusées sur umap.
-
-De même, on simplifie le nombre de candidats : gauche, droite, petits gauches et petits droites
-
-
-
-## Barème
-
-![](img/barème.png)
-
-Importance des commentaires, même non demandés, ils donnaient un sens à tous ces chiffres !
-
-J'avais mis tableau juste pour le khi2, j'ai fini par noter si le tableau était présent ou pas.
-
-### Données
-
-#### Mauvaises réponses (mais intéressantes)
-
-*Dans chacun des 8 quartiers (IRIS) de Bondy, le nombre de foyers pauvres et leur degré de pauvreté*
-
-- il manque le terme *variable* et le type *categorie*, ceci dit la réponse est juste et surtout élégante.
-
-
-*Notre base de données est composée de 3 variables, la 1e, l'identifiant.. la 2e est une variable de catégorie et la dernière nomIRIS est une variable de catégorie. La base de données permet de comprendre si les IRIS qui apparaissent dans le tableaur sont des IRIS qui s'en sortent plutôt bien moins bien et pas du tout.*
-
-- attention aux termes ! *base de données*
-
-- La première variable est la population et non pas une variable comme les autres
-
-- la formulation de l'hypothèse est maladroite (mais elle est là, du coup je l'ai noté comme commentaire du tableau de contingence)
-
-#### Bonne réponse
-
-*Les zones et le type de logement social*
-
-#### Très bonne réponse
-
-
-*Il y a 2 variables : les zones de logements sociaux et le type de logement social (moins pauvre, pauvre et très pauvres). Ces deux variables sont de type catégorie.*
-
-#### Très très bonne réponse
-
-*Nous avons deux variables, la première, le financement et la seconde, le zonage par regroupement d'IRIS, la donnée FINAN du tableau est de type catégorielle (Très pauvre, pauvre, moins pauvre). Elle décrit le type de financement par appartement (càd le loyer versé).*
-
-
-- recodage FINAN en equiv
-- inventaire de logement social, de l'iris à la zone.
-
-
-Deux étudiants ont mis en titre *Type de financement et zone géographique*, impeccable !
-
-
-## Tableau de contingence
-
-
-Une première observation du tableau nous permet de noter des chiffres très disparates d'un quartier à l'autre. La très grosse majorité des logements sociaux quelque soit le quartier sont de type *pauvres*.
-Les *très pauvres* et *pauvres* représentent la même quantité.
-Seul le quartier des Merisiers a quasiment autant de logements *très pauvres*, *moins pauvres*. 
-
-## Effectifs théoriques
-
-Il s'agit de mesurer relativement à la répartition des logements, l'effectif au hasard.
-Ainsi, on voit bien que les logements *très  pauvres* et *moins pauvres* sont en quantité égale dans toutes les zones.
-
-
-## Calcul du khi2
-
-Le khi2 calculé est largement supérieur au khi2 du tableau.
-
-```{r}
-data <- read.csv("data/rplsTypeZone.csv", fileEncoding = "UTF-8")
-tab <- table(data$NOM_IRIS, data$equiv)
-khi2 <- chisq.test(tab)
-khi2$expected
-khi2
-```
-
-Donc il y n'y a pas d'indépendance entre les variables.
-
-### Unique exemple de réponse
-
-
-*On peut donc voir que le test n'est pas valide, le khi2 calculé étant supérieur au khi2 théorique, l'hypothèse du lien entre le financement des logements (maison) et des IRIS est donc nulle*
-
-
-Analyse de cette réponse.
-
-
-(j'ai quand même mis deux points, le truc n'est pas facile et j'attendais un essai)
-
-
-
-### Ce que j'attend désormais
-
-Si on regarde la contribution de chaque zone au modèle, on voit qu'un quartier
-se singularise complètement par rapport aux autres, De Lattre de Tassigny possède autant de logement *moins pauvre* que *pauvre*. Du coup il contribue pour quasiment la moitié au khi2.
-Centre-ville et Noue Caillet ont une sur représentation de logements très pauvres.
-Tous les autres quartiers s'écartent moins du modèle.
-
-
-```{r}
-khi2partiel <- (khi2$observed - khi2$expected) ^2 / khi2$expected
-contrib <- round(apply(khi2partiel,1,sum)/sum(khi2partiel),2)
-hist(contrib)
-```
-
-## Cartographie
-
-
-```{r}
+library(sf)
 library(mapsf)
-df <- data.frame(NOM_IRIS = names(contrib),
-                 contrib = contrib, row.names = NULL
-                 )
-jointure <- merge(zone, df, by ="NOM_IRIS")
-jointure$num <- rownames(jointure)
-mf_init(zone)
-mf_map(jointure, type = "choro", breaks = c(0, 0.1, 0.2,0.50), border = "antiquewhite2", var = "contrib", add = T)
-mf_map(jointure2, pch = 20, col = "antiquewhite3",border = NA, add = T)
-mf_label(jointure, var = "num", overlap = FALSE, col= "white",bg ="black", halo = T, cex = 1.5)
-mf_layout("Type appartement bailleur social : contribution au chi2", credits = "RPLS2019")
+st_layers("data/vote.gpkg")
+bv <- st_read("data/vote.gpkg", "bureauPolyZone")
+jointure <- merge(bv, df, by.x ="numBureau", by.y="bv")
+#jointure$num <- rownames(jointure)
+mf_init(bv)
+mf_map(jointure, type = "choro", border = "antiquewhite2", var = "contrib", leg_val_rnd = 0,add = T)
+mf_label(jointure, var = "numBureau", overlap = FALSE, col= "white",bg ="black", halo = T, cex = 0.8)
+mf_layout("Votes par bureau 2022 : contribution au chi2", credits = "data.gouv")
 ```
+
+Cette carte permet de commencer à classifier les bureaux de vote par rapport à un modèle d'indépendance, une répartition des votes type.
+
+Elle permet de situer précisemment là où l'élection s'est jouée dans les bureaux 5, 24, 2, 15, 29,30
+
+Ce qui est intéressant ici est que ces bureaux sont situés sur l'ensemble du 
+territoire de la commune.
+
+
+
 
 
 
