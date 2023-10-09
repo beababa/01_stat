@@ -11,7 +11,7 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = TRUE)
 ```
 
 # Déroulement
@@ -123,6 +123,7 @@ La donnée comporte 2 variables :
 ### Graphique
 
 ![](img/continGraphique.png)
+
 Remarquer le titre
 
 au niveau de la présentation des séries, la boite de dialogue *plages de données* permet de classer les séries
@@ -139,7 +140,8 @@ Même si les bureaux restent différents, les répartitions des votes se ressemb
 ### Observations sur les villes choisies
 
 
-```{r}
+```{r, eval =F}
+library(sf)
 data <- st_read("data/geo.gpkg", "data2022")
 ind <- grep("^Voix", names(data))
 data <- data [,c(1:4,ind)]
@@ -217,7 +219,7 @@ le khi2 théorique est de 11,7, il est donc inférieur au khi2 observé.
 
 Quand le khi2 théorique est inférieur, le test est rejeté.
 
-Le test est rejeté avec un risque de 5 %
+Le test est rejeté avec un risque de 5 % mais on aurait pu aller jusqu'au risque de 2.5 % (1 chance sur 25)
 
 Donc, le dé est truqué.
 
@@ -268,24 +270,15 @@ rappel : métrique euclidienne plutôt que les valeurs absolues on utilise les c
 
 ### Le Khi2 partiel
 
-On met les écarts rapportés à la valeur théorique d'indépendance au carré.
-Puis on divise par l'effectif théorique.
+- On met les écarts rapportés à la valeur théorique d'indépendance au carré (on mesure ainsi une *distance*)
+
+- on divise par l'effectif théorique (on relativise)
 
 
 
 ![](img/khi2partiel.png)
 
 ### Le Khi2
-
-
-Le total de tous les khi2 partiels
-
-![](img/khi2partiel.png)
-
-
-
-
-
 
 C'est le total des khi2 partiels (dans notre exemple 768)
 
@@ -340,23 +333,37 @@ Estimation des écarts fondés sur la pondération des masses
 
 A partir de quand le khi2 devient inférieur ?
 
+## Variations autour du khi2
+
 Si on prend les résultats de l'élection 2022 où il apparaît que le vote pivot est celui de Mélenchon, le calcul du khi2
 
 
+```{r}
+tab <- read.table("data/tabBondy2022.csv", row.names = 1,
+                  header = T, sep = ",", fileEncoding = "UTF-8")
+(test <-chisq.test(tab))
+```
+
+effectif théorique
+
+```{r, eval=FALSE}
+addmargins(tab)
+#SeffectifThéorique <- 
+```
 
 
+
+On supprime le vote Mélenchon
 
 ```{r}
-tab <- read.table("data/tabBondy2022.csv", row.names = 1, header = T, sep = ",")
-tab
-(test <-chisq.test(tab))
-# On supprime le vote Mélenchon
 names(tab)
 tab2 <- tab [-c(7),]
 chisq.test(tab2)
 ```
 
-Le khi2 diminue légèrement, mais reste largement au dessus du khi2 théorique (environ 560)
+Le khi2 diminue légèrement, mais reste largement au dessus du khi2 théorique
+
+![](img/tabkhi2Gros.png)
 
 ## Et en carto...
 
@@ -373,7 +380,7 @@ hist(chi2partielFreq*100, main = "Distribution des khi2 partiels (%)")
 
 Beaucoup de petits khi2 (correspond aux petits candidats)
 
-```{r}
+```{r, eval=F}
 df <- data.frame(bv = names(chi2partielFreq),
                  contrib = chi2partielFreq*100, row.names = NULL
                  )
