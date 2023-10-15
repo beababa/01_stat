@@ -65,8 +65,9 @@ Pour 2022, on rajoute les étiquettes des colonnes manquantes
 
 ```{r, eval = FALSE}
 # 2022
-data2022 <- read.csv2("data/gros/resultats-par-niveau-burvot-t1-france-entiere.csv", fileEncoding = "Latin1", header = T)
+data2022 <- read.csv("data/gros/resultats-par-niveau-burvot-t1-france-entiere.csv", fileEncoding = "UTF-8", header = T)
 bondy2022 <- data2022 [ data2022$Libellé.de.la.commune == "Bondy",]
+str(bondy2022)
 write.csv(bondy2022, "data/bondy2022.csv", fileEncoding = "UTF-8")
 # 2002
 data2002 <- read.csv2("data/gros/PR02_BVot_T1T2.csv", fileEncoding= "Latin1",header=F,skip=18)
@@ -86,13 +87,13 @@ write.csv(bondy2002, "data/bondy2002.csv", fileEncoding = "UTF-8")
 
 Chaque étudiant a choisi une ville pour ses données.
 
-```{r}
-ville <- read.csv("data/cours2.csv")
+```{r, eval=FALSE}
+ville <- read.csv("data/cours2.csv", colClasses = "character")
 ville <- ville [,3]
-villeModif <- read.csv("data/cours3.csv")
+villeModif <- read.csv("data/cours3.csv", colClasses = "character")
 ville <- c(ville, villeModif [,4])
-# tts les villes ont
-ville <- na.omit(ville)
+# 68 villes différentes
+ville <- unique(na.omit(ville))
 # recodage pour le zéro
 nb <- nchar(ville)
 df <- data.frame(cbind(ville, nb))
@@ -100,10 +101,10 @@ df$ville [df$nb == 4 ]<- paste0("0", df$ville [df$nb == 4 ] )
 df$nb <- nchar(df$ville)
 table(df$nb)
 df <- df [!(df$nb != 5),]
-# liste des villes utilisées
+# liste des villes utilisées = 65
 library(sf)
 library(mapsf)
-fr <- st_read("data/gros/COMMUNE.shp")
+fr <- st_read("data/gros/COMMUNE_CARTO.shp")
 names(df)
 names(fr)
 joint <- merge(fr, df, by.x = "INSEE_COM", by.y= "ville")
@@ -137,14 +138,14 @@ Des choix sur toute l'étendue du territoire de la métropole
 
 Enregistrement des fichiers
 
-```{r}
+```{r, eval=FALSE}
 names(joint2)
 st_write(joint2 [, c(1,8,19:118)], "data/geo.gpkg", "data2022", delete_layer = T)
-write.csv(joint2 [, c(1,8, 19:118), drop = T], "data/data2022.csv", fileEncoding = "UTF-8")
+write.csv(joint2 [, c(1,8, 18:117), drop = T], "data/data2022.csv", fileEncoding = "UTF-8")
 ```
 
 
-Bureaux de vote pour chacune des communes
+Bureaux de vote pour chacune des communes, données texte
 
 ```{r}
 data <- read.csv("data/data2022.csv", fileEncoding = "UTF-8") 
@@ -153,12 +154,19 @@ cog <- unique(data [,c("INSEE_COM","Libellé.de.la.commune")])
 ```
 
 
+
 ## Recodage des variables
+
+
 
 ### Créer des tables de référence
 
+
+
 ![](img/recodageRef.png)
+
 ### Formule rechercheV
+
 
 ![](img/recodageFormule.png)
 
@@ -238,7 +246,7 @@ barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", x
 ### Les rendus d'exercices
 
 ```{r}
-rendu <- c(56,59, 56, 0,0,0,0,0)
+rendu <- c(56,59, 56, 45,0,0,0,0)
 titre <- c("distribution", "univarié", "contingence", "khi2", "regression", "boxplot", "variance", "4 variables")
 par(mar = c(8,6,6,6))
 p <- barplot(rendu, names = titre, cex.names = 0.8, las = 2, main = "rendu devoirs (effectif 75 étudiants environ)", border = NA)
@@ -258,9 +266,10 @@ le temps du rendu (avant la limite)
 
 ```{r, eval=T}
 res <- read.csv("data/exo.csv",  na.strings = '-', fileEncoding = "UTF-8")
+names(res)
 # recodage : si note 2, alors note1 = 0 si NA
-res$denombrement [is.na(res$denombrement )& !is.na(res$univarié)] <- 0
-res$denombrement [ is.na(res$univarié)] <- NA
+res$dénombrement [is.na(res$dénombrement )& !is.na(res$indicateurs)] <- 0
+res$dénombrement [ is.na(res$indicateurs)] <- NA
 # graphique
 par(mfrow= c(2,2))
 for (i in (1:length(res))){
