@@ -18,7 +18,7 @@ On travaille à présent sur les suffrages exprimés et l'abstention.
 
 Comprendre les variables
 
-Enoncer les hypothèses possibles de la comparaison, attention variable explicative (Y) et à expliquer (X)
+Enoncer les hypothèses possibles de la comparaison, attention variable explicative (X) et à expliquer (Y)
 
 (cf moodle exercice *Introduction =régression*)
 
