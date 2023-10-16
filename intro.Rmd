@@ -283,6 +283,7 @@ for (i in (1:length(res))){
 ## Notes finales
 
 
+
 ```{r, eval=FALSE}
 note <- read.csv("data/noteFin.csv", fileEncoding = "UTF-8", na.strings = "en attente", dec = ",")
 summary(note$note.sur.20)

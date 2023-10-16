@@ -114,16 +114,19 @@ La distance MP doit être minimale d'où le terme *droite des moindres carrées*
 
 
 ```{r}
+par(mfrow = c(2,1))
 plot(data$Abstentions, data$ZEMMOUR)
 # modèle de régression
 lm <- lm(data$ZEMMOUR~data$Abstentions)
 abline(lm, lty =2, lwd = 1, col = "red")
-text( data$Abstentions, data$ZEMMOUR,labels = as.character(row.names(data)))
+text( data$Abstentions, data$ZEMMOUR,labels = as.character(row.names(data))
+      , cex=0.6, pos = 1)
 plot(sel$Abstentions, sel$ZEMMOUR)
 # modèle de régression
 lm <- lm(sel$ZEMMOUR~sel$Abstentions)
 abline(lm, lty =2, lwd = 1, col = "red")
-text( sel$Abstentions, sel$ZEMMOUR,labels = as.character(row.names(sel)))
+text( sel$Abstentions, sel$ZEMMOUR,labels = as.character(row.names(sel)), 
+      cex = 0.6,pos = 1)
 ```
 
 
@@ -214,8 +217,15 @@ Les 81 % restant sont liés à d'autres facteurs.
 ![](img/moindreCarre.jpg)
 
 
-Identifiez graphiquement 2 points éloignés de la droite de régression et tenter un 
-commentaire.
+Identifiez graphiquement 2 points éloignés de la droite de régression.
+
+Il peut s'agit par exemple des valeurs minimum et maximum des vote pour Zemmour.
+
+Le bureau 5 apparaît une nouvelle fois confirmant son originalité. Le petit
+nombre de voix pour Zemmour n'implique pas une grande abstention.
+
+Pour le bureau 2,  l'abstention déja importante est à mettre en parallèle
+avec le nombre maximum de voix pour Zemmour dans le cadre de ce bureau.
 
 
 # cartographie des résidus
@@ -230,8 +240,6 @@ bv <- st_read("data/vote.gpkg", "bureauPolyZone")
 
 
 ```{r}
-library(sf)
-library(mapsf)
 residus <- rstudent(lm)
 hist(residus)
 # on calcule les résidus
@@ -242,7 +250,7 @@ dataResidu <- data [data$residus < -1 | data$residus > + 1, drop = F]
 ```{r}
 mf_map(data, var = "residus", type="choro", breaks = c(-3, -2,0,2,3), pal = terrain.colors(4))
 mf_label(bv, var = "numBureau", overlap = FALSE, col= "white",bg ="black", halo = T, cex = 0.8)
-mf_layout("ZEMMOUR et abstention : étude des résidus", credits = "Ministère de l'intérieur; 2022")
+mf_layout("Abstention et Zemmour : étude des résidus", credits = "Ministère de l'intérieur; 2022")
 ```
 
 
