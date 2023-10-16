@@ -25,9 +25,14 @@ Enoncer les hypothèses possibles de la comparaison, attention variable explicat
 
 ```{r}
 data <- read.csv("data/bondy2022.csv", fileEncoding = "UTF-8", dec =".")
-ind <- grep("X..Voix.Exp",names(data))
+names(data)
+ind <- grep("^Voix",names(data))
 ind <- c(ind, 8,10)
 data <- data [, c(ind)] 
+candidats <- c("ARTHAUD",	"ROUSSEL",	"MACRON",	"LASSALLE",	"LE PEN",	"ZEMMOUR",	"MÉLENCHON",
+                 "HIDALGO",	"JADOT",	"PÉCRESSE",	"POUTOU",	"DUPONT-AIGNAN")
+
+names(data) [1:12] <- candidats
 write.csv(data, "data/abs2022.csv")
 ```
 
@@ -36,14 +41,12 @@ write.csv(data, "data/abs2022.csv")
 ## Quel candidat choisir ?
 
 ```{r, echo=F}
-data <- read.csv("data/abs2022.csv", dec = ",")
-i <- 1
+data <- read.csv("data/abs2022.csv", row.names = 1,dec = ",")
+row.names(data) <- data$Code.du.b.vote
+data <- data [,-13]
 par(mfrow = c(3,4))
-for (i in 2:13){
-  candidats <- c("ARTHAUD",	"ROUSSEL",	"MACRON",	"LASSALLE",	"LE PEN",	"ZEMMOUR",	"MÉLENCHON",
-                 "HIDALGO",	"JADOT",	"PÉCRESSE",	"POUTOU",	"DUPONT-AIGNAN")
-
-  plot(data$Abstentions, data [,i], xlab = "nb abst", ylab = "nb voix", main = candidats [i-1] )
+for (i in 1:12){
+  plot(data$Abstentions, data [,i], xlab = "nb abst", ylab = "nb voix", main =  names (data)[i] )
 }
 ```
 
@@ -51,7 +54,6 @@ for (i in 2:13){
 variable explicative et expliquée.
 
 ```{r}
-names(data) <- c("lg", candidats, "bv", "abstentions")
 write.csv (data, "data/abstentions2022VF.csv")
 ```
 
@@ -74,19 +76,27 @@ write.csv (data, "data/abstentions2022VF.csv")
 Retour sur les distributions pour enlever les valeurs aberrantes
 
 ```{r}
-hist(data$abstentions)
+hist(data$Abstentions)
 hist(data$ZEMMOUR)
 ```
 
 On recherche des bornes permettant d'avoir un nuage de points "cohérent".
 Avec le tableur, on fait le graphique puis on ajuste avec le filtre.
 
+Le graphique se met automatiquement à jour
+
+![](img/filtre.png)
+
 ```{r}
-sel <- data [data$abstentions %in% c(150:330) ,]
-sel <- sel [sel$ZEMMOUR > 2,]
-plot(sel$abstentions, sel$ZEMMOUR)
+sel <- data [data$Abstentions %in% c(150:300) ,]
+sel <- sel [sel$ZEMMOUR %in% c(5:32),]
+par(mfrow = c(1,2))
+plot(data$Abstentions, data$ZEMMOUR)
+plot(sel$Abstentions, sel$ZEMMOUR)
 ```
 
+Désormais, on travaille sur la sélection et la totalité de la série pour vérifier
+que la restriction des bornes est utile.
 
 
 # Droite de régression
@@ -104,18 +114,23 @@ La distance MP doit être minimale d'où le terme *droite des moindres carrées*
 
 
 ```{r}
-plot(data$abstentions, data$ZEMMOUR)
+plot(data$Abstentions, data$ZEMMOUR)
 # modèle de régression
-lm <- lm(data$ZEMMOUR~data$abstentions)
+lm <- lm(data$ZEMMOUR~data$Abstentions)
 abline(lm, lty =2, lwd = 1, col = "red")
-text( data$abstentions, data$ZEMMOUR,labels = as.character(data$bv))
+text( data$Abstentions, data$ZEMMOUR,labels = as.character(row.names(data)))
+plot(sel$Abstentions, sel$ZEMMOUR)
+# modèle de régression
+lm <- lm(sel$ZEMMOUR~sel$Abstentions)
+abline(lm, lty =2, lwd = 1, col = "red")
+text( sel$Abstentions, sel$ZEMMOUR,labels = as.character(row.names(sel)))
 ```
 
 
 Dans calc, cliquer sur les points et insérer courbe de tendance
 (on peut également afficher l'équation de la droite.)
 
-Visuellement, on voit bien qu'il existe un lien entre les deux variables, mais la pente de la droite n'est pas très forte. 
+Visuellement, on voit bien qu'il existe un lien entre les deux variables, mais il y a beaucoup de points éparses (les résidus)
 
 Il s'agit maintenant de mesurer précisemment l'intensité du lien à l'aide de calculs.
 
@@ -155,7 +170,8 @@ et coeff (cov / produit des écarts types)
 
 ![](img/formules.png)
 
-![](img/resultat.png)
+![](img/resultats.png)
+
 
 ### Interprétation
 
@@ -165,17 +181,19 @@ Le coefficient évolue de -1 à +1
 
 - Dans les autres cas, les variables sont corrélées négativement ou positivement.
 
-
 - plus la variable est proche de 1, plus l'intensité de la relation entre les deux variables est forte.
 
 Dans notre exemple, lien faible
 
 ```{r}
-varCorr <- data [, c( "abstentions", "ZEMMOUR")]
+varCorr <- data [, c( "Abstentions", "ZEMMOUR")]
+cor(varCorr)
+# Et avec la sélection
+varCorr <- sel [, c( "Abstentions", "ZEMMOUR")]
 cor(varCorr)
 ```
 
-
+Le coefficient augmente mais il reste faible même en ayant supprimé 13 observations.
 
 # Coefficient de détermination
 
@@ -186,9 +204,10 @@ cor(varCorr)^2
 ```
 
 
-L'abstention explique 31 % du vote pour le candidat 6.
+L'abstention explique 19 % du vote pour Zemmour dans le meilleur des cas.
+Cela reste très peu.
 
-Les 69 % restant sont liés à d'autres facteurs.
+Les 81 % restant sont liés à d'autres facteurs.
 
 # Etude des résidus
 
@@ -199,7 +218,6 @@ Identifiez graphiquement 2 points éloignés de la droite de régression et tent
 commentaire.
 
 
-![](img/residu.jpg)
 # cartographie des résidus
 
 
