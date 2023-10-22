@@ -1,0 +1,188 @@
+---
+title: "Examen"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# Données d'exemple
+
+```{r}
+data <- read.csv("data/data2022.csv", fileEncoding = "UTF-8" , colClasses = "character") 
+cog <- unique(data [,c("INSEE_COM","Libellé.de.la.commune")])
+cog
+# 61 communes
+```
+
+```{r}
+vf <- read.csv("data/gros/valeursfoncieres-2022.txt", sep ="|", dec = ",")
+```
+
+code INSEE
+
+pb des zéros, un import en txt n'a pas réglé la question.
+
+
+```{r}
+vf$lg <- sapply(vf$Code.commune, nchar)
+vf$dpt <- sapply(vf$Code.departement, nchar)
+table(vf$dpt)
+table(vf$Code.departement [vf$dpt == "3"])
+# on supprime les DROM
+vf<- vf [vf$dpt < 3, ] 
+table(vf$lg, useNA = "always")
+vf$com <- paste0('00', vf$Code.commune)
+table(sapply(vf$com, nchar))
+right = function (string, char) {
+    substr(string,nchar(string)-(char-1),nchar(string))
+}
+vf$comF <- right(vf$com, 3)
+table(sapply(vf$comF, nchar))
+vf$cog <- paste0(vf$Code.departement, vf$comF)
+table(sapply(vf$cog, nchar))
+```
+
+extraction des 61 communes
+
+
+```{r}
+vfSel <- vf [vf$cog %in% cog$INSEE_COM,]
+length(unique(vfSel$cog))
+```
+
+58 communes
+
+```{r}
+manquants <- setdiff(cog$INSEE_COM, vfSel$cog)
+cog [cog$INSEE_COM %in% manquants,]
+```
+
+```{r}
+vf [grep("MARSEILLE", vf$Commune), c("cog","Commune")]
+# Pour Marseille, on prend le 1er 13201
+vf [grep("^THIONVILLE", vf$Commune), c("cog","Commune")]
+vf [vf$cog == 57672,]
+# Les DVF pour l'Alsace Moselle dans le livre foncier droit local pas d'appli
+vf [grep("^LYON", vf$Commune), c("cog","Commune")]
+# Pour Lyon, le 69381
+manquants <- c('13201', '69381')
+```
+
+```{r}
+autres <- vf [vf$cog %in% manquants,]
+vfSel <- rbind(vfSel, autres)
+```
+
+test bondy
+
+```{r}
+bondy <- vfSel [vfSel$cog == '93010',]
+tab <- table(bondy$Valeur.fonciere)
+hist(bondy$Valeur.fonciere)
+table(bondy$Voie [bondy$Valeur.fonciere > 30000000])
+barplot(table(bondy$Voie [bondy$Valeur.fonciere < 3000]), las = 2)
+```
+
+On enregistre le fichier.
+
+```{r}
+names(vfSel)
+write.csv(vfSel [, c(48,1:43)], "data/gros/vfEXAMEN.csv", fileEncoding = "UTF-8")
+```
+
+
+on enregistre par dpt
+
+
+```{r}
+valDpt <- unique(vfSel$Code.departement)
+for (i in valDpt){
+  sel <- vfSel [vfSel$Code.departement == i,]
+  write.csv2(sel [, c(48,1:43)], paste0("data/examen/vf/", i, "_vfEXAMEN.csv"), fileEncoding = "UTF-8")
+}
+```
+
+
+Autres sources :  base logement
+
+
+```{r}
+lgt <- read.csv2("data/gros/base-ic-logement-2019.CSV", dec = ".")
+names(lgt)
+# rajout Marseille 1 et Lyon 1 13201 69381
+ajout1 <- c(13201, "Marseille 1")
+ajout2 <- c(69381, "Lyon 1")
+cog <- rbind(cog, ajout1, ajout2)
+lgtSel <- lgt [lgt$COM %in% cog$INSEE_COM,]
+length(unique(lgtSel$COM))
+```
+
+
+test Bondy
+
+
+```{r}
+bondy <- lgtSel [lgtSel$COM == '93010',]
+plot(bondy$P19_LOGVAC, bondy$P19_MAISON)
+```
+
+
+enregistrement
+
+```{r}
+valDpt <- unique(vfSel$Code.departement)
+lgtSel$dpt <- substring(lgtSel$COM,1,2)
+for (i in valDpt){
+  sel <- lgtSel [lgtSel$dpt == i,]
+  write.csv2(sel [, c(48,1:43)], paste0("data/examen/lgt/", i, "_lgtEXAMEN.csv"), fileEncoding = "UTF-8")
+}
+```
+
+carreaux
+
+
+```{r}
+library(sf)
+library(mapsf)
+car <- st_read("data/gros/carreaux_200m_met.gpkg")
+# extraction du premier code insee du carreau
+car$cog <- substring(car$lcog_geo,1,5)
+carSel <- car [car$cog %in% cog$INSEE_COM,]
+length(unique(carSel$cog))
+```
+
+toujours 61
+
+
+Bondy
+
+
+```{r}
+bondy <- carSel [carSel$lcog_geo == '93010',]
+plot(bondy$men_pauv, bondy$men_mais)
+hist(bondy$men_pauv)
+str(bondy)
+```
+
+Enregistrement des carraux par commune
+
+```{r}
+valDpt <- unique(vfSel$Code.departement)
+carSel$dpt <- substring(carSel$lcog_geo,1,2)
+carSel <- carSel [,c(37,1:33), drop = T]
+for (i in valDpt){
+  sel <- carSel [carSel$dpt == i,]
+  write.csv2(sel, paste0("data/examen/car/", i, "_carEXAMEN.csv"), fileEncoding = "UTF-8")
+}
+```
+
+
+

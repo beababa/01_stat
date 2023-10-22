@@ -473,6 +473,7 @@ hist(df$contrib)
 bks <- c(0,4,10, 16)
 library(sf)
 library(mapsf)
+png("img/khi2Carte.png")
 bv <- st_read("data/vote.gpkg", "bureauPolyZone", quiet=T)
 jointure <- merge(bv, df, by.x ="numBureau", by.y="bv")
 #jointure$num <- rownames(jointure)
@@ -480,9 +481,12 @@ mf_init(bv)
 mf_map(jointure, type = "choro", border = "antiquewhite2", var = "contrib", breaks = bks ,leg_val_rnd = 0,add = T)
 mf_label(jointure, var = "numBureau", overlap = FALSE, col= "white",bg ="black", halo = T, cex = 0.8)
 mf_layout("Votes par bureau 2022 : contribution au chi2", credits = "data.gouv")
+dev.off()
 ```
 
-Cette carte permet de situer précisemment là où l'élection s'est joué, le bureau 5.
+![](img/khi2Carte.png)
+
+Cette carte permet de situer précisemment les bureaux qui s'écartent le plus de modèle bondinois, en l’occurrence, il s'agit d'abord du bureau 5. On peut imaginer soit un trucage de l'élection, soit les efforts d'un groupe militant spécifique.
 
 Ce qui est intéressant ici est que ces bureaux sont situés sur l'ensemble du 
 territoire de la commune, dans les zones pavillonnaires.

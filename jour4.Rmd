@@ -10,6 +10,7 @@ editor_options:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(eval = TRUE)
 ```
 
 # Données d'exemple
@@ -121,10 +122,11 @@ lm <- lm(data$ZEMMOUR~data$Abstentions)
 abline(lm, lty =2, lwd = 1, col = "red")
 text( data$Abstentions, data$ZEMMOUR,labels = as.character(row.names(data))
       , cex=0.6, pos = 1)
+# Pour la sélection
 plot(sel$Abstentions, sel$ZEMMOUR)
 # modèle de régression
-lm <- lm(sel$ZEMMOUR~sel$Abstentions)
-abline(lm, lty =2, lwd = 1, col = "red")
+lm2 <- lm(sel$ZEMMOUR~sel$Abstentions)
+abline(lm2, lty =2, lwd = 1, col = "red")
 text( sel$Abstentions, sel$ZEMMOUR,labels = as.character(row.names(sel)), 
       cex = 0.6,pos = 1)
 ```
@@ -240,17 +242,25 @@ bv <- st_read("data/vote.gpkg", "bureauPolyZone")
 
 
 ```{r}
-residus <- rstudent(lm)
+residus <- lm$residuals
 hist(residus)
 # on calcule les résidus
 data <- cbind(bv, residus)
-dataResidu <- data [data$residus < -1 | data$residus > + 1, drop = F]
+dataResidu <- data [data$residus < -5 | data$residus > + 5, drop = F]
+
 ```
 
 ```{r}
-mf_map(data, var = "residus", type="choro", breaks = c(-3, -2,0,2,3), pal = terrain.colors(4))
+library(mapsf)
+png("img/residusCarte.png")
+mf_map(data, var = "residus", type="choro", breaks = c(-15, -5,0,10,30), pal = terrain.colors(4))
 mf_label(bv, var = "numBureau", overlap = FALSE, col= "white",bg ="black", halo = T, cex = 0.8)
 mf_layout("Abstention et Zemmour : étude des résidus", credits = "Ministère de l'intérieur; 2022")
+dev.off()
 ```
+
+
+![](img/residusCarte.png)
+
 
 
