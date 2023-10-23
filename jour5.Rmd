@@ -13,14 +13,22 @@ knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-# Données d'exemple
+# Préparation des données
 
 ```{r}
 data <- read.csv("data/data2022.csv", fileEncoding = "UTF-8" , colClasses = "character") 
 cog <- unique(data [,c("INSEE_COM","Libellé.de.la.commune")])
 cog
 # 61 communes
+# On rajoute Rochefort
+rajout <- c(17299, "Rochefort")
+cog <- rbind(cog, rajout)
 ```
+
+62 communes
+
+## DVF
+
 
 ```{r}
 vf <- read.csv("data/gros/valeursfoncieres-2022.txt", sep ="|", dec = ",")
@@ -111,7 +119,7 @@ for (i in valDpt){
 ```
 
 
-Autres sources :  base logement
+## Autres sources :  base logement
 
 
 ```{r}
@@ -146,7 +154,7 @@ for (i in valDpt){
 }
 ```
 
-carreaux
+## Carreaux
 
 
 ```{r}
@@ -172,7 +180,7 @@ hist(bondy$men_pauv)
 str(bondy)
 ```
 
-Enregistrement des carraux par commune
+Enregistrement des carreaux par commune
 
 ```{r}
 valDpt <- unique(vfSel$Code.departement)
@@ -185,4 +193,10 @@ for (i in valDpt){
 ```
 
 
+# Corrections
 
+## Généralités aux 3 groupes
+
+Description des données et notamment de la base géographique
+
+IRIS, 
