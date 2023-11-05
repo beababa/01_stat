@@ -13,7 +13,9 @@ knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-# Données d'exemple
+# Préparation des données
+
+## Lecture du cog
 
 ```{r}
 data <- read.csv("data/data2022.csv", fileEncoding = "UTF-8" , colClasses = "character") 
@@ -21,6 +23,12 @@ cog <- unique(data [,c("INSEE_COM","Libellé.de.la.commune")])
 cog
 # 61 communes
 ```
+
+
+Le cog permet d'avoir l'équivalent libellé ville / code INSEE
+
+
+## Valeurs foncières
 
 ```{r}
 vf <- read.csv("data/gros/valeursfoncieres-2022.txt", sep ="|", dec = ",")
@@ -111,7 +119,7 @@ for (i in valDpt){
 ```
 
 
-Autres sources :  base logement
+##  Base logement
 
 
 ```{r}
@@ -146,7 +154,7 @@ for (i in valDpt){
 }
 ```
 
-carreaux
+## Carreaux Filosofi
 
 
 ```{r}
@@ -172,7 +180,7 @@ hist(bondy$men_pauv)
 str(bondy)
 ```
 
-Enregistrement des carraux par commune
+Enregistrement des carreaux par commune
 
 ```{r}
 valDpt <- unique(vfSel$Code.departement)
@@ -183,6 +191,61 @@ for (i in valDpt){
   write.csv2(sel, paste0("data/examen/car/", i, "_carEXAMEN.csv"), fileEncoding = "UTF-8")
 }
 ```
+
+
+
+# Choix des variables
+
+```{r, eval = T}
+data <- read.csv("data/examenVar.csv")
+knitr::kable(data)
+```
+
+
+# Graphiques à commenter
+
+
+## Groupe 1 logement
+
+### Distribution du logement par nombre d'Iris
+
+![](img/distribLogement.png)
+
+### Ecart observés / théoriques ancienneté logement par iris
+
+![](img/ecartLogement.png)
+
+### Distribution des khi2 partiels
+
+![](img/khi2Logement.png)
+
+### Régression
+
+![](img/regressionLgt.png)
+
+
+## Groupe 2 Filosofi
+
+
+### Distribution du nb d'individus par carreaux
+
+![](img/distribCar.png)
+
+### Ecart observés / théoriques tranches d'age population par carreau
+
+
+![](img/ecartCar.png)
+
+
+### Distribution des khi2 partiels
+
+
+![](img/khi2Car.png)
+
+### Régression
+
+![](img/regressionCar.png)
+
 
 
 
