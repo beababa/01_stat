@@ -175,7 +175,7 @@ et coeff (cov / produit des écarts types)
 
 ![](img/formules.png)
 
-![](img/resultats.png)
+![](img/resultat.png)
 
 
 ### Interprétation
@@ -233,7 +233,7 @@ avec le nombre maximum de voix pour Zemmour dans le cadre de ce bureau.
 # cartographie des résidus
 
 
-```{r}
+```{r, eval=F}
 library(sf)
 bv <- st_read("data/vote.gpkg", "bureauPolyZone")
 ```
@@ -241,7 +241,7 @@ bv <- st_read("data/vote.gpkg", "bureauPolyZone")
 
 
 
-```{r}
+```{r, eval=FALSE}
 residus <- lm$residuals
 hist(residus)
 # on calcule les résidus
@@ -250,7 +250,7 @@ dataResidu <- data [data$residus < -5 | data$residus > + 5, drop = F]
 
 ```
 
-```{r}
+```{r, eval=FALSE}
 library(mapsf)
 png("img/residusCarte.png")
 mf_map(data, var = "residus", type="choro", breaks = c(-15, -5,0,10,30), pal = terrain.colors(4))

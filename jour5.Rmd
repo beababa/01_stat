@@ -14,22 +14,36 @@ knitr::opts_chunk$set(eval = FALSE)
 ```
 
 # Préparation des données
+<<<<<<< HEAD
 
 ## Lecture du cog
+=======
+>>>>>>> 55273af252fdeb311ebbbbd167e2f9f36faa809d
 
 ```{r}
 data <- read.csv("data/data2022.csv", fileEncoding = "UTF-8" , colClasses = "character") 
 cog <- unique(data [,c("INSEE_COM","Libellé.de.la.commune")])
 cog
 # 61 communes
+# On rajoute Rochefort
+rajout <- c(17299, "Rochefort")
+cog <- rbind(cog, rajout)
 ```
 
+<<<<<<< HEAD
 
 Le cog permet d'avoir l'équivalent libellé ville / code INSEE
 
 
 ## Valeurs foncières
 
+=======
+62 communes
+
+## DVF
+
+
+>>>>>>> 55273af252fdeb311ebbbbd167e2f9f36faa809d
 ```{r}
 vf <- read.csv("data/gros/valeursfoncieres-2022.txt", sep ="|", dec = ",")
 ```
@@ -119,7 +133,11 @@ for (i in valDpt){
 ```
 
 
+<<<<<<< HEAD
 ##  Base logement
+=======
+## Autres sources :  base logement
+>>>>>>> 55273af252fdeb311ebbbbd167e2f9f36faa809d
 
 
 ```{r}
@@ -154,7 +172,11 @@ for (i in valDpt){
 }
 ```
 
+<<<<<<< HEAD
 ## Carreaux Filosofi
+=======
+## Carreaux
+>>>>>>> 55273af252fdeb311ebbbbd167e2f9f36faa809d
 
 
 ```{r}
@@ -193,7 +215,13 @@ for (i in valDpt){
 ```
 
 
+# Corrections
 
+## Généralités aux 3 groupes
+
+Description des données et notamment de la base géographique
+
+<<<<<<< HEAD
 # Choix des variables
 
 ```{r, eval = T}
@@ -249,3 +277,6 @@ knitr::kable(data)
 
 
 
+=======
+IRIS, 
+>>>>>>> 55273af252fdeb311ebbbbd167e2f9f36faa809d
