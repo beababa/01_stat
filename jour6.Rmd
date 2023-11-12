@@ -34,7 +34,7 @@ Avec la variance, nous allons aborder test, significativité et intensité.
 
 # Donnée et objet de l'exercice
 
-Suite à l'examen, on a 3 séries de données sous les iris (logement), les carreaux (revenus), et les parcelles cadastrales (fonciers)
+Suite à l'examen, on a 3 séries de données sous les iris (logement), les carreaux (revenus), et les parcelles cadastrales (valeurs fp,co_res)
 
 On va tester s'il y a une répartition spatiale spécifique des éléments pour chacune de ces données. 
 
@@ -106,35 +106,37 @@ des graphiques obtenus.
 ```{r}
 boxplot(vf_Bondy$Valeur.fonciere~vf_Bondy$Section)
 # Trop de sections, on va prendre uniquement les sections où il y a beaucoup de données.
-ind <- which((table(vf_Bondy$Section) > 63))
-sectionSup63 <- names(ind)
-vf_BondySup63 <- vf_Bondy [vf_Bondy$Section %in% sectionSup63,]
-boxplot(vf_BondySup63$Valeur.fonciere~vf_BondySup63$Section)
+# D'après le dénombrement
+hist(table(vf_Bondy$Section))
+ind <- which((table(vf_Bondy$Section) > 50))
+sectionSup50 <- names(ind)
+vf_BondySup50 <- vf_Bondy [vf_Bondy$Section %in% sectionSup50,]
+boxplot(vf_BondySup50$Valeur.fonciere~vf_BondySup50$Section)
 # la section P et H  paraîssent des cas à part
-vf_BondySup63_sansPH <- vf_BondySup63 [!(vf_BondySup63$Section %in%  c('P','H')),]
-boxplot(vf_BondySup63_sansPH$Valeur.fonciere~vf_BondySup63_sansPH$Section)
+vf_BondySup50_sansPH <- vf_BondySup50 [!(vf_BondySup50$Section %in%  c('P','H')),]
+boxplot(vf_BondySup50_sansPH$Valeur.fonciere~vf_BondySup50_sansPH$Section)
 # avec quelques options pour faire plus joli
 # on décide de diviser la valeur foncière par 100 000 afin d'avoir moins de zéros.
-vf_BondySup63_sansPH$Valeur.fonciere <- vf_BondySup63_sansPH$Valeur.fonciere / 100000
-boxplot(vf_BondySup63_sansPH$Valeur.fonciere~vf_BondySup63_sansPH$Section, xlab ="Section", ylab="montant valeur foncière (centaines de milliers)",
+vf_BondySup50_sansPH$Valeur.fonciere <- vf_BondySup50_sansPH$Valeur.fonciere / 100000
+boxplot(vf_BondySup50_sansPH$Valeur.fonciere~vf_BondySup50_sansPH$Section, xlab ="Section", ylab="montant valeur foncière (centaines de milliers)",
         col=rainbow(8))
 # Affichage des moyennes sur les boites à moustache
-moyenne <- tapply(vf_BondySup63_sansPH$Valeur.fonciere, vf_BondySup63_sansPH$Section, mean)
+moyenne <- tapply(vf_BondySup50_sansPH$Valeur.fonciere, vf_BondySup50_sansPH$Section, mean)
 points(moyenne, pch = 8,  col="black", cex = 2)
 ```
 
-Ce graphique permet de comparer 5 sections.
+Ce graphique permet de comparer 7 sections.
 Les variations entre les groupes sont-elles plus importantes que les 
 variations au sein des groupes eux-mêmes ?
-A priori, dans les sections AT et AJ, l'amplitude est très étendue et la distribution est très asymétrique (la médiane est quasiment au plancher de la boite).
+A priori, dans les sections AT et J, l'amplitude est très étendue et la distribution est très asymétrique (la médiane est quasiment au plancher de la boite).
 Beaucoup de petites ventes, et quelques grosses ventes entre 50 M et 150 000.
-Les sections A, AJ et B ont une distribution symétrique et une amplitude beaucoup plus faible.
+Les sections A, AJ, B, G et M ont une distribution symétrique et une amplitude beaucoup plus faible.
 
 
 Il existe une valeur aberrante dans la section AT
 
 ```{r}
-hist(vf_BondySup63_sansPH$Valeur.fonciere [vf_BondySup63_sansPH$Section == "AT"],
+hist(vf_BondySup50_sansPH$Valeur.fonciere [vf_BondySup50_sansPH$Section == "AT"],
      main = "Distribution montant valeur foncière section AT", xlab = "montant (centaines de milliers)", ylab = "effectif")
 ```
 
@@ -152,9 +154,9 @@ Dans le tableur, nous aurions fait une série de tableaux de calcul autour des
 écarts à la moyennes (en mettant des carrés). Dans r, c'est une formule var.
 
 ```{r}
-var(vf_BondySup63_sansPH$Valeur.fonciere)
+var(vf_BondySup50_sansPH$Valeur.fonciere)
 # Variance pour chaque zone, on utilise un tapply
-tapply(vf_BondySup63_sansPH$Valeur.fonciere, vf_BondySup63_sansPH$Section,var)
+tapply(vf_BondySup50_sansPH$Valeur.fonciere, vf_BondySup50_sansPH$Section,var)
 # verif pour la section AT
 sel <-  vf_Bondy[vf_Bondy == 'AT',c("Section", "Valeur.fonciere")]
 sel$Valeur.fonciere <- sel$Valeur.fonciere /100000
@@ -186,7 +188,7 @@ Sous R, il suffit de lancer une formule.
 
 ```{r}
 # on renomme la donnée avec un nom plus simple et on divise par 100000
-data <- vf_BondySup63_sansPH
+data <- vf_BondySup50_sansPH
 # transformation en variable de catégorie
 data$Section <- as.factor(data$Section)
 modele <- lm (Valeur.fonciere ~ Section, data = data)
@@ -212,9 +214,25 @@ Le test est mesuré par le rapport entre la variation intergroupe et la variatio
 
 Si ce rapport est élevé, cela signifie que la variation intergroupe est importante relativement à la variation intra, donc qu'il y a une vraie différence entre les écarts à la moyenne des groupes.
 
+
+```{r}
+# variation inter / variation intra.
+383 / 17
+# plus la variation intra augmente, plus le rapport diminue, moins il y a de différence entre les groupes.
+```
+
+
 Concernant les degré de liberté pour les données intra, on prend tous les effectifs et on enlève le nombre de sections (cf les 2 chiffres df)
 
-ICi 420 - 5, df1 = 4, df2 = 415
+```{r}
+# toutes les valeurs foncières
+eff <-length(data$Valeur.fonciere)
+# toutes les sections
+df1 <- length(unique(data$Section)) -1
+df2 <- eff - length(unique(data$Section)) 
+```
+
+
 
 #### Comme pour le khi2, observé et théorique
 
@@ -224,8 +242,8 @@ Comme pour le khi2, on compare à un test obtenu par le hasard (donc une table).
 F calculé
 
 ```{r}
-Ftable <- qf(p=.05, df1=4, df2=415, lower.tail=FALSE)
-Fcalcule <- 551 / 20
+Ftable <- qf(p=.05, df1=6, df2=518, lower.tail=FALSE)
+Fcalcule <- 383 / 17
 ```
 
 Le F théorique est inférieur au F calculé pour un risque de 5 %
@@ -243,13 +261,13 @@ C'est la même logique que pour le khi2 (cf exemple khi2 dans l'introduction aux
 Dans notre cas, la pvalue indique un risque très faible Concrètement, il faudrait aller chercher la table du risque à  % de Fisher.
 
 ```{r}
-qf(p=2.2e-16, df1=4, df2=415, lower.tail=FALSE)
+qf(p=2.2e-23, df1=6, df2=518, lower.tail=FALSE)
 ```
 
 
 On a très peu chances de se tromper si on rejette l'indépendance, il faut donc la rejeter.
 
-Les 5 sections correspondent à une répartition spécifique du montant de la valeur foncière. 
+Les 7 sections correspondent à une répartition spécifique du montant de la valeur foncière. 
 
 ### Intensité
 
@@ -259,13 +277,47 @@ variation intergroupe / variation totale
 
 
 ```{r}
-551/(551 + 20)
+383/(383 + 17)
 ```
 
-L'intensité est forte, plus de 96 % de la variation est expliquée par la structure spatiale.
+L'intensité est forte, plus de 95 % de la variation est expliquée par la structure spatiale.
 
 
-# Exercice d'application
+# ExerciceS d'application
+
+
+On peut prendre les sections AT et J, au vu des boites à moustaches, la différence entre les 2 variances
+est plus faible
+
+```{r}
+vf_Bondy_AT_J <- vf_BondySup50 [ vf_BondySup50$Section %in% c("AT", "J"),]
+vf_Bondy_AT_J$Valeur.fonciere <- vf_Bondy_AT_J$Valeur.fonciere /100000
+boxplot(vf_Bondy_AT_J$Valeur.fonciere~vf_Bondy_AT_J$Section, xlab ="Section", ylab="montant valeur foncière (centaines de milliers)",
+        col=rainbow(2))
+
+```
+
+
+```{r}
+# on renomme la donnée avec un nom plus simple et on divise par 100000
+data <- vf_Bondy_AT_J
+# transformation en variable de catégorie
+data$Section <- as.factor(data$Section)
+modele <- lm (Valeur.fonciere ~ Section, data = data)
+anova(modele)
+```
+
+
+```{r}
+#Ftable
+qf(p=.05, df1=1, df2=173, lower.tail=FALSE)
+qf(p=.28, df1=1, df2=173, lower.tail=FALSE)
+```
+
+Pour un risque de 5 %, le test est rejeté, il y a indépendance entre les sections.
+
+Pour un risque de quasiment de 28 % il serait accepté...
+
 
 ## Hypothèse
 
