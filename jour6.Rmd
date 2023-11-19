@@ -108,6 +108,7 @@ boxplot(vf_Bondy$Valeur.fonciere~vf_Bondy$Section)
 # Trop de sections, on va prendre uniquement les sections où il y a beaucoup de données.
 # D'après le dénombrement
 hist(table(vf_Bondy$Section))
+# On décide de filtrer au dessus de la 1e borne 50
 ind <- which((table(vf_Bondy$Section) > 50))
 sectionSup50 <- names(ind)
 vf_BondySup50 <- vf_Bondy [vf_Bondy$Section %in% sectionSup50,]
@@ -142,9 +143,18 @@ hist(vf_BondySup50_sansPH$Valeur.fonciere [vf_BondySup50_sansPH$Section == "AT"]
 
 La section AT a une très grosse vente. 
 
+On enregistre la donnée filtrée pour pouvoir repartir de cette donnée déjà plus cohérente
+que la donnée d'origine.
+
+```{r}
+write.csv(vf_BondySup50_sansPH, "data/vf_BondySup50_sansPH.csv", fileEncoding = "UTF-8")
+```
+
+
+
+
 
 # La variance
-
 
 ## Rappel
 
@@ -153,13 +163,30 @@ Pour mémoire, la variance est le carré de la moyenne des écarts à la moyenne
 Dans le tableur, nous aurions fait une série de tableaux de calcul autour des 
 écarts à la moyennes (en mettant des carrés). Dans r, c'est une formule var.
 
+## Préparer la donnée
+
+On repart de la donnée filtrée dans laquelle on a supprimée toutes les sections ayant moins de
+50 ventes et P et H qui représentaient des profils trop particuliers.
+
 ```{r}
-var(vf_BondySup50_sansPH$Valeur.fonciere)
+data <- read.csv("data/vf_BondySup50_sansPH.csv", fileEncoding = "UTF-8")
+# pour être plus lisible, on a divisé les montants par 100 000
+hist(data$Valeur.fonciere, xlab = "valeur foncière (en centaine de milliers", ylab = "nb de ventes")
+boxplot(data$Valeur.fonciere)
+# on supprime également les valeurs aberrantes
+data <- data [data$Valeur.fonciere < 10,]
+```
+
+On applique un nouveau filtre
+
+## Calcul de la variance avec et sans la formule
+
+```{r}
+var(data$Valeur.fonciere)
 # Variance pour chaque zone, on utilise un tapply
-tapply(vf_BondySup50_sansPH$Valeur.fonciere, vf_BondySup50_sansPH$Section,var)
+tapply(data$Valeur.fonciere, data$Section,var)
 # verif pour la section AT
-sel <-  vf_Bondy[vf_Bondy == 'AT',c("Section", "Valeur.fonciere")]
-sel$Valeur.fonciere <- sel$Valeur.fonciere /100000
+sel <-  data[data$Section == 'AT',c("Section", "Valeur.fonciere")]
 mean((sel$Valeur.fonciere - mean(sel$Valeur.fonciere))^2)
 var(sel$Valeur.fonciere)
 ```
@@ -167,6 +194,15 @@ var(sel$Valeur.fonciere)
 Le résultat est légèrement différent, car le logiciel pondère la variance en soustrayant 1 à l'effectif. Plus la série est grande, moins cela a d'importance.
 
 ## Analyse de la variance
+
+
+Un nouveau graphique nous permet de comprendre en quoi la variance permet de comparer
+des séries entre elles
+
+
+```{r}
+boxplot(data$Valeur.fonciere~ data$Section)
+```
 
 La variance est une quantité qui se décompose en :
 
@@ -187,9 +223,7 @@ ANalyse Ordinaire de la VAriance
 Sous R, il suffit de lancer une formule.
 
 ```{r}
-# on renomme la donnée avec un nom plus simple et on divise par 100000
-data <- vf_BondySup50_sansPH
-# transformation en variable de catégorie
+# transformation en variable de catégorie (une précaution)
 data$Section <- as.factor(data$Section)
 modele <- lm (Valeur.fonciere ~ Section, data = data)
 anova(modele)
@@ -234,7 +268,7 @@ df2 <- eff - length(unique(data$Section))
 
 
 
-#### Comme pour le khi2, observé et théorique
+#### La table de fisher
 
 Comme pour le khi2, on compare à un test obtenu par le hasard (donc une table).
 
@@ -250,7 +284,7 @@ Le F théorique est inférieur au F calculé pour un risque de 5 %
 
 Il n'y a donc pas indépendance entre les sections et la distribution du montant de la valeur foncière.
 
-### Avec R, importance de la p-value
+#### Avec R, importance de la p-value
 
 Le chiffre le plus rapide à analyser, c'est la p-value, il indique la taille de la différence entre les moyennes des 5 sections.
 
@@ -283,7 +317,9 @@ variation intergroupe / variation totale
 L'intensité est forte, plus de 95 % de la variation est expliquée par la structure spatiale.
 
 
-# ExerciceS d'application
+# Exercices d'application
+
+## Deux sections
 
 
 On peut prendre les sections AT et J, au vu des boites à moustaches, la différence entre les 2 variances
@@ -318,13 +354,14 @@ Pour un risque de 5 %, le test est rejeté, il y a indépendance entre les secti
 
 Pour un risque de quasiment de 28 % il serait accepté...
 
+## Les différents groupes et les notes
 
-## Hypothèse
+### Hypothèse
 
 Il s'agit d'observer s'il y a une variation entre les groupes en terme de notation.
 L'hypothèse est que le groupe 2 aura des meilleurs notes car le cours du groupe 1 sert de brouillon, et le groupe 3 digère.
 
-## Script
+#### Script
 
 ```{r,echo=FALSE, eval=FALSE}
 note <- read.csv("data/noteExamen.csv")
@@ -347,9 +384,9 @@ anova(modele)
 ```
 
 
-## Commentaires (année 2022)
+### Correction (année 2022)
 
-### Boite à moustaches
+#### Boite à moustaches
 
 Il existe des différences entre les groupes, la variation des notes au sein de chaque groupe est différente. Seul le 3e groupe a une distribution symétrique.
 
@@ -358,12 +395,12 @@ Et le 2e groupe a beaucoup de notes basses.
 
 La variance entre les groupes risque donc d'être plus importante que la variance intragroupe.
 
-### Pvalue
+####  Pvalue
 
 Le chiffre de la p-value (0.039) est bas. Donc la relation est significative.
 H0 est rejetée avec un risque de 4 %.
 
 
-### Intensité
+#### Intensité
 
 L'intensité est forte, plus de 75 % de la variation est expliquée par la structure en groupe.
