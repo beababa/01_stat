@@ -219,7 +219,9 @@ fic
 nb <- max(as.integer(substring(fic, 6,7)))
 tmp <- NULL
 tab <- NULL
+i <-  1
 for (i in 1:nb) {
+  print(i)
   nomFic <- paste0("data/cours", i, ".csv")
   data <- read.csv(nomFic, fileEncoding = "UTF-8")
   data <- data [data [,2] == "oui",]
@@ -245,9 +247,11 @@ barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", x
 
 ### Les rendus d'exercices
 
+
+
 ```{r}
-rendu <- c(56,59, 56, 45,0,0,0,0)
-titre <- c("distribution", "univarié", "contingence", "khi2", "regression", "boxplot", "variance", "4 variables")
+rendu <- c(56,59, 56, 45,58,49)
+titre <- c("distribution", "univarié", "contingence", "khi2", "regression", "1er script")
 par(mar = c(8,6,6,6))
 p <- barplot(rendu, names = titre, cex.names = 0.8, las = 2, main = "rendu devoirs (effectif 75 étudiants environ)", border = NA)
 text(p, y = rendu - 1, labels = rendu )
