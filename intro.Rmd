@@ -121,11 +121,11 @@ le nombre d'années depuis le dernier apprentissage.
 etudiant <-  read.csv("data/cours1.csv", fileEncoding = "UTF-8")
 names(etudiant)
 names(etudiant)[8:9] <- c("appétence", "nb d'années")
-png("img/quisontils.png")
-par(mar = c(2,16,2,4))
-par(mfrow = c(3,2))
+png("img/quisontils.png", width = 10000, height = 10000, res=1800)
+#par(mar = c(2,16,2,4))
+par(mfrow = c(2,3))
 for (i in 5:9){
-  par(mar = c(2,16,2,4))
+  (mar = c(2,16,2,4))
   barplot(sort(table(etudiant [,i])), border = NA,
           horiz = T, las = 2, cex.names = 0.8, 
           main = names (etudiant) [i])
@@ -161,12 +161,8 @@ tab
 row.names(tab) <- paste0("cours ",seq(1,nb, by = 1))
 paste0("cours ",seq(1,nb, by = 1))
 knitr::kable(tab)
-```
-
-Graphique
-
-```{r, eval=FALSE}
-barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(nb) 
+# Graphique
+p <- barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(nb) 
         , border = NA, legend =  F)
 ```
 
@@ -200,11 +196,12 @@ le temps du rendu (avant la limite)
 ```{r, eval=T}
 res <- read.csv("data/exo.csv",  na.strings = '-', fileEncoding = "UTF-8")
 names(res)
+res <- res [, c(2:5,1,6)]
 # recodage : si note 2, alors note1 = 0 si NA
-res$dénombrement [is.na(res$dénombrement )& !is.na(res$indicateurs)] <- 0
-res$dénombrement [ is.na(res$indicateurs)] <- NA
+res$X1_Univarié.1 [is.na(res$X1_Univarié.1 )& !is.na(res$X2_Univarié.2)] <- 0
+res$X1_Univarié.1 [ is.na(res$X2_Univarié.2)] <- NA
 # graphique
-par(mfrow= c(2,2))
+par(mfrow= c(2,3))
 for (i in (1:length(res))){
   p <-barplot(table(res[,i]), main = names(res)[i])
 }
