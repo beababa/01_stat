@@ -32,9 +32,33 @@ Ces 4 sources seront utilisées pour le devoir maison, afin de permettre à l'é
 
 Ces 4 sources seront agrégées au bureau de vote via les centroides pour l'élection de 2022 (on dispose des bureaux uniquement pour cette élection)
 
-# Extraction des données
+## Démarche
 
-## résultats des élections 2022
+5 étapes
+
+- on définit le nombre de communes concernées
+
+- extractions pour les fichiers spatiaux et les fichiers texte (diminuer la taille
+des fichiers)
+
+- intersection bv et centroides fichiers spatiaux
+
+- jointure attributaire centroide, fichers de données
+
+- agrégation des données au bv
+
+
+```{r}
+library(sf)
+library(mapsf)
+```
+
+
+# cog
+
+Définition de la liste des villes de base.
+
+Des pb seront à traiter : Pointe à Pitre, Lyon, Marseille
 
 Chaque étudiant a choisi une ville pour ses données. Ces villes sont choisies au cours2,
 jusqu'au cours 9 pour les modifications
@@ -67,8 +91,6 @@ df <- df [!(df$nb != 5),]
 
 
 ```{r}
-library(sf)
-library(mapsf)
 fr <- st_read("data/gros/COMMUNE_CARTO.shp")
 # le code INSEE a 5 chiffres y compris le zéro
 names(df)
@@ -107,30 +129,184 @@ joint <- unique(joint)
 72 villes récupérées
 73 au départ
 
-quelques test
+quelques tests
+
+sur quelques villes
 
 ```{r}
-joint$NOM_COM_M[grep("ROCHE|ISSY|VITRY|ACH", joint$NOM_COM_M)]
+joint$NOM_COM_M[grep("ROCHE|ISSY|VITRY|ACH|POIN", joint$NOM_COM_M)]
 ```
 
 
+Pb Lyon et Marseille / uniquement les arrondissements 1
+
+```{r}
+joint <- cog
+joint$INSEE_COM [joint$INSEE_COM == "13055"] <- "13201"
+joint$INSEE_COM [joint$INSEE_COM_TXT == "69123"] <- "69381"
+
+
+
+```
+
+
+
+
+
+premier enregistrement
+
+```{r}
+st_write(joint,"data/geo.gpkg", "cog", delete_layer =  T)
+write.csv(joint [, c("INSEE_COM", "NOM_COM_M"), drop = T], "data/cog.csv", fileEncoding = "UTF-8", quote = T, row.names = F)
+# quote permet d'avoir du texte
+# attention on a du DROM Guadeloupe (971) (97120)
+```
+
+
+# Extraction des données
+
+
+
+
+
+
+
+
+
+## bv
+
+```{r}
+bv <- st_read("data/gros/bureau-de-vote-insee-reu-openstreetmap.gpkg")
+bv <- bv [, c("insee", "nom", "bureau")]
+bv <- st_transform(bv, 2154)
+bvSel <- bv [bv$insee %in% cog$INSEE_COM,]
+length(unique(bvSel$insee))
+manquants <- setdiff(cog$INSEE_COM, bv$insee)
+```
+
+pb Marseille 1er 
+
+les codes insee sont les codes des villes (le code arr est sur le champs bureau)
+
+```{r}
+bv [bv$insee == '13201',]
+marseille <- bv [bv$nom == 'Marseille',]
+marseille$insee <- substring(marseille$bureau, 1,5)
+marseille <- marseille [marseille$insee == "13201",]
+bvSel <- rbind(bvSel, marseille)
+```
+
+enregistrement
+
+```{r}
+st_write(bvSel, "data/geo.gpkg", "bv", delete_layer = T)
+```
+
+## Iris
+
+
+```{r}
+iris <- st_read("data/gros/IRIS-GE_3-0_SHP_LAMB93_FXX-ED2023-01-01/IRIS.shp")
+```
+
+```{r}
+names(iris)
+iris$INSEE_COM
+irisSel <- iris [iris$INSEE_COM %in% cog$INSEE_COM,]
+length(unique(irisSel$INSEE_COM))
+manquants <- setdiff(cog$INSEE_COM, irisSel$INSEE_COM)
+cog$NOM_COM_M [cog$INSEE_COM %in% manquants]
+```
+
+rajout Pointe à pitre
+
+pb projection....on garde à part
+
+```{r}
+iris$NOM_COM
+iris <- st_read("data/gros/IRIS-GE_3-0_SHP_RGAF09UTM20_GLP-ED2023-01-01/")
+irisSelPAP <- iris [iris$NOM_COM == 'Pointe-à-Pitre',]
+```
+
+
+rajout Lyon si nécessaire
+
+```{r}
+iris [grep("^Lyon",iris$NOM_COM),]
+manquants <- iris [iris$INSEE_COM == '69381',]     
+irisSel <- rbind(irisSel, manquants)
+```
+
+
+enregistrement
+
+```{r}
+st_write(irisSel, "data/geo.gpkg", "iris", delete_layer = T)
+st_write(irisPAP, "data/geo.gpkg", "irisPAP", delete_layer = T)
+```
+
+
+
+## résultats des élections 2022
+
+
+
 ```{r, eval=FALSE}
+cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8", colClasses = "character")
 # jointure ville code insee pour les résultats
 election2022 <- read.csv("data/gros/resultats-par-niveau-burvot-t1-france-entiere.csv", fileEncoding = "UTF-8", header = T, colClasses = "character")
 names(election2022)
 str(election2022$Code.de.la.commune)
-# transformation en données texte
+# INSEE_COM code insee
 election2022$INSEE_COM<-paste0(election2022$Code.du.département,election2022$Code.de.la.commune)
-# 2e jointure
-joint2 <- merge(joint, election2022, by = "INSEE_COM", )
-length(unique(joint2$INSEE_COM))
-# encore 1 en moins...
+# Pb pointe à pitre
+election2022[grep("Pointe-à-Pitre", election2022$Libellé.de.la.commune),]
+# le code dpt est ZA120 on le remplace par le cog officiel
+election2022$INSEE_COM[election2022$INSEE_COM =="ZA120"] <- 97120
+# jointure
+joint <- merge(cog, election2022, by = "INSEE_COM")
+length(unique(joint$INSEE_COM))
+# 72 youpi au cas où ce n'est pas le cas :
+pb <- setdiff(cog$INSEE_COM, joint$INSEE_COM)
+cog[cog$INSEE_COM %in% pb ,]
+```
+
+```{r}
+write.csv(election2022,"data/election2022.csv", fileEncoding = "UTF-8", row.names = FALSE)
+```
+
+
+
+remplacer les en têtes par les noms, on extrait les candidats
+
+le remplacement se fera en fonction des colonnes choisies % ou inscrits ou sexe etc...
+
+```{r}
+election2022 <- read.csv("data/election2022.csv", fileEncoding = "UTF-8")
+ind <- grep("Nom", names(election2022))
+candidats  <- t(unique(election2022[, c(ind)]))
+candidats <- as.vector(candidats)
+write.csv(candidats,"data/candidats.csv")
+```
+
+
+
+
+Cartographie (sans Pointe à Pitre)
+
+```{r}
+cogGEOM <- st_read("data/geo.gpkg", "cog") 
+cogGEOM <- cogGEOM [-72,]
+```
+
+
+```{r, eval=FALSE}
 fond <- st_read("data/gros/DEPARTEMENT.shp")
 png("img/communes.png")
-mf_init(joint)
+mf_init(cogGEOM)
 mf_map(fond, add = T, col = "antiquewhite1", border = "wheat")
-mf_map(joint, col = "red", border = NA,add = T)
-mf_layout("Communes choisies par les étudiants", credits = "IGN")
+mf_map(cogGEOM, col = "red", border = NA,add = T)
+mf_layout("Communes choisies par les étudiants (sf Pointe à Pitre (Guadeloupe))", credits = "IGN")
 dev.off()
 ```
 
@@ -139,37 +315,20 @@ dev.off()
 Des choix sur toute l'étendue du territoire de la métropole
 
 
-Enregistrement des fichiers
-
-```{r, eval=FALSE}
-# pb zéro
-joint2$INSEE_COM_TXT <- paste0("'", joint2$INSEE_COM)
-joint2$INSEE_COM_TXT
-names(joint2)
-st_write(joint2 [, c(119,8,19:118)], "data/geo.gpkg", "election2022", fileEncoding ="UTF-8", delete_layer = T)
-write.csv(joint2 [, c(119,8, 18:117), drop = T], "data/election2022.csv", fileEncoding = "UTF-8")
-```
 
 
-Bureaux de vote pour chacune des communes, données texte
 
-```{r}
-data <- read.csv("data/election2022.csv", fileEncoding = "UTF-8") 
-# nb de bv par communes : grande disparité
-sort(table(data$INSEE_COM_TXT))
-# 71 communes
-length(unique(data$INSEE_COM_TXT))
-# enregstrement de ces cog
-write.csv(unique(data[,c("INSEE_COM_TXT", "Libellé.de.la.commune")]),"data/cog.csv", row.names = F,fileEncoding = "UTF-8")
-```
+
+
 
 ## Valeurs foncières
 
 
 
 ```{r}
-cog <- read.csv("data/cog.csv")
-vf <- read.csv("data/gros/valeursfoncieres-2022.txt", sep ="|", dec = ",")
+cog <- read.csv("data/cog.csv", colClasses = "character", fileEncoding = "UTF-8")
+cog$INSEE_COM
+vf <- read.csv("data/gros/valeursfoncieres-2022.txt", sep ="|", dec = ",", fileEncoding = "UTF-8")
 ```
 
 attention gros fichier
@@ -180,13 +339,17 @@ pb des zéros, un import en txt n'a pas réglé la question.
 
 
 ```{r}
+names(vf)
 vf$lg <- sapply(vf$Code.commune, nchar)
 vf$dpt <- sapply(vf$Code.departement, nchar)
 table(vf$dpt)
 table(vf$Code.departement [vf$dpt == "3"])
-# on supprime les DROM
+# on supprime les  sf pointe à pitre
+vf[grep("POINTE A PITRE", vf$Commune),]
+vf$dpt[grep("POINTE A PITRE", vf$Commune)] <-  2
 vf<- vf [vf$dpt < 3, ] 
 table(vf$lg, useNA = "always")
+# pour le code commune on rajoute deux zéros et on coupe
 vf$com <- paste0('00', vf$Code.commune)
 table(sapply(vf$com, nchar))
 right = function (string, char) {
@@ -194,24 +357,28 @@ right = function (string, char) {
 }
 vf$comF <- right(vf$com, 3)
 table(sapply(vf$comF, nchar))
-vf$cog <- paste0("'",vf$Code.departement, vf$comF)
+# cas pointe à pitre
+vf$cog <- paste0(vf$Code.departement, vf$comF)
 table(sapply(vf$cog, nchar))
+vf$cog [nchar(vf$cog)==6] <- "97120"
 ```
 
-extraction des 71 communes
+extraction des 72 communes
 
 
 ```{r}
-vfSel <- vf [vf$cog %in% cog$INSEE_COM_TXT,]
+vfSel <- vf [vf$cog %in% cog$INSEE_COM,]
 length(unique(vfSel$cog))
 ```
 
 68 communes
-On rajoute les premiers arrondissements de Marseille et Lyon
+On rajoute les premiers arrondissements de Marseille et Lyon (au cas où mais normalement le cog a été modifie)
 
 ```{r}
-manquants <- setdiff(cog$INSEE_COM_TXT, vfSel$cog)
-cog$Libellé.de.la.commune [cog$INSEE_COM_TXT %in% manquants]
+manquants <- setdiff(cog$INSEE_COM, vfSel$cog)
+cog$Libellé.de.la.commune [cog$INSEE_COM %in% manquants]
+vfSel [vfSel$cog == '69381',]
+vf$cog [grep("^LYON 1", vf$Commune)]
 ```
 
 Marseille et Lyon trop grands. Thionville pas de valeur foncière
@@ -224,7 +391,7 @@ vf [vf$cog == 57672,]
 # Les DVF pour l'Alsace Moselle dans le livre foncier droit local pas d'appli
 vf [grep("^LYON", vf$Commune), c("cog","Commune")]
 # Pour Lyon, le 69381
-manquants <- c("'13201", "'69381")
+manquants <- c("13201", "69381")
 ```
 
 ```{r}
@@ -242,7 +409,9 @@ table(bondy$Voie [bondy$Valeur.fonciere > 30000000])
 barplot(table(bondy$Voie [bondy$Valeur.fonciere < 3000]), las = 2)
 ```
 
-On enregistre le fichier.
+
+
+
 
 ```{r}
 names(vfSel)
@@ -404,10 +573,84 @@ lgt.csv à l'IRIS
 vf.csv  à la parcelle
 le rpls à l'appartement
 
+### données
+
+#### csv
+
 ```{r}
 vf <- read.csv("data/gros/vfEXAMEN.csv", fileEncoding = "UTF-8")
 lgt <- read.csv("data/gros/lgt.csv", fileEncoding = "UTF-8")
 rpls <- list.files("data/gros/RPLS")
+cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8", colClasses = "character")
 ```
 
+#### spatiaux
+
+
+
+###  vf / parcelle
+
+On récupère le cadastre, on intersecte parcelle et bv et on enregistre le fichier
+dans bv.gpkg avec le code insee.
+
+```{r}
+dpt <- substring(cog$INSEE_COM_TXT,2,3)
+code <- substring(cog$INSEE_COM_TXT,2,6)
+bv <- bv [bv$insee %in% code,]
+code
+dpt <- dpt [1:length(dpt)]
+code <- code [1:length(code)]
+
+for (i in 15:length(dpt)){
+  nomZIP <- paste0(dpt [i], "_", code [i],".gz")
+  nomGEO <- paste0(dpt [i], "_", code [i],".geojson")
+  print(paste0(i, "_",nomZIP))
+  if (file.exists(nomZIP)==FALSE ){
+    fic <- download.file(paste0("https://cadastre.data.gouv.fr/data/etalab-cadastre/2023-07-01/geojson/communes/", dpt [i],"/",code [i],"/cadastre-", code [i],"-parcelles.json.gz"), nomZIP)
+  }
+  
+  exdir <- paste0("data/gros/cadastre/",nomGEO)
+  gunzip(nomZIP, exdir, overwrite = T )
+  cadastre <- st_read(paste0("data/gros/cadastre/",nomGEO))
+  cadastre <- st_transform(cadastre,2154)
+  # extraction bv
+  bvSel <- bv [bv$insee == code [i],]
+  all(sf::st_is_valid(bvSel))
+  bvSel <- st_make_valid(bvSel)
+  # intersection avec bv
+  inter <- st_intersection(bvSel [, c("bureau")], st_centroid( cadastre [, c("section", "numero")]))
+  st_write(inter, "data/gros/bv.gpkg", paste0("bv_",code [i]), delete_layer = T)
+}
+```
+
+
+bilan
+
+```{r}
+st_layers("data/gros/bv.gpkg")
+# 64 couches dont bv69381 (lyon) vide
+vf <- vf [vf$Code.departement == '69',]
+vf$Code.commune [grep('381', vf$Code.commune)]
+table(vf$Code.commune)
+```
+
+
+
+## lgt / iris
+
+
+
+
+
+Croisement iris / bv
+
+```{r}
+inter <- st_intersection(bv, irisSel)
+```
+
+
+
+```{r}
+
+```
 
