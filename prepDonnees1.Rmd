@@ -69,6 +69,7 @@ Rochefort est rajouté à la main
 
 à partir de la feuille d'émargement
 
+
 ```{r}
 # recup fichier ville
 ville <- read.csv("data/cours2.csv", colClasses = "character")
@@ -95,7 +96,15 @@ df <- df [!(df$nb != 5),]
 
 Les étudiants ont choisi 73 code insee.
 
+
 ## Jointure 
+=======
+Attention, la lecture du code insee peut se faire comme un chiffre et donc la donnée sera faussée.
+Toujours vérifier que le code insee est une variable de type alphanumérique.
+
+
+## Jointure
+
 
 ```{r}
 fr <- st_read("data/gros/COMMUNE_CARTO.shp")
@@ -140,16 +149,17 @@ joint <- unique(joint)
 
 72 villes récupérées, il y avait des doublons.
 
-quelques tests
-
-sur quelques villes
+quelques tests sur quelques villes
 
 ```{r}
 joint$NOM_COM_M[grep("ROCHE|ISSY|VITRY|ACH|POIN", joint$NOM_COM_M)]
 ```
 
+2 points de vigilance :
 
-Pb Lyon et Marseille / uniquement les arrondissements 1
+- Pb Lyon et Marseille / uniquement les arrondissements 1
+
+- Guadeloupe / Pointe à Pitre (DROM 971, code insee ville 97120)
 
 ```{r}
 joint$INSEE_COM [joint$INSEE_COM == "13055"] <- "13201"
@@ -160,13 +170,20 @@ joint [joint$INSEE_COM == "69381",]
 
 
 
+# on substitue le codes insee des arrondissements 1 au code insee de la ville
+joint$INSEE_COM [joint$INSEE_COM == "13055"] <- "13201"
+joint$INSEE_COM [joint$INSEE_COM == "69123"] <- "69381"
+joint$INSEE_COM [joint$INSEE_COM == "97120"]
+```
+
+
+
 premier enregistrement
 
 ```{r}
 st_write(joint,"data/geo.gpkg", "cog", delete_layer =  T)
 write.csv(joint [, c("INSEE_COM", "NOM_COM_M"), drop = T], "data/cog.csv", fileEncoding = "UTF-8", quote = T, row.names = F)
 # quote permet d'avoir du texte
-# attention on a du DROM Guadeloupe (971) (97120)
 ```
 
 
@@ -176,6 +193,7 @@ write.csv(joint [, c("INSEE_COM", "NOM_COM_M"), drop = T], "data/cog.csv", fileE
 cogGEOM <- st_read("data/geo.gpkg", "cog") 
 cogGEOM <- cogGEOM [-72,]
 ```
+<<<<<<< HEAD:prepDonnees1.Rmd
 
 
 ```{r, eval=FALSE}
@@ -195,6 +213,10 @@ Des choix sur toute l'étendue du territoire de la métropole
 
 
 
+
+# Extraction des données
+
+
 # Extraction des données
 
 ```{r}
@@ -202,11 +224,12 @@ cog <- read.csv("data/cog.csv", colClasses = "character")
 ```
 
 
-
-
-
+```{r}
+cog <- read.csv("data/cog.csv", colClasses = "character")
+```
 
 ## Données spatiales
+
 
 ### bv
 
@@ -219,7 +242,9 @@ length(unique(bvSel$insee))
 manquants <- setdiff(cog$INSEE_COM, bv$insee)
 ```
 
-pb Marseille 1er 
+pb Marseille 1er et Lyon 1er
+
+le fichier des bureaux de vote utilise le code INSEE ville
 
 les codes insee sont les codes des villes (le code arr est sur le champs bureau)
 
@@ -232,6 +257,20 @@ pbMarseille <- pb [pb$nom == 'Marseille',]
 tab <- table(pbMarseille$bureau2)
 length(names(tab))
 bureauxMarseille <- names(tab)
+# filtre sur les 2 communes avec les codes INSEE
+pb <- bv [bv$insee %in% c('13055', '69123'),]
+# on extrait les codes insee de la variable bureau
+pb$insee <- substring(pb$bureau, 1,5)
+pb <- pb [pb$insee %in% c('13201','69381'),]
+# on extrait le numéro du bureau
+pb$bureau2 <- substring(pb$bureau, 7,9)
+# extraction sur le libelle
+pbMarseille <- pb [pb$nom == 'Marseille',]
+# verif un bureau par nom bureau
+table(pbMarseille$bureau2)
+#  bureaux à Marseille
+bureauxMarseille <- names(tab)
+bureauxMarseille
 # 18 bureaux ms pas nom se suivant
 pbLyon <- pb [pb$nom == 'Lyon',]
 # 16 bureaux Lyon 101 117
@@ -255,11 +294,36 @@ hist(tab, main = "Distribution du nombre de bureaux", xlab = "nb de bureaux",
 
 
 
+Cartographie de Marseille pour voir logique des nom de bureau
+
+```{r}
+st_write(pbMarseille,"data/pb.gpkg", "bureauxMarseille", delete_layer = T)
+png("img/pbMarseille.png")
+mf_map(pbMarseille, col = "antiquewhite2")
+mf_label(pbMarseille, var = "bureau2", cex = 1.5, halo = T)
+mf_layout("Marseille : des bureaux discontinues", "opendata REU")
+dev.off()
+```
+
+
+![](img/pbMarseille.png)
+Ville à un seul bv : uniquement Drom
+
+```{r}
+tab <- sort(table (bvSel$insee))
+hist(tab, main = "Distribution du nombre de bureaux sur les 72 villes", xlab = "nb de bureaux",
+     ylab = "nb de villes")
+bvSel$bureau [bvSel$nom == "Drom"] <- 1
+bvSel$bureau [bvSel$nom == "Drom"]
+```
+
+2849 bureaux au total
+>>>>>>> 5ade091e47a99708b918525ae7a200997b52fd44:prepDonnees.Rmd
 
 enregistrement
 
 ```{r}
-st_write(bvSel, "data/geo.gpkg", "bv", delete_layer = T)
+st_write(bvSel, "data/gros/geo.gpkg", "bv", delete_layer = T)
 ```
 
 ### Iris
@@ -271,6 +335,12 @@ iris <- st_read("data/gros/IRIS-GE_3-0_SHP_LAMB93_FXX-ED2023-01-01/IRIS.shp")
 
 ```{r}
 names(iris)
+<<<<<<< HEAD:prepDonnees1.Rmd
+=======
+# verif code INSEE
+iris$INSEE_COM
+# filtre
+>>>>>>> 5ade091e47a99708b918525ae7a200997b52fd44:prepDonnees.Rmd
 irisSel <- iris [iris$INSEE_COM %in% cog$INSEE_COM,]
 length(unique(irisSel$INSEE_COM))
 manquants <- setdiff(cog$INSEE_COM, irisSel$INSEE_COM)
@@ -282,6 +352,7 @@ rajout Pointe à pitre
 pb projection....on garde à part
 
 ```{r}
+<<<<<<< HEAD:prepDonnees1.Rmd
 iris <- st_read("data/gros/IRIS-GE_3-0_SHP_RGAF09UTM20_GLP-ED2023-01-01/")
 irisSelPAP <- iris [iris$NOM_COM == 'Pointe-à-Pitre',]
 ```
@@ -292,6 +363,18 @@ enregistrement
 ```{r}
 st_write(irisSel, "data/geo.gpkg", "iris", delete_layer = T)
 st_write(irisSelPAP, "data/geo.gpkg", "irisPAP", delete_layer = T)
+=======
+iris <- st_read("data/gros/IRIS-GE_3-0_SHP_RGAF09UTM20_GLP-ED2023-01-01/IRIS.shp")
+irisPAP <- iris [iris$NOM_COM == 'Pointe-à-Pitre',]
+```
+
+
+
+enregistrement
+
+```{r}
+st_write(irisSel, "data/gros/geo.gpkg", "iris", delete_layer = T)
+st_write(irisPAP, "data/gros/geo.gpkg", "irisPAP", delete_layer = T
 ```
 
 ### Carreaux Filosofi
@@ -307,6 +390,24 @@ length(unique(carSel$cog))
 toujours 71, manque pointe à pitre
 
 Pas de filosofi à la Guadeloupe - moindre qualité des sources.
+
+
+Bondy
+
+
+### Carreaux Filosofi
+
+```{r}
+library(sf)
+library(mapsf)
+car <- st_read("data/gros/carreaux_200m_met.gpkg")
+# extraction du premier code insee du carreau + la quote pour pb zero
+car$cog <- paste0("'",substring(car$lcog_geo,1,5))
+carSel <- car [car$cog %in% cog$INSEE_COM_TXT,]
+length(unique(carSel$cog))
+```
+
+toujours 71
 
 
 Bondy
@@ -338,6 +439,63 @@ for (i in valDpt){
 }
 ```
 
+Enregistrement des carreaux par dpt
+
+```{r}
+st_write(carSel, "data/gros/geo.gpkg", "car", delete_layer = T)
+```
+
+16 M carreaux
+
+```{r}
+valDpt <- unique(vfSel$Code.departement)
+carSel$dpt <- substring(carSel$lcog_geo,1,2)
+carSel <- carSel [,c(37,1:33), drop = T]
+for (i in valDpt){
+  sel <- carSel [carSel$dpt == i,]
+  write.csv2(sel, paste0("data/examen/car/", i, "_carEXAMEN.csv"), fileEncoding = "UTF-8")
+}
+```
+
+## RPLS
+
+Le RPLS est par région et par dpt en idf
+
+```{r}
+fic <- list.files("data/gros/RPLS")
+regFic <- substring(fic, 28,29)
+refRPLS <- data.frame(reg = regFic, fic = fic)
+refRPLS
+# equiv code insee et region
+ref <- read.csv("data/gros/table-appartenance-geo-communes-23.csv", fileEncoding = "UTF-8")
+cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8")
+cog$INSEE_COM <- substring(cog$INSEE_COM_TXT, 2, 6)
+joint <- merge(cog, ref [, c("CODGEO", "REG", "DEP")], by.x = "INSEE_COM", by.y = "CODGEO")
+reg <-names(table(joint$REG))
+# 12 régions sur 19
+r <- reg [1]
+reg <- reg [-c(1:3)]
+rpls <- NULL
+for (r in reg){
+  refFIC <- refRPLS$fic [refRPLS$reg == r]
+  print(r)
+  fic <- read.csv2(paste0("data/gros/RPLS/", refFIC), header = T, quote = "")
+  commune <- joint$INSEE_COM [joint$REG == r] 
+  for (c in commune){
+     tmp <-  fic [fic$DEPCOM == c,]
+     rpls <- rbind (rpls, tmp)
+  }
+  }
+write.csv(rpls, "data/gros/rpls.csv")
+head(rpls)
+```
+
+pb lecture reg27
+
+```{r}
+fic <- read.csv2(paste0("data/gros/RPLS/", refFIC), quote="")
+write.csv(fic, paste0("data/gros/RPLS", refFIC), fileEncoding = "UTF-8", quote = "")
+```
 
 
 
@@ -359,11 +517,11 @@ election2022$INSEE_COM<-paste0(election2022$Code.du.département,election2022$Co
 election2022[grep("Pointe-à-Pitre", election2022$Libellé.de.la.commune),]
 # le code dpt est ZA120 on le remplace par le cog officiel
 election2022$INSEE_COM[election2022$INSEE_COM =="ZA120"] <- 97120
-# jointure
-joint <- merge(cog, election2022, by = "INSEE_COM")
-length(unique(joint$INSEE_COM))
+# extraction
+election2022 <- election2022 [election2022$INSEE_COM %in% cog$INSEE_COM,]
+length(unique(election2022$INSEE_COM))
 # 72 youpi au cas où ce n'est pas le cas :
-pb <- setdiff(cog$INSEE_COM, joint$INSEE_COM)
+pb <- setdiff(cog$INSEE_COM, filtre$INSEE_COM)
 cog[cog$INSEE_COM %in% pb ,]
 ```
 
@@ -387,6 +545,31 @@ election2022 <- rbind(election2022, lyon, mars)
 ```
 
 
+```{r}
+# ok Lyon 69 123 et Marseille 13 055
+lyon <- election2022 [election2022$INSEE_COM == "69123",]
+lyon$Code.du.b.vote <- as.integer(lyon$Code.du.b.vote)
+lyon <- lyon [lyon$Code.du.b.vote %in% c(101:117),]
+lyon$INSEE_COM <- "69381"
+# joint on retire puis on ajoute
+election2022 <- election2022 [election2022$INSEE_COM != "69123",]
+election2022 <- rbind(election2022, lyon)
+```
+
+idem pour Marseille
+
+```{r}
+mars <- election2022 [election2022$INSEE_COM == "13055",]
+mars$Code.du.b.vote <- as.integer(mars$Code.du.b.vote)
+# recup des libellés bv
+tmp <- sort(mars$Code.du.b.vote)
+tmp <- tmp [1:18]
+mars <- mars [mars$Code.du.b.vote %in% tmp,]
+mars$INSEE_COM <- "13201"
+# joint on retire puis on ajoute
+election2022 <- election2022 [election2022$INSEE_COM != "13055",]
+election2022 <- rbind(election2022, mars)
+```
 
 
 ```{r}
@@ -408,11 +591,7 @@ write.csv(candidats,"data/candidats.csv")
 ```
 
 
-
-
-
-
-
+Agrégation par point adresse
 
 
 
@@ -593,6 +772,7 @@ write.csv(fic, paste0("data/gros/RPLS", refFIC), fileEncoding = "UTF-8", quote =
 
 
 Agrégation par point adresse
+
 
 
 
