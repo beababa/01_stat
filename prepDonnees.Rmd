@@ -97,6 +97,10 @@ df <- df [!(df$nb != 5),]
 Les étudiants ont choisi 73 code insee.
 
 
+![](img/lgtBondy.png)
+
+
+
 ## Jointure 
 
 Attention, la lecture du code insee peut se faire comme un chiffre et donc la donnée sera faussée.
@@ -179,7 +183,7 @@ write.csv(joint [, c("INSEE_COM", "NOM_COM_M"), drop = T], "data/cog.csv", fileE
 ```
 
 
-## Cartographie (sans Pointe à Pitre)
+## Cartographie France (sans Pointe à Pitre)
 
 ```{r}
 cogGEOM <- st_read("data/gros/geo.gpkg", "cog") 
@@ -200,6 +204,7 @@ dev.off()
 ![](img/communes.png)
 
 Des choix sur toute l'étendue du territoire de la métropole
+
 
 
 # Extraction des données
@@ -249,6 +254,7 @@ bvSel <- bv [bv$insee %in% cog$INSEE_COM,]
 (tab <- sort(table (bvSel$insee)))
 png("img/distributionBureau.png")
 hist(tab, main = "Distribution du nombre de bureaux choix communes étudiants",
+     sub = "2078 bureaux au total",
      col = "coral", border = NA,
      xlab = "nb de bureaux",
      ylab = "nb de villes")
@@ -349,8 +355,20 @@ iris <- rbind(irisSel, irisSelPAP)
 enregistrement
 
 ```{r}
-st_write(iris, "data/gros/geo.gpkg", "iris", delete_layer = T)
+st_write(iris, "data/gros/geo.gpkg", "iris", row.names = F,delete_layer = T)
 ```
+
+
+Les IRIS sont définis par rapport aux limites communales.
+
+```{r}
+
+```
+
+
+
+
+
 
 
 
@@ -664,9 +682,19 @@ for (i in valDpt){
 
 
 ```{r}
-lgt <- read.csv2("data/gros/base-ic-logement-2019.CSV", dec = ".")
+lgt <- read.csv2("data/gros/base-ic-logement-2019.CSV", dec = ".", fileEncoding = "UTF-8")
+str(lgt[,1:6])
+# les colonnes sont en alpha et en entier sans spécification d'ouverture.
 lgt <- lgt [lgt$COM %in% cog$INSEE_COM,]
+# 1364
 unique(lgt$COM)
+#  il faut spécifier les colonnes à quoter
+caract <- which(sapply(lgt, function(y) (is.character(y))))
+write.csv2(lgt,"data/gros/lgt.csv", quote= caract , row.names = F , fileEncoding = "UTF-8")
+# test de reouverture
+reouv <- read.csv2("data/gros/lgt.csv", 
+                    fileEncoding = "UTF-8", header = T)
+str(reouv[,1:6])
 ```
 
 72 communes
@@ -676,7 +704,7 @@ test Bondy
 
 ```{r}
 bondy <- lgt [lgt$COM == '93010',]
-png("data/vfBondy.png")
+png("img/lgtBondy.png")
 plot(bondy$P19_LOGVAC, bondy$P19_MAISON, pch = 20, col ="coral",
      main = "Logements vacants et maisons à Bondy",
      xlab = "logements vacants", ylab = "maisons")
@@ -684,17 +712,8 @@ dev.off()
 ```
 
 
-enregistrement
+![](img/lgtBondy.png)
 
-```{r}
-write.csv(lgt, "data/gros/lgt.csv", fileEncoding = "UTF-8", quote = T)
-valDpt <- unique(vfSel$Code.departement)
-lgtSel$dpt <- substring(lgtSel$COM,1,2)
-for (i in valDpt){
-  sel <- lgtSel [lgtSel$dpt == i,]
-  write.csv2(sel [, c(48,1:43)], paste0("data/examen/lgt/", i, "_lgtEXAMEN.csv"), fileEncoding = "UTF-8")
-}
-```
 
 
 ### RPLS
@@ -782,6 +801,9 @@ bv <- bv [bv$aire > 5,]
 2113 au départ 2098, puis 2096 à la fin
 
 
+```{r}
+st_write(bv, "data/gros/geo.gpkg", "bvValide", delete_layer = T)
+```
 
 
 
@@ -889,7 +911,7 @@ data [data$INSEE_COM == '01150',]
 
 Croisement iris / bv
 
-### Carto repère sur l'Ile de France
+### Cartographie : Iris et bureaux de vote
 
 ```{r}
 fond <- st_read("data/gros/DEPARTEMENT.shp")
@@ -897,23 +919,24 @@ fond <- st_transform(fond, 2154)
 ```
 
 
-
-Histoire de repérer quelques communes test
-
 ```{r}
-png("img/idF.png", height = 1200, width = 1200, res = 200)
+png("img/idF.png", height = 2400, width = 2400, res = 400)
 fond <- fond [fond$INSEE_REG == 11,]
-mf_map(fond, col = "antiquewhite1", border = "pink")
-mf_map(iris, col= "white", border = "blue", add = T)
-mf_map(bv, border = "red", col = NA, add = T)
-etik <- bv [!duplicated(bv$insee),]
-mf_label(etik, var = "nom",overlap = F )
-mf_layout("iris, bv et ile de france", "ign")
+mf_init(fond [fond$INSEE_DEP == 75,])
+mf_map(fond, col = "antiquewhite1", border = "pink", add = T)
+mf_map(iris, col= "cornsilk", border = "blue", lwd = 2, add = T)
+mf_map(bv, col = NA, border = "coral", add = T)
+etik <- iris [!duplicated(iris$INSEE_COM),]
+mf_label(etik, var = "NOM_COM",overlap = F, lines = T, halo = T )
+mf_layout("iris, bureaux de vote et proche banlieue", "ign")
 dev.off()
 ```
 
 
 ![](img/idF.png)
+
+
+
 
 ### Traitement
 
@@ -1217,6 +1240,13 @@ write.csv(data, "data/devoirMaison/lgt.csv", fileEncoding = "UTF-8", row.names =
 ## Traitement final : concaténation de tous les fichiers.
 
 
+### Données 
+
+```{r}
+cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8", colClasses = "character")
+```
+
+
 ### Vérification
 
 pour chacun des fichiers, on vérifie le nb de communes concernées et le code bureau.
@@ -1246,7 +1276,7 @@ length(unique(lgt.csv$INSEE_COM))
 ```
 
 
-
+### Traitement
 
 
 ```{r}
@@ -1254,25 +1284,59 @@ fic <- list.files("data/devoirMaison/")
 fic <- fic [-c(1:4)]
 fin <- election.csv
 fin$bureau
-filosofi.csv$bureau
+f <- fic [1]
 for (f in fic){
   print(f)
-  tmp <- read.csv(paste0("data/devoirMaison/", f), fileEncoding = "UTF-8")
+  tmp <- read.csv(paste0("data/devoirMaison/", f), fileEncoding = "UTF-8", dec =",")
   fin <- merge(tmp,fin, by = "bureau", all.x = T)
 }
-write.csv(fin,"data/devoirMaison/base.csv", fileEncoding = "UTF-8")
+write.csv(fin,"data/devoirMaison/base.csv", fileEncoding = "UTF-8", row.names = FALSE, quote = T)
 length(unique(fin$Libellé.de.la.commune))
-
+names(fin)
 ```
 
 2204 obs
 
 67 communes
 
+
+Vérification
+
 ```{r}
-bondy <- fin [fin$Libellé.de.la.commune == "Bondy",]
-bondy
+fin <- na.omit(fin)
 ```
+
+1909 avt
+1838
+
+```{r}
+bondy <- na.omit(fin [fin$INSEE_COM == "93010",])
+election.csv$bureau [election.csv$Libellé.de.la.commune == 'Bondy']
+bondyFilo <-filosofi.csv$bureau [filosofi.csv$INSEE_COM == '93010']
+```
+
+```{r}
+car <- st_read("data/gros/geo.gpkg", "car")
+bv <-st_read("data/gros/geo.gpkg", "bv")
+bv$numBureau <- substring(bv$bureau, 7,8)
+bondy <- bv [bv$insee == '93010',]
+carBondy <- car [car$cog == '93010',]
+carBondyC <- st_centroid(carBondy)
+bondyC <- st_centroid(bondy)
+mf_init(bondy)
+mf_map(bondy, type = "typo", var ="bureau", add = T, border = "red", lwd=2)
+mf_map(carBondy, add = T, col=NA)
+mf_map(carBondyC, add = T)
+mf_label(bondy, var = "numBureau", col = "red", halo = T, overlap = T)
+# Cela signifie qu'un bv n'a aucun centroide de carreau sur son territoire.
+# je n'arrive pas à le voir sur la carte
+# TODO les carreaux couvrent le territoire
+setdiff(bondy$bureau, bondyFilo )
+inter <-st_intersection(bondy [, c("bureau")], st_centroid(carBondy [, c("idcar_200m")]))
+length(unique(inter$bureau))
+# il y a bien 32 bureaux : refaire l'intersection bureau carreau
+```
+
 
 On a perdu un bv...
 
@@ -1280,6 +1344,5 @@ On a perdu un bv...
 ```{r}
 setdiff(cog$INSEE_COM, fin$INSEE_COM)
 setdiff(cog$INSEE_COM, election.csv$Code.de.la.commune)
-
 ```
 
