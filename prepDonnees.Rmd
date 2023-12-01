@@ -54,7 +54,9 @@ library(mapsf)
 ```
 
 
-# cog
+# Base ; cog et bv
+
+## cog
 
 Définition de la liste des villes de base.
 
@@ -65,7 +67,7 @@ jusqu'au cours 9 pour les modifications
 
 Rochefort est rajouté à la main
 
-## Constitution de la liste 
+### Constitution de la liste 
 
 à partir de la feuille d'émargement
 
@@ -101,7 +103,7 @@ Les étudiants ont choisi 73 code insee.
 
 
 
-## Jointure 
+### Jointure 
 
 Attention, la lecture du code insee peut se faire comme un chiffre et donc la donnée sera faussée.
 Toujours vérifier que le code insee est une variable de type alphanumérique.
@@ -173,7 +175,7 @@ joint [joint$INSEE_COM == "97120",]
 
 
 
-premier enregistrement
+### Enregistrement données
 
 ```{r}
 #toutes les données pour le fichier géométrie
@@ -183,7 +185,7 @@ write.csv(joint [, c("INSEE_COM", "NOM_COM_M"), drop = T], "data/cog.csv", fileE
 ```
 
 
-## Cartographie France (sans Pointe à Pitre)
+### Cartographie France (sans Pointe à Pitre)
 
 ```{r}
 cogGEOM <- st_read("data/gros/geo.gpkg", "cog") 
@@ -205,26 +207,9 @@ dev.off()
 
 Des choix sur toute l'étendue du territoire de la métropole
 
+## Extraction et nettoyage du bv
 
-
-# Extraction des données
-
-On charge le cog et cogG (pour géographie)
-
-```{r}
-cog <- read.csv("data/cog.csv", colClasses = "character")
-# le colclasses permet de régler le pb du code insee
-str(cog)
-st_layers("data/gros/geo.gpkg")
-cogG <-  st_read("data/gros/geo.gpkg", "cog")
-```
-
-
-
-## Données spatiales
-
-
-### bv
+### Extraction
 
 ```{r}
 bv <- st_read("data/gros/bureau-de-vote-insee-reu-openstreetmap.gpkg")
@@ -233,6 +218,11 @@ bv <- st_transform(bv, 2154)
 fond <- st_transform(fond, 2154)
 ```
 
+
+
+#### Distribution des bureaux par commune
+
+##### Drom
 
 Ville à un seul bv : uniquement Drom
 
@@ -270,7 +260,7 @@ length(unique(bvSel$insee))
 manquants <- setdiff(cog$INSEE_COM, bvSel$insee)
 ```
 
-Rapport nb bureaux taille ville
+##### Rapport nb bureaux taille ville
 
 
 ```{r}
@@ -292,7 +282,7 @@ dev.off()
 ![](img/bvPOP.png)
 
 
-Cartographie de Marseille pour voir logique des nom de bureau
+##### Marseille
 
 ```{r}
 st_crs(fond)
@@ -321,12 +311,94 @@ enregistrement
 st_write(bvSel, "data/gros/geo.gpkg", "bv", delete_layer = T)
 ```
 
+
+
+#### Netooyage
+
+```{r}
+bv <- st_read("data/gros/geo.gpkg", "bv")
+bv2 <- bv [st_is_valid(bv),]
+#2113
+bv2 <- st_cast(bv, "POLYGON")
+#  3472 Du coup, pl polygone pour un bureau on supprime les petits poly
+bv2$aire <- st_area(bv2)/10000
+library(units)
+bv2$aire <- drop_units(bv2$aire)
+bv2 <- bv2 [bv2$aire > 5,]
+```
+
+2113 au départ 2098, puis 2096 à la fin
+
+
+Comparaison en terme de nb de bv
+
+```{r}
+tabke
+```
+
+
+
+
+```{r}
+st_write(bv, "data/gros/geo.gpkg", "bvValide", delete_layer = T)
+```
+
+
+
+
+
+# Extraction des données
+
+On charge le cog et cogG (pour géographie) et les bv valides
+
+```{r}
+cog <- read.csv("data/cog.csv", colClasses = "character")
+# le colclasses permet de régler le pb du code insee
+str(cog)
+st_layers("data/gros/geo.gpkg")
+cogG <-  st_read("data/gros/geo.gpkg", "cog")
+bv <- st_read("data/gros/geo.gpkg", "bvValide")
+```
+
+
+
+## Données spatiales
+
+
+
+
 ### Iris
 
 
 ```{r}
 iris <- st_read("data/gros/IRIS-GE_3-0_SHP_LAMB93_FXX-ED2023-01-01/IRIS.shp")
 ```
+
+
+```{r}
+carre <- function(c) {
+  carCOG <- NULL
+  i <- grep(c, car$lcog_geo)
+  lg <- car$lcog_geo [i]
+  carCOG <- car [car$lcog_geo %in% lg, ]
+  return(carCOG)
+}
+fin <- NULL
+for (c in cog$INSEE_COM) {
+  print(c)
+  tmp <- carre(c)
+  fin <- rbind(fin, tmp)
+}
+str(car$lcog_geo)
+# suppression doublons (pl carre sont limitrophes)
+#fin <- fin [!duplicated(fin$lcog_geo),]
+# 1420 carreaux
+st_write(fin, "data/gros/geo.gpkg", "car", delete_layer = T)
+```
+
+18 917 carreaux
+
+
 
 ```{r}
 names(iris)
@@ -362,14 +434,20 @@ st_write(iris, "data/gros/geo.gpkg", "iris", row.names = F,delete_layer = T)
 Les IRIS sont définis par rapport aux limites communales.
 
 ```{r}
-
+fond <- st_read("data/gros/COMMUNE_CARTO.shp")
+fond <- st_transform(fond, 2154)
+iris <- st_read("data/gros/geo.gpkg", "iris")
+bondy <- fond [fond$INSEE_COM == "93010",]
+png("png/iris.png")
+mf_init(bondy)
+mf_map(fond, col = "antiquewhite1", add = T, border ="red", lwd = 2)
+bondyIris <- iris [iris$NOM_COM == 'Bondy',]
+mf_map(bondyIris, col = NA, border = "aquamarine1", alpha = 0.8, lwd =3,add = T)
+mf_layout("IRIS et limites communales IGN", "IGN")
+dev.off()
 ```
 
-
-
-
-
-
+![](img/iris.png)
 
 
 ### Carreaux Filosofi
@@ -382,9 +460,58 @@ carSel <- car [car$cog %in% cog$INSEE_COM,]
 length(unique(carSel$cog))
 ```
 
-toujours 71, manque pointe à pitre
+#### Sélection carreaux
+
+Les carreaux peuvent appartenir à plusieurs communes.
+
+On sélectionne tous les carreaux concernés et on les attribue à la commune avec un prorata surface.
+
+
+```{r}
+carre <- function(c) {
+  carCOG <- NULL
+  i <- grep(c, car$lcog_geo)
+  lg <- car$lcog_geo [i]
+  carCOG <- car [car$lcog_geo %in% lg, ]
+  return(carCOG)
+}
+fin <- NULL
+for (c in cog$INSEE_COM) {
+  print(c)
+  tmp <- carre(c)
+  fin <- rbind(fin, tmp)
+}
+str(car$lcog_geo)
+
+st_write(fin, "data/gros/geo.gpkg", "car", delete_layer = T)
+```
+
+18 917 carreaux
+
+
+# verif et prorata
+
+```{r}
+car <- st_read("data/gros/geo.gpkg", "car")
+length(unique(substring(car$lcog_geo,1,5)))
+# on vérifie si les 72 communes y sont
+setdiff(cog$INSEE_COM, substring(car$lcog_geo,1,5))
+```
+
+579 communes c'est normale il y a les limitrophes.
 
 Pas de filosofi à la Guadeloupe - moindre qualité des sources.
+
+
+on va prendre les limites définis par les bv
+
+
+```{r}
+
+bvLimite <- aggregate(bv, by = list(bv$insee), st_union)
+
+```
+
 
 
 
@@ -392,12 +519,6 @@ Bondy, carreaux et stats
 
 ```{r}
 bv <- st_read( "data/gros/geo.gpkg", "bv")
-```
-
-
-
-
-```{r}
 bondy <- carSel [carSel$lcog_geo == '93010',]
 bvBondy <- bv [bv$nom == 'Bondy',]
 png("img/carreauxStat1.png")
@@ -422,7 +543,31 @@ dev.off()
 ![](img/carreauxStat2.png)
 
 ![](img/carreauxCarto.png)
+Attention, problème des carreaux sur la frontière.
 
+Il vaut mieux récupérer tous les carreaux 93010
+
+```{r}
+car <- st_read("data/gros/geo.gpkg", "car")
+i <- grep("93010", car$lcog_geo)
+carBondy <- car$lcog_geo [i]
+carBondy <- car [car$lcog_geo %in% carBondy,]
+png("img/carBondy2.png")
+mf_map(bondy)
+mf_map(car, type = "choro", var = "men_pauv", border = NA,add = T, alpha = 0.5)
+mf_layout("Tous les carreaux", "INSEE/IGN")
+dev.off()
+st_write(carBondy, "data/gros/geo.gpkg", "carBondy", delete_layer = T)
+```
+
+
+
+
+
+![](img/carBondy2.png)
+
+
+`
 
 
 Enregistrement des carreaux par dpt
@@ -444,7 +589,7 @@ for (i in valDpt){
 ```
 
 
-## RPLS
+### RPLS
 
 Le RPLS est par région et par dpt en idf
 
@@ -690,11 +835,14 @@ lgt <- lgt [lgt$COM %in% cog$INSEE_COM,]
 unique(lgt$COM)
 #  il faut spécifier les colonnes à quoter
 caract <- which(sapply(lgt, function(y) (is.character(y))))
-write.csv2(lgt,"data/gros/lgt.csv", quote= caract , row.names = F , fileEncoding = "UTF-8")
+write.csv(lgt,"data/gros/lgt.csv", quote= caract , row.names = F , fileEncoding = "UTF-8")
 # test de reouverture
-reouv <- read.csv2("data/gros/lgt.csv", 
-                    fileEncoding = "UTF-8", header = T)
+reouv <- read.csv("data/gros/lgt.csv",  quote = "\"", fileEncoding = "UTF-8")
 str(reouv[,1:6])
+head(reouv)[,1:6]
+lgt [lgt$X.COM.=="\"01150\"",]
+# trop complexe
+
 ```
 
 72 communes
@@ -781,30 +929,6 @@ cogG <- st_read("data/geo.gpkg", "cog")
 cogG <- st_transform(cogG, 2154)
 cogG$aire <- st_area(cogG)
 ```
-
-
-## Nettoyage du bv
-
-
-Le bv pas valide pour les intersection
-
-```{r}
-bv <- bv [st_is_valid(bv),]
-bv <- st_cast(bv, "POLYGON")
-# Du coup, pl polygone pour un bureau on supprime les petits poly
-bv$aire <- st_area(bv)/10000
-library(units)
-bv$aire <- drop_units(bv$aire)
-bv <- bv [bv$aire > 5,]
-```
-
-2113 au départ 2098, puis 2096 à la fin
-
-
-```{r}
-st_write(bv, "data/gros/geo.gpkg", "bvValide", delete_layer = T)
-```
-
 
 
 
