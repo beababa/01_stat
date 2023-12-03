@@ -20,9 +20,11 @@ knitr::opts_chunk$set(warning  = FALSE)
 On lit la donnée, on filtre sur Bondy
 
 ```{r}
-data <- read.csv("data/data2022.csv", fileEncoding = "UTF-8", dec = ",")
+data <- read.csv("data/election2022.csv", fileEncoding = "UTF-8", dec = ",")
 names(data)
 data <- data [data$INSEE_COM == '93010',]
+#data <- data [data$INSEE_COM == '72154',]
+# la flèche
 ```
 
 On la met en forme au niveau des colonnes :
@@ -52,7 +54,8 @@ names(pct) [1] <- "abst"
 On attribue les numéros des bureaux
 
 ```{r}
-rownames(pct) <- c(1:32)
+rownames(pct) <- c(1:length(data$Code.du.b.vote))
+rownames(pct)
 ```
 
 On sauvegarde pour pouvoir l'utiliser à nouveau
@@ -66,18 +69,23 @@ write.csv(pct, "data/pctBondy.csv", fileEncoding = "UTF-8")
 
 ```{r}
 pct <- read.csv("data/pctBondy.csv", fileEncoding = "UTF-8")
+# élimination de la 1e colonne si nécessaire
 pct <- pct [,-1]
 summary(pct)
 cor(pct)
 pairs(pct)
 ```
 
+
+
 # ACP analyse en composante principale
 
 ```{r}
-res <- prcomp(pct)
+res <- prcomp(pct, scale. = F)
 plot(res)
+png("img/acpCentreNONReduite.png")
 biplot(res)
+dev.off()
 ```
 
 Deux graphiques superposés : 
@@ -107,13 +115,42 @@ plot(cah)
 Dendrogramme avec matérialisation des groupes
 
 ```{r}
+#png("img/lafleche3.png")
 plot(cah)
 rect.hclust(cah,k=4)
 groupes.cah <- cutree(cah,k=4)
+#dev.off()
 #liste des groupes
 print(sort(groupes.cah))
 ```
 
+# Quelques remarques autour de ces premiers résultats
+
+
+Il s'agit de faire correspondre le cercle de correlation et le dendogramme
+
+
+![](img/lafleche.png) ![](img/lafleche3.png)
+
+
+
+Cas de la Flèche : isolement du bureau 17
+
+L'abstention est beaucoup plus basse qu'ailleurs (17), Mélenchon très sous représenté et Macron sur représenté.
+
+On prend le bureau 13 qui est à l'opposé sur le cercle de corrélation
+
+```{r, eval=FALSE}
+# on filtre sur les deux bureaux
+pct_13_17 <- pct [c(13,17),]
+# on transforme en matrice pour pouvoir faire un graphique de comparaison des répartitions
+mat <- as.matrix(pct_13_17)
+png("img/lafleche2.png")
+barplot(mat, las = 2, beside = T, col = terrain.colors(2))
+dev.off()
+```
+
+![](img/lafleche2.png)
 
 # Deuxième approche
 
@@ -131,6 +168,12 @@ pct <- pct [, c(2,3,5,7,9,10:13)]
 ```
 
 Et on reproduit le code.
+
+
+![](img/ptit.png)
+
+
+
 
 ## Les bureaux de vote
 
@@ -152,5 +195,45 @@ res$rotation
 res$sdev
 # variance
 100 * res$sdev^2 / sum(res$sdev^2)   
+```
+
+
+# Compléments pour le devoir maison
+
+voir item scriptEtudiant.html 
+
+
+## Filtre sur Bondy
+
+Cela fonctionne mais on a perdu 2 bureaux
+
+
+```{r}
+base <- read.csv("data/devoirMaison/base.csv", fileEncoding = "UTF-8")
+bondy <- base [base$INSEE_COM == '93010',]
+```
+
+
+## Une vision cartographique
+
+
+https://demo-terravisu.solutions-territoriales.fr/visualiser/elections#map=14.27/48.9005/2.46921&layers=a0c5903b79811fda82ef73b9dca9aacc
+
+
+Cette carte permet de savoir situer les bureaux de vote sur la commune, et éventuellement d'opposer nord, centre et sud par exemple.
+
+
+
+
+## Centrer et réduire
+
+
+![](img/acpCentreNONReduite.png)
+![](img/acpCentreReduite.png)
+
+Idem avec la classification
+
+```{r}
+pct.cr <- scale(pct, center = T, scale = T)
 ```
 

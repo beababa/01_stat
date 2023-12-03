@@ -80,9 +80,11 @@ villeModif <- read.csv("data/cours3.csv", colClasses = "character")
 ville <- c(ville, villeModif [,4])
 # recup dernier cours
 villeModif <- read.csv("data/cours9.csv", colClasses = "character")
-# rajout Rochefort
-ville <- c(ville, 17299)
 ville <- c(ville, villeModif [,4])
+# rajout Rochefort
+ville <- c(ville, '17299')
+# rajout 94019 Chenevières
+ville <- c(ville, '94019')
 # 78 villes différentes
 ville <- unique(na.omit(ville))
 # recodage pour le zéro
@@ -158,7 +160,7 @@ joint <- unique(joint)
 quelques tests sur quelques villes
 
 ```{r}
-joint$NOM_COM_M[grep("ROCHE|ISSY|VITRY|ACH|POIN", joint$NOM_COM_M)]
+joint$NOM_COM_M[grep("ROCHE|ISSY|VITRY|ACH|POIN|CHENN", joint$NOM_COM_M)]
 ```
 
 2 points de vigilance :
@@ -1378,6 +1380,8 @@ pour chacun des fichiers, on vérifie le nb de communes concernées et le code b
 
 ```{r}
 fic <- list.files("data/devoirMaison/")
+fic
+# elimination des 3 premieres valeurs qui sont les résultats
 fic <- fic [-c(1:3)]
 f <- fic [1]
 for (f in fic){
@@ -1407,6 +1411,7 @@ length(unique(lgt.csv$INSEE_COM))
 fic <- list.files("data/devoirMaison/")
 fic <- fic [-c(1:4)]
 fin <- election.csv
+# 2133
 fin$bureau
 f <- fic [1]
 for (f in fic){
@@ -1435,6 +1440,7 @@ fin <- na.omit(fin)
 
 ```{r}
 bondy <- na.omit(fin [fin$INSEE_COM == "93010",])
+bondy
 election.csv$bureau [election.csv$Libellé.de.la.commune == 'Bondy']
 bondyFilo <-filosofi.csv$bureau [filosofi.csv$INSEE_COM == '93010']
 ```
@@ -1468,5 +1474,17 @@ On a perdu un bv...
 ```{r}
 setdiff(cog$INSEE_COM, fin$INSEE_COM)
 setdiff(cog$INSEE_COM, election.csv$Code.de.la.commune)
+```
+
+
+
+## Pb des NA sur la base
+
+
+```{r}
+base <- read.csv("data/devoirMaison/base.csv", fileEncoding = "UTF-8")
+base <- na.omit(base)
+bondy <- base [base$INSEE_COM == '93010',]
+write.csv(base, "data/devoirMaison/base.csv", row.names = F, fileEncoding = "UTF-8")
 ```
 
