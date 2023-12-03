@@ -9,7 +9,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(eval  = FALSE)
+knitr::opts_chunk$set(eval  = TRUE)
 knitr::opts_chunk$set(echo  = TRUE)
 knitr::opts_chunk$set(warning  = FALSE)
 ``` 
@@ -45,6 +45,8 @@ table(extension)
 4 scripts R et 7 pdf
 
 
+
+
 # Points importants
 
 ## Le code postal
@@ -77,44 +79,4 @@ dev.off()
 ```
 
 
-
-## Utiliser les graphiques de façon libre
-
-
-
-```{r}
-hist(commune$Abstentions, "distribution")
-barplot(commune$Inscrits, "répartition")
-```
-
-
-Mais aussi pour comparer les bureaux
-
-
-```{r}
-barplot(commune$Inscrits~commune$Code.du.b.vote)
-barplot(commune$Abstentions~commune$Code.du.b.vote)
-```
-
-
-Plus délicat
-
-Il faut transformer en matrice
-
-```{r}
-data <- read.csv("data/pctBondy.csv")
-data <- data [,-1]
-matrice <- as.matrix(data)
-boxplot(matrice, las= 2)
-boxplot(t(matrice))
-```
-
-```{r}
-candidats <- colnames(matrice)
-matrice <- matrice [1:5,]
-colnames(matrice)
-barplot(t(matrice), beside = T, 
-        xlab = "bureaux de vote", names.arg = c(1:5), legend.text = candidats)
-
-```
 

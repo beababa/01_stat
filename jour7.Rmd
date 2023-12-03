@@ -127,7 +127,8 @@ print(sort(groupes.cah))
 # Quelques remarques autour de ces premiers résultats
 
 
-Il s'agit de faire correspondre le cercle de correlation et le dendogramme
+## Correspondance cercle de correlation et dendrogramme
+
 
 
 ![](img/lafleche.png) ![](img/lafleche3.png)
@@ -152,7 +153,48 @@ dev.off()
 
 ![](img/lafleche2.png)
 
-# Deuxième approche
+## Quelques graphiques pour mieux observer
+
+
+### Comparer les bureaux variable par variable
+
+
+```{r}
+commune <- read.csv("data/election2022.csv", fileEncoding = "UTF-8", dec =",")
+commune <- commune [commune$INSEE_COM == '93010',]
+barplot(commune$Inscrits~commune$Code.du.b.vote, las =2)
+barplot(commune$Abstentions~commune$Code.du.b.vote, las =2)
+```
+
+
+### Plus complexe, bureau par bureau
+
+Il faut transformer en matrice
+
+```{r}
+data <- read.csv("data/pctBondy.csv")
+data <- data [,-1]
+# suppression 1e colonne si nécessaire
+matrice <- as.matrix(data)
+boxplot(matrice, las= 2)
+# transposition de la matrice
+boxplot(t(matrice))
+```
+
+
+
+```{r}
+candidats <- colnames(matrice)
+matrice <- matrice [1:5,]
+colnames(matrice)
+barplot(t(matrice), beside = T, 
+        xlab = "bureaux de vote", names.arg = c(1:5), legend.text = candidats)
+
+```
+
+
+
+# Deuxième approche de l'ACP, on fltre
 
 Deux directions possibles :
 
