@@ -126,6 +126,19 @@ for (i in valDpt){
 }
 ```
 
+
+Enregistrement des carreaux par dpt
+
+```{r}
+valDpt <- unique(vfSel$Code.departement)
+carSel$dpt <- substring(carSel$lcog_geo,1,2)
+carSel <- carSel [,c(37,1:33), drop = T]
+for (i in valDpt){
+  sel <- carSel [carSel$dpt == i,]
+  write.csv2(sel, paste0("data/examen/car/", i, "_carEXAMEN.csv"), fileEncoding = "UTF-8")
+}
+```
+
 ## Valeurs foncières
 
 
@@ -162,6 +175,16 @@ for (i in valDpt){
 
 
 
+on enregistre par dpt
+
+
+```{r}
+valDpt <- unique(vfSel$Code.departement)
+for (i in valDpt){
+  sel <- vfSel [vfSel$Code.departement == i,]
+  write.csv2(sel [, c(48,1:43)], paste0("data/examen/vf/", i, "_vfEXAMEN.csv"), fileEncoding = "UTF-8")
+}
+```
 
 
 # Corrections

@@ -95,13 +95,13 @@ df$nb <- nchar(df$ville)
 table(df$nb)
 df [(df$nb != 5),]
 df <- df [!(df$nb != 5),]
-# liste des villes utilisées avec code à 5 chiffres = 73
+# liste des villes utilisées avec code à 5 chiffres = 75
 ```
 
-Les étudiants ont choisi 73 code insee.
+Les étudiants ont choisi 75 code insee.
 
 
-![](img/lgtBondy.png)
+
 
 
 
@@ -120,7 +120,7 @@ fr <- st_read("data/gros/COMMUNE_CARTO.shp")
 names(df)
 names(fr)
 joint <- merge(fr, df, by.x = "INSEE_COM", by.y= "ville")
-# la jointure est de 68
+# la jointure est de 70
 # pb sur 5 code insee qui doivent etre des cp
 cp <- setdiff(df$ville, joint$INSEE_COM)
 ```
@@ -148,19 +148,19 @@ equiv <- equiv [, c("code", "nom")]
 df <- rbind(df, data.frame(ville=equiv$code, nb = 5))
 ```
 
-79 villes = 73 + 5 code insee liés à des cp
+81 villes = 76 + 5 code insee liés à des cp
 
 ```{r}
 joint <- merge(fr, df, by.x = "INSEE_COM", by.y= "ville")
 joint <- unique(joint)
 ```
 
-72 villes récupérées, il y avait des doublons.
+74 villes récupérées, il y avait des doublons.
 
 quelques tests sur quelques villes
 
 ```{r}
-joint$NOM_COM_M[grep("ROCHE|ISSY|VITRY|ACH|POIN|CHENN", joint$NOM_COM_M)]
+joint$NOM_COM_M[grep("ROCHE|ISSY|VITRY|ACH|POIN|CHENN|LAGNIEU|GRANVILLE", joint$NOM_COM_M)]
 ```
 
 2 points de vigilance :
@@ -190,8 +190,10 @@ write.csv(joint [, c("INSEE_COM", "NOM_COM_M"), drop = T], "data/cog.csv", fileE
 ### Cartographie France (sans Pointe à Pitre)
 
 ```{r}
+cog <- read.csv("data/cog.csv", colClasses = "character")
 cogGEOM <- st_read("data/gros/geo.gpkg", "cog") 
-cogGEOM <- cogGEOM [-72,]
+cogGEOM [cogGEOM$INSEE_COM == "97120",]
+cogGEOM <- cogGEOM [-74,]
 ```
 
 
@@ -244,9 +246,10 @@ bv$insee <- substring(bv$bureau, 1,5)
 bvSel <- bv [bv$insee %in% cog$INSEE_COM,]
 # dénombrement
 (tab <- sort(table (bvSel$insee)))
+length(names(tab))
 png("img/distributionBureau.png")
 hist(tab, main = "Distribution du nombre de bureaux choix communes étudiants",
-     sub = "2078 bureaux au total",
+     sub = "2128 bureaux au total pour 74 communes",
      col = "coral", border = NA,
      xlab = "nb de bureaux",
      ylab = "nb de villes")
@@ -257,8 +260,6 @@ dev.off()
 
 
 ```{r}
-# 68 596 bureaux deviennent 2078
-length(unique(bvSel$insee))
 manquants <- setdiff(cog$INSEE_COM, bvSel$insee)
 ```
 
@@ -269,7 +270,8 @@ manquants <- setdiff(cog$INSEE_COM, bvSel$insee)
 # récupération de la population par ville
 df <- as.data.frame(tab) 
 names(df) <- c("INSEE_COM", "nbBureaux")
-joint <- merge(cogG, df, by = "INSEE_COM")
+joint <- merge(cogGEOM, df, by = "INSEE_COM")
+str(joint)
 joint$POPULATION <- joint$POPULATION/1000
 png("img/bvPOP.png")
 plot(joint$nbBureaux, joint$POPULATION, col="coral3", pch = 20,
@@ -329,23 +331,28 @@ bv2$aire <- drop_units(bv2$aire)
 bv2 <- bv2 [bv2$aire > 5,]
 ```
 
-2113 au départ 2098, puis 2096 à la fin
+2128 au départ 2113, puis 2129 à la fin
 
 
 Comparaison en terme de nb de bv
 
 ```{r}
-tabke
+bvTab <- table(bv$insee)
+bv2Tab <- table(bv2$insee)
+#On compare les 2 tableaux
+sort(bvTab - bv2Tab)
 ```
 
 
+Pas mal de perte, il faut regarder dans le détail, on tolère une différence de 3 bureaux.
 
+A voir au cas par cas.
 
 ```{r}
-st_write(bv, "data/gros/geo.gpkg", "bvValide", delete_layer = T)
+st_write(bv2, "data/gros/geo.gpkg", "bvValide", delete_layer = T)
 ```
 
-
+#2129 bureaux enregistrés
 
 
 
@@ -377,29 +384,6 @@ iris <- st_read("data/gros/IRIS-GE_3-0_SHP_LAMB93_FXX-ED2023-01-01/IRIS.shp")
 ```
 
 
-```{r}
-carre <- function(c) {
-  carCOG <- NULL
-  i <- grep(c, car$lcog_geo)
-  lg <- car$lcog_geo [i]
-  carCOG <- car [car$lcog_geo %in% lg, ]
-  return(carCOG)
-}
-fin <- NULL
-for (c in cog$INSEE_COM) {
-  print(c)
-  tmp <- carre(c)
-  fin <- rbind(fin, tmp)
-}
-str(car$lcog_geo)
-# suppression doublons (pl carre sont limitrophes)
-#fin <- fin [!duplicated(fin$lcog_geo),]
-# 1420 carreaux
-st_write(fin, "data/gros/geo.gpkg", "car", delete_layer = T)
-```
-
-18 917 carreaux
-
 
 
 ```{r}
@@ -414,7 +398,7 @@ manquants <- setdiff(cog$INSEE_COM, irisSel$INSEE_COM)
 cog$NOM_COM_M [cog$INSEE_COM %in% manquants]
 ```
 
-1356 iris
+1366 iris
 
 rajout Pointe à pitre (changemetn proj)
 
@@ -440,7 +424,7 @@ fond <- st_read("data/gros/COMMUNE_CARTO.shp")
 fond <- st_transform(fond, 2154)
 iris <- st_read("data/gros/geo.gpkg", "iris")
 bondy <- fond [fond$INSEE_COM == "93010",]
-png("png/iris.png")
+png("img/iris.png")
 mf_init(bondy)
 mf_map(fond, col = "antiquewhite1", add = T, border ="red", lwd = 2)
 bondyIris <- iris [iris$NOM_COM == 'Bondy',]
@@ -483,12 +467,21 @@ for (c in cog$INSEE_COM) {
   tmp <- carre(c)
   fin <- rbind(fin, tmp)
 }
-str(car$lcog_geo)
-
 st_write(fin, "data/gros/geo.gpkg", "car", delete_layer = T)
 ```
 
-18 917 carreaux
+19 317 carreaux
+
+
+```{r}
+# suppression doublons (pl carre sont limitrophes)
+#fin <- fin [!duplicated(fin$lcog_geo),]
+# 1451 carreaux
+st_write(fin, "data/gros/geo.gpkg", "carSansDoublon", delete_layer = T)
+```
+
+
+
 
 
 # verif et prorata
@@ -500,28 +493,18 @@ length(unique(substring(car$lcog_geo,1,5)))
 setdiff(cog$INSEE_COM, substring(car$lcog_geo,1,5))
 ```
 
-579 communes c'est normale il y a les limitrophes.
+595 communes c'est normale il y a les limitrophes.
 
 Pas de filosofi à la Guadeloupe - moindre qualité des sources.
 
 
-on va prendre les limites définis par les bv
-
-
-```{r}
-
-bvLimite <- aggregate(bv, by = list(bv$insee), st_union)
-
-```
-
-
-
-
 Bondy, carreaux et stats
+
+2 graphiques et 1 carte
 
 ```{r}
 bv <- st_read( "data/gros/geo.gpkg", "bv")
-bondy <- carSel [carSel$lcog_geo == '93010',]
+bondy <- car [car$lcog_geo == '93010',]
 bvBondy <- bv [bv$nom == 'Bondy',]
 png("img/carreauxStat1.png")
 plot(bondy$men_pauv, bondy$men_mais, col = "coral3", pch = 20, main = "carreau IRIS, relation ménage pauvre et maison à Bondy")
@@ -545,6 +528,7 @@ dev.off()
 ![](img/carreauxStat2.png)
 
 ![](img/carreauxCarto.png)
+
 Attention, problème des carreaux sur la frontière.
 
 Il vaut mieux récupérer tous les carreaux 93010
@@ -572,7 +556,6 @@ st_write(carBondy, "data/gros/geo.gpkg", "carBondy", delete_layer = T)
 `
 
 
-Enregistrement des carreaux par dpt
 
 ```{r}
 st_write(carSel, "data/gros/geo.gpkg", "car", delete_layer = T)
@@ -580,15 +563,7 @@ st_write(carSel, "data/gros/geo.gpkg", "car", delete_layer = T)
 
 16 M carreaux
 
-```{r}
-valDpt <- unique(vfSel$Code.departement)
-carSel$dpt <- substring(carSel$lcog_geo,1,2)
-carSel <- carSel [,c(37,1:33), drop = T]
-for (i in valDpt){
-  sel <- carSel [carSel$dpt == i,]
-  write.csv2(sel, paste0("data/examen/car/", i, "_carEXAMEN.csv"), fileEncoding = "UTF-8")
-}
-```
+
 
 
 ### RPLS
@@ -651,7 +626,8 @@ L'objectif serait dés cette étape d'utiliser le code bureau : insee et numéro
 
 
 ```{r}
-bv <- st_read("data/gros/geo.gpkg", "bv")
+bv <- st_read("data/gros/geo.gpkg", "bvValide")
+# 2129
 nomBureauMars <- substring(bv$bureau [bv$nom == "Marseille"], 7,9)
 cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8", colClasses = "character")
 # jointure ville code insee pour les résultats
@@ -688,8 +664,6 @@ combien de bv dans le fichier bv ? 17 et 18
 
 ```{r}
 pb <- election2022 [election2022$INSEE_COM %in% c('13055', '69123'),]
-write.csv(pb, "data/pb.csv", fileEncoding = "UTF-8", row.names = F, quote=TRUE)
-pb <- read.csv("data/pb.csv", fileEncoding = "UTF-8")
 lyon <- pb [pb$Libellé.de.la.commune == 'Lyon',]
 lyon <- lyon [lyon$Code.du.b.vote %in% c(101:117),]
 lyon$INSEE_COM <- '69381'
@@ -699,7 +673,7 @@ mars$Code.de.la.commune <- '13201'
 election2022Sel <- rbind(election2022Sel, lyon, mars)
 ```
 
-2133 bureaux
+2149 bureaux
 
 
 ```{r}
@@ -775,7 +749,7 @@ vfSel <- vf [vf$cog %in% cog$INSEE_COM,]
 length(unique(vfSel$cog))
 ```
 
-71 communes
+73 communes
 
 ```{r}
 manquants <- setdiff(cog$INSEE_COM, vfSel$cog)
@@ -811,29 +785,19 @@ write.csv(vfSel [, c(48,9:43)], "data/gros/vf.csv", fileEncoding = "UTF-8")
 ```
 
 
-on enregistre par dpt
-
-
-```{r}
-valDpt <- unique(vfSel$Code.departement)
-for (i in valDpt){
-  sel <- vfSel [vfSel$Code.departement == i,]
-  write.csv2(sel [, c(48,1:43)], paste0("data/examen/vf/", i, "_vfEXAMEN.csv"), fileEncoding = "UTF-8")
-}
-```
 
 
 
 ###  Base logement (IRIS)
 
-
+![](img/lgtBondy.png)
 
 ```{r}
 lgt <- read.csv2("data/gros/base-ic-logement-2019.CSV", dec = ".", fileEncoding = "UTF-8")
 str(lgt[,1:6])
 # les colonnes sont en alpha et en entier sans spécification d'ouverture.
 lgt <- lgt [lgt$COM %in% cog$INSEE_COM,]
-# 1364
+# 1374
 unique(lgt$COM)
 #  il faut spécifier les colonnes à quoter
 caract <- which(sapply(lgt, function(y) (is.character(y))))
@@ -920,7 +884,7 @@ On a déjà les bv et les carreaux
 
 ```{r}
 st_layers("data/gros/geo.gpkg")
-bv <- st_read("data/gros/geo.gpkg", "bv")
+bv <- st_read("data/gros/geo.gpkg", "bvValide")
 car <- st_read("data/gros/geo.gpkg", "car")
 iris <- st_read("data/gros/geo.gpkg", "iris")# 1364
 ```
@@ -1000,7 +964,7 @@ for (i in 1:length(dpt)){
 
 ```{r}
 st_layers("data/gros/bv.gpkg")
-# 72 couches
+# 74 couches
 ```
 
 
@@ -1014,7 +978,7 @@ lireGPKG <- function(numCouche){
   cadastre$INSEE_COM <- substring(couche [numCouche], 4, 8)
   st_write(cadastre, "data/gros/geoInter.gpkg", "cadastre", append = T )
 }
-couche <- c(1:72)
+couche <- c(1:74)
 lapply(couche, lireGPKG)
 ```
 
@@ -1189,17 +1153,25 @@ st_write(inter, "data/gros/geoInter.gpkg", "car", delete_layer = T)
 
 ### csv
 
+On vérifie les décimales
+
 ```{r}
-election2022 <- read.csv("data/election2022.csv", fileEncoding = "UTF-8")
-vf <- read.csv("data/gros/vf.csv", fileEncoding = "UTF-8", dec = ".", colClasses = "character")
+election2022 <- read.csv("data/election2022.csv", fileEncoding = "UTF-8", dec =",")
+str(election2022)
+vf <- read.csv("data/gros/vf.csv", fileEncoding = "UTF-8", dec = ".")
+str(vf)
 lgt <- read.csv("data/gros/lgt.csv", fileEncoding = "UTF-8")
+str(lgt)
 #rpls <- list.files("data/gros/RPLS")
-cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8", colClasses = "character")
+cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8")
+str(cog)
 ```
 
 Pas de donnée csv dans les carreaux, elles sont déjà dedans
 
-Pour chaque fichier attention au cog
+Pour chaque fichier attention au cog, cette fois ci on le passe en num.partt
+
+
 
 ### Spatial
 
@@ -1218,9 +1190,10 @@ cadastre <- st_read("data/gros/geoInter.gpkg", "cadastre")
 
 ```{r}
 setdiff(cog$INSEE_COM, iris$INSEE_COM)
+car$bureau
 ```
 
-
+Pb sur tous les codes insee zéro sf dans les iris
 
 
 ## Traitement
@@ -1236,6 +1209,7 @@ v <- names(car)[11:38]
 agg <- aggregate(car [, v], by = list(car$bureau), sum)
 names(agg)[1] <- "bureau"
 agg <- st_drop_geometry(agg)
+str(agg) # verif num partout
 write.csv(agg,"data/devoirMaison/filosofi.csv", fileEncoding = "UTF-8", row.names = F)
 ```
 
@@ -1263,6 +1237,7 @@ joint <- merge(cadastre, vf, by = "cle")
 
 189 549...
 170 M
+445 M
 
 #### Agrégation
 
@@ -1274,10 +1249,7 @@ Essai de type local
 ```{r}
 names(joint)
 v <- names(joint)[c(10,38,39,42)]
-joint$Valeur.fonciere <-as.numeric(joint$Valeur.fonciere)
-joint$Surface.reelle.bati <-as.numeric(joint$Surface.reelle.bati)
-joint$Surface.terrain <-as.numeric(joint$Surface.terrain)
-joint$Nombre.pieces.principales <- as.numeric(joint$Nombre.pieces.principales)
+str (joint[,v])
 agg <- aggregate(joint [,v], by = list(joint$bureau), mean, na.rm=T, na.action=NULL)
 names(agg)[1] <- "bureau"
 agg <- st_drop_geometry(agg)
@@ -1309,13 +1281,13 @@ str(lgt$IRIS)
 str(iris$CODE_IRIS)
 ```
 
-1365 et 2079
+1365 et 2079 et 2123
 
 ```{r}
 joint <- merge(iris, lgt, by.x = "CODE_IRIS", by.y = "IRIS")
 ```
 
-2089
+2121
 On en a perdu 2
 
 ```{r}
@@ -1334,12 +1306,8 @@ attention bureau unique à DROM 01150_1
 
 ```{r}
 names(joint)
-# choix de variables
-var <- c( "P19_MAISON","P19_RP_120M2P","P19_RP_ACHTOT","P19_RP_ACH19",         "P19_RP_ACH45", "P19_RP_ACH70","P19_RP_ACH90","P19_RP_ACH05", "P19_RP_ACH15",
-"P19_RP_CCCOLL")
-convertir <- function(var) {
-  var <- as.numeric(var)
-}
+str(joint)
+# tout est en numérique
 joint <- st_drop_geometry(joint)
 col <- NULL
 v <- "prorata"
@@ -1347,12 +1315,11 @@ tmp <- NULL
 nom <- NULL
 for (v in var){
   tmp <- ( joint[,v])
- tmp <-convertir(tmp)
- col <- cbind(col, tmp)
+  col <- cbind(col, tmp)
  nom <- c(nom, v)
 }
 # on a une matrice, on utilise la colonne prorata pour tt traiter
-prorata <- convertir(joint [,"prorata"])
+prorata <- (joint [,"prorata"])
 data <- prorata*col
 data <- as.data.frame(data)
 names(data) <- nom
@@ -1361,7 +1328,7 @@ names(data)[1] <- "bureau"
 write.csv(data, "data/devoirMaison/lgt.csv", fileEncoding = "UTF-8", row.names = F)
 ```
 
-2089
+2121
 
 ## Traitement final : concaténation de tous les fichiers.
 
@@ -1369,7 +1336,7 @@ write.csv(data, "data/devoirMaison/lgt.csv", fileEncoding = "UTF-8", row.names =
 ### Données 
 
 ```{r}
-cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8", colClasses = "character")
+cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8")
 ```
 
 
@@ -1383,7 +1350,6 @@ fic <- list.files("data/devoirMaison/")
 fic
 # elimination des 3 premieres valeurs qui sont les résultats
 fic <- fic [-c(1:3)]
-f <- fic [1]
 for (f in fic){
   print(f)
   tmp <- read.csv(paste0("data/devoirMaison/", f), fileEncoding = "UTF-8")
@@ -1419,14 +1385,14 @@ for (f in fic){
   tmp <- read.csv(paste0("data/devoirMaison/", f), fileEncoding = "UTF-8", dec =",")
   fin <- merge(tmp,fin, by = "bureau", all.x = T)
 }
-write.csv(fin,"data/devoirMaison/base.csv", fileEncoding = "UTF-8", row.names = FALSE, quote = T)
+write.csv(fin,"data/devoirMaison/base.csv", fileEncoding = "UTF-8", row.names = FALSE)
 length(unique(fin$Libellé.de.la.commune))
 names(fin)
 ```
 
 2204 obs
 
-67 communes
+64 communes
 
 
 Vérification
@@ -1447,7 +1413,7 @@ bondyFilo <-filosofi.csv$bureau [filosofi.csv$INSEE_COM == '93010']
 
 ```{r}
 car <- st_read("data/gros/geo.gpkg", "car")
-bv <-st_read("data/gros/geo.gpkg", "bv")
+bv <-st_read("data/gros/geo.gpkg", "bvValide")
 bv$numBureau <- substring(bv$bureau, 7,8)
 bondy <- bv [bv$insee == '93010',]
 carBondy <- car [car$cog == '93010',]
