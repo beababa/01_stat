@@ -141,7 +141,7 @@ dev.off()
 
 ### Effectif et cours
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 fic <- list.files("data/", pattern = "^cours")
 fic
 # on recherche le fichier le plus haut
@@ -164,6 +164,7 @@ knitr::kable(tab)
 # Graphique
 p <- barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(nb) 
         , border = NA, legend =  F)
+
 ```
 
 

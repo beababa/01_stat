@@ -81,12 +81,15 @@ pairs(pct)
 # ACP analyse en composante principale
 
 ```{r}
+pct <- read.csv("data/pctBondy.csv")
 res <- prcomp(pct, scale. = F)
 plot(res)
 png("img/acpCentreNONReduite.png")
 biplot(res)
 dev.off()
 ```
+
+![](img/acpCentreNONReduite.png)
 
 Deux graphiques superposés : 
 
@@ -194,7 +197,7 @@ barplot(t(matrice), beside = T,
 
 
 
-# Deuxième approche de l'ACP, on fltre
+# Deuxième approche de l'ACP, on filtre
 
 Deux directions possibles :
 
@@ -203,6 +206,8 @@ Deux directions possibles :
 - on zoome sur certains bureaux de vote
 
 ## Les candidats
+
+On veut montrer uniquement les petits candidats
 
 ```{r}
 names(pct)
@@ -222,30 +227,56 @@ Et on reproduit le code.
 On choisit un bureau dans chacun des 4 groupes : 3 15 29 13
 
 ```{r}
+pct <- read.csv("data/pctBondy.csv", fileEncoding = "UTF-8")
+pct <- pct [,-1]
 pct <- pct [c(3,15,29,13),]
+acp <- prcomp(pct)
+biplot(acp)
 ```
 
-Pour chaque graphique, faire une analyse 
-
-Pourcentage d'information expliqué 
-
-```{r}
-plot(res)
-# composantes principales
-res$rotation
-# écarts types
-res$sdev
-# variance
-100 * res$sdev^2 / sum(res$sdev^2)   
-```
 
 
 # Compléments pour le devoir maison
 
-voir item scriptEtudiant.html 
+voir item scriptEtudiant.html pour le groupe 1
+
+## Une vision cartographique
 
 
-## Filtre sur Bondy
+https://demo-terravisu.solutions-territoriales.fr/visualiser/elections#map=14.27/48.9005/2.46921&layers=a0c5903b79811fda82ef73b9dca9aacc
+
+Cette carte permet de comprendre les problèmes liés à la base.
+En effet, comme le dessin du bureau est fait automatiquement, il y a des bureaux discontinus.
+
+
+```{r}
+library(sf)
+library(mapsf)
+bv <- st_read("data/gros/geo.gpkg", "bv")
+bvBondy <- bv [bv$insee == '93010',]
+bureau <- substring(bvBondy$bureau,7,9)
+rownames(bvBondy) <- bureau
+bv32 <- bvBondy [rownames(bvBondy)==32,]
+png("img/bv32.png")
+mf_init(bv32)
+mf_map(bvBondy, type = "typo", var = "bureau", add = T, leg_pos = NA)
+mf_map(bv32, col = NA, border ="red",lwd=2, add = T)
+mf_label(bvBondy, var = "bureau", overlap = F)
+mf_layout("Bureau de vote discontinu", "opendata, réutilisation des REU")
+dev.off()
+```
+
+![](img/bv32.png)
+
+Cette carte permet également de savoir situer les bureaux de vote sur la commune, et éventuellement d'opposer nord, centre et sud par exemple.
+
+
+
+
+
+## Filtrer la base du devoir maison : pb éventuels
+
+### Disparition de bureaux
 
 Cela fonctionne mais on a perdu 2 bureaux
 
@@ -253,16 +284,20 @@ Cela fonctionne mais on a perdu 2 bureaux
 ```{r}
 base <- read.csv("data/devoirMaison/base.csv", fileEncoding = "UTF-8")
 bondy <- base [base$INSEE_COM == '93010',]
+length(bondy$bureau)
 ```
 
-
-## Une vision cartographique
-
-
-https://demo-terravisu.solutions-territoriales.fr/visualiser/elections#map=14.27/48.9005/2.46921&layers=a0c5903b79811fda82ef73b9dca9aacc
+### Doublons
 
 
-Cette carte permet de savoir situer les bureaux de vote sur la commune, et éventuellement d'opposer nord, centre et sud par exemple.
+```{r}
+table(bondy$bureau)
+# 2 fois le bureau 7
+# la commande duplicated permet de voir les doublons
+# le ! indique que l'on ne veut pas du doublon
+doublon <- bondy [duplicated(bondy$bureau),]
+bondy <- bondy [!duplicated(bondy$bureau),]
+```
 
 
 
@@ -270,8 +305,18 @@ Cette carte permet de savoir situer les bureaux de vote sur la commune, et éven
 ## Centrer et réduire
 
 
+### Comprendre l'option "scale." dans la commande
+
+```{r, eval=FALSE}
+res <- prcomp(pct, scale. = FALSE)
+```
+
+
 ![](img/acpCentreNONReduite.png)
 ![](img/acpCentreReduite.png)
+
+
+
 
 Idem avec la classification
 
