@@ -352,7 +352,7 @@ A voir au cas par cas.
 st_write(bv2, "data/gros/geo.gpkg", "bvValide", delete_layer = T)
 ```
 
-#2129 bureaux enregistrés
+2129 bureaux enregistrés
 
 
 
@@ -480,6 +480,16 @@ st_write(fin, "data/gros/geo.gpkg", "car", delete_layer = T)
 st_write(fin, "data/gros/geo.gpkg", "carSansDoublon", delete_layer = T)
 ```
 
+pb Drom, vérifier les carreaux
+
+15 carreaux sélectionnnés cela apparaît trop peu
+
+```{r}
+bvChoix <- bv [bv$insee == "01150"]
+mf_map(bvChoix)
+mf_map(car, type= "choro", "ind", add = T)
+mf_layout("Drom, 1 bv et 15 carreaux")
+```
 
 
 
@@ -610,6 +620,7 @@ write.csv(fic, paste0("data/gros/RPLS", refFIC), fileEncoding = "UTF-8", quote =
 
 ## Données texte
 
+
 ### résultats des élections 2022
 
 Comme avec les bv, les points de vigilance sont :
@@ -629,6 +640,7 @@ L'objectif serait dés cette étape d'utiliser le code bureau : insee et numéro
 bv <- st_read("data/gros/geo.gpkg", "bvValide")
 # 2129
 nomBureauMars <- substring(bv$bureau [bv$nom == "Marseille"], 7,9)
+write.csv(nomBureauMars, "data/devoirMaison/marseille.csv")
 cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8", colClasses = "character")
 # jointure ville code insee pour les résultats
 election2022 <- read.csv("data/gros/resultats-par-niveau-burvot-t1-france-entiere.csv", fileEncoding = "UTF-8", header = T, colClasses = "character")
@@ -640,6 +652,7 @@ election2022 <- read.csv("data/gros/resultats-par-niveau-burvot-t1-france-entier
 ```{r, eval=FALSE}
 # INSEE_COM code insee
 election2022$INSEE_COM<-paste0(election2022$Code.du.département,election2022$Code.de.la.commune)
+election2022$INSEE_COM
 ```
 
 
@@ -652,7 +665,7 @@ election2022$INSEE_COM[election2022$INSEE_COM =="ZA120"] <- 97120
 election2022Sel <- election2022 [election2022$INSEE_COM %in% cog$INSEE_COM,]
 length(unique(election2022Sel$INSEE_COM))
 # 72 youpi au cas où ce n'est pas le cas :
-pb <- setdiff(cog$INSEE_COM, election2022$INSEE_COM)
+pb <- setdiff(cog$INSEE_COM, election2022Sel$INSEE_COM)
 cog[cog$INSEE_COM %in% pb ,]
 ```
 
@@ -669,33 +682,32 @@ lyon <- lyon [lyon$Code.du.b.vote %in% c(101:117),]
 lyon$INSEE_COM <- '69381'
 mars <- pb [pb$Libellé.de.la.commune == 'Marseille',]
 mars <- mars [mars$Code.du.b.vote %in% nomBureauMars,]
-mars$Code.de.la.commune <- '13201'
+mars$INSEE_COM <- '13201'
 election2022Sel <- rbind(election2022Sel, lyon, mars)
 ```
 
-2149 bureaux
+2182 2148 bureaux
 
+Refaire la verif
 
 ```{r}
 election2022Sel$Code.du.b.vote <- paste0(election2022Sel$INSEE_COM, "_", election2022Sel$Code.du.b.vote)
-write.csv(election2022Sel,"data/election2022.csv", fileEncoding = "UTF-8", row.names = FALSE)
+write.csv(election2022Sel,"data/devoirMaison/election2022.csv", fileEncoding = "UTF-8", row.names = FALSE)
 ```
 
+pb de la décimale
 
-
-remplacer les en têtes par les noms, on extrait les candidats
-
-le remplacement se fera en fonction des colonnes choisies % ou inscrits ou sexe etc...
 
 ```{r}
-election2022 <- read.csv("data/election2022.csv", fileEncoding = "UTF-8")
-ind <- grep("Nom", names(election2022))
-candidats  <- t(unique(election2022[, c(ind)]))
-candidats <- as.vector(candidats)
-write.csv(candidats,"data/candidats.csv")
+election2022 <- read.csv("data/devoirMaison/election2022.csv", 
+                         fileEncoding = "UTF-8", dec =",")
+str(election2022$Code.du.b.vote)
+write.csv(election2022,"data/devoirMaison/election2022.csv", fileEncoding = "UTF-8")
 ```
 
 
+
+Ce fichier sera joint à celui des bureaux de vote.
 
 
 
@@ -928,8 +940,8 @@ dpt <- substring(cog$INSEE_COM,1,2)
 code <- substring(cog$INSEE_COM,1,6)
 
 # en cas de sous boucle. pour diminuer les communes concernés
-dpt <- dpt [1:6]
-code <- code [1:6]
+dpt <- dpt [1]
+code <- code [1]
 i <-1
 dpt <- "971"
 code <- "97120"
@@ -990,7 +1002,10 @@ Drom 1 seul bv, on intersecte à la parcelle
 
 ```{r}
 data <- st_read("data/gros/geoInter.gpkg", "cadastre")
-data [data$INSEE_COM == '01150',]
+choix <- data [data$INSEE_COM == '01150',]
+mf_map(choix)
+mf_layout("centroides parcelles Drom", "cadastre")
+choix
 ```
 
 
@@ -1143,9 +1158,21 @@ names(inter)
 st_write(inter, "data/gros/geoInter.gpkg", "car", delete_layer = T)
 ```
 
+On recherche les carreaux pour 01150
 
+```{r}
+interChoix <- inter [inter$insee == "01150",]
+#interChoix$ind
+bvChoix <- bv [bv$insee == "01150",]
+png("img/drom.png")
+mf_map(bvChoix)
+mf_map(cadastre, col = NA, border ="pink", add = T)
+mf_map(car, type = "choro", var = "ind", add = T)
+mf_layout("Drom, 15 carreaux, 3495 parcelles et 1 bv", "opendata")
+dev.off()
+```
 
-
+![](img/drom.png)
 
 # Jointure et agrégation au bv des données texte
 
@@ -1156,10 +1183,14 @@ st_write(inter, "data/gros/geoInter.gpkg", "car", delete_layer = T)
 On vérifie les décimales
 
 ```{r}
-election2022 <- read.csv("data/election2022.csv", fileEncoding = "UTF-8", dec =",")
-str(election2022)
-vf <- read.csv("data/gros/vf.csv", fileEncoding = "UTF-8", dec = ".")
+election2022 <- read.csv("data/devoirMaison/election2022.csv", fileEncoding = "UTF-8")
+str(election2022$INSEE_COM)
+# 2148 dec ok
+vf <- read.csv("data/gros/vf.csv", fileEncoding = "UTF-8", colClasses = "character")
 str(vf)
+# nécessité character pour code insee
+# test sur Drom
+vf [vf$cog == "01150",]
 lgt <- read.csv("data/gros/lgt.csv", fileEncoding = "UTF-8")
 str(lgt)
 #rpls <- list.files("data/gros/RPLS")
@@ -1169,7 +1200,7 @@ str(cog)
 
 Pas de donnée csv dans les carreaux, elles sont déjà dedans
 
-Pour chaque fichier attention au cog, cette fois ci on le passe en num.partt
+Pour chaque fichier attention au cog, cette fois ci on le passe en num partt
 
 
 
@@ -1180,9 +1211,9 @@ Tout est dans geoInter.gpkg
 
 ```{r}
 st_layers("data/gros/geoInter.gpkg")
-car <- st_read("data/gros/geoInter.gpkg", "car")
-iris <- st_read("data/gros/geoInter.gpkg", "iris") # 2091
-cadastre <- st_read("data/gros/geoInter.gpkg", "cadastre")
+car <- st_read("data/gros/geoInter.gpkg", "car") # 14964
+iris <- st_read("data/gros/geoInter.gpkg", "iris") # 2123
+cadastre <- st_read("data/gros/geoInter.gpkg", "cadastre")# 2 M
 ```
 
 
@@ -1213,6 +1244,11 @@ str(agg) # verif num partout
 write.csv(agg,"data/devoirMaison/filosofi.csv", fileEncoding = "UTF-8", row.names = F)
 ```
 
+Verif
+
+voir debug
+
+
 ### vf
 
 #### Jointure
@@ -1224,6 +1260,7 @@ str(cadastre)
 cadastre$cle <- paste0(cadastre$INSEE_COM, "_", cadastre$section, cadastre$numero)
 str(vf)
 vf$cle <- paste0(vf$cog, "_", vf$Section, vf$No.plan)
+vf$cle
 ```
 
 
@@ -1238,6 +1275,18 @@ joint <- merge(cadastre, vf, by = "cle")
 189 549...
 170 M
 445 M
+513 M
+
+Enregistremetn poour récupérer les champs numériques
+
+```{r}
+joint <- st_drop_geometry(joint)
+write.csv(joint, "data/gros/jointureVFCadastre.csv", fileEncoding = "UTF-8", row.names = F)
+vf <- read.csv("data/gros/jointureVFCadastre.csv", fileEncoding = "UTF-8")
+str(vf)
+```
+
+
 
 #### Agrégation
 
@@ -1247,14 +1296,27 @@ On va faire la moyenne des ventes, surfaces (bati et terrain)
 Essai de type local
 
 ```{r}
-names(joint)
-v <- names(joint)[c(10,38,39,42)]
-str (joint[,v])
-agg <- aggregate(joint [,v], by = list(joint$bureau), mean, na.rm=T, na.action=NULL)
+names(vf)
+v <- names(vf)[c(10,38,39,42)]
+str (vf[,v])
+agg <- aggregate(vf [,v], by = list(vf$bureau), mean, na.rm=T, na.action=NULL)
 names(agg)[1] <- "bureau"
 agg <- st_drop_geometry(agg)
 write.csv(agg, "data/devoirMaison/vfMoyenne.csv", fileEncoding = "UTF-8", row.names = FALSE)
 ```
+
+# 1897
+
+
+Verif sur 97120
+
+
+```{r}
+ind <- grep("97120", agg$bureau)
+agg [ind,]
+```
+
+
 
 ### IRIS
 
