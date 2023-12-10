@@ -41,12 +41,29 @@ knitr::kable(data)
 
 L'important c'est
 
-```{r}
+```{r, eval=TRUE}
 t <- t(data [1,])
 t <- t [-1,]
 knitr::kable(t, col.names = "lien donnée géométrie", row.names = F)
 ```
 
+
+###  Cartographies
+
+#### Les IRIS
+
+![](img/idf.png)
+
+![](img/arpajon.png)
+
+#### Les carreaux
+
+![](img/carBondy2.png)
+
+#### Les parcelles cadastrales
+
+
+![](img/dromCadastre.png)
 
 
 ##  Base logement (IRIS)

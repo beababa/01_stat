@@ -15,6 +15,13 @@ knitr::opts_chunk$set(warning  = FALSE)
 ``` 
 
 
+```{r}
+library(sf)
+library(mapsf)
+```
+
+
+
 # Préparation de la donnée
 
 On lit la donnée, on filtre sur Bondy
@@ -81,7 +88,6 @@ pairs(pct)
 # ACP analyse en composante principale
 
 ```{r}
-pct <- read.csv("data/pctBondy.csv")
 res <- prcomp(pct, scale. = F)
 plot(res)
 png("img/acpCentreNONReduite.png")
@@ -181,7 +187,7 @@ data <- data [,-1]
 matrice <- as.matrix(data)
 boxplot(matrice, las= 2)
 # transposition de la matrice
-boxplot(t(matrice))
+boxplot(t(matrice), las=2)
 ```
 
 
@@ -245,13 +251,13 @@ voir item scriptEtudiant.html pour le groupe 1
 
 https://demo-terravisu.solutions-territoriales.fr/visualiser/elections#map=14.27/48.9005/2.46921&layers=a0c5903b79811fda82ef73b9dca9aacc
 
+### Dessin des bureaux de vote
+
 Cette carte permet de comprendre les problèmes liés à la base.
 En effet, comme le dessin du bureau est fait automatiquement, il y a des bureaux discontinus.
 
 
 ```{r}
-library(sf)
-library(mapsf)
 bv <- st_read("data/gros/geo.gpkg", "bv")
 bvBondy <- bv [bv$insee == '93010',]
 bureau <- substring(bvBondy$bureau,7,9)
@@ -268,13 +274,39 @@ dev.off()
 
 ![](img/bv32.png)
 
+
+### Une aide à la compréhension des résultats ?
+
 Cette carte permet également de savoir situer les bureaux de vote sur la commune, et éventuellement d'opposer nord, centre et sud par exemple.
 
+
+![](img/bondyBV.png)
+
+Ainsi, sur Bondy
+
+Les bureaux 10, 12, 14, 23 représentent des profils
+
+
+![](img/acpCentreNONReduite.png)
+
+
+```{r}
+bvBondy <- st_read("data/gros/geo.gpkg", "bv")
+bvBondy  <- bvBondy [bvBondy$nom == "Bondy",] 
+mf_map(bvBondy)
+bvBondy$nom <- substring(bvBondy$bureau,7,9)
+bvProfil <- bvBondy[bvBondy$nom %in% c(10,12,14,23),]
+mf_label(bvProfil, var = "nom")
+mf_layout ("Des profils différents au centre de Bondy même", "opendata/ élections 2022 et REU")
+```
 
 
 
 
 ## Filtrer la base du devoir maison : pb éventuels
+
+La géographie discontinue des bureaux de vote génère des problèmes qui doivent être
+réglés avant de lancer l'ACP.
 
 ### Disparition de bureaux
 
@@ -287,6 +319,8 @@ bondy <- base [base$INSEE_COM == '93010',]
 length(bondy$bureau)
 ```
 
+
+
 ### Doublons
 
 
@@ -297,10 +331,31 @@ table(bondy$bureau)
 # le ! indique que l'on ne veut pas du doublon
 doublon <- bondy [duplicated(bondy$bureau),]
 bondy <- bondy [!duplicated(bondy$bureau),]
+# la donnée sans doublons est considérée comme propre, on met les num de bureaux
+# et on enregistre
+rownames(bondy) <- substring(bondy$bureau,7,9)
+# on supprime la 1e colonne, celle des bureaux puisqu'on a les étiquettes
+bondy <- bondy [,-1]
+write.csv(bondy,"data/baseBondy.csv", row.names = F, fileEncoding = "UTF-8")
 ```
 
 
 
+### Données incomplètes
+
+Rappel : le dictionnaire des données indique la provenance.
+
+
+#### Cas de Pointe à Pitre
+
+```{r}
+data <- read.csv("data/devoirMaison/97120.csv", fileEncoding = "UTF-8")
+names(data)
+```
+
+Il manque toutes les données IRIS car pour l'INSEE, les chiffres ne sont pas fiables.
+
+Colmar n'a pas les valeurs foncières.
 
 ## Centrer et réduire
 
@@ -320,7 +375,28 @@ res <- prcomp(pct, scale. = FALSE)
 
 Idem avec la classification
 
-```{r}
+```{r, eval=FALSE}
 pct.cr <- scale(pct, center = T, scale = T)
 ```
+
+
+
+## Utiliser toutes les variables
+
+
+```{r}
+data <- read.csv("data/baseBondy.csv", fileEncoding = "UTF-8")
+names(data)
+data <- data [, -c(43:49)]
+ind <- grep("Voix", names(data))
+data<- data [,c( 2:57, ind)] 
+data <- data [,-42]
+pca <- prcomp(data, scale = F)
+biplot(pca)
+data <- data [,c(1,43,15,41)]
+pca <- prcomp(data, scale = T)
+biplot(pca)
+```
+
+Reprendre le script en classe et indiquer les commentaires
 
