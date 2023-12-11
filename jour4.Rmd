@@ -9,7 +9,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(eval = TRUE)
 ```
 
@@ -24,7 +24,7 @@ Enoncer les hypothèses possibles de la comparaison, attention variable explicat
 (cf moodle exercice *Introduction =régression*)
 
 
-```{r}
+```{r, echo = F}
 data <- read.csv("data/bondy2022.csv", fileEncoding = "UTF-8", dec =".")
 names(data)
 ind <- grep("^Voix",names(data))
@@ -88,6 +88,9 @@ Le graphique se met automatiquement à jour
 
 ![](img/filtre.png)
 
+
+#### Filtre sous R
+
 ```{r}
 sel <- data [data$Abstentions %in% c(150:300) ,]
 sel <- sel [sel$ZEMMOUR %in% c(5:32),]
@@ -114,7 +117,9 @@ Pour une droite aX+b
 La distance MP doit être minimale d'où le terme *droite des moindres carrées*
 
 
-```{r}
+#### Droite de régression sous R
+
+```{r, echo=TRUE}
 par(mfrow = c(2,1))
 plot(data$Abstentions, data$ZEMMOUR)
 # modèle de régression

@@ -359,6 +359,11 @@ Colmar n'a pas les valeurs foncières.
 
 ## Centrer et réduire
 
+Centrer et réduire permet de comparer les variables dont les montants sont très différents.
+
+Centrer : on compte les écarts à la moyenne
+
+Réduire : on divise toutes les valeurs par l'écart type.
 
 ### Comprendre l'option "scale." dans la commande
 
@@ -366,19 +371,43 @@ Colmar n'a pas les valeurs foncières.
 res <- prcomp(pct, scale. = FALSE)
 ```
 
+Il faut faire varier l'option avec FALSE et TRUE.
+
+Le FALSE permet d'obtenir uniquement les gros candidats.
 
 ![](img/acpCentreNONReduite.png)
+
+Le TRUE permet de pouvoir comparer tous les candidats
+
 ![](img/acpCentreReduite.png)
 
 
 
 
-Idem avec la classification
+### Idem avec la classification
 
 ```{r, eval=FALSE}
 pct.cr <- scale(pct, center = T, scale = T)
 ```
 
+### Au niveau des données
+
+On peut également utiliser la fonction scale pour les données elles-mêmes
+
+```{r}
+base <- read.csv("data/baseBondy.csv")
+# filtre sur 2 colonnes 
+base <- base [,c("Valeur.fonciere", "X..Voix.Exp.11")]
+# renommer les colonnes
+names(base) <- c("vf", "Dupont Aignant")
+# transformation en matrice
+mat <- as.matrix(base)
+# graphiques pour comparer les 2 variables par bureau de vote
+barplot(mat, beside=T)
+# on ne voit rien, il faut centrer réduire
+mat <- scale(mat)
+barplot(mat, beside = T)
+```
 
 
 ## Utiliser toutes les variables
