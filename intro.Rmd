@@ -216,17 +216,16 @@ for (i in (1:length(res))){
 
 
 ```{r, eval=FALSE}
-note <- read.csv("data/noteFin.csv", fileEncoding = "UTF-8", na.strings = "en attente", dec = ",")
-summary(note$note.sur.20)
-hist(note$note.sur.20, main = "Etalement note finale - 95 obs", freq = T, border = NA)
-resSansZero <- note [note$note.sur.20  !=0,]
-abline(v = mean(note$note.sur.20, na.rm = T),  col = "red")
- mean(note$note.sur.20)
-hist(resSansZero$note.sur.20, main = "Etalement note finale - 73 obs", freq = T, border = NA)
-abline(v = mean(resSansZero$note.sur.20, na.rm = T),  col = "red", lty = 2)
+note <- read.csv("data/noteFinales.csv", fileEncoding = "UTF-8", na.strings = c("EN ATTENTE", "NA","-"), dec = ",")
+summary(note)
+png("img/noteFin.png")
+hist(note$NOTE.FINALE, main = "Etalement note finale - 64 obs", freq = T, border = NA)
+abline(v = mean(note$NOTE.FINALE, na.rm = T),  col = "red")
+abline(v = median(note$NOTE.FINALE, na.rm=T), col = "blue")
+dev.off()
 ```
 
-
+![](img/noteFin.png)
 
 # Ressources autre que la bibliographie officielle
 

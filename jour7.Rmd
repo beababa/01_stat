@@ -70,12 +70,13 @@ On sauvegarde pour pouvoir l'utiliser à nouveau
 ```{r}
 write.csv(pct, "data/pctBondy.csv", fileEncoding = "UTF-8")
 ```
-
+```{r}
 
 # Exploration de la donnée
 
-```{r}
+
 pct <- read.csv("data/pctBondy.csv", fileEncoding = "UTF-8")
+pct
 # élimination de la 1e colonne si nécessaire
 pct <- pct [,-1]
 summary(pct)
@@ -387,6 +388,8 @@ pct.cr <- scale(pct, center = T, scale = T)
 ```{r}
 data <- read.csv("data/baseBondy.csv", fileEncoding = "UTF-8")
 names(data)
+table(data$Valeur.fonciere)
+
 data <- data [, -c(43:49)]
 ind <- grep("Voix", names(data))
 data<- data [,c( 2:57, ind)] 
