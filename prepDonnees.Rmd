@@ -317,7 +317,7 @@ st_write(bvSel, "data/gros/geo.gpkg", "bv", delete_layer = T)
 
 
 
-#### Netooyage
+#### Nettoyage
 
 ```{r}
 bv <- st_read("data/gros/geo.gpkg", "bv")
@@ -1003,13 +1003,14 @@ Drom 1 seul bv, on intersecte à la parcelle
 ```{r}
 data <- st_read("data/gros/geoInter.gpkg", "cadastre")
 choix <- data [data$INSEE_COM == '01150',]
+png("img/dromCadastre.png")
 mf_map(choix)
 mf_layout("centroides parcelles Drom", "cadastre")
-choix
+dev.off()
 ```
 
 
-
+![](img/dromCadastre.png)
 
 
 ## lgt / iris : prorata
