@@ -1,5 +1,5 @@
 ---
-title: "Préparation des données"
+title: "Préparation des données debug"
 output:
   html_document:
     number_sections: yes
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(warning  = FALSE)
 
 # Objectif
 
-
+Tester la source obtenue.
 
 
 ```{r}
@@ -25,7 +25,7 @@ library(sf)
 library(mapsf)
 ```
 
-## Traitement final : concaténation de tous les fichiers.
+# Traitement final : concaténation de tous les fichiers.
 
 
 ### Données 
@@ -157,7 +157,7 @@ setdiff(cog$INSEE_COM, fin$INSEE_COM)
 
 
 
-## Pb des NA sur la base
+# Pb des NA sur la base
 
 
 ```{r}
@@ -210,3 +210,38 @@ str(test)
 write.csv(test,"data/devoirMaison/test.csv", fileEncoding = "UTF-8")
 ```
 
+
+# Verif de la validité sur les variables
+
+Il y a des variables qui doivent être correlées.
+
+```{r}
+base <- read.csv("data/devoirMaison/base.csv", fileEncoding = "UTF-8")
+names(base)
+base <- base [!duplicated(base$bureau),]
+rownames(base) <- base$bureau
+```
+
+27:30 9:14
+
+```{r}
+base <- base  [,c(27:30, 9:14)]
+commune <- unique(substring(rownames (base),1,5))
+c <- commune [1]
+commune <- commune [-1]
+for (c in commune){
+  print(c)
+  tmp <- base [(substring(rownames (base),1,5))== c,]
+  acp <- prcomp(tmp)
+  png(paste0("img/biplot_",c,".png"))
+  biplot(acp)
+  dev.off()
+}
+
+
+```
+
+
+
+
+# Affichage de toutes les APC
