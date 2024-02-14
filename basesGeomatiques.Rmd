@@ -57,10 +57,58 @@ https://demo-terravisu.solutions-territoriales.fr/visualiser/elections#map=14.27
 library(sf)
 bv <- st_read("data/gros/bureau-de-vote-insee-reu-openstreetmap.gpkg")
 bondy <- bv [bv$insee == '93010',]
-st_write(bondy,"data/bvBondy.geojson")
+st_write(bondy,"data/geomatique_bvBondy.geojson")
 st_write(bv,"data/gros/bv.geojson")
 ```
 
+
+
+
+pb 75109
+
+
+```{r}
+paris <- (bv [grep('^75109', bv$bureau),])
+mf_map(paris)
+mf_map(paris2, add =T, col="red")
+st_is_valid(paris)
+paris2 <- st_cast(paris, "POLYGON")
+st_write(paris, "data/geomatique_75109d.geojson", append = FALSE)
+paris3 <- st_read("data/geomatique_75109.gpkg")
+st_write(paris3, "data/geomatique_75109b.geojson", append = FALSE)
+```
+
+
+extraction des communes
+
+```{r}
+villes <- read.csv("data/etudiantGeomatique.csv", fileEncoding = "UTF-8")
+villes <- villes$code.INSEE
+bvSel <- bv [bv$insee %in% villes,]
+library(mapsf)
+fond <- st_read("data/gros/DEPARTEMENT_CARTO.shp")
+```
+
+enregistrement par commune
+
+```{r}
+for (v in villes){
+  print(v)
+  data <- bv [bv$insee == v,]
+  st_write(data, paste0("data/geomatique_",v, ".geojson"), append = FALSE)
+}
+```
+
+
+```{r}
+png("img/coursGeomatique.png")
+mf_init(bv)
+mf_map(fond, add = T, col = "antiquewhite", border= "white")
+mf_map(bvSel, add = T, col = "red", border=NA)
+mf_layout("Choix des communes cours géomatique 2024", credits = "IGN")
+dev.off()
+st_write(bv, "data/bv.geojson")
+```
 
 
 # Présentation rapide (vous êtes nombreux !)
@@ -73,14 +121,13 @@ st_write(bv,"data/gros/bv.geojson")
 
 
 ```{r}
-etudiant <-  read.csv("data/cours1.csv", fileEncoding = "UTF-8")
+etudiant <-  read.csv("data/etudiantGeomatique.csv", fileEncoding = "UTF-8")
 names(etudiant)
-names(etudiant)[8:9] <- c("appétence", "nb d'années")
-png("img/quisontils.png", width = 10000, height = 10000, res=1800)
+png("img/quisontils.png", width = 8000, height = 5000, res=600)
 #par(mar = c(2,16,2,4))
-par(mfrow = c(2,3))
-for (i in 5:9){
-  (mar = c(2,16,2,4))
+par(mfrow = c(1,3))
+for (i in 2:4){
+  par(mar=c(1, 12, 2, 2))
   barplot(sort(table(etudiant [,i])), border = NA,
           horiz = T, las = 2, cex.names = 0.8, 
           main = names (etudiant) [i])
