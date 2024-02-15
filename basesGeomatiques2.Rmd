@@ -42,7 +42,41 @@ sqldf("select * from data where code_commune_ref like 1025")
 sqldf("select * from data where id_brut_bv_reu like '01025%'")
 data [data$code_commune_ref == 1001,]
 data <- read.csv.sql("data/gros/table-adresses-reu.csv", sql = "select * from file where code_commune_ref like 93010 " )
+data <- read.csv("data/gros/table-adresses-reu.csv")
+bondy <- data [data$code_commune_ref == 93010,]
+paris13 <- data [data$code_commune_ref == 75113,]
+sel <- data [data$code_commune_ref %in% villes,]
+table(sel$code_commune_ref)
+sel [sel$code_commune_ref == 33058,]
+# enregistrement
+villes <- unique(villes)
+for (v in villes) {
+  tmp <- sel [sel$code_commune_ref == v,]
+  write.csv(tmp,paste0("data/adresses", v, ".csv"), fileEncoding = "UTF-8")
+}
+write.csv(bondy, "data/adresses93010.csv", fileEncoding = "UTF-8")
+write.csv(paris13, "data/adresses75113.csv", fileEncoding = "UTF-8")
 ```
+
+
+avec format parquet à voir
+
+```{r}
+library(dplyr)
+
+# Cities for tests
+
+city_ids <- c("29046","29116","29039")
+
+
+# addresses_sample
+
+temp <- tempfile()
+download.file("https://www.data.gouv.fr/fr/datasets/r/8b5c75df-24ea-43ae-9f4c-6f5c633e942b", temp)
+addresses <- arrow::read_parquet(file.path("../../../../", temp))
+```
+
+
 
 
 ### Cartographies bureaux de vote
