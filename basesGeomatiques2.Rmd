@@ -1,0 +1,162 @@
+---
+title: "Introduction"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval  = TRUE)
+knitr::opts_chunk$set(echo  = TRUE)
+knitr::opts_chunk$set(warning  = FALSE)
+``` 
+
+
+2e partie pour cours géomatique, autres recup
+
+à utiliser plutôt quand travail mairie
+
+# recup des villes
+
+```{r}
+villes <- read.csv("data/etudiantGeomatique.csv", fileEncoding = "UTF-8")
+villes <- villes$code.INSEE
+villes  <- unique(villes)
+villes <- c(villes, 93010, 75113)
+```
+
+
+# adresses des électeurs
+
+Le fichier est très lourd, on essaie de le lire avec sqldf
+
+mais cela ne fonctionne pas
+
+```{r}
+library(sqldf)
+head("data/gros/table-adresses-reu.csv")
+data <- read.csv("data/gros/table-adresses-reu.csv", nrows = 10000)
+str(data)
+tail(data)
+sqldf("select * from data where code_commune_ref like 1025")
+sqldf("select * from data where id_brut_bv_reu like '01025%'")
+data [data$code_commune_ref == 1001,]
+data <- read.csv.sql("data/gros/table-adresses-reu.csv", sql = "select * from file where code_commune_ref like 93010 " )
+data <- read.csv("data/gros/table-adresses-reu.csv")
+bondy <- data [data$code_commune_ref == 93010,]
+paris13 <- data [data$code_commune_ref == 75113,]
+sel <- data [data$code_commune_ref %in% villes,]
+table(sel$code_commune_ref)
+sel [sel$code_commune_ref == 33058,]
+# enregistrement
+villes <- unique(villes)
+for (v in villes) {
+  tmp <- sel [sel$code_commune_ref == v,]
+  write.csv(tmp,paste0("data/adresses", v, ".csv"), fileEncoding = "UTF-8")
+}
+write.csv(bondy, "data/adresses93010.csv", fileEncoding = "UTF-8")
+write.csv(paris13, "data/adresses75113.csv", fileEncoding = "UTF-8")
+```
+
+
+avec format parquet à voir
+
+```{r}
+library(dplyr)
+
+# Cities for tests
+
+city_ids <- c("29046","29116","29039")
+
+
+# addresses_sample
+
+temp <- tempfile()
+download.file("https://www.data.gouv.fr/fr/datasets/r/8b5c75df-24ea-43ae-9f4c-6f5c633e942b", temp)
+addresses <- arrow::read_parquet(file.path("../../../../", temp))
+```
+
+
+
+
+
+
+# La donnée à utiliser
+
+```{r}
+library(sf)
+bv <- st_read("data/gros/bureau-de-vote-insee-reu-openstreetmap.gpkg")
+bondy <- bv [bv$insee == '93010',]
+st_write(bondy,"data/geomatique_bvBondy.geojson")
+st_write(bv,"data/gros/bv.geojson")
+```
+
+
+
+
+pb 75109
+
+
+```{r}
+paris <- (bv [grep('^75109', bv$bureau),])
+mf_map(paris)
+mf_map(paris2, add =T, col="red")
+st_is_valid(paris)
+paris2 <- st_cast(paris, "POLYGON")
+st_write(paris, "data/geomatique_75109d.geojson", append = FALSE)
+paris3 <- st_read("data/geomatique_75109.gpkg")
+st_write(paris3, "data/geomatique_75109b.geojson", append = FALSE)
+```
+
+
+extraction des communes
+
+```{r}
+villes <- read.csv("data/etudiantGeomatique.csv", fileEncoding = "UTF-8")
+villes <- villes$code.INSEE
+bvSel <- bv [bv$insee %in% villes,]
+library(mapsf)
+fond <- st_read("data/gros/DEPARTEMENT_CARTO.shp")
+```
+
+enregistrement par commune
+
+```{r}
+for (v in villes){
+  print(v)
+  data <- bv [bv$insee == v,]
+  st_write(data, paste0("data/geomatique_",v, ".geojson"), append = FALSE)
+}
+```
+
+# verif fichiers
+
+```{r}
+library(sf)
+data <- st_read("data/gros/bv.geojson")
+str(data)
+sel<- data [data$insee %in% villes,]
+unique(data$insee)
+data [grep("^75113|",data$insee), ]
+sel2 <- data [grep("^75113|^75109", data$bureau),]
+selTot <- rbind(sel, sel2)
+selTot <- selTot [,-5 ]
+st_write(selTot,"data/bv.geojson", append = F)
+```
+
+carreaux 1 km
+
+pour les ordis de la salle, les carreaux de 1km sont trop nombreux, on travaille donc uniquement
+sur une sélection
+
+
+
+```{r}
+carreau <- st_read("data/carreaux.gpkg", "carreaux__r_rfl09_laea1000mifSEL")
+st_write(carreau,"data/carreau.gpkg", "carreau1km")
+```
+
+
