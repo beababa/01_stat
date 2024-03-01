@@ -79,8 +79,8 @@ https://www.data.gouv.fr/fr/users/frederic-rodrigo/
 library(sf)
 bv <- st_read("data/gros/bureau-de-vote-insee-reu-openstreetmap.gpkg")
 bondy <- bv [bv$insee == '93010',]
-st_write(bondy,"data/geomatique_bvBondy.geojson")
-st_write(bv,"data/gros/bv.geojson")
+st_write(bondy,"data/geomatique_bvBondy.geojson", append = F)
+#st_write(bv,"data/gros/bv.geojson", append = F)
 st_coordinates(bondy)
 ```
 
@@ -90,17 +90,35 @@ extraction des communes du fichier F. Rodrigo
 
 ```{r}
 bvSel <- bv [bv$insee %in% villes,]
-(unique(bvSel$insee))
+length(unique(bvSel$insee))
+# 13, manque les 2 arrondissements 
 # pb des arrondissements parisiens
 paris <- (bv [grep('^75109|^75113', bv$bureau),])
 bvSel <- rbind(bvSel, paris)
 (unique(substring(bvSel$bureau,1,5)))
+# Normalement 15-1 puisque code INSEE pour paris
+length(unique(bvSel$insee))
 substring(bvSel$bureau,1,5)
-bv$insee[grep ("^33100",bv$insee)]
+bvSel$insee[grep ("^33100",bvSel$insee)]
 ```
 
 pour les communes 75056 paris et pour les bv NA pour 2 communes du 33... donc 14, mais c'est
 ok pour 15
+
+```{r}
+str(bvSel)
+bvSel <- bvSel [,-4]
+st_write(bvSel , "data/bv.geojson", append = F)
+```
+
+
+vérification doublons
+
+
+```{r}
+bvSelDoublon <- bvSel[!duplicated(bvSel),]
+bvSelDoublon <- bvSel [unique(bvSel$bureau),]
+```
 
 
 
