@@ -19,15 +19,6 @@ knitr::opts_chunk$set(warning  = FALSE)
 
 à utiliser plutôt quand travail mairie
 
-# recup des villes
-
-```{r}
-villes <- read.csv("data/etudiantGeomatique.csv", fileEncoding = "UTF-8")
-villes <- villes$code.INSEE
-villes  <- unique(villes)
-villes <- c(villes, 93010, 75113)
-```
-
 
 # adresses des électeurs
 

@@ -56,17 +56,23 @@ https://demo-terravisu.solutions-territoriales.fr/visualiser/elections#map=14.27
 ## Les choix des étudiants
 
 ```{r}
-villes <- read.csv("data/etudiantGeomatique.csv", fileEncoding = "UTF-8")
+villes <- read.csv("data/etudiantGeomatique2.csv", fileEncoding = "UTF-8")
 villes <- unique(villes$code.INSEE)
-# il manque le 13e car 2 étudiants avaient choisi la même ville
-villes <- c(villes, 75113, 93010,33325,33100,33382)
+# 24
+# 8 communes pour le 33 + Bondy
+villes <- c(villes,  93010,33325,33100,33382,  33473, 33458, 33047, 33441, 33416)
+villes <- unique(villes)
+table(substring(villes,1,2))
 ```
 
-11 communes + Bondy
+33 communes inclu Bondy 
 
-Rajouter Plassac, Cars, Saint Chrystophyde de blaye;33325,33100,33382
++ pt vigilance Paris 4 arrondissements
 
-Donc, on attend 15 communes en tout
+Rajouter Plassac, Cars, Saint Chrystophyde de blaye;33325,33100,33382, 
+et 33473, 33458, 33047, 33441, 33416
+
+Donc, on attend 33 communes en tout
 
 
 ## Les bureaux de vote
@@ -90,10 +96,15 @@ extraction des communes du fichier F. Rodrigo
 
 ```{r}
 bvSel <- bv [bv$insee %in% villes,]
-length(unique(bvSel$insee))
-# 13, manque les 2 arrondissements 
+villeSel <- as.numeric((unique(bvSel$insee)))
+pb <- setdiff(villes, villeSel)
+pb <- paste0("^", pb, "|")
+pb [5] <- "^75109"
+pb <- paste(pb, collapse = "")
+# 28, manque les 4 arrondissements et 78598 Soisy sous montmorency 
 # pb des arrondissements parisiens
-paris <- (bv [grep('^75109|^75113', bv$bureau),])
+paris <- (bv [grep(pb, bv$bureau),])
+table(substring(paris$bureau,1,5))
 bvSel <- rbind(bvSel, paris)
 (unique(substring(bvSel$bureau,1,5)))
 # Normalement 15-1 puisque code INSEE pour paris
@@ -102,12 +113,12 @@ substring(bvSel$bureau,1,5)
 bvSel$insee[grep ("^33100",bvSel$insee)]
 ```
 
-pour les communes 75056 paris et pour les bv NA pour 2 communes du 33... donc 14, mais c'est
-ok pour 15
+pour les communes 75056 paris et pour les bv NA pour 2 communes du 33... donc 30, mais c'est ok pour 34
 
 ```{r}
 str(bvSel)
 bvSel <- bvSel [,-4]
+# étrange champs block_ids qui a l'air lié avec les coordonnées
 st_write(bvSel , "data/bv.geojson", append = F)
 ```
 
@@ -119,6 +130,10 @@ vérification doublons
 bvSelDoublon <- bvSel[!duplicated(bvSel),]
 bvSelDoublon <- bvSel [unique(bvSel$bureau),]
 ```
+
+pb NA
+
+carto d'ensemble
 
 
 
