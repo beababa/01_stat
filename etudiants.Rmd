@@ -146,12 +146,11 @@ length(communes)
 52 communes
 
 ```{r}
-# filtre 1 sur insee
+bv$insee <- substring(bv$bureau,1,5) 
 bvSel <- bv [bv$insee %in% communes,]
-# pb des insee arrondissements, on recopie les codes insee des bureaux
-bvSel$insee <- substring(bvSel$bureau,1,5) 
-bvSel <- bvSel [bvSel$insee %in% communes,]
 ```
+
+1255 bureaux
 
 Vérification sur Paris
 
@@ -162,12 +161,29 @@ bvSelParis <- bvSel [grep("^75", bvSel$insee),]
 mapview(bvSelParis, zcol="insee")
 ```
 
+Seulement 2 arr alors que 3 éléments ds Paris
+
+Export des mails concernés
 
 ```{r}
 pbParis <- vendredi$adresseMail [vendredi$code.INSEE..minimum.10.bureaux. == '75056']
 write.csv(pbParis, "data/pbParis.csv", fileEncoding="UTF-8")
 paste0(pbParis, ";", collapse = "")
 ```
+
+Correction suite réponse
+
+```{r}
+pbParisCorrige <- read.csv("data/pbParisCorrige.csv")
+insee <- pbParisCorrige$correction [!is.na (pbParisCorrige$correction)]
+bvSelParis <- bv [bv$insee %in% insee,]
+table(bv$insee %in% insee)
+```
+
+```{r}
+bvSel <- rbind(bvSel,bvSelParis)
+```
+
 
 
 ```{r}
@@ -185,13 +201,19 @@ Manquants par rapport à la liste de départ
 
 ```{r}
 pb <- setdiff(communes, agg$insee)
+pb
 # on enlève paris
 pb  <- pb [-5]
 bvPb <- bv [bv$insee %in% pb,]
+# 29232 pour 29000 (Quimper), 66135 Perillos, 69123 Lyon, Croix Chapeau 1 bureau 71136
+# Corrèze 19062 / Ajjaccio 2A004
 unique(bvPb$nom)
 table(bvPb$insee)
 vendredi [vendredi$code.INSEE..minimum.10.bureaux. %in% bvPb$insee, c(1,2,3)]
 ```
+
+Remplacements
+
 
 
 ```{r}
