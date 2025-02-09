@@ -138,12 +138,7 @@ st_write(bv,"data/gros/bv.geojson", append = F)
 ## Liste des communes pour les étudiants du vendredi
 
 
-```{r}
-communes <- vendredi$code.INSEE..minimum.10.bureaux.[vendredi$code.INSEE..minimum.10.bureaux.!=""]
-length(communes)
-```
 
-52 communes
 
 ```{r}
 # filtre 1 sur insee
@@ -162,6 +157,15 @@ bvSelParis <- bvSel [grep("^75", bvSel$insee),]
 mapview(bvSelParis, zcol="insee")
 ```
 
+## Liste des communes pour les étudiants du vendredi
+
+
+```{r}
+communes <- vendredi$code.INSEE..minimum.10.bureaux.[vendredi$code.INSEE..minimum.10.bureaux.!=""]
+length(communes)
+```
+
+52 communes
 
 ```{r}
 pbParis <- vendredi$adresseMail [vendredi$code.INSEE..minimum.10.bureaux. == '75056']
@@ -180,7 +184,17 @@ st_write(agg, "data/bv.gpkg", "bvVendrediAgg", delete_layer = T)
 mapview(agg)
 ```
 
+1255 bureaux
+
+Vérification sur Paris
+
 Manquants par rapport à la liste de départ
+
+```{r}
+paris <- unique(communes [grep('^75', communes)])
+bvSelParis <- bvSel [grep("^75", bvSel$insee),]
+mapview(bvSelParis, zcol="insee")
+```
 
 
 ```{r}
@@ -193,12 +207,67 @@ table(bvPb$insee)
 vendredi [vendredi$code.INSEE..minimum.10.bureaux. %in% bvPb$insee, c(1,2,3)]
 ```
 
+Seulement 2 arr alors que 3 éléments ds Paris
+
+Export des mails concernés
+
+```{r}
+hist(table(bvSel$insee), main = "Nb de bureaux de vote", xlab = "Nb de bureaux", ylab = "Nb d'étudiants" )
+table(bvSel$insee)
+pbParis <- vendredi$adresseMail [vendredi$code.INSEE..minimum.10.bureaux. == '75056']
+write.csv(pbParis, "data/pbParis.csv", fileEncoding="UTF-8")
+paste0(pbParis, ";", collapse = "")
+```
+
+Correction suite réponse
+
+```{r}
+pbParisCorrige <- read.csv("data/pbParisCorrige.csv")
+insee <- pbParisCorrige$correction [!is.na (pbParisCorrige$correction)]
+bvSelParis <- bv [bv$insee %in% insee,]
+table(bv$insee %in% insee)
+```
+
+```{r}
+bvSel <- rbind(bvSel,bvSelParis)
+```
+
+
+
+```{r}
+st_write(bvSel, "data/bv.gpkg", "bvVendredi", delete_layer = T)
+bvSel <- st_read("data/bv.gpkg", "bvVendredi")
+bvSel <- bvSel [ st_is_valid(bvSel$geom),]
+agg <- aggregate(bvSel [,c("nom", "geom")], list(bvSel$insee, bvSel$nom), length)
+names(agg)  [1:3] <- c("insee", "nom", "nbBureaux")
+st_write(agg, "data/bv.gpkg", "bvVendrediAgg", delete_layer = T)
+mapview(agg)
+```
+
+Manquants par rapport à la liste de départ
+
+
+```{r}
+pb <- setdiff(communes, agg$insee)
+pb
+# on enlève paris
+pb  <- pb [-5]
+bvPb <- bv [bv$insee %in% pb,]
+# 29232 pour 29000 (Quimper), 66135 Perillos, 69123 Lyon, Croix Chapeau 1 bureau 71136
+# Corrèze 19062 / Ajjaccio 2A004
+unique(bvPb$nom)
+table(bvPb$insee)
+vendredi [vendredi$code.INSEE..minimum.10.bureaux. %in% bvPb$insee, c(1,2,3)]
+```
+
+Remplacements
+
+
 
 ```{r}
 hist(table(bvSel$insee), main = "Nb de bureaux de vote", xlab = "Nb de bureaux", ylab = "Nb d'étudiants" )
 table(bvSel$insee)
 ```
-
 
 
 
