@@ -62,11 +62,9 @@ dev.off()
 ## Passé,Futur
 
 ```{r}
-table(jeudi$futur)
-table(vendredi$futur)
 # on recode ? géomatique urbanisme autre
-vecteur <- jeudi$futur 
 recodage <- function (vecteur){
+  res <- NULL
   res [1:length(vecteur)] <- NA
   res [grep("géomatique", vecteur)] <- "géomatique"
   res [grep("urba", vecteur)] <- "urbanisme"
@@ -83,8 +81,6 @@ par(mfrow = c(2,1))
 barplot(jeudiFutur, main = "jeudi")
 barplot(vendrediFutur, main = "vendredi")
 dev.off()
-jeudiFutur
-vendrediFutur
 ```
 
 ![](img/futur.png)
@@ -111,7 +107,7 @@ write(liste,"data/mailEtudiant.txt")
 ```
 
 
-Pb sur adresses mail :
+Pb sur adresses mail, retour du mail
 tiassan22@gmail.com
 lisa.caroline.pires@gmail.com
 delphine.lecuit@etu.sorbonn-universite.fr
@@ -129,11 +125,45 @@ mail [ind,]
 library(sf)
 library(mapsf)
 library(mapview)
+```
+
+On teste les contours INSEE et ceux de Rodrigo avec OSM
+Le format "pmtiles" s'ouvre très bien
+
+```{r}
+# INSEE
+bv <- st_read(paste0(cheminGROS,"reu-france-entiere-2022-06-01-v2.pmtiles"))
+# 603 705
+#bondy <- bv [bv$insee == '93010',]
+bondy <- bv [bv$codeCommune == '93010',]
+
+table(bondy$numeroBureauVote)
+# pb triplets / quartople
+bondy7 <- bondy [bondy$numeroBureauVote == '0007',]
+bondy7$fid <- seq(1,4)
+mapview(bondy7, zcol = "fid")
+# agregation
+bondy <- aggregate(bondy [, c("numeroBureauVote")], by = list(bondy$numeroBureauVote), length)
+mapview(bondy, zcol = "Group.1", legend=FALSE)
+st_write(bondy,"data/bvBondyINSEE.geojson", append = F)
+```
+
+
+```{r}
+# RODRIGO
+bv <- st_read(paste0(cheminGROS,"bureau.pmtiles"))
+# le pmtiles pose pb
 bv <- st_read(paste0(cheminGROS,"bureau-de-vote-insee-reu-openstreetmap.gpkg"))
-bondy <- bv [bv$insee == '93010',]
-st_write(bondy,"data/bvBondy.geojson", append = F)
 st_write(bv,"data/gros/bv.geojson", append = F)
 ```
+
+On reprend le fichier sauvegardé précédemment
+
+```{r}
+bv <- st_read("data/gros/bv.geojson")
+```
+
+
 
 ## Liste des communes pour les étudiants du vendredi
 
