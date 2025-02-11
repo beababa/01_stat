@@ -62,11 +62,9 @@ dev.off()
 ## Passé,Futur
 
 ```{r}
-table(jeudi$futur)
-table(vendredi$futur)
 # on recode ? géomatique urbanisme autre
-vecteur <- jeudi$futur 
 recodage <- function (vecteur){
+  res <- NULL
   res [1:length(vecteur)] <- NA
   res [grep("géomatique", vecteur)] <- "géomatique"
   res [grep("urba", vecteur)] <- "urbanisme"
@@ -83,8 +81,6 @@ par(mfrow = c(2,1))
 barplot(jeudiFutur, main = "jeudi")
 barplot(vendrediFutur, main = "vendredi")
 dev.off()
-jeudiFutur
-vendrediFutur
 ```
 
 ![](img/futur.png)
@@ -111,7 +107,7 @@ write(liste,"data/mailEtudiant.txt")
 ```
 
 
-Pb sur adresses mail :
+Pb sur adresses mail, retour du mail
 tiassan22@gmail.com
 lisa.caroline.pires@gmail.com
 delphine.lecuit@etu.sorbonn-universite.fr
@@ -129,14 +125,53 @@ mail [ind,]
 library(sf)
 library(mapsf)
 library(mapview)
-bv <- st_read(paste0(cheminGROS,"bureau-de-vote-insee-reu-openstreetmap.gpkg"))
-bondy <- bv [bv$insee == '93010',]
-st_write(bondy,"data/bvBondy.geojson", append = F)
-st_write(bv,"data/gros/bv.geojson", append = F)
 ```
 
-## Liste des communes pour les étudiants du vendredi
+On teste les contours INSEE et ceux de Rodrigo avec OSM
+Le format "pmtiles" s'ouvre très bien
 
+```{r}
+# INSEE
+bv <- st_read(paste0(cheminGROS,"reu-france-entiere-2022-06-01-v2.pmtiles"))
+# 603 705
+#bondy <- bv [bv$insee == '93010',]
+bondy <- bv [bv$codeCommune == '93010',]
+
+table(bondy$numeroBureauVote)
+# pb triplets / quartople
+bondy7 <- bondy [bondy$numeroBureauVote == '0007',]
+bondy7$fid <- seq(1,4)
+mapview(bondy7, zcol = "fid")
+# agregation
+bondy <- aggregate(bondy [, c("numeroBureauVote")], by = list(bondy$numeroBureauVote), length)
+mapview(bondy, zcol = "Group.1", legend=FALSE)
+st_write(bondy,"data/bvBondyINSEE.geojson", append = F)
+```
+
+Un quadrillage sur la donnée INSEE (carroyage 2 km ?)
+
+
+```{r}
+# RODRIGO
+bv <- st_read("data/gros/bureau.pmtiles")
+# le pmtiles pose pb
+bv <- st_read(paste0(cheminGROS,"bureau-de-vote-insee-reu-openstreetmap.gpkg"))
+st_write(bv,"data/gros/bvRodrigo.geojson", append = F)
+```
+68596
+
+On reprend le fichier sauvegardé précédemment
+
+```{r}
+bv <- st_read("data/gros/bv.geojson")
+bvBondyRodrigo <- bv [bv$insee == 93010,]
+mapview(bvBondyRodrigo)
+st_write(bvBondyRodrigo,"data/bvBondyRODRIGO.geojson", append = F)
+```
+
+
+
+## Liste des communes pour les étudiants du vendredi
 
 ```{r}
 communes <- vendredi$code.INSEE..minimum.10.bureaux.[vendredi$code.INSEE..minimum.10.bureaux.!=""]
@@ -145,14 +180,16 @@ length(communes)
 
 52 communes
 
+
 ```{r}
-bv$insee <- substring(bv$bureau,1,5) 
+# filtre 1 sur insee
 bvSel <- bv [bv$insee %in% communes,]
+# pb des insee arrondissements, on recopie les codes insee des bureaux
+bvSel$insee <- substring(bvSel$bureau,1,5) 
+bvSel <- bvSel [bvSel$insee %in% communes,]
 ```
 
-1255 bureaux
-
-Vérification sur Paris
+### Vérification sur Paris
 
 
 ```{r}
@@ -161,11 +198,46 @@ bvSelParis <- bvSel [grep("^75", bvSel$insee),]
 mapview(bvSelParis, zcol="insee")
 ```
 
+
+
+
+```{r}
+pbParis <- vendredi$adresseMail [vendredi$code.INSEE..minimum.10.bureaux. == '75056']
+write.csv(pbParis, "data/pbParis.csv", fileEncoding="UTF-8")
+paste0(pbParis, ";", collapse = "")
+```
+
+
+```{r}
+st_write(bvSel, "data/gros/bv.gpkg", "bvVendredi", delete_layer = T)
+bvSel <- st_read("data/gros/bv.gpkg", "bvVendredi")
+bvSel <- bvSel [ st_is_valid(bvSel$geom),]
+agg <- aggregate(bvSel [,c("nom", "geom")], list(bvSel$insee, bvSel$nom), length)
+names(agg)  [1:3] <- c("insee", "nom", "nbBureaux")
+st_write(agg, "data/gros/bv.gpkg", "bvVendrediAgg", delete_layer = T)
+mapview(agg)
+```
+
+1255 bureaux
+
+
+```{r}
+pb <- setdiff(communes, agg$insee)
+# on enlève paris
+pb  <- pb [-5]
+bvPb <- bv [bv$insee %in% pb,]
+unique(bvPb$nom)
+table(bvPb$insee)
+vendredi [vendredi$code.INSEE..minimum.10.bureaux. %in% bvPb$insee, c(1,2,3)]
+```
+
 Seulement 2 arr alors que 3 éléments ds Paris
 
 Export des mails concernés
 
 ```{r}
+hist(table(bvSel$insee), main = "Nb de bureaux de vote", xlab = "Nb de bureaux", ylab = "Nb d'étudiants" )
+table(bvSel$insee)
 pbParis <- vendredi$adresseMail [vendredi$code.INSEE..minimum.10.bureaux. == '75056']
 write.csv(pbParis, "data/pbParis.csv", fileEncoding="UTF-8")
 paste0(pbParis, ";", collapse = "")
@@ -187,8 +259,8 @@ bvSel <- rbind(bvSel,bvSelParis)
 
 
 ```{r}
-st_write(bvSel, "data/bv.gpkg", "bvVendredi", delete_layer = T)
-bvSel <- st_read("data/bv.gpkg", "bvVendredi")
+st_write(bvSel, "data/gros/bv.gpkg", "bvVendredi", delete_layer = T)
+bvSel <- st_read("data/gros/bv.gpkg", "bvVendredi")
 bvSel <- bvSel [ st_is_valid(bvSel$geom),]
 agg <- aggregate(bvSel [,c("nom", "geom")], list(bvSel$insee, bvSel$nom), length)
 names(agg)  [1:3] <- c("insee", "nom", "nbBureaux")
@@ -221,6 +293,56 @@ hist(table(bvSel$insee), main = "Nb de bureaux de vote", xlab = "Nb de bureaux",
 table(bvSel$insee)
 ```
 
+## Liste des bureaux de vote
+
+### Lille
+
+
+```{r}
+adresseBV <- read.csv("data/table-bv-reu.csv")
+# 50 122
+lille <- adresseBV [ grep('^59350',adresseBV$id_brut_insee),]
+sort(lille$code)
+write.csv (lille, "data/lilleBV.csv")
+```
+
+
+```{r}
+lilleContour <- bv [bv$codeCommune == 59350,]
+mapview(lilleContour)
+```
+
+### Bondy
+
+```{r}
+bondy <- adresseBV [ grep('^93',adresseBV$code_commune),]
+bondy
+```
+
+```{r}
+library(arrow)
+adresseBV <- read_parquet("data/gros/table-bv-reu.parquet")
+# 68 839 !
+bondy <- adresseBV [ grep('^93',adresseBV$code_commune),]
+table(bondy$code_commune)
+bondy <- bondy [bondy$code_commune == 93010,]
+write.csv(bondy,"data/bureauxBondyLoc.csv")
+```
+
+
+# Géolocalisation avec la Ban R
+
+```{r}
+library(banR)
+adresses <- bondy [, c("libelle_reu", "voie_reu", "cp_reu", "commune_reu")]
+adresses$compil <- paste(adresses$voie_reu, adresses$cp_reu, adresses$commune_reu, sep = " ")
+adresses$compil
+geoc <- geocode_tbl(tbl = adresses, adresse = compil)
+geoc$latitude
+mes_adresses_sf <- st_as_sf(geoc, coords = c("longitude", "latitude"), crs = 4326)
+bondyLocBureaux <- mes_adresses_sf [, c("libelle_reu", "voie_reu")]
+st_write(bondyLocBureaux, "data/bv.gpkg", "bondyLocBureau", delete_layer = T)
+ ```
 
 
 
