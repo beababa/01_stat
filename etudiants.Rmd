@@ -19,6 +19,14 @@ knitr::opts_chunk$set(warning  = FALSE)
 # Chemin et librairies
 
 
+
+```{r}
+library(sf)
+library(mapsf)
+library(mapview)
+```
+
+
 ```{r}
 cheminGROS <-  paste0(Sys.getenv("USERPROFILE"), "/Downloads/")
 ```
@@ -456,3 +464,120 @@ dev.off()
 
 ![](img/distributionBureauGeomatique.png)
 
+# PLUi et choix des groupes
+
+
+La donnée
+
+Sauvegarde du tableau du cours 2
+
+```{r}
+data <- read.csv("data/constructionChoixGroupe.csv")
+data <- data [!is.na(data$prénom),]
+```
+
+57 étudiants
+
+
+```{r}
+setwd("data/gros")
+setwd("C:/Users/tachasa/01_stat/")
+getwd()
+Sys.getenv()
+unzip(zipfile = "data/gros/communes-20220101-shp.zip", exdir = "data/gros")
+communes <- st_read("data/gros/communes-20220101.shp")
+```
+
+
+## PLUi
+
+
+
+```{r}
+table(data$PLUI, useNA = "always")
+insee <- data$choix.de.la.commune..code.INSEE. [data$PLUI =="non"]
+communesSel <- communes [communes$insee %in% unique(insee),]
+mapview(communesSel)
+knitr::kable(communesSel [, c("insee", "nom"), drop = T], row.names = F)
+```
+
+
+WFS
+
+pour mémoire, l'output standard pour un flux wfs est en GML.
+OGC standard
+
+```{r}
+library(httr) # generic webservice package
+library(ows4R) # interface pour services ogc
+wfs <- "https://data.geopf.fr/wfs/ows"
+plui_client <- WFSClient$new(wfs, serviceVersion = "2.0.0")
+url <- parse_url(wfs)
+url$query <- list(service = "wfs",
+                  #version = "2.0.0", # facultative
+                  request = "GetFeature",
+                  typename = "wfs_du:habillage_surf",
+                  outputFormat = "application/json"
+                  )
+request <- build_url(url)
+data <- st_read(request)
+table(data$partition)
+dataSel <- data [data$partition == "DU_01075",]
+mapview(dataSel)
+```
+
+
+```{r}
+plui_client <- WFSClient$new(wfs, serviceVersion = "2.0.0")
+plui_client
+```
+format R6 OOP paradigme (objet$method())
+
+```{r}
+plui_client$getFeatureTypes(pretty = TRUE)
+```
+
+
+```{r}
+url$query <- list(service = "wfs",
+                  #version = "2.0.0", # optional
+                  request = "GetFeature",
+                  typename = "region",
+                  outputFormat = "application/json"
+                  )
+request <- build_url(url)
+region <- st_read(request)
+region$nom
+mf_map(region [c(1:13),])
+```
+
+
+```{r}
+bondy <- st_read("data/bvBondy.geojson")
+bb <- st_bbox(bondy)
+bb <- round(bb,0)
+bbTransf <-paste0(bb, sep = ",", collapse = "")
+nchar(bbTransf)
+bbTransf <- substring(bbTransf, 1,nchar(bbTransf))
+
+bbTransf <- paste0("\"", bbTransf, "\"")
+```
+
+
+```{r}
+url$query <- list(service = "wfs",
+                  #version = "2.0.0", # optional
+                  request = "GetFeature",
+                  typename = "BDGEODESIQUE:site",
+                  #bbox = bbTransf,
+                  outputFormat = "application/json"
+                  #resultType = "hits"
+                  )
+request <- build_url(url)
+res <- GET(request)
+res
+urba <- st_read(request)
+```
+
+
+```{r}
