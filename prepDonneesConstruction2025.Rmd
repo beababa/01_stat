@@ -345,7 +345,7 @@ urba <- st_read(request)
 
 # Valeurs foncières
 
-
+## Filtre sur les villes
 
 ```{r}
 cog <- st_read("data/construction.gpkg", "villes")
@@ -412,38 +412,7 @@ length(unique(vfSel$Code.postal))
 
 ```{r}
 manquants <- setdiff(cp, vfSel$Code.postal)
-vfSel$cle <- cbind(vfSel$Section, vfSel$No.plan)
-write.csv(vfSel, "data/vf.csv")
 ```
-
-
-
-test bondy
-
-```{r}
-bondy <- vfSel [vfSel$Code.postal == "93140",]
-summary(bondy$Valeur.fonciere)
-hist(bondy$Valeur.fonciere)
-# on se base sur le 3e quartile
-bondySel <- bondy [bondy$Valeur.fonciere < 300000,]
-
-# division par 1000
-bondySel$Valeur.fonciere <- bondySel$Valeur.fonciere/1000
-png("img/bondyvf.png")
-hist(bondySel$Valeur.fonciere, col = "coral", border = " brown1",
-     main = "Distribution des valeurs foncières inf 500 M à Bondy",
-     xlab = "valeurs foncières (en milliers)",
-     ylab = "nb")
-dev.off()
-```
-
-![](img/bondyvf.png)
-Identification des gdes valeurs
-
-```{r}
-cher <- bondy [bondy$Valeur.fonciere > 300000,]
-```
-
 
 
 
@@ -451,7 +420,7 @@ cher <- bondy [bondy$Valeur.fonciere > 300000,]
 names(vfSel)
 head(vfSel)
 noms <- c("Code.postal", "Commune", "Valeur.fonciere", "Section", "No.plan")
-write.csv(vfSel [,  noms], "data/gros/vf.csv", fileEncoding = "UTF-8")
+write.csv(vfSel [,  noms], "data/vf.csv", fileEncoding = "UTF-8", row.names = F)
 ```
 
 
@@ -459,365 +428,86 @@ write.csv(vfSel [,  noms], "data/gros/vf.csv", fileEncoding = "UTF-8")
 
 
 
-##  vf / parcelle : intégration du cadastre
+##  vf / parcelle : préparation à la jointure
 
 
-
+la clé est numéro parcelle + nom section
 
 On récupère le cadastre et jointure cadastre / vf
 
+Il faut également agréger à la parcelle (moyenne)
 
-### données
+### données et clé
 
 ```{r}
+vf <- read.csv("data/vf.csv", fileEncoding = "UTF-8")
+vf$cle <- paste0(vf$Section, vf$No.plan)
+vf <- vf [, -c(1,2)]
 cog <- st_read("data/construction.gpkg", "villes")
 library(R.utils)#gunzip
 ```
 
 
 
-### traitement
-
-Le cadastre est téléchargé par commune (etalab), dézippé et intersecté.
-L'extraction va dans le bv.gpkg, une couche par commune
+### Agrégation sur la parcelle
 
 
+On va faire la moyenne des ventes, surfaces (bati et terrain)
+
+Essai de type local
 
 ```{r}
-dpt <- substring(cog$INSEE_COM,1,2)
-code <- substring(cog$INSEE_COM,1,6)
-
-# en cas de sous boucle. pour diminuer les communes concernés
-dpt <- dpt [1]
-code <- code [1]
-i <-1
-dpt <- "971"
-code <- "97120"
-nomZIP <- "cadastre-97120-parcelles.json.gz"
-##### NE PAS JOUER
-
-for (i in 1:length(dpt)){
-  nomZIP <- paste0(dpt [i], "_", code [i],".gz")
-  nomGEO <- paste0(dpt [i], "_", code [i],".geojson")
-  print(paste0(i, "_",nomZIP))
-  # pour éviter de télécharger pl fois test
-  if (file.exists(nomZIP)==FALSE ){
-    fic <- download.file(paste0("https://cadastre.data.gouv.fr/data/etalab-cadastre/2023-07-01/geojson/communes/", dpt [i],"/",code [i],"/cadastre-", code [i],"-parcelles.json.gz"), nomZIP)
-  }
-  
-  exdir <- paste0("data/gros/cadastre/",nomGEO)
-  # gunzip pour des gz
-  gunzip(nomZIP, exdir, overwrite = T )
-  cadastre <- st_read(paste0("data/gros/cadastre/",nomGEO))
-  # 2154 obligatoire pour intersecter
-  cadastre <- st_transform(cadastre,2154)
-  # extraction bv
-  bvSel <- bv [bv$insee == code [i],]
-  # intersection avec bv
-  inter <- st_intersection(bvSel [, c("bureau")], st_centroid( cadastre [, c("section", "numero")]))
-  st_write(inter, "data/gros/bv.gpkg", paste0("bv_",code [i]), delete_layer = T)
-}
+names(vf)
+class(vf$Valeur.fonciere)
+summary(vf$Valeur.fonciere)
+# Nettoyage
+vf <- vf [!is.na(vf$Valeur.fonciere),]
 ```
 
 
 
-### Union
 
 ```{r}
-lireGPKG <- function(numCouche){
-  fic <- st_layers("data/gros/bv.gpkg")
-  couche <- fic$name
-  cadastre <- st_read("data/gros/bv.gpkg", couche [numCouche])
-  cadastre$INSEE_COM <- substring(couche [numCouche], 4, 8)
-  st_write(cadastre, "data/gros/geoInter.gpkg", "cadastre", append = T )
-}
-couche <- c(1:74)
-lapply(couche, lireGPKG)
+agg <- aggregate(vf [,c( "Valeur.fonciere")], by = list(cp= vf$Code.postal,
+                                                        ville = vf$Commune, 
+                                                        cle = vf$cle), 
+                 mean, na.action=na.omit)
+names(agg) [4] <- c("montantMoyen")
+agg$montantCourt <- agg$montantMoyen /10000
+write.csv(agg, "data/vfMoyenne.csv", fileEncoding = "UTF-8", row.names = FALSE)
+hist(agg$montantCourt)
+summary(agg$montantCourt)
+plot(agg$montantCourt)
+hist(agg$montantCourt [agg$montantCourt < 100])
 ```
 
 
 
-### vérif
-
-Drom 1 seul bv, on intersecte à la parcelle
 
 ```{r}
-data <- st_read("data/gros/geoInter.gpkg", "cadastre")
-choix <- data [data$INSEE_COM == '01150',]
-png("img/dromCadastre.png")
-mf_map(choix)
-mf_layout("centroides parcelles Drom", "cadastre")
+vf93010 <- agg [agg$cp== 93140,]
+vf93010
+cadastre <- st_read("data/cadastre-93010-parcelles.json")
+cadastre$cle <- paste0(cadastre$section, cadastre$numero)
+joint <- merge(cadastre, vf93010, by = "cle")
+joint$coutM2 <- round(joint$montantMoyen/st_area(joint$geometry),0)
+library(units)
+joint$coutM2 <- drop_units(joint$coutM2)
+summary(joint$coutM2)
+plot(joint$coutM2)
+joint <- joint [joint$coutM2 < 1000,]
+# 105
+mapview(joint)
+png("img/valeursFoncieres2024Bondy.png")
+mf_map(cadastre, col = "wheat", border="antiquewhite1")
+
+mf_choro(joint, nbreaks = 3, pal=rev(heat.colors(3)), var = "coutM2", border = NA, add = T)
+mf_layout("Jointure cadastre et valeurs foncières", "Mairie de Bondy / DGST\ndvf 2024, cadastre 2024")
 dev.off()
 ```
 
+![](img/valeursFoncieres2024Bondy.png)
 
-![](img/dromCadastre.png)
-
-
-## lgt / iris : prorata
-
-Croisement iris / bv
-
-### Cartographie : Iris et bureaux de vote
-
-```{r}
-fond <- st_read("data/gros/DEPARTEMENT.shp")
-fond <- st_transform(fond, 2154)
-```
-
-
-```{r}
-png("img/idF.png", height = 2400, width = 2400, res = 400)
-fond <- fond [fond$INSEE_REG == 11,]
-mf_init(fond [fond$INSEE_DEP == 75,])
-mf_map(fond, col = "antiquewhite1", border = "pink", add = T)
-mf_map(iris, col= "cornsilk", border = "blue", lwd = 2, add = T)
-mf_map(bv, col = NA, border = "coral", add = T)
-etik <- iris [!duplicated(iris$INSEE_COM),]
-mf_label(etik, var = "NOM_COM",overlap = F, lines = T, halo = T )
-mf_layout("iris, bureaux de vote et proche banlieue", "ign")
-dev.off()
-```
-
-
-![](img/idF.png)
-
-
-
-
-### Traitement
-
-Les iris sont plus gros que les bureaux de vote, donc on prend les centroides 
-des bureaux de vote.
-
-Puis on divise par l'iris par le prorata du bv / aire de l'iris
-
-```{r}
-inter <- st_intersection(iris, st_centroid(bv) )
-bvC <- st_centroid(bv)
-```
-
-
-```{r}
-code <- cog$INSEE_COM
-for (c in code){
-  print(c)
-  interSel <- inter [inter$INSEE_COM == c,]
-  irisSel <- unique (interSel$CODE_IRIS)
-  for (i in irisSel){
-    aireIris  <- st_area(iris$geom [iris$CODE_IRIS == i])/10000
-    inter$prorata [inter$INSEE_COM == c & inter$CODE_IRIS == i] <- inter$aire [inter$INSEE_COM == c & inter$CODE_IRIS == i]  / sum(inter$aire  [inter$INSEE_COM == c & inter$CODE_IRIS == i])
-    inter$prorataIris [inter$INSEE_COM == c & inter$CODE_IRIS == i] <- aireIris * inter$prorata [inter$INSEE_COM == c & inter$CODE_IRIS == i] 
-}
-}
-```
-
-### Quelques verif
-
-Bondy
-
-```{r}
-# verif sur Bondy
-code <-"93010"
-# on rejoue la boucle
-i <-irisSel [1]
-table(inter$CODE_IRIS [inter$NOM_COM == 'Bondy'])
-inter [inter$INSEE_COM == '93010'&  inter$CODE_IRIS == '930100202' ,]
-st_area(iris$geom [iris$CODE_IRIS == '930100202'])/10000
-17*0.42
-# le prorata est le rapport entre surface par rapport à la surface totale
-# le prorata iris est la verif sur la surface.
-# verif sur pointe à pitre... il n'y a pas d'iris pap normalement
-inter [inter$INSEE_COM == '97120',]
-inter$prorata <- round(inter$prorata, 2)
-```
-
-
-```{r}
-st_write(inter, "data/gros/geoInter.gpkg", "iris", delete_layer = T)
-```
-
-
-
-Autre cas d'école Arpajon et Miribel
-
-
-```{r}
-bvSel <- bv [bv$nom == "Arpajon",]
-interSel <- inter [inter$NOM_COM == 'Arpajon',] 
-png("img/arpajon.png")
-mf_map(bvSel, "typo", var = "bureau", border = NA)
-mf_map(iris, col = NA, lwd = 2, border = "red", add = T)
-mf_label(interSel, var = "prorata", col = "red")
-mf_layout("Arpajon : Prorata bv sur aire Iris...", "ign et calculs fous")
-dev.off()
-```
-
-![](img/arpajon.png)
-
-
-```{r}
-bvSel <- bv [bv$nom == "Miribel",]
-interSel <- inter [inter$NOM_COM == 'Miribel',] 
-png("img/miribel.png")
-mf_map(bvSel, "typo", border = NA, var = "bureau")
-mf_map(iris, col = NA, lwd = 2, border = "red", add = T)
-mf_label(interSel, var = "prorata", col = "red")
-mf_layout("Miribel : Prorata bv sur aire Iris...", "ign et calculs fous")
-dev.off()
-```
-
-
-![](img/miribel.png)
-
-
-Guadeloupe
-
-```{r}
-guadeloupe <- iris [iris$INSEE_COM == "97120",]
-png("img/guadeloupe.png")
-mf_init(guadeloupe)
-bvG <- bv [bv$insee == "97120",]
-mf_map(bvG,  "typo", var = "bureau",add = T, leg_pos = "", border = NA)
-mf_map(guadeloupe, col = NA, border = "red", add = T)
-mf_label(interSel, "prorata", halo = T, cex = 1.5)
-mf_layout("Guadeloupe : IRIS et bureaux", "REU, Frédérique Rodrigo")
-dev.off()
-```
-
-
-
-![](img/guadeloupe.png)
-
-
-## bv / car : sans pb
-
-```{r}
-carC <- st_centroid(car)
-inter <- st_intersection(bv, carC)
-# il peut y avoir pl carreaux dans un bv mais pas pl bv dans un carreau
-names(inter)
-st_write(inter, "data/gros/geoInter.gpkg", "car", delete_layer = T)
-```
-
-On recherche les carreaux pour 01150
-
-```{r}
-interChoix <- inter [inter$insee == "01150",]
-#interChoix$ind
-bvChoix <- bv [bv$insee == "01150",]
-png("img/drom.png")
-mf_map(bvChoix)
-mf_map(cadastre, col = NA, border ="pink", add = T)
-mf_map(car, type = "choro", var = "ind", add = T)
-mf_layout("Drom, 15 carreaux, 3495 parcelles et 1 bv", "opendata")
-dev.off()
-```
-
-![](img/drom.png)
-
-# Jointure et agrégation au bv des données texte
-
-## données
-
-### csv
-
-On vérifie les décimales
-
-```{r}
-election2022 <- read.csv("data/devoirMaison/election2022.csv", fileEncoding = "UTF-8")
-str(election2022$INSEE_COM)
-# 2148 dec ok
-vf <- read.csv("data/gros/vf.csv", fileEncoding = "UTF-8", colClasses = "character")
-str(vf)
-# nécessité character pour code insee
-# test sur Drom
-vf [vf$cog == "01150",]
-lgt <- read.csv("data/gros/lgt.csv", fileEncoding = "UTF-8")
-str(lgt)
-#rpls <- list.files("data/gros/RPLS")
-cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8")
-str(cog)
-```
-
-Pas de donnée csv dans les carreaux, elles sont déjà dedans
-
-Pour chaque fichier attention au cog, cette fois ci on le passe en num partt
-
-
-
-### Spatial
-
-
-Tout est dans geoInter.gpkg
-
-```{r}
-st_layers("data/gros/geoInter.gpkg")
-car <- st_read("data/gros/geoInter.gpkg", "car") # 14964
-iris <- st_read("data/gros/geoInter.gpkg", "iris") # 2123
-cadastre <- st_read("data/gros/geoInter.gpkg", "cadastre")# 2 M
-```
-
-
-## Verif
-
-```{r}
-setdiff(cog$INSEE_COM, iris$INSEE_COM)
-car$bureau
-```
-
-Pb sur tous les codes insee zéro sf dans les iris
-
-
-## Traitement
-
-### car
-
-Il y a plusieurs carreaux pour un meme bureau de vote.
-On somme les valeurs (il s'agit des ménages fiscaux par bv)
-
-```{r}
-names(car)
-v <- names(car)[11:38]
-agg <- aggregate(car [, v], by = list(car$bureau), sum)
-names(agg)[1] <- "bureau"
-agg <- st_drop_geometry(agg)
-str(agg) # verif num partout
-write.csv(agg,"data/devoirMaison/filosofi.csv", fileEncoding = "UTF-8", row.names = F)
-```
-
-Verif
-
-voir debug
-
-
-### vf
-
-#### Jointure
-
-Constitution des clés pour la jointure 
-
-```{r}
-str(cadastre)
-cadastre$cle <- paste0(cadastre$INSEE_COM, "_", cadastre$section, cadastre$numero)
-str(vf)
-vf$cle <- paste0(vf$cog, "_", vf$Section, vf$No.plan)
-vf$cle
-```
-
-
-670 M et 190 M enregistrements
-
-
-```{r}
-joint <- merge(cadastre, vf, by = "cle")
-```
-
-
-189 549...
-170 M
-445 M
-513 M
 
 Enregistremetn poour récupérer les champs numériques
 
@@ -830,231 +520,4 @@ str(vf)
 
 
 
-#### Agrégation
-
-
-On va faire la moyenne des ventes, surfaces (bati et terrain)
-
-Essai de type local
-
-```{r}
-names(vf)
-v <- names(vf)[c(10,38,39,42)]
-str (vf[,v])
-agg <- aggregate(vf [,v], by = list(vf$bureau), mean, na.rm=T, na.action=NULL)
-names(agg)[1] <- "bureau"
-agg <- st_drop_geometry(agg)
-write.csv(agg, "data/devoirMaison/vfMoyenne.csv", fileEncoding = "UTF-8", row.names = FALSE)
-```
-
-# 1897
-
-
-Verif sur 97120
-
-
-```{r}
-ind <- grep("97120", agg$bureau)
-agg [ind,]
-```
-
-
-
-### IRIS
-
-On fait la jointure puis on proratise la valeur avec le prorata
-
-
-2091
-
-
-La jointure se fait sur le code IRIS pb zéro
-
-```{r}
-table(sapply((iris$CODE_IRIS), nchar))
-table(sapply(lgt$IRIS, nchar))
-lgt$n <- sapply(lgt$IRIS, nchar)
-lgt$IRIS [lgt$n ==8 ] <- paste0("0", lgt$IRIS [lgt$n==8])
-```
-
-
-
-```{r}
-iris
-str(lgt$IRIS)
-str(iris$CODE_IRIS)
-```
-
-1365 et 2079 et 2123
-
-```{r}
-joint <- merge(iris, lgt, by.x = "CODE_IRIS", by.y = "IRIS")
-```
-
-2121
-On en a perdu 2
-
-```{r}
-setdiff(cog$INSEE_COM, joint$INSEE_COM)
-# ms pas de commune perdue
-lgt$COM
-lgt$IRIS [lgt$COM == "1249"]
-iris [iris$CODE_IRIS == "12490101",]
-iris [iris$NOM_COM == "Miribel",]
-```
-
-
-
-attention bureau unique à DROM 01150_1
-
-
-```{r}
-names(joint)
-str(joint)
-# tout est en numérique
-joint <- st_drop_geometry(joint)
-col <- NULL
-v <- "prorata"
-tmp <- NULL
-nom <- NULL
-for (v in var){
-  tmp <- ( joint[,v])
-  col <- cbind(col, tmp)
- nom <- c(nom, v)
-}
-# on a une matrice, on utilise la colonne prorata pour tt traiter
-prorata <- (joint [,"prorata"])
-data <- prorata*col
-data <- as.data.frame(data)
-names(data) <- nom
-data <- cbind(joint$bureau, data)
-names(data)[1] <- "bureau"
-write.csv(data, "data/devoirMaison/lgt.csv", fileEncoding = "UTF-8", row.names = F)
-```
-
-2121
-
-## Traitement final : concaténation de tous les fichiers.
-
-
-### Données 
-
-```{r}
-cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8")
-```
-
-
-### Vérification
-
-pour chacun des fichiers, on vérifie le nb de communes concernées et le code bureau.
-
-
-```{r}
-fic <- list.files("data/devoirMaison/")
-fic
-# elimination des 3 premieres valeurs qui sont les résultats
-fic <- fic [-c(1:3)]
-for (f in fic){
-  print(f)
-  tmp <- read.csv(paste0("data/devoirMaison/", f), fileEncoding = "UTF-8")
-  assign(f, tmp)
-}
-# élection
-names(election.csv)[8] <- "bureau"
-length(unique(election.csv [, c("INSEE_COM")]))
-# filosofi.csv
-filosofi.csv$INSEE_COM <- substring(filosofi.csv$bureau,1,5)
-length(unique(filosofi.csv$INSEE_COM))
-filosofi.csv$bureau
-# normal il manque pointe à pitre
-#lgt.csv
-names(lgt.csv)
-lgt.csv$INSEE_COM <- substring(lgt.csv$bureau, 1,5)
-length(unique(lgt.csv$INSEE_COM))
-```
-
-
-### Traitement
-
-
-```{r}
-fic <- list.files("data/devoirMaison/")
-fic <- fic [-c(1:4)]
-fin <- election.csv
-# 2133
-fin$bureau
-f <- fic [1]
-for (f in fic){
-  print(f)
-  tmp <- read.csv(paste0("data/devoirMaison/", f), fileEncoding = "UTF-8", dec =",")
-  fin <- merge(tmp,fin, by = "bureau", all.x = T)
-}
-write.csv(fin,"data/devoirMaison/base.csv", fileEncoding = "UTF-8", row.names = FALSE)
-length(unique(fin$Libellé.de.la.commune))
-names(fin)
-```
-
-2204 obs
-
-64 communes
-
-
-Vérification
-
-```{r}
-fin <- na.omit(fin)
-```
-
-1909 avt
-1838
-
-```{r}
-bondy <- na.omit(fin [fin$INSEE_COM == "93010",])
-bondy
-election.csv$bureau [election.csv$Libellé.de.la.commune == 'Bondy']
-bondyFilo <-filosofi.csv$bureau [filosofi.csv$INSEE_COM == '93010']
-```
-
-```{r}
-car <- st_read("data/gros/geo.gpkg", "car")
-bv <-st_read("data/gros/geo.gpkg", "bvValide")
-bv$numBureau <- substring(bv$bureau, 7,8)
-bondy <- bv [bv$insee == '93010',]
-carBondy <- car [car$cog == '93010',]
-carBondyC <- st_centroid(carBondy)
-bondyC <- st_centroid(bondy)
-mf_init(bondy)
-mf_map(bondy, type = "typo", var ="bureau", add = T, border = "red", lwd=2)
-mf_map(carBondy, add = T, col=NA)
-mf_map(carBondyC, add = T)
-mf_label(bondy, var = "numBureau", col = "red", halo = T, overlap = T)
-# Cela signifie qu'un bv n'a aucun centroide de carreau sur son territoire.
-# je n'arrive pas à le voir sur la carte
-# TODO les carreaux couvrent le territoire
-setdiff(bondy$bureau, bondyFilo )
-inter <-st_intersection(bondy [, c("bureau")], st_centroid(carBondy [, c("idcar_200m")]))
-length(unique(inter$bureau))
-# il y a bien 32 bureaux : refaire l'intersection bureau carreau
-```
-
-
-On a perdu un bv...
-
-
-```{r}
-setdiff(cog$INSEE_COM, fin$INSEE_COM)
-setdiff(cog$INSEE_COM, election.csv$Code.de.la.commune)
-```
-
-
-
-## Pb des NA sur la base
-
-
-```{r}
-base <- read.csv("data/devoirMaison/base.csv", fileEncoding = "UTF-8")
-base <- na.omit(base)
-bondy <- base [base$INSEE_COM == '93010',]
-write.csv(base, "data/devoirMaison/base.csv", row.names = F, fileEncoding = "UTF-8")
-```
 
