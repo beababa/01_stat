@@ -508,6 +508,12 @@ write.csv(aggNb,"data/vfNb.csv", fileEncoding = "UTF-8")
 ```
 
 
+On lie les deux
+
+```{r}
+vfNb <- read.csv("data/vfNb.csv", fileEncoding = "UTF-8")
+vfMoy <- read.csv("data/vfMoyenne.csv", fileEncoding = "UTF-8")
+```
 
 ```{r}
 agg <- aggNb
@@ -554,4 +560,10 @@ ep <- st_read("data/")
 
 ```
 
+
+# Eclatement des fichiers par dpt
+
+
+```
+```
 
