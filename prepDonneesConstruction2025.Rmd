@@ -483,8 +483,34 @@ hist(agg$montantCourt [agg$montantCourt < 100])
 
 
 
+La moyenne n'est peut-être pas la valeur la plus intéressante
+car elle cache la valeur terrain nu et vente sur plan (cas Delattre)
+
 
 ```{r}
+aggMax <- aggregate(vf [,c( "Valeur.fonciere")], 
+                 by = list(cp= vf$Code.postal,                                                 ville = vf$Commune, 
+                           cle = vf$cle), 
+                 max)
+summary(aggMax)
+```
+
+Peut-être plus facile à interpréter
+
+```{r}
+aggNb <- aggregate(vf [,c( "Valeur.fonciere")], 
+                 by = list(cp= vf$Code.postal,                                                 ville = vf$Commune, 
+                           cle = vf$cle), 
+                 length)
+names(aggNb)[4] <- "nb"
+summary(aggNb)
+write.csv(aggNb,"data/vfNb.csv", fileEncoding = "UTF-8")
+```
+
+
+
+```{r}
+agg <- aggNb
 vf93010 <- agg [agg$cp== 93140,]
 vf93010
 cadastre <- st_read("data/cadastre-93010-parcelles.json")
@@ -519,5 +545,13 @@ str(vf)
 ```
 
 
+# Jointure spatiale
+
+Espaces paysagers et zonage N
+
+```{r}
+ep <- st_read("data/")
+
+```
 
 

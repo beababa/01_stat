@@ -1,0 +1,479 @@
+---
+title: "Préparation des données pour bases conceptuelles"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval  = FALSE)
+knitr::opts_chunk$set(echo  = TRUE)
+knitr::opts_chunk$set(warning  = FALSE)
+``` 
+
+
+
+```{r}
+library(sf)
+library(mapsf)
+library(mapview)
+```
+
+# Objectif
+
+On extrait pour chaque ville choisie par les étudiants :
+
+- la géométrie de la ville d'après le cog (pb code insee)
+
+- les données électorales au bv (cours 4)
+
+
+# Démarche
+
+Pour les cog, pb Paris et codes postaux
+
+
+
+
+# Base cog
+
+
+Définition de la liste des villes de base.
+
+Une première définition a été faite mais on reprend la liste.
+
+## Constitution de la liste 
+
+à partir de la feuille d'émargement TD3
+
+
+```{r}
+# recup fichier ville en character pour les codes commençant par zéro
+ville <- read.csv("data/TD3Concept.csv", colClasses = "character")
+ville <- ville [ville$prénom!="",]
+ville <- ville [,2]
+# 50 villes différentes42 uniques 
+ville <- unique(na.omit(ville))
+```
+
+57 étudiants ont choisi 50 code insee différents.
+
+
+
+## Première jointure
+
+
+
+```{r}
+fr <- st_read("data/gros/communes-20220101.shp")
+# le code INSEE a 5 chiffres y compris le zéro
+names(fr)
+sel <- fr [fr$insee %in% ville,]
+sel$insee
+mapview(sel)
+pb <- setdiff(ville, sel$insee)
+```
+
+10 pb dont codes insee Paris
+
+## Paris
+
+```{r}
+Paris <- fr [fr$insee == "75056",]
+pbParis <- pb [grep("^75", pb)]
+mf_map(Paris)
+# téléchargements arrondissements
+paris <- st_read("data/gros/arrondissements.geojson")
+mf_map(paris, add = T)
+parisSel <- paris [paris$c_arinsee %in% pbParis,] 
+mf_map(parisSel, add = T, col="red")
+mf_label(parisSel, var = "l_ar")
+```
+
+5 arrondissements, 12, 16, 17, 18 et 20
+
+Reste pb faux codes insee, grrrr
+
+```{r}
+pb <- pb [!(pb  %in% pbParis)]
+```
+
+## Codes postaux
+
+retrouver les code insee à partir des cp pour ces 5 communes
+utilisation de l'api
+
+```{r}
+library(httr)
+library(jsonlite)
+equiv <- NULL
+for (i in pb){
+  print(i)
+  rqt <- paste0("https://geo.api.gouv.fr/communes?codePostal=",i)
+  res <- httr::GET(rqt)
+# dans res, on remarque le status à 200, c'est ok. et le format json
+  tmp <- fromJSON(rawToChar(res$content))
+  equiv <- rbind(equiv, tmp)
+}
+str(equiv)
+equiv$code
+selPb <- fr [fr$insee %in% equiv$code,]
+```
+
+
+Reste la commune de Perillos et Ajaccio
+
+```{r}
+#66135
+
+#2A004
+selCorse <- fr [fr$insee == "2A004",]
+```
+
+
+
+## Enregistrement
+
+
+```{r}
+sel <- rbind (sel, selCorse, selPb)
+sel <- sel [,c("insee", "nom")]
+parisSel <- parisSel [,c("c_arinsee", "l_ar")]
+names(parisSel)[1:2] <- c("insee", "nom")
+tot <- rbind(parisSel, sel)
+st_write(tot, "data/concept.gpkg", "villes", delete_layer = T)
+```
+
+
+dernière vérif
+
+On a 1 ville en trop, mais c'était un cp Paris
+
+```{r}
+setdiff(ville, tot$insee)
+pb
+```
+
+
+
+## Cartographie France
+
+### Flux IGN dpt
+
+Idée : utiliser les flux ign opur récupérer uniquement les dpt
+
+```{r}
+library(httr) # generic webservice package
+library(ows4R) # interface pour services ogc
+```
+
+
+```{r}
+wfs <- "https://data.geopf.fr/wfs/ows"
+# connexion
+dpt_client <- WFSClient$new(wfs, serviceVersion = "2.0.0")
+```
+
+format R6 OOP paradigme (objet$method())
+
+On repère la couche dpt
+
+```{r}
+retour <- dpt_client$getFeatureTypes(pretty = TRUE)
+retour [grep("departement", retour$title),]
+```
+
+
+```{r}
+url <- parse_url(wfs)
+url
+url$query <- list(service = "wfs",
+                  #version = "2.0.0", # facultative
+                  request = "GetFeature",
+                  typename = "BDCARTO_V5:departement",
+                  outputFormat = "application/json"
+                  )
+request <- build_url(url)
+data <- st_read(request)
+```
+
+```{r}
+tot$dep <- substring(tot$insee,1,2)
+dpt <- unique(names(table(tot$dep)))
+```
+
+
+
+```{r}
+dptSel <- data [data$code_insee %in% dpt,]
+```
+
+
+
+## Carto
+
+
+
+```{r, eval=FALSE}
+png("img/communeConcept.png")
+mf_init(dptSel)
+mf_map(data, col = "wheat2" , border = NA,add = T)
+mf_map(dptSel, add = T, col = "antiquewhite1", border = "wheat")
+mf_map(tot, col = "red", border = NA,add = T)
+#mf_label(tot, var = "dpt")
+mf_layout("Communes choisies par les étudiants", credits = "IGN")
+dev.off()
+```
+
+![](img/communeConcept.png)
+
+Nb de choix par zone
+
+```{r}
+table(tot$dep)
+```
+
+
+
+
+# bv
+
+## Extraction
+
+```{r}
+bv <- st_read("data/gros/bureau-de-vote-insee-reu-openstreetmap.gpkg")
+bv <- bv [, c("insee", "nom", "bureau")]
+bv <- st_transform(bv, 2154)
+fond <- st_transform(fond, 2154)
+```
+
+
+
+## Distribution des bureaux par commune
+
+##### Drom
+
+Ville à un seul bv : uniquement Drom
+
+```{r}
+bv [bv$nom == "Drom",]
+bv$bureau  [bv$nom == "Drom"] <- paste0(bv$insee [bv$nom == "Drom"], "_1")
+```
+
+
+```{r}
+# le bureau est la concaténation du num bureau et du code INSEE
+bv$insee <- substring(bv$bureau, 1,5)
+```
+
+
+```{r}
+bvSel <- bv [bv$insee %in% cog$INSEE_COM,]
+# dénombrement
+(tab <- sort(table (bvSel$insee)))
+length(names(tab))
+png("img/distributionBureau.png")
+hist(tab, main = "Distribution du nombre de bureaux choix communes étudiants",
+     sub = "2128 bureaux au total pour 74 communes",
+     col = "coral", border = NA,
+     xlab = "nb de bureaux",
+     ylab = "nb de villes")
+dev.off()
+```
+
+![](img/distributionBureau.png)
+
+
+```{r}
+manquants <- setdiff(cog$INSEE_COM, bvSel$insee)
+```
+
+## Rapport nb bureaux taille ville
+
+
+```{r}
+# récupération de la population par ville
+df <- as.data.frame(tab) 
+names(df) <- c("INSEE_COM", "nbBureaux")
+joint <- merge(cogGEOM, df, by = "INSEE_COM")
+str(joint)
+joint$POPULATION <- joint$POPULATION/1000
+png("img/bvPOP.png")
+plot(joint$nbBureaux, joint$POPULATION, col="coral3", pch = 20,
+     xlab = "Nb de bureaux", ylab = "population (en milliers)")
+# on soustrait les 2 valeurs.
+joint2 <- joint [joint$POPULATION < 400,]
+modele <- lm(POPULATION~nbBureaux, joint2)
+abline(modele, col = "darkgoldenrod1")
+dev.off()
+```
+
+![](img/bvPOP.png)
+
+
+##### Marseille
+
+```{r}
+st_crs(fond)
+mars <- bvSel [bvSel$nom == 'Marseille',]
+png("img/pbMarseille.png")
+mf_init(mars)
+mf_base(mars,bg = "cadetblue2", add = T)
+mf_map(fond, col = "antiquewhite1", border = "burlywood2", bg ="cadetblue2", add = T)
+mf_map(mars, col = "antiquewhite2", border = "burlywood2", lwd = 2, add = T)
+mars$bureau2 <- substring(mars$bureau,7,9)
+mf_label(mars, var = "bureau2", cex = 1.5, halo = T)
+mf_layout("Marseille : des bureaux aux numéros discontinus", "opendata REU /  Frédéric Rodrigo")
+dev.off()
+```
+
+
+![](img/pbMarseille.png)
+
+
+
+2113 bureaux au total
+
+enregistrement
+
+```{r}
+st_write(bvSel, "data/gros/geo.gpkg", "bv", delete_layer = T)
+```
+
+
+
+## Nettoyage
+
+```{r}
+bv <- st_read("data/gros/geo.gpkg", "bv")
+bv2 <- bv [st_is_valid(bv),]
+#2113
+bv2 <- st_cast(bv, "POLYGON")
+#  3472 Du coup, pl polygone pour un bureau on supprime les petits poly
+bv2$aire <- st_area(bv2)/10000
+library(units)
+bv2$aire <- drop_units(bv2$aire)
+bv2 <- bv2 [bv2$aire > 5,]
+```
+
+2128 au départ 2113, puis 2129 à la fin
+
+
+Comparaison en terme de nb de bv
+
+```{r}
+bvTab <- table(bv$insee)
+bv2Tab <- table(bv2$insee)
+#On compare les 2 tableaux
+sort(bvTab - bv2Tab)
+```
+
+
+Pas mal de perte, il faut regarder dans le détail, on tolère une différence de 3 bureaux.
+
+A voir au cas par cas.
+
+```{r}
+st_write(bv2, "data/gros/geo.gpkg", "bvValide", delete_layer = T)
+```
+
+2129 bureaux enregistrés
+
+
+
+
+# Données électorales
+
+### résultats des élections 2022
+
+Comme avec les bv, les points de vigilance sont :
+
+- les arrondissements de Lyon et Marseille
+
+- le DROM Guadeloupe
+
+- le bv unique 
+
+le code bureau est juste un numéro. 
+
+L'objectif serait dés cette étape d'utiliser le code bureau : insee et numéro bureau.
+
+
+```{r}
+bv <- st_read("data/gros/geo.gpkg", "bvValide")
+# 2129
+nomBureauMars <- substring(bv$bureau [bv$nom == "Marseille"], 7,9)
+write.csv(nomBureauMars, "data/devoirMaison/marseille.csv")
+cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8", colClasses = "character")
+# jointure ville code insee pour les résultats
+election2022 <- read.csv("data/gros/p2022-resultats-bureaux-t1.csv", fileEncoding = "UTF-8", header = T, colClasses = "character")
+```
+
+
+
+
+```{r, eval=FALSE}
+# INSEE_COM code insee
+election2022$INSEE_COM<-paste0(election2022$Code.du.département,election2022$Code.de.la.commune)
+election2022$INSEE_COM
+```
+
+
+```{r}
+# Pb pointe à pitre
+election2022[grep("Pointe-à-Pitre", election2022$Libellé.de.la.commune),]
+# le code dpt est ZA120 on le remplace par le cog officiel
+election2022$INSEE_COM[election2022$INSEE_COM =="ZA120"] <- 97120
+# extraction
+election2022Sel <- election2022 [election2022$INSEE_COM %in% cog$INSEE_COM,]
+length(unique(election2022Sel$INSEE_COM))
+# 72 youpi au cas où ce n'est pas le cas :
+pb <- setdiff(cog$INSEE_COM, election2022Sel$INSEE_COM)
+cog[cog$INSEE_COM %in% pb ,]
+```
+
+Même pb qu'avec les bv
+
+syntaxe : num bureau
+
+combien de bv dans le fichier bv ? 17 et 18
+
+```{r}
+pb <- election2022 [election2022$INSEE_COM %in% c('13055', '69123'),]
+lyon <- pb [pb$Libellé.de.la.commune == 'Lyon',]
+lyon <- lyon [lyon$Code.du.b.vote %in% c(101:117),]
+lyon$INSEE_COM <- '69381'
+mars <- pb [pb$Libellé.de.la.commune == 'Marseille',]
+mars <- mars [mars$Code.du.b.vote %in% nomBureauMars,]
+mars$INSEE_COM <- '13201'
+election2022Sel <- rbind(election2022Sel, lyon, mars)
+```
+
+2182 2148 bureaux
+
+Refaire la verif
+
+```{r}
+election2022Sel$Code.du.b.vote <- paste0(election2022Sel$INSEE_COM, "_", election2022Sel$Code.du.b.vote)
+write.csv(election2022Sel,"data/devoirMaison/election2022.csv", fileEncoding = "UTF-8", row.names = FALSE)
+```
+
+pb de la décimale
+
+
+```{r}
+election2022 <- read.csv("data/devoirMaison/election2022.csv", 
+                         fileEncoding = "UTF-8", dec =",")
+str(election2022$Code.du.b.vote)
+write.csv(election2022,"data/devoirMaison/election2022.csv", fileEncoding = "UTF-8")
+```
+
+
+
+Ce fichier sera joint à celui des bureaux de vote.
+
+
+
