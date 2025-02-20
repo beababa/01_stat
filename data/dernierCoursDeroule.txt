@@ -1,0 +1,17 @@
+déroulé cours
+- logistique : vérification des notes
+- évaluation de satisfaction
+- chercher IA
+- IA et intelligence collectives : quelques notions
+	- revue des plus récents plugin QGIS autour de la question (QdeepLandia / QGPT agent / AIRS plugin / bunting Labs Vectoriser), pour chaque plugin, date création + dernière version, auteur, objectif et utilisation possible ?
+Voir également documentation scodify
+	- OSM via overpass + saisie dans OSM
+
+
+
+https://lite.framacalc.org/9pse-coursstatsorbonne2022-9we9
+
+https://decryptageo.fr/intelligence-artificiell-geomatique/
+
+années 50, le Perceptron de Rosenblatt
+
