@@ -560,10 +560,26 @@ ep <- st_read("data/")
 
 ```
 
+# Jointure vfMoy et vfNb
+
+
+```{r}
+cle <- paste(vfMoy)
+vf <- merge(vfMoy, vfNb [, c("cp","ville","cle", "nb")], by = c("cp","ville","cle"))
+write.csv(vf,"data/vf.csv", fileEncoding = "UTF-8")
+```
+
 
 # Eclatement des fichiers par dpt
 
 
-```
+```{r}
+vf <- read.csv("data/vf.csv", fileEncoding = "UTF-8")
+vf$dpt <- substring(vf$cp,1,2)
+dpt <- unique(vf$dpt)
+for (d in dpt){
+  tmp <- vf [vf$dpt == d,]
+  write.csv(tmp, paste0("data/vf_", d, ".csv"), fileEncoding = "UTF-8")
+}
 ```
 
