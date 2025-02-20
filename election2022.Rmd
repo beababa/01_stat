@@ -211,9 +211,9 @@ dev.off()
 
 Des choix sur toute l'étendue du territoire de la métropole
 
-# bv
+## Extraction et nettoyage du bv
 
-## Extraction
+### Extraction
 
 ```{r}
 bv <- st_read("data/gros/bureau-de-vote-insee-reu-openstreetmap.gpkg")
@@ -224,7 +224,7 @@ fond <- st_transform(fond, 2154)
 
 
 
-## Distribution des bureaux par commune
+#### Distribution des bureaux par commune
 
 ##### Drom
 
@@ -263,7 +263,7 @@ dev.off()
 manquants <- setdiff(cog$INSEE_COM, bvSel$insee)
 ```
 
-## Rapport nb bureaux taille ville
+##### Rapport nb bureaux taille ville
 
 
 ```{r}
@@ -317,7 +317,7 @@ st_write(bvSel, "data/gros/geo.gpkg", "bv", delete_layer = T)
 
 
 
-## Nettoyage
+#### Nettoyage
 
 ```{r}
 bv <- st_read("data/gros/geo.gpkg", "bv")
@@ -643,7 +643,7 @@ nomBureauMars <- substring(bv$bureau [bv$nom == "Marseille"], 7,9)
 write.csv(nomBureauMars, "data/devoirMaison/marseille.csv")
 cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8", colClasses = "character")
 # jointure ville code insee pour les résultats
-election2022 <- read.csv("data/gros/p2022-resultats-bureaux-t1.csv", fileEncoding = "UTF-8", header = T, colClasses = "character")
+election2022 <- read.csv("data/gros/resultats-par-niveau-burvot-t1-france-entiere.csv", fileEncoding = "UTF-8", header = T, colClasses = "character")
 ```
 
 
