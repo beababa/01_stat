@@ -28,6 +28,8 @@ On extrait pour chaque ville choisie par les étudiants :
 
 - la géométrie de la ville d'après le cog (pb code insee)
 
+- les bv
+
 - les données électorales au bv (cours 4)
 
 
@@ -55,284 +57,23 @@ Une première définition a été faite mais on reprend la liste.
 ville <- read.csv("data/TD3Concept.csv", colClasses = "character")
 ville <- ville [ville$prénom!="",]
 ville <- ville [,2]
-# 50 villes différentes42 uniques 
+# 57 villes différentes 49 uniques 
 ville <- unique(na.omit(ville))
 ```
 
-57 étudiants ont choisi 50 code insee différents.
 
-# Donnée utilisées en cours
+## Dézippage fichier communes
 
-## Distributions des bureaux
-
-```{r}
-# dénombrement
-(tab <- sort(table (bvSel$insee)))
-nb <- length(names(tab))
-png("img/distributionBureauGeomatique.png")
-hist(tab, main = paste0("Distribution du nombre de bureaux\n choix communes des ", length(vendredi$prenom)," étudiants"),
-     sub = paste0(length(bvSel$insee), " bureaux au total pour ",nb," communes"),
-     col = "coral", border = NA,
-     xlab = "nb de bureaux",
-     ylab = "nb de villes")
-dev.off()
-```
-
-![](img/distributionBureauGeomatique.png)
-
-# PLUi et choix des groupes
-
-
-La donnée
-
-Sauvegarde du tableau du cours 2
+Une fois suffit...
 
 ```{r}
-data <- read.csv("data/constructionChoixGroupe.csv")
-data <- data [!is.na(data$prénom),]
-```
-
-57 étudiants
-
-
-```{r}
-setwd("data/gros")
-setwd("C:/Users/tachasa/01_stat/")
-getwd()
-Sys.getenv()
 unzip(zipfile = "data/gros/communes-20220101-shp.zip", exdir = "data/gros")
 communes <- st_read("data/gros/communes-20220101.shp")
 ```
 
 
-## Liste des bureaux de vote
 
-### Lille
-
-
-```{r}
-adresseBV <- read.csv("data/table-bv-reu.csv")
-# 50 122
-lille <- adresseBV [ grep('^59350',adresseBV$id_brut_insee),]
-sort(lille$code)
-write.csv (lille, "data/lilleBV.csv")
-```
-
-
-```{r}
-lilleContour <- bv [bv$codeCommune == 59350,]
-mapview(lilleContour)
-```
-
-### Bondy
-
-```{r}
-bondy <- adresseBV [ grep('^93',adresseBV$code_commune),]
-bondy
-```
-
-```{r}
-library(arrow)
-adresseBV <- read_parquet("data/gros/table-bv-reu.parquet")
-# 68 839 !
-bondy <- adresseBV [ grep('^93',adresseBV$code_commune),]
-table(bondy$code_commune)
-bondy <- bondy [bondy$code_commune == 93010,]
-write.csv(bondy,"data/bureauxBondyLoc.csv")
-```
-
-
-# Géolocalisation avec la Ban R
-
-```{r}
-library(banR)
-adresses <- bondy [, c("libelle_reu", "voie_reu", "cp_reu", "commune_reu")]
-adresses$compil <- paste(adresses$voie_reu, adresses$cp_reu, adresses$commune_reu, sep = " ")
-adresses$compil
-geoc <- geocode_tbl(tbl = adresses, adresse = compil)
-geoc$latitude
-mes_adresses_sf <- st_as_sf(geoc, coords = c("longitude", "latitude"), crs = 4326)
-bondyLocBureaux <- mes_adresses_sf [, c("libelle_reu", "voie_reu")]
-st_write(bondyLocBureaux, "data/bv.gpkg", "bondyLocBureau", delete_layer = T)
- ```
-
-# La donnée à utiliser
-
-```{r}
-library(sf)
-library(mapsf)
-library(mapview)
-```
-
-On teste les contours INSEE et ceux de Rodrigo avec OSM
-Le format "pmtiles" s'ouvre très bien
-
-```{r}
-# INSEE
-bv <- st_read(paste0(cheminGROS,"reu-france-entiere-2022-06-01-v2.pmtiles"))
-# 603 705
-#bondy <- bv [bv$insee == '93010',]
-bondy <- bv [bv$codeCommune == '93010',]
-
-table(bondy$numeroBureauVote)
-# pb triplets / quartople
-bondy7 <- bondy [bondy$numeroBureauVote == '0007',]
-bondy7$fid <- seq(1,4)
-mapview(bondy7, zcol = "fid")
-# agregation
-bondy <- aggregate(bondy [, c("numeroBureauVote")], by = list(bondy$numeroBureauVote), length)
-mapview(bondy, zcol = "Group.1", legend=FALSE)
-st_write(bondy,"data/bvBondyINSEE.geojson", append = F)
-```
-
-Un quadrillage sur la donnée INSEE (carroyage 2 km ?)
-
-
-```{r}
-# RODRIGO
-bv <- st_read("data/gros/bureau.pmtiles")
-# le pmtiles pose pb
-bv <- st_read(paste0(cheminGROS,"bureau-de-vote-insee-reu-openstreetmap.gpkg"))
-st_write(bv,"data/gros/bvRodrigo.geojson", append = F)
-```
-68596
-
-On reprend le fichier sauvegardé précédemment
-
-```{r}
-bv <- st_read("data/gros/bv.geojson")
-bvBondyRodrigo <- bv [bv$insee == 93010,]
-mapview(bvBondyRodrigo)
-st_write(bvBondyRodrigo,"data/bvBondyRODRIGO.geojson", append = F)
-```
-
-
-
-## Liste des communes pour les étudiants du vendredi
-
-```{r}
-communes <- vendredi$code.INSEE..minimum.10.bureaux.[vendredi$code.INSEE..minimum.10.bureaux.!=""]
-length(communes)
-```
-
-52 communes
-
-
-```{r}
-# filtre 1 sur insee
-bvSel <- bv [bv$insee %in% communes,]
-# pb des insee arrondissements, on recopie les codes insee des bureaux
-bvSel$insee <- substring(bvSel$bureau,1,5) 
-bvSel <- bvSel [bvSel$insee %in% communes,]
-```
-
-### Vérification sur Paris
-
-
-```{r}
-paris <- unique(communes [grep('^75', communes)])
-bvSelParis <- bvSel [grep("^75", bvSel$insee),]
-mapview(bvSelParis, zcol="insee")
-```
-
-
-
-
-```{r}
-pbParis <- vendredi$adresseMail [vendredi$code.INSEE..minimum.10.bureaux. == '75056']
-write.csv(pbParis, "data/pbParis.csv", fileEncoding="UTF-8")
-paste0(pbParis, ";", collapse = "")
-```
-
-
-```{r}
-st_write(bvSel, "data/gros/bv.gpkg", "bvVendredi", delete_layer = T)
-bvSel <- st_read("data/gros/bv.gpkg", "bvVendredi")
-bvSel <- bvSel [ st_is_valid(bvSel$geom),]
-agg <- aggregate(bvSel [,c("nom", "geom")], list(bvSel$insee, bvSel$nom), length)
-names(agg)  [1:3] <- c("insee", "nom", "nbBureaux")
-st_write(agg, "data/gros/bv.gpkg", "bvVendrediAgg", delete_layer = T)
-mapview(agg)
-```
-
-1255 bureaux
-
-
-```{r}
-pb <- setdiff(communes, agg$insee)
-# on enlève paris
-pb  <- pb [-5]
-bvPb <- bv [bv$insee %in% pb,]
-unique(bvPb$nom)
-table(bvPb$insee)
-vendredi [vendredi$code.INSEE..minimum.10.bureaux. %in% bvPb$insee, c(1,2,3)]
-```
-
-Seulement 2 arr alors que 3 éléments ds Paris
-
-Export des mails concernés
-
-```{r}
-hist(table(bvSel$insee), main = "Nb de bureaux de vote", xlab = "Nb de bureaux", ylab = "Nb d'étudiants" )
-table(bvSel$insee)
-pbParis <- vendredi$adresseMail [vendredi$code.INSEE..minimum.10.bureaux. == '75056']
-write.csv(pbParis, "data/pbParis.csv", fileEncoding="UTF-8")
-paste0(pbParis, ";", collapse = "")
-```
-
-Correction suite réponse
-
-```{r}
-pbParisCorrige <- read.csv("data/pbParisCorrige.csv")
-insee <- pbParisCorrige$correction [!is.na (pbParisCorrige$correction)]
-bvSelParis <- bv [bv$insee %in% insee,]
-table(bv$insee %in% insee)
-```
-
-```{r}
-bvSel <- rbind(bvSel,bvSelParis)
-```
-
-
-
-```{r}
-st_write(bvSel, "data/gros/bv.gpkg", "bvVendredi", delete_layer = T)
-bvSel <- st_read("data/gros/bv.gpkg", "bvVendredi")
-bvSel <- bvSel [ st_is_valid(bvSel$geom),]
-agg <- aggregate(bvSel [,c("nom", "geom")], list(bvSel$insee, bvSel$nom), length)
-names(agg)  [1:3] <- c("insee", "nom", "nbBureaux")
-st_write(agg, "data/bv.gpkg", "bvVendrediAgg", delete_layer = T)
-mapview(agg)
-```
-
-Manquants par rapport à la liste de départ
-
-
-```{r}
-pb <- setdiff(communes, agg$insee)
-pb
-# on enlève paris
-pb  <- pb [-5]
-bvPb <- bv [bv$insee %in% pb,]
-# 29232 pour 29000 (Quimper), 66135 Perillos, 69123 Lyon, Croix Chapeau 1 bureau 71136
-# Corrèze 19062 / Ajjaccio 2A004
-unique(bvPb$nom)
-table(bvPb$insee)
-vendredi [vendredi$code.INSEE..minimum.10.bureaux. %in% bvPb$insee, c(1,2,3)]
-```
-
-Remplacements
-
-
-
-```{r}
-hist(table(bvSel$insee), main = "Nb de bureaux de vote", xlab = "Nb de bureaux", ylab = "Nb d'étudiants" )
-table(bvSel$insee)
-```
-
-
-## Première jointure
-
+## Première extraction
 
 
 ```{r}
@@ -342,6 +83,7 @@ names(fr)
 sel <- fr [fr$insee %in% ville,]
 sel$insee
 mapview(sel)
+# attention une ville en DROM
 pb <- setdiff(ville, sel$insee)
 ```
 
@@ -354,7 +96,7 @@ Paris <- fr [fr$insee == "75056",]
 pbParis <- pb [grep("^75", pb)]
 mf_map(Paris)
 # téléchargements arrondissements
-paris <- st_read("data/gros/arrondissements.geojson")
+paris <- st_read("data/arrondissements.geojson")
 mf_map(paris, add = T)
 parisSel <- paris [paris$c_arinsee %in% pbParis,] 
 mf_map(parisSel, add = T, col="red")
@@ -398,7 +140,7 @@ Reste la commune de Perillos et Ajaccio
 #66135
 
 #2A004
-selCorse <- fr [fr$insee == "2A004",]
+selCorse <- fr [fr$insee == "2A004", c("insee", "nom")]
 ```
 
 
@@ -407,8 +149,8 @@ selCorse <- fr [fr$insee == "2A004",]
 
 
 ```{r}
+selPb <- selPb [,c("insee", "nom")]
 sel <- rbind (sel, selCorse, selPb)
-sel <- sel [,c("insee", "nom")]
 parisSel <- parisSel [,c("c_arinsee", "l_ar")]
 names(parisSel)[1:2] <- c("insee", "nom")
 tot <- rbind(parisSel, sel)
@@ -422,7 +164,7 @@ On a 1 ville en trop, mais c'était un cp Paris
 
 ```{r}
 setdiff(ville, tot$insee)
-pb
+mapview(tot)
 ```
 
 
@@ -466,6 +208,11 @@ url$query <- list(service = "wfs",
                   )
 request <- build_url(url)
 data <- st_read(request)
+# pb Fort de France, on coupe le dpt
+which(tot$insee == "97209")
+data [grep("^97",data$code_insee),]
+data$code_insee [data$code_insee == 972] <- "97"
+#data <- data [-c(97,99:101)]
 ```
 
 ```{r}
@@ -483,21 +230,35 @@ dptSel <- data [data$code_insee %in% dpt,]
 
 ## Carto
 
+2 cartos car Fort de France
 
-
-```{r, eval=FALSE}
+```{r}
 png("img/communeConcept.png")
-mf_init(dptSel)
+dptSel1 <- dptSel [dptSel$code_insee == "97",]
+mf_init(dptSel1)
 mf_map(data, col = "wheat2" , border = NA,add = T)
 mf_map(dptSel, add = T, col = "antiquewhite1", border = "wheat")
 mf_map(tot, col = "red", border = NA,add = T)
 #mf_label(tot, var = "dpt")
-mf_layout("Communes choisies par les étudiants", credits = "IGN")
+mf_layout("Fort de France", credits = "IGN")
+dev.off()
+```
+
+
+```{r, eval=FALSE}
+png("img/communeConcept2.png")
+dptSel2 <- dptSel [dptSel$code_insee != "97",]
+mf_init(dptSel2)
+mf_map(data, col = "wheat2" , border = NA,add = T)
+mf_map(dptSel, add = T, col = "antiquewhite1", border = "wheat")
+mf_map(tot, col = "red", border = NA,add = T)
+#mf_label(tot, var = "dpt")
+mf_layout("Communes choisies par les étudiants sf Martinique", credits = "IGN")
 dev.off()
 ```
 
 ![](img/communeConcept.png)
-
+![](img/communeConcept2.png)
 Nb de choix par zone
 
 ```{r}
@@ -507,67 +268,130 @@ table(tot$dep)
 
 
 
-# bv
 
-## Extraction
+# BV contours
+
+On teste les contours INSEE et ceux de Rodrigo avec OSM
+Le format "pmtiles" s'ouvre très bien mais le fichier a un carroyage.
 
 ```{r}
+ville <- st_read("data/concept.gpkg", "villes")
+```
+
+50 communes
+
+```{r}
+# RODRIGO
+bv <- st_read("data/gros/bureau.pmtiles")
+# le pmtiles pose pb
 bv <- st_read("data/gros/bureau-de-vote-insee-reu-openstreetmap.gpkg")
-bv <- bv [, c("insee", "nom", "bureau")]
-bv <- st_transform(bv, 2154)
-fond <- st_transform(fond, 2154)
+#st_write(bv,"data/gros/bvRodrigo.geojson", append = F)
+```
+68596
+
+On reprend le fichier sauvegardé précédemment
+
+```{r}
+#bv <- st_read("data/gros/bv.geojson")
+bvBondy <- bv [bv$insee == 93010, c("insee", "nom", "bureau")]
+# doublons
+bvBondy <- unique(bvBondy)
+mapview(bvBondy)
+st_write(bvBondy,"data/concept.gpkg", "bvBondy", delete_layer = T)
 ```
 
 
 
-## Distribution des bureaux par commune
+```{r}
+bvCourt <- bv [!is.na(bv$bureau), c("insee", "nom", "bureau")]
+# 40 303 villes avec plus d'un bureau
+# pb des insee arrondissements, on recopie les codes insee des bureaux
+bvCourt$insee <- substring(bvCourt$bureau,1,5) 
+bvSel <- bvCourt [bvCourt$insee %in% ville$insee,]
+```
 
-##### Drom
+1566
 
-Ville à un seul bv : uniquement Drom
+### Vérification sur Paris
+
 
 ```{r}
-bv [bv$nom == "Drom",]
-bv$bureau  [bv$nom == "Drom"] <- paste0(bv$insee [bv$nom == "Drom"], "_1")
+bvSelParis <- bvSel [grep("^75", bvSel$insee),]
+mapview(bvSelParis, zcol="insee")
 ```
 
 
+
 ```{r}
-# le bureau est la concaténation du num bureau et du code INSEE
-bv$insee <- substring(bv$bureau, 1,5)
+st_write(bvSel, "data/concept.gpkg", "bv", delete_layer = T)
+bvSel <- st_read("data/concept.gpkg", "bv")
+# pb géométrie : 11 bureaux
+bvSelGeometrie <- bvSel [ !st_is_valid(bvSel$geom),]
+bvSel <- bvSel [ st_is_valid(bvSel$geom),]
+# On ne peut les laisser pour l'agrégation
+agg <- aggregate(bvSel [,c("nom", "geom")], list(bvSel$insee, bvSel$nom), length)
+names(agg)  [1:3] <- c("insee", "nom", "nbBureaux")
+st_write(agg, "data/concept.gpkg", "bvAgg", delete_layer = T)
+mapview(agg)
+```
+
+1555 bureaux
+
+44 communnes
+
+```{r}
+pb <- setdiff(ville$insee, agg$insee)
+pb
+pb  <- pb [-3]
+bvPb <- bv [bv$insee %in% pb, c("insee", "nom", "bureau")]
+bvFin <- rbind(bvSel, bvPb)
 ```
 
 
+1557 bureaux
+
 ```{r}
-bvSel <- bv [bv$insee %in% cog$INSEE_COM,]
+st_write(bvFin, "data/concept.gpkg", "bv", delete_layer = T)
+bvSel <- st_read("data/concept.gpkg", "bv")
+bvSel <- bvSel [ st_is_valid(bvSel$geom),]
+```
+
+
+
+## Distributions des bureaux
+
+```{r}
+vendredi <- read.csv("data/TD3Concept.csv")
+vendredi <- vendredi [ vendredi$prénom!="",]
+vendredi$prénom
 # dénombrement
 (tab <- sort(table (bvSel$insee)))
-length(names(tab))
-png("img/distributionBureau.png")
-hist(tab, main = "Distribution du nombre de bureaux choix communes étudiants",
-     sub = "2128 bureaux au total pour 74 communes",
+nb <- length(names(tab))
+png("img/distributionBureauGeomatique.png")
+hist(tab, main = paste0("Distribution du nombre de bureaux\n choix communes des ", length(vendredi$prénom)," étudiants"),
+     sub = paste0(length(bvSel$insee), " bureaux au total pour ",nb," communes"),
      col = "coral", border = NA,
      xlab = "nb de bureaux",
      ylab = "nb de villes")
 dev.off()
 ```
 
-![](img/distributionBureau.png)
+![](img/distributionBureauGeomatique.png)
 
 
-```{r}
-manquants <- setdiff(cog$INSEE_COM, bvSel$insee)
-```
 
 ## Rapport nb bureaux taille ville
 
 
+Il faut la population
+
 ```{r}
 # récupération de la population par ville
 df <- as.data.frame(tab) 
-names(df) <- c("INSEE_COM", "nbBureaux")
-joint <- merge(cogGEOM, df, by = "INSEE_COM")
-str(joint)
+df
+names(df) <- c("insee", "nbBureaux")
+joint <- merge(ville, df, by = "insee")
+
 joint$POPULATION <- joint$POPULATION/1000
 png("img/bvPOP.png")
 plot(joint$nbBureaux, joint$POPULATION, col="coral3", pch = 20,
@@ -616,18 +440,19 @@ st_write(bvSel, "data/gros/geo.gpkg", "bv", delete_layer = T)
 ## Nettoyage
 
 ```{r}
-bv <- st_read("data/gros/geo.gpkg", "bv")
+bv <- st_read("data/concept.gpkg", "bv")
+# 1557
 bv2 <- bv [st_is_valid(bv),]
-#2113
+# 1557
 bv2 <- st_cast(bv, "POLYGON")
-#  3472 Du coup, pl polygone pour un bureau on supprime les petits poly
+#  3766 Du coup, pl polygone pour un bureau on supprime les petits poly
 bv2$aire <- st_area(bv2)/10000
 library(units)
 bv2$aire <- drop_units(bv2$aire)
 bv2 <- bv2 [bv2$aire > 5,]
 ```
 
-2128 au départ 2113, puis 2129 à la fin
+3766 au départ 1557, puis 1554 à la fin
 
 
 Comparaison en terme de nb de bv
@@ -645,11 +470,84 @@ Pas mal de perte, il faut regarder dans le détail, on tolère une différence d
 A voir au cas par cas.
 
 ```{r}
-st_write(bv2, "data/gros/geo.gpkg", "bvValide", delete_layer = T)
+st_write(bv2, "data/concept.gpkg", "bvValide", delete_layer = T)
 ```
 
-2129 bureaux enregistrés
+1524 bureaux enregistrés
 
+# REU Bureaux de vote
+
+## France entière
+
+```{r}
+
+# INSEE
+bv <- st_read(paste0(cheminGROS,"reu-france-entiere-2022-06-01-v2.pmtiles"))
+# 603 705
+#bondy <- bv [bv$insee == '93010',]
+bondy <- bv [bv$codeCommune == '93010',]
+
+table(bondy$numeroBureauVote)
+# pb triplets / quartople
+bondy7 <- bondy [bondy$numeroBureauVote == '0007',]
+bondy7$fid <- seq(1,4)
+mapview(bondy7, zcol = "fid")
+# agregation
+bondy <- aggregate(bondy [, c("numeroBureauVote")], by = list(bondy$numeroBureauVote), length)
+mapview(bondy, zcol = "Group.1", legend=FALSE)
+st_write(bondy,"data/bvBondyINSEE.geojson", append = F)
+```
+
+
+
+### Lille
+
+
+```{r}
+adresseBV <- read.csv("data/table-bv-reu.csv")
+# 50 122
+lille <- adresseBV [ grep('^59350',adresseBV$id_brut_insee),]
+sort(lille$code)
+write.csv (lille, "data/lilleBV.csv")
+```
+
+
+```{r}
+lilleContour <- bv [bv$codeCommune == 59350,]
+mapview(lilleContour)
+```
+
+## Bondy
+
+```{r}
+bondy <- adresseBV [ grep('^93',adresseBV$code_commune),]
+bondy
+```
+
+```{r}
+library(arrow)
+adresseBV <- read_parquet("data/gros/table-bv-reu.parquet")
+# 68 839 !
+bondy <- adresseBV [ grep('^93',adresseBV$code_commune),]
+table(bondy$code_commune)
+bondy <- bondy [bondy$code_commune == 93010,]
+write.csv(bondy,"data/bureauxBondyLoc.csv")
+```
+
+
+# Géolocalisation avec la Ban R
+
+```{r}
+library(banR)
+adresses <- bondy [, c("libelle_reu", "voie_reu", "cp_reu", "commune_reu")]
+adresses$compil <- paste(adresses$voie_reu, adresses$cp_reu, adresses$commune_reu, sep = " ")
+adresses$compil
+geoc <- geocode_tbl(tbl = adresses, adresse = compil)
+geoc$latitude
+mes_adresses_sf <- st_as_sf(geoc, coords = c("longitude", "latitude"), crs = 4326)
+bondyLocBureaux <- mes_adresses_sf [, c("libelle_reu", "voie_reu")]
+st_write(bondyLocBureaux, "data/bv.gpkg", "bondyLocBureau", delete_layer = T)
+```
 
 
 
@@ -671,11 +569,8 @@ L'objectif serait dés cette étape d'utiliser le code bureau : insee et numéro
 
 
 ```{r}
-bv <- st_read("data/gros/geo.gpkg", "bvValide")
-# 2129
-nomBureauMars <- substring(bv$bureau [bv$nom == "Marseille"], 7,9)
-write.csv(nomBureauMars, "data/devoirMaison/marseille.csv")
-cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8", colClasses = "character")
+bv <- st_read("data/concept.gpkg", "bv")
+# 1554
 # jointure ville code insee pour les résultats
 election2022 <- read.csv("data/gros/p2022-resultats-bureaux-t1.csv", fileEncoding = "UTF-8", header = T, colClasses = "character")
 ```
@@ -683,31 +578,50 @@ election2022 <- read.csv("data/gros/p2022-resultats-bureaux-t1.csv", fileEncodin
 
 
 
-```{r, eval=FALSE}
-# INSEE_COM code insee
-election2022$INSEE_COM<-paste0(election2022$Code.du.département,election2022$Code.de.la.commune)
-election2022$INSEE_COM
+```{r}
+# Pb pointe à pitre
+Martinique <- election2022[grep("Fort-de", election2022$Commune),]
+# extraction
+election2022Sel <- election2022 [election2022$CodeInsee %in% ville$insee,]
+length(unique(election2022Sel$CodeInsee))
+# 41 - 9 communes
+pb <- setdiff(ville$insee, election2022Sel$CodeInsee)
+Paris <- election2022 [election2022$CodeInsee == "75056",]
+Paris$CodeBdeVote
+# 4 chiffres les 2 premiers l'arr les deux derniers le bureau
+Paris$arr <- substring(Paris$CodeBdeVote,  1 ,2)
+Paris$CodeInsee <- paste0("751", Paris$arr)
+# filetre sur les arrondissements
+Paris <- Paris [Paris$CodeInsee %in% pb,]
+unique(Paris$CodeInsee)
 ```
+
+Total
+
+```{r}
+election2022Sel
+Martinique$CodeInsee <- "97209"
+# suppression de la colonne arr
+Paris <- Paris [, -55]
+election <- rbind(election2022Sel, Martinique, Paris)
+write.csv(election,"data/election2022.csv", fileEncoding = "UTF-8")
+```
+
+2486 lg ou bv (1557 bv)
 
 
 ```{r}
-# Pb pointe à pitre
-election2022[grep("Pointe-à-Pitre", election2022$Libellé.de.la.commune),]
-# le code dpt est ZA120 on le remplace par le cog officiel
-election2022$INSEE_COM[election2022$INSEE_COM =="ZA120"] <- 97120
-# extraction
-election2022Sel <- election2022 [election2022$INSEE_COM %in% cog$INSEE_COM,]
-length(unique(election2022Sel$INSEE_COM))
-# 72 youpi au cas où ce n'est pas le cas :
-pb <- setdiff(cog$INSEE_COM, election2022Sel$INSEE_COM)
-cog[cog$INSEE_COM %in% pb ,]
+bv$insee
+election <- election [election$CodeInsee != "75056",]
+write.csv(election, "data/election2022.csv", fileEncoding = "UTF-8")
 ```
 
-Même pb qu'avec les bv
+1556
 
-syntaxe : num bureau
 
-combien de bv dans le fichier bv ? 17 et 18
+### combien de bv dans le fichier bv ? 17 et 18
+
+cas particuliers à explorer
 
 ```{r}
 pb <- election2022 [election2022$INSEE_COM %in% c('13055', '69123'),]
@@ -720,23 +634,16 @@ mars$INSEE_COM <- '13201'
 election2022Sel <- rbind(election2022Sel, lyon, mars)
 ```
 
-2182 2148 bureaux
 
-Refaire la verif
-
-```{r}
-election2022Sel$Code.du.b.vote <- paste0(election2022Sel$INSEE_COM, "_", election2022Sel$Code.du.b.vote)
-write.csv(election2022Sel,"data/devoirMaison/election2022.csv", fileEncoding = "UTF-8", row.names = FALSE)
-```
 
 pb de la décimale
 
 
 ```{r}
-election2022 <- read.csv("data/devoirMaison/election2022.csv", 
+election2022 <- read.csv("data/election2022.csv", 
                          fileEncoding = "UTF-8", dec =",")
-str(election2022$Code.du.b.vote)
-write.csv(election2022,"data/devoirMaison/election2022.csv", fileEncoding = "UTF-8")
+str(election2022$CodeBdeVote)
+write.csv(election2022,"data/election2022.csv", fileEncoding = "UTF-8")
 ```
 
 
