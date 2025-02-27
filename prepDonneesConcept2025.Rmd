@@ -59,8 +59,11 @@ ville <- ville [ville$prénom!="",]
 ville <- ville [,2]
 # 57 villes différentes 49 uniques 
 ville <- unique(na.omit(ville))
+# On rajoute Champs sur Marne, Perpignan, Paris 19
+ville <- c(ville,"77083", "66136", "75119")
 ```
 
+52 villes uniques
 
 ## Dézippage fichier communes
 
@@ -84,10 +87,10 @@ sel <- fr [fr$insee %in% ville,]
 sel$insee
 mapview(sel)
 # attention une ville en DROM
-pb <- setdiff(ville, sel$insee)
+(pb <- setdiff(ville, sel$insee))
 ```
 
-10 pb dont codes insee Paris
+11 pb dont codes insee Paris
 
 ## Paris
 
@@ -103,7 +106,7 @@ mf_map(parisSel, add = T, col="red")
 mf_label(parisSel, var = "l_ar")
 ```
 
-5 arrondissements, 12, 16, 17, 18 et 20
+6 arrondissements, 12, 16, 17, 18, 19 et 20
 
 Reste pb faux codes insee, grrrr
 
@@ -131,6 +134,7 @@ for (i in pb){
 str(equiv)
 equiv$code
 selPb <- fr [fr$insee %in% equiv$code,]
+selPb <- selPb [,c("insee", "nom")]
 ```
 
 
@@ -138,7 +142,7 @@ Reste la commune de Perillos et Ajaccio
 
 ```{r}
 #66135
-
+# Remplacement par Perpignan
 #2A004
 selCorse <- fr [fr$insee == "2A004", c("insee", "nom")]
 ```
@@ -149,7 +153,7 @@ selCorse <- fr [fr$insee == "2A004", c("insee", "nom")]
 
 
 ```{r}
-selPb <- selPb [,c("insee", "nom")]
+sel <- sel [,c("insee", "nom")]
 sel <- rbind (sel, selCorse, selPb)
 parisSel <- parisSel [,c("c_arinsee", "l_ar")]
 names(parisSel)[1:2] <- c("insee", "nom")
@@ -157,17 +161,40 @@ tot <- rbind(parisSel, sel)
 st_write(tot, "data/concept.gpkg", "villes", delete_layer = T)
 ```
 
+50 villes
 
 dernière vérif
 
-On a 1 ville en trop, mais c'était un cp Paris
+On a 2 villes en moins, mais c'est normal
 
 ```{r}
 setdiff(ville, tot$insee)
 mapview(tot)
 ```
 
+On veut également récupérer la population des villes (pour comparaison avec votants 
+plus loin)
 
+```{r}
+equiv <- NULL
+insee <- tot$insee
+for (i in insee){
+  print(i)
+  rqt <- paste0("https://geo.api.gouv.fr/communes?code=", i)
+  res <- httr::GET(rqt)
+# dans res, on remarque le status à 200, c'est ok. et le format json
+  tmp <- fromJSON(rawToChar(res$content))
+  equiv <- rbind(equiv, tmp)
+}
+str(equiv)
+tot$insee
+equiv$code
+joint <- merge(tot, equiv, all.x=T, by.x = "insee", by.y="code")
+names(joint)
+st_write(joint [, -8], "data/concept.gpkg", "villes", delete_layer = T)
+dpt <- joint$codeDepartement [!is.na(  joint$codeDepartement )]
+dpt <- unique(dpt)
+```
 
 ## Cartographie France
 
@@ -289,7 +316,6 @@ bv <- st_read("data/gros/bureau-de-vote-insee-reu-openstreetmap.gpkg")
 ```
 68596
 
-On reprend le fichier sauvegardé précédemment
 
 ```{r}
 #bv <- st_read("data/gros/bv.geojson")
@@ -310,7 +336,7 @@ bvCourt$insee <- substring(bvCourt$bureau,1,5)
 bvSel <- bvCourt [bvCourt$insee %in% ville$insee,]
 ```
 
-1566
+1724
 
 ### Vérification sur Paris
 
@@ -335,9 +361,9 @@ st_write(agg, "data/concept.gpkg", "bvAgg", delete_layer = T)
 mapview(agg)
 ```
 
-1555 bureaux
+1713 bureaux
 
-44 communnes
+47 communnes
 
 ```{r}
 pb <- setdiff(ville$insee, agg$insee)
@@ -348,7 +374,7 @@ bvFin <- rbind(bvSel, bvPb)
 ```
 
 
-1557 bureaux
+1715 bureaux
 
 ```{r}
 st_write(bvFin, "data/concept.gpkg", "bv", delete_layer = T)
@@ -391,57 +417,47 @@ df <- as.data.frame(tab)
 df
 names(df) <- c("insee", "nbBureaux")
 joint <- merge(ville, df, by = "insee")
-
-joint$POPULATION <- joint$POPULATION/1000
+joint [order(joint$population, decreasing = T),]
+joint$population <- joint$population/1000
 png("img/bvPOP.png")
-plot(joint$nbBureaux, joint$POPULATION, col="coral3", pch = 20,
+plot(joint$nbBureaux, joint$population, col="coral3", pch = 20,
      xlab = "Nb de bureaux", ylab = "population (en milliers)")
 # on soustrait les 2 valeurs.
-joint2 <- joint [joint$POPULATION < 400,]
-modele <- lm(POPULATION~nbBureaux, joint2)
+joint <- joint [joint$population < 80,]
+modele <- lm(population~nbBureaux, joint)
 abline(modele, col = "darkgoldenrod1")
 dev.off()
 ```
 
 ![](img/bvPOP.png)
 
+#### Cas particulier
 
-##### Marseille
+La plus grosse ville c'est Lille
+
+### Lille
+
 
 ```{r}
-st_crs(fond)
-mars <- bvSel [bvSel$nom == 'Marseille',]
-png("img/pbMarseille.png")
-mf_init(mars)
-mf_base(mars,bg = "cadetblue2", add = T)
-mf_map(fond, col = "antiquewhite1", border = "burlywood2", bg ="cadetblue2", add = T)
-mf_map(mars, col = "antiquewhite2", border = "burlywood2", lwd = 2, add = T)
-mars$bureau2 <- substring(mars$bureau,7,9)
-mf_label(mars, var = "bureau2", cex = 1.5, halo = T)
-mf_layout("Marseille : des bureaux aux numéros discontinus", "opendata REU /  Frédéric Rodrigo")
-dev.off()
+adresseBV <- read.csv("data/table-bv-reu.csv")
+# 50 122
+lille <- adresseBV [ grep('^59350',adresseBV$id_brut_insee),]
+sort(lille$code)
+write.csv (lille, "data/lilleBV.csv")
 ```
 
 
-![](img/pbMarseille.png)
-
-
-
-2113 bureaux au total
-
-enregistrement
-
 ```{r}
-st_write(bvSel, "data/gros/geo.gpkg", "bv", delete_layer = T)
+lilleContour <- bv [bv$insee == 59350,]
+mapview(lilleContour)
 ```
-
 
 
 ## Nettoyage
 
 ```{r}
 bv <- st_read("data/concept.gpkg", "bv")
-# 1557
+# 1715
 bv2 <- bv [st_is_valid(bv),]
 # 1557
 bv2 <- st_cast(bv, "POLYGON")
@@ -452,7 +468,7 @@ bv2$aire <- drop_units(bv2$aire)
 bv2 <- bv2 [bv2$aire > 5,]
 ```
 
-3766 au départ 1557, puis 1554 à la fin
+3766 au départ 1715, puis 1680 à la fin
 
 
 Comparaison en terme de nb de bv
@@ -466,6 +482,27 @@ sort(bvTab - bv2Tab)
 
 
 Pas mal de perte, il faut regarder dans le détail, on tolère une différence de 3 bureaux.
+
+```{r}
+pb <- ville [ville$insee == 97209,]
+```
+
+```{r}
+bv <- st_read("data/concept.gpkg", "bv")
+mart <- bv [bv$nom == 'Fort-de-France',]
+png("img/pbFortDeFrance.png")
+mf_init(mart)
+mf_map(dptSel, type = "base", bg = "cadetblue2", add = T)
+#mf_map(fond, col = "antiquewhite1", border = "burlywood2", bg ="cadetblue2", add = T)
+mf_map(mart, col = "antiquewhite2", border = "burlywood2", lwd = 2, add = T)
+mart$bureau2 <- substring(mart$bureau,7,9)
+mf_label(mart, var = "bureau2", cex = 0.5, halo = T)
+mf_layout("Fort de France : des bureaux aux numéros discontinus", "opendata REU")
+dev.off()
+```
+
+
+![](img/pbFortDeFrance.png)
 
 A voir au cas par cas.
 
@@ -500,22 +537,6 @@ st_write(bondy,"data/bvBondyINSEE.geojson", append = F)
 
 
 
-### Lille
-
-
-```{r}
-adresseBV <- read.csv("data/table-bv-reu.csv")
-# 50 122
-lille <- adresseBV [ grep('^59350',adresseBV$id_brut_insee),]
-sort(lille$code)
-write.csv (lille, "data/lilleBV.csv")
-```
-
-
-```{r}
-lilleContour <- bv [bv$codeCommune == 59350,]
-mapview(lilleContour)
-```
 
 ## Bondy
 
@@ -584,7 +605,7 @@ Martinique <- election2022[grep("Fort-de", election2022$Commune),]
 # extraction
 election2022Sel <- election2022 [election2022$CodeInsee %in% ville$insee,]
 length(unique(election2022Sel$CodeInsee))
-# 41 - 9 communes
+# 43 - 7 communes
 pb <- setdiff(ville$insee, election2022Sel$CodeInsee)
 Paris <- election2022 [election2022$CodeInsee == "75056",]
 Paris$CodeBdeVote
@@ -607,7 +628,7 @@ election <- rbind(election2022Sel, Martinique, Paris)
 write.csv(election,"data/election2022.csv", fileEncoding = "UTF-8")
 ```
 
-2486 lg ou bv (1557 bv)
+2645 lg ou bv (1715 bv)
 
 
 ```{r}
@@ -616,7 +637,7 @@ election <- election [election$CodeInsee != "75056",]
 write.csv(election, "data/election2022.csv", fileEncoding = "UTF-8")
 ```
 
-1556
+1745
 
 
 ### combien de bv dans le fichier bv ? 17 et 18
@@ -651,4 +672,37 @@ write.csv(election2022,"data/election2022.csv", fileEncoding = "UTF-8")
 Ce fichier sera joint à celui des bureaux de vote.
 
 
+# Carreaux Filosofi
+
+```{r}
+car <- st_read("data/gros/Filosofi2015_carreaux_1000m_metropole.gpkg")
+car$id <- rownames(car)
+st_crs(car)
+st_crs(bv)
+bv <- st_transform(car, 2154)
+```
+
+## Sélection c
+
+
+```{r}
+inter <- st_intersection(car, bv)
+# plutôt intersection avec les villes
+ville <- st_read("data/concept.gpkg", "villes")
+ville <- st_transform(ville, 2154)
+inter <- st_intersection (car, ville)
+inter
+st_write(inter, "data/concept.gpkg", "carreaux1km", delete_layer = T)
+```
+
+export des carrés
+
+
+```{r}
+insee <- ville$insee
+for (i in insee) {
+  tmp <- inter [inter$insee == i,]
+  st_write(tmp,"data/concept.gpkg", paste0("car_", i), delete_layer = T)
+}
+```
 
