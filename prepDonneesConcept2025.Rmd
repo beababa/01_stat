@@ -475,6 +475,34 @@ st_write(bv2, "data/concept.gpkg", "bvValide", delete_layer = T)
 
 1524 bureaux enregistrés
 
+```{r}
+bvBondy <- st_union(bvBondy)
+bvBondy <- bvBondy [2]
+enveloppe <- st_convex_hull(bvBondy)
+mf_map(bvBondy, add = T)
+mf_map(enveloppe)
+st_write(bvBondy, "data/concept.gpkg", "aggBondy")
+st_write(bvBondy, "data/concept.gpkg", "enveloppeBondy")
+```
+
+
+
+nettoyage par la longueur de ligne
+
+```{r}
+ligne <- st_cast(bvBondy, "MULTILINESTRING")
+ligne <-  st_cast(ligne, "LINESTRING")
+ligne <- st_as_sf(ligne)
+ligne$longueur <- st_length(ligne)
+library(units)
+ligne$longueur <- drop_units(ligne$longueur)
+ligne <- ligne [ligne$longueur > 5000,]
+mf_choro(ligne, var = "longueur")
+poly <- st_cast(ligne, "POLYGON")
+mf_map(poly)
+```
+
+
 # REU Bureaux de vote
 
 ## France entière
@@ -650,5 +678,16 @@ write.csv(election2022,"data/election2022.csv", fileEncoding = "UTF-8")
 
 Ce fichier sera joint à celui des bureaux de vote.
 
+# Carreaux
 
+Utilisation des carreaux 1 km 
+On fait une base sqlite pour cours SQL par commune
+
+test sur Bondy
+
+
+```{r}
+car <- st_read("data/gros/carreau.gpkg")
+st_layers("data/concept.gpkg")
+bvBondy <- st_read("data/concept.gpkg", "bvBondy")
 
