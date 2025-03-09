@@ -441,6 +441,7 @@ Il faut également agréger à la parcelle (moyenne)
 
 ```{r}
 vf <- read.csv("data/vf.csv", fileEncoding = "UTF-8")
+vf
 vf$cle <- paste0(vf$Section, vf$No.plan)
 vf <- vf [, -c(1,2)]
 cog <- st_read("data/construction.gpkg", "villes")

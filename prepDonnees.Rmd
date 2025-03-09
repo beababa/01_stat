@@ -440,6 +440,8 @@ dev.off()
 
 ```{r}
 car <- st_read("data/gros/carreaux_200m_met.gpkg")
+car <- st_read("data/gros/Filosofi2015_carreaux_1000m_metropole.gpkg")
+car$id <- rownames(car)
 # extraction du premier code insee du carreau + la quote pour pb zero
 car$cog <- paste0(substring(car$lcog_geo,1,5))
 carSel <- car [car$cog %in% cog$INSEE_COM,]
