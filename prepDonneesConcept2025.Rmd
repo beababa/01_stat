@@ -30,7 +30,11 @@ On extrait pour chaque ville choisie par les étudiants :
 
 - les bv
 
-- les données électorales au bv (cours 4)
+- les données électorales au bv
+
+- les carreaux 1 km de filosofi
+
+- les iris
 
 
 # Démarche
@@ -473,7 +477,15 @@ A voir au cas par cas.
 st_write(bv2, "data/concept.gpkg", "bvValide", delete_layer = T)
 ```
 
+
+
 1524 bureaux enregistrés
+
+
+### Nettoyage géométrie
+
+sous Qgis, on passe sous éditeur de sommet, on efface les points
+et on passe points to line
 
 ```{r}
 bvBondy <- st_union(bvBondy)
@@ -481,8 +493,8 @@ bvBondy <- bvBondy [2]
 enveloppe <- st_convex_hull(bvBondy)
 mf_map(bvBondy, add = T)
 mf_map(enveloppe)
-st_write(bvBondy, "data/concept.gpkg", "aggBondy")
-st_write(bvBondy, "data/concept.gpkg", "enveloppeBondy")
+st_write(bvBondy, "data/concept.gpkg", "aggBondy", delete_layer = T)
+st_write(enveloppe, "data/concept.gpkg", "enveloppeBondy", delete_layer = T)
 ```
 
 
@@ -683,11 +695,126 @@ Ce fichier sera joint à celui des bureaux de vote.
 Utilisation des carreaux 1 km 
 On fait une base sqlite pour cours SQL par commune
 
-test sur Bondy
+Les carreaux sont ceux du lien du cours :
+https://www.insee.fr/fr/statistiques/4176293?sommaire=4176305
+
+
+
+```{r}
+car <- st_read("data/gros/Filosofi2015_carreaux_1000m_metropole.shp")
+# 375 en 2154
+carMartinique <- st_read("data/gros/Filosofi2015_carreaux_1000m_reg02.shp")
+mapview(carMartinique)
+```
+
+Pb de la projection epsg 5490
+
+```{r}
+summary(st_area(carMartinique)/1000000)
+carMartinique2154 <- st_transform(carMartinique, 2154)
+summary(st_area(carMartinique2154)/1000000)
+```
+
+Donc rester dans la projection pour faire les stats. Les
+carreaux sont faits pour faire 1km en Martinique
+
+## Test sur Bondy
 
 
 ```{r}
 car <- st_read("data/gros/carreau.gpkg")
 st_layers("data/concept.gpkg")
-bvBondy <- st_read("data/concept.gpkg", "bvBondy")
+bv <- st_read("data/concept.gpkg", "bvBondy")
+# pour aller plus vite sur l'intersection, on la fait par la ville
+bondy <- st_union(st_convex_hull(bv))
+interBondy <- st_intersection(car, bondy)
+mf_map(interBondy)
+```
+
+
+```{r}
+st_crs(interBondy)
+st_crs(bv)
+# attention on est en 4326 
+st_write(interBondy, "data/bondy.sqlite", "inter", delete_layer = T)
+st_write(bv, "data/bondy.sqlite", "bv", delete_layer = T)
+```
+
+
+### Inter carreaux / communes
+
+```{r}
+ville <- st_read("data/concept.gpkg", "villes")
+# nettoyage fichier
+names(ville) [2] <- "nom"
+ville <- ville [,-3]
+# attention test sur 19e / Perpignan et Champs sur marne / Fort de France
+# on a recupere le fichier du moodle...
+st_crs(car)
+summary(st_area(car))
+car <- st_transform(car, 2154)
+# pas de différence quasiment
+st_crs(ville)
+ville <- st_transform(ville, 2154)
+# filtre sur une seule colonne
+inter <- st_intersection(car [, c("Ind")], ville)
+```
+
+Fort de France
+
+```{r}
+interMartinique <- st_intersection (carMartinique [,"Ind"], ville )
+mf_map(inter)
+summary(st_area(inter)/10000000)
+mf_map(interMartinique)
+
+summary(st_area(interMartinique)/1000000)
+inter <- rbind(inter, interMartinique)
+```
+
+
+test sur qls villes pour visualiser les carreaux
+
+```{r}
+mf_init(ville [ville$insee == 75117,])
+mf_map (inter, add = T, col= NA, border="blue")
+mf_map(ville, add=T, border = "red", lwd = 3, col = NA)
+mf_label(ville, var = "nom", halo=T, col= "red")
+mf_layout("Quelques carreaux", "data.gouv, 2025")
+```
+
+
+prorata du carreau
+
+```{r}
+inter$coeff <- round(st_area(inter),0)
+# on ramène en base 100
+summary(inter$coeff)
+```
+
+verif carto
+
+
+```{r}
+mf_map(inter, "coeff", type="choro", add = T, alpha = 0.5, border = NA, leg_pos = NA )
+mf_label(inter, "coeff")
+```
+
+
+pb doublons ?
+
+
+TODO
+
+
+Enregistrement
+
+```{r}
+st_write(inter, "data/concept.gpkg", "inter" , delete_layer = T)
+mf_map(inter)
+```
+
+1681 carreaux 
+
+
 
