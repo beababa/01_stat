@@ -37,10 +37,6 @@ On extrait pour chaque ville choisie par les étudiants :
 - les iris
 
 
-# Démarche
-
-Pour les cog, pb Paris et codes postaux
-
 
 
 
@@ -49,29 +45,121 @@ Pour les cog, pb Paris et codes postaux
 
 Définition de la liste des villes de base.
 
-Une première définition a été faite mais on reprend la liste.
+Une première définition a été faite au 1er cours mais on reprend la liste dy td3
 
-## Constitution de la liste 
+## Première définition
+
+
+
+```{r}
+library(sf)
+library(mapsf)
+library(mapview)
+communes <- vendredi$code.INSEE..minimum.10.bureaux.[vendredi$code.INSEE..minimum.10.bureaux.!=""]
+length(communes)
+```
+
+52 communes
+
+```{r}
+bv$insee <- substring(bv$bureau,1,5) 
+bvSel <- bv [bv$insee %in% communes,]
+```
+
+1255 bureaux
+
+Vérification sur Paris
+
+
+```{r}
+paris <- unique(communes [grep('^75', communes)])
+bvSelParis <- bvSel [grep("^75", bvSel$insee),]
+mapview(bvSelParis, zcol="insee")
+```
+
+Seulement 2 arr alors que 3 éléments ds Paris
+
+Export des mails concernés
+
+```{r}
+pbParis <- vendredi$adresseMail [vendredi$code.INSEE..minimum.10.bureaux. == '75056']
+write.csv(pbParis, "data/pbParis.csv", fileEncoding="UTF-8")
+paste0(pbParis, ";", collapse = "")
+```
+
+Correction suite réponse
+
+```{r}
+pbParisCorrige <- read.csv("data/pbParisCorrige.csv")
+insee <- pbParisCorrige$correction [!is.na (pbParisCorrige$correction)]
+bvSelParis <- bv [bv$insee %in% insee,]
+table(bv$insee %in% insee)
+```
+
+```{r}
+bvSel <- rbind(bvSel,bvSelParis)
+```
+
+
+
+```{r}
+st_write(bvSel, "data/bv.gpkg", "bvVendredi", delete_layer = T)
+bvSel <- st_read("data/bv.gpkg", "bvVendredi")
+bvSel <- bvSel [ st_is_valid(bvSel$geom),]
+agg <- aggregate(bvSel [,c("nom", "geom")], list(bvSel$insee, bvSel$nom), length)
+names(agg)  [1:3] <- c("insee", "nom", "nbBureaux")
+st_write(agg, "data/bv.gpkg", "bvVendrediAgg", delete_layer = T)
+mapview(agg)
+```
+
+Manquants par rapport à la liste de départ
+
+
+```{r}
+pb <- setdiff(communes, agg$insee)
+pb
+# on enlève paris
+pb  <- pb [-5]
+bvPb <- bv [bv$insee %in% pb,]
+# 29232 pour 29000 (Quimper), 66135 Perillos, 69123 Lyon, Croix Chapeau 1 bureau 71136
+# Corrèze 19062 / Ajjaccio 2A004
+unique(bvPb$nom)
+table(bvPb$insee)
+vendredi [vendredi$code.INSEE..minimum.10.bureaux. %in% bvPb$insee, c(1,2,3)]
+```
+
+Remplacements
+
+
+
+```{r}
+hist(table(bvSel$insee), main = "Nb de bureaux de vote", xlab = "Nb de bureaux", ylab = "Nb d'étudiants" )
+table(bvSel$insee)
+```
+
+
+
+## Liste TD3
 
 à partir de la feuille d'émargement TD3
 
 
 ```{r}
 # recup fichier ville en character pour les codes commençant par zéro
-ville <- read.csv("data/TD3Concept.csv", colClasses = "character")
+ville <- read.csv("data/TD3Concept.csv", colClasses = "character", fileEncoding = "UTF-8")
 ville <- ville [ville$prénom!="",]
 ville <- ville [,2]
 # 57 villes différentes 49 uniques 
 ville <- unique(na.omit(ville))
-# On rajoute Champs sur Marne, Perpignan, Paris 19
-ville <- c(ville,"77083", "66136", "75119")
+# On rajoute Champs sur Marne, Perpignan, Paris 19, Bondy
+ville <- c(ville,"77083", "66136", "75119", "93010")
 ```
 
-52 villes uniques
+53 villes uniques
 
-## Dézippage fichier communes
+### Dézippage fichier communes
 
-Une fois suffit...
+Une fois suffit... mais comme on travaille sur gros...
 
 ```{r}
 unzip(zipfile = "data/gros/communes-20220101-shp.zip", exdir = "data/gros")
@@ -80,7 +168,7 @@ communes <- st_read("data/gros/communes-20220101.shp")
 
 
 
-## Première extraction
+### Première extraction
 
 
 ```{r}
@@ -96,7 +184,7 @@ mapview(sel)
 
 11 pb dont codes insee Paris
 
-## Paris
+### Paris
 
 ```{r}
 Paris <- fr [fr$insee == "75056",]
@@ -118,7 +206,7 @@ Reste pb faux codes insee, grrrr
 pb <- pb [!(pb  %in% pbParis)]
 ```
 
-## Codes postaux
+### Codes postaux
 
 retrouver les code insee à partir des cp pour ces 5 communes
 utilisation de l'api
@@ -153,7 +241,7 @@ selCorse <- fr [fr$insee == "2A004", c("insee", "nom")]
 
 
 
-## Enregistrement
+### Enregistrement
 
 
 ```{r}
@@ -167,7 +255,7 @@ st_write(tot, "data/concept.gpkg", "villes", delete_layer = T)
 
 50 villes
 
-dernière vérif
+### Dernière vérif
 
 On a 2 villes en moins, mais c'est normal
 
@@ -714,14 +802,15 @@ Ce fichier sera joint à celui des bureaux de vote.
 # Carreaux
 
 Utilisation des carreaux 1 km 
-On fait une base sqlite pour cours SQL par commune
+On fait une base sqlite pour cours SQL par commune ? Un .gpkg suffit
 
 Les carreaux sont ceux du lien du cours :
 https://www.insee.fr/fr/statistiques/4176293?sommaire=4176305
 
-
+## Les données et la projection
 
 ```{r}
+st_layers("data/concept.gpkg")
 car <- st_read("data/gros/Filosofi2015_carreaux_1000m_metropole.shp")
 # 375 en 2154
 carMartinique <- st_read("data/gros/Filosofi2015_carreaux_1000m_reg02.shp")
@@ -739,66 +828,9 @@ summary(st_area(carMartinique2154)/1000000)
 Donc rester dans la projection pour faire les stats. Les
 carreaux sont faits pour faire 1km en Martinique
 
-## Test sur Bondy
-
-# Carreaux Filosofi
-
-```{r}
-car <- st_read("data/gros/Filosofi2015_carreaux_1000m_metropole.gpkg")
-car$id <- rownames(car)
-st_crs(car)
-st_crs(bv)
-bv <- st_transform(car, 2154)
-```
-
-## Sélection c
-
-
-```{r}
-inter <- st_intersection(car, bv)
-# plutôt intersection avec les villes
-ville <- st_read("data/concept.gpkg", "villes")
-ville <- st_transform(ville, 2154)
-inter <- st_intersection (car, ville)
-inter
-st_write(inter, "data/concept.gpkg", "carreaux1km", delete_layer = T)
-```
-
-export des carrés
-
-
-```{r}
-insee <- ville$insee
-for (i in insee) {
-  tmp <- inter [inter$insee == i,]
-  st_write(tmp,"data/concept.gpkg", paste0("car_", i), delete_layer = T)
-}
-```
-
-```{r}
-car <- st_read("data/gros/carreau.gpkg")
-st_layers("data/concept.gpkg")
-bv <- st_read("data/concept.gpkg", "bvBondy")
-# pour aller plus vite sur l'intersection, on la fait par la ville
-bondy <- st_union(st_convex_hull(bv))
-interBondy <- st_intersection(car, bondy)
-mf_map(interBondy)
-```
-
-
-```{r}
-st_crs(interBondy)
-st_crs(bv)
-# attention on est en 4326 
-st_write(interBondy, "data/bondy.sqlite", "inter", delete_layer = T)
-st_write(bv, "data/bondy.sqlite", "bv", delete_layer = T)
-```
-
-
-### Inter carreaux / communes
-
 ```{r}
 ville <- st_read("data/concept.gpkg", "villes")
+str(ville)
 # nettoyage fichier
 names(ville) [2] <- "nom"
 ville <- ville [,-3]
@@ -806,30 +838,123 @@ ville <- ville [,-3]
 # on a recupere le fichier du moodle...
 st_crs(car)
 summary(st_area(car))
-car <- st_transform(car, 2154)
+car4326 <- st_transform(car, 4326)
+summary(st_area(car4326))
 # pas de différence quasiment
 st_crs(ville)
 ville <- st_transform(ville, 2154)
+
+```
+
+## Intersection bv carreaux générale
+
+pas Martinique
+
+```{r}
+bv <- st_read("data/concept.gpkg", "bv")
+# 1715
+car <- st_read("data/gros/Filosofi2015_carreaux_1000m_metropole.gpkg")
+car$id <- rownames(car)
+st_crs(car)
+st_crs(bv)
+# ce n'est pas les carreaux qu'on transforme puisque base 1 km en 2154
+bv <- st_transform(car, 2154)
+# opération lente et resultat lourd
+inter <- st_intersection(car, bv)
+st_write(inter, "data/gros/concept.gpkg", "interBVCarreaux", delete_layer = T)
+```
+
+## Intersection carreaux ville
+
+```{r}
 # filtre sur une seule colonne
 inter <- st_intersection(car [, c("Ind")], ville)
+# ou pas (il faut se décider !)
+inter <- st_intersection (car, ville)
+inter
+st_write(inter, "data/concept.gpkg", "interCar1kmVille", delete_layer = T)
+# 1681 carreaux
+str(inter)
+mf_map(inter)
+```
+
+### Le coefficient
+
+En % combien vaut l'aire du carré découpé ?
+On modifie les données en conséquence avant l'enregistrement
+et on ne travaille que sur la densité
+
+### prorata du carreau
+
+```{r}
+inter$coeff <- round(st_area(inter)/10000,0)
+# on ramène en base 100
+summary(inter$coeff)
+```
+
+Application du coeff aux valeurs
+
+```{r}
+names(inter)
+str(inter)
+library(units)
+inter$coeff <- drop_units(inter$coeff)
+interProrata <- inter$coeff * inter [, c(2:31), dropgeom = T]
+prorata <-  function(variable) {inter$coeff * variable}
+lapply(inter [,c(2:31), drop = T], prorata)
+```
+
+
+
+## Export ville par ville
+
+export des carrés ville par ville pour inclure Fort de France
+
+
+```{r}
+insee <- ville$insee
+nb <- NULL
+for (i in insee) {
+  tmp <- inter [inter$insee == i,]
+  id <- c(i, length(tmp$Id_carr1km))
+  nb <- rbind(nb, id)
+  st_write(tmp,"data/carreaux.gpkg", paste0("car_", i), delete_layer = T)
+}
+# verif
+nb  <- data.frame(nb)
+nb [nb$X2 == 0,]
+# c'est Fort de France, bien sûr !
 ```
 
 Fort de France
 
+
 ```{r}
-interMartinique <- st_intersection (carMartinique [,"Ind"], ville )
-mf_map(inter)
+st_crs(carMartinique)
+fDf <- ville [ville$insee == 97209,]
+st_crs(fDf)
+fDf <- st_transform(fDf, 5490)
+interMartinique <- st_intersection (carMartinique [,"Ind"], fDf)
+mf_map(interMartinique)
 summary(st_area(inter)/10000000)
 mf_map(interMartinique)
-
+# verif du 1km pour les carreaux
 summary(st_area(interMartinique)/1000000)
-inter <- rbind(inter, interMartinique)
+st_write(interMartinique, "data/carreaux.gpkg", "car_97209", delete_layer = T)
+```
+
+### Inter carreaux / communes
+
+`
+
+
 ```
 
 
 test sur qls villes pour visualiser les carreaux
 
 ```{r}
+png("img/carreauxVille.png")
 mf_init(ville [ville$insee == 75117,])
 mf_map (inter, add = T, col= NA, border="blue")
 mf_map(ville, add=T, border = "red", lwd = 3, col = NA)
@@ -838,13 +963,6 @@ mf_layout("Quelques carreaux", "data.gouv, 2025")
 ```
 
 
-prorata du carreau
-
-```{r}
-inter$coeff <- round(st_area(inter),0)
-# on ramène en base 100
-summary(inter$coeff)
-```
 
 verif carto
 
@@ -852,10 +970,15 @@ verif carto
 ```{r}
 mf_map(inter, "coeff", type="choro", add = T, alpha = 0.5, border = NA, leg_pos = NA )
 mf_label(inter, "coeff")
+dev.off()
+inter$coeff
 ```
 
 
 pb doublons ?
+```{r}
+
+```
 
 
 TODO
@@ -864,11 +987,32 @@ TODO
 Enregistrement
 
 ```{r}
-st_write(inter, "data/concept.gpkg", "inter" , delete_layer = T)
+st_write(inter, "data/concept.gpkg", "interCarVille" , delete_layer = T)
 mf_map(inter)
 ```
 
 1681 carreaux 
+
+### Cas Bondy
+
+```{r}
+st_layers("data/concept.gpkg")
+bv <- st_read("data/concept.gpkg", "bvBondy")
+st_crs(bv)
+st_crs(car)
+bv <- st_transform(bv, 2154)
+# pour aller plus vite sur l'intersection, on la fait par la ville
+bondy <- st_union(st_convex_hull(bv))
+interBondy <- st_intersection(car, bondy)
+mf_map(interBondy)
+```
+
+Ecriture d'une base sqlite
+
+```{r}
+st_write(interBondy, "data/bondy.sqlite", "inter", delete_layer = T)
+st_write(bv, "data/bondy.sqlite", "bv", delete_layer = T)
+```
 
 
 

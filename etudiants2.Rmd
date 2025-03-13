@@ -149,29 +149,17 @@ table(bvSel$insee)
 ### Effectif et cours
 
 ```{r, eval=TRUE}
-fic <- list.files("data/", pattern = "^cours")
-fic
-# on recherche le fichier le plus haut
-nb <- max(as.integer(substring(fic, 6,7)))
-tmp <- NULL
-tab <- NULL
-i <-  1
-for (i in 1:nb) {
-  print(i)
-  nomFic <- paste0("data/cours", i, ".csv")
-  data <- read.csv(nomFic, fileEncoding = "UTF-8")
-  data <- data [data [,2] == "oui",]
-  tmp <- table(data$groupe)
-  tab <- rbind(tab , tmp)
-}
-tab
-row.names(tab) <- paste0("cours ",seq(1,nb, by = 1))
-paste0("cours ",seq(1,nb, by = 1))
-knitr::kable(tab)
+effectif <- read.csv("data/effectif2025.csv")
+nom <- paste0(effectif$niveau, "_", effectif$groupe) 
+effectif <- as.matrix(effectif [, c(3:8)])
 # Graphique
-p <- barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(nb) 
-        , border = NA, legend =  F)
+png("img/presence.png", width = 800, height = 800, res = 100)
+p <- barplot(effectif, beside = T, main = "Nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(4) , legend.text = nom, border = NA)
+dev.off()
+```
 
+
+```{r, eval=TRUE}
 ```
 
 
