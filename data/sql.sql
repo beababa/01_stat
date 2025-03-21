@@ -1,28 +1,17 @@
----- intersection 1
-select * from Filosofi2015_carreaux_1000m_metropole  limit 10;
-select f.Men_pauv, f.geometry from Filosofi2015_carreaux_1000m_metropole as f, villes2154 as v
-where st_intersects(f.geometry, v.geometry)
-
-
-select * from bv;
-
-select * from inter;
--- aire et transformation
-select distinct(st_srid(inter.geometry)) as SRID from inter;
-select st_area(inter.geometry) from inter;
-select st_area(st_transform(inter.geometry, 2154))/1000000 as geom from inter;
-
---select recovergeometrycolumn('bv', 'GEOMETRY', 2, 'MULTIPOLYGON',2);
-
---select * from sqlite_master where type='trigger' and lower(tbl_name)='bv'
-
-
-select b.bureau,  i.ogc_fid, st_intersection(b.GEOMETRY, i.GEOMETRY) as geom, st_area(st_intersection(b.GEOMETRY, i.GEOMETRY)) as aire
-
-from bv as b, inter as i
-
-where st_intersects(b.GEOMETRY, i.GEOMETRY);
-
-
-select st_transform(i.geometry, 2154)
-from inter as i;
+-- sélection simple
+select * from bv;
+select * from iris limit 10;
+select st_area(geomfromwkb(bv.GEOMETRY)) as aire from bv;
+select st_area(geomfromwkb(iris.GEOMETRY)) as aire from iris;
+-- sélection attributaire
+select nom_iris,iris.dec_q119 from iris where iris.insee_com like 93010;
+-- sélection spatiale et attributaire
+select iris.nom_iris , bv.bureau,  st_intersection(geomfromwkb(iris.GEOMETRY), geomfromwkb(bv.GEOMETRY)) as geom
+from iris, bv
+where st_intersects(geomfromwkb(iris.GEOMETRY), geomfromwkb(bv.GEOMETRY)) 
+-- calcul 
+select iris.nom_iris , bv.bureau,  sum(st_intersects(geomfromwkb(iris.GEOMETRY), geomfromwkb(bv.GEOMETRY)) ) as nb, 
+sum(st_area (st_intersection(geomfromwkb(iris.GEOMETRY), geomfromwkb(bv.GEOMETRY)) ) )as aire
+from iris, bv
+where st_intersects(geomfromwkb(iris.GEOMETRY), geomfromwkb(bv.GEOMETRY)) 
+group by bv.bureau;
