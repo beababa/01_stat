@@ -55,8 +55,6 @@ Une première définition a été faite au 1er cours mais on reprend la liste dy
 library(sf)
 library(mapsf)
 library(mapview)
-communes <- vendredi$code.INSEE..minimum.10.bureaux.[vendredi$code.INSEE..minimum.10.bureaux.!=""]
-length(communes)
 ```
 
 52 communes
@@ -160,14 +158,12 @@ ville <- c(ville,"77083", "66136", "75119","93010", "65286")
 
 
 
-
 ### Dézippage fichier communes
 
 Une fois suffit... mais comme on travaille sur gros...
 
 ```{r}
 unzip(zipfile = "data/gros/communes-20220101-shp.zip", exdir = "data/gros")
-fr <- st_read("data/gros/communes-20220101.shp")
 ```
 
 
@@ -202,7 +198,7 @@ mf_map(parisSel, add = T, col="red")
 mf_label(parisSel, var = "l_ar")
 ```
 
-6 arrondissements, 12, 16, 17, 18, 19 et 20
+7 arrondissements, 12, 15, 16, 17, 18, 19 et 20
 
 Reste pb faux codes insee, grrrr
 
@@ -254,7 +250,7 @@ sel <- rbind (sel, selCorse, selPb)
 parisSel <- parisSel [,c("c_arinsee", "l_ar")]
 names(parisSel)[1:2] <- c("insee", "nom")
 tot <- rbind(parisSel, sel)
-st_write(tot, "data/concept.gpkg", "villes", delete_layer = T)
+st_write(tot, "data/concept.gpkg", "ville", delete_layer = T)
 ```
 
 52 villes y compris Bondy
@@ -403,14 +399,13 @@ Le format "pmtiles" s'ouvre très bien mais le fichier a un carroyage.
 ville <- st_read("data/concept.gpkg", "ville")
 ```
 
-50 communes
+52 communes
 
 ```{r}
 # RODRIGO
 bv <- st_read("data/gros/bureau.pmtiles")
 # le pmtiles pose pb
 bv <- st_read("data/gros/bureau-de-vote-insee-reu-openstreetmap.gpkg")
-#st_write(bv,"data/gros/bvRodrigo.geojson", append = F)
 ```
 
 68596
@@ -435,7 +430,11 @@ bvCourt$insee <- substring(bvCourt$bureau,1,5)
 bvSel <- bvCourt [bvCourt$insee %in% ville$insee,]
 ```
 
+<<<<<<< HEAD
 1768
+=======
+1851
+>>>>>>> d13af6a8fbbd447f1eb8acea8cb510273a033d2d
 
 ### Vérification sur Paris
 
@@ -460,7 +459,7 @@ st_write(agg, "data/concept.gpkg", "bvAgg", delete_layer = T)
 mapview(agg)
 ```
 
-1713 bureaux
+1840 bureaux
 
 49 communnes
 
@@ -474,7 +473,8 @@ bvFin <- rbind(bvSel, bvPb)
 ```
 
 
-1759 bureaux
+
+1842 bureaux
 
 ```{r}
 st_write(bvFin, "data/concept.gpkg", "bv", delete_layer = T)
@@ -561,6 +561,9 @@ bv2 <- bv [st_is_valid(bv),]
 bv2 <- st_cast(bv, "POLYGON")
 #  4060 Du coup, pl polygone pour un bureau on supprime les petits poly
 bv2$aire <- st_area(bv2)/10000
+# 1842
+bv2 <- bv [st_is_valid(bv),]
+# 4138
 library(units)
 bv2$aire <- drop_units(bv2$aire)
 bv2 <- bv2 [bv2$aire > 5,]
@@ -809,6 +812,7 @@ https://www.insee.fr/fr/statistiques/4176293?sommaire=4176305
 
 ## Les données et la projection
 
+
 On utilise selon l'humeur le gpkg ou le shp (en fonction des ordis)
 
 ```{r}
@@ -948,11 +952,6 @@ st_write(interMartinique, "data/carreaux.gpkg", "car_97209", delete_layer = T)
 
 ### Inter carreaux / communes
 
-`
-
-
-```
-
 
 test sur qls villes pour visualiser les carreaux
 
@@ -1004,7 +1003,6 @@ bv <- st_read("data/concept.gpkg", "bvBondy")
 st_crs(bv)
 st_crs(car)
 bv <- st_transform(bv, 2154)
-# pour aller plus vite sur l'intersection, on la fait par la ville
 bondy <- st_union(st_convex_hull(bv))
 interBondy <- st_intersection(car, bondy)
 mf_map(interBondy)
@@ -1018,4 +1016,45 @@ st_write(bv, "data/bondy.sqlite", "bv", delete_layer = T)
 ```
 
 
+# Iris et données recensement
+
+
+
+
+```{r}
+iris <- st_read("data/gros/CONTOURS-IRIS.shp")
+irisMart <- st_read("data/gros/MARTINIQUE/CONTOURS-IRIS.shp")
+dataIris <- read.csv("data/gros/BASE_TD_FILO_DEC_IRIS_2019.csv")  
+iris$CODE_IRIS
+dataIris$IRIS
+```
+
+
+12 481 de data pour 48 947 
+
+Test sur Bondy
+
+```{r}
+irisBondy <- iris [iris$INSEE_COM == '93010',]
+joint <- merge(irisBondy, dataIris, by.x = "CODE_IRIS", by.y = "IRIS")
+joint$DEC_PIMP19
+mf_map(joint, type = "choro", var = "DEC_PIMP19")
+mf_map(irisBondy, col = NA, border = "red", add = T)
+```
+
+
+```{r}
+joint <- merge(iris, dataIris, by.x = "CODE_IRIS", by.y = "IRIS")
+jointMart <- merge(irisMart, dataIris, by.x = "CODE_IRIS", by.y = "IRIS")
+# 11480
+```
+
+filtre
+
+```{r}
+jointSel <- joint [joint$INSEE_COM %in% ville$insee,]
+jointMartSel <- jointMart [jointMart$INSEE_COM %in% ville$insee,]
+st_write(jointSel, "data/iris.gpkg", "irisMetropole")
+st_write(jointMartSel, "data/iris.gpkg", "irisMartinique")
+```
 
