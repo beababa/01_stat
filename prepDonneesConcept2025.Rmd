@@ -151,19 +151,15 @@ ville <- ville [ville$prénom!="",]
 ville <- ville [,2]
 # 57 villes différentes 49 uniques 
 ville <- unique(na.omit(ville))
-<<<<<<< HEAD
-# On rajoute Champs sur Marne, Perpignan, Paris 19
-ville <- c(ville,"77083", "66136", "75119","93010")
+# On rajoute Champs sur Marne, Perpignan, Paris 19, Lourdes
+ville <- c(ville,"77083", "66136", "75119","93010", "65286")
 ```
 
-53 villes uniques y compris bondy
-=======
-# On rajoute Champs sur Marne, Perpignan, Paris 19, Bondy
-ville <- c(ville,"77083", "66136", "75119", "93010")
-```
+54 villes uniques y compris bondy
 
-53 villes uniques
->>>>>>> 628e9427ea2b50cfb3379bb0804b40a36a92d724
+
+
+
 
 ### Dézippage fichier communes
 
@@ -171,7 +167,7 @@ Une fois suffit... mais comme on travaille sur gros...
 
 ```{r}
 unzip(zipfile = "data/gros/communes-20220101-shp.zip", exdir = "data/gros")
-communes <- st_read("data/gros/communes-20220101.shp")
+fr <- st_read("data/gros/communes-20220101.shp")
 ```
 
 
@@ -180,11 +176,11 @@ communes <- st_read("data/gros/communes-20220101.shp")
 
 
 ```{r}
-fr <- st_read("data/gros/communes-20220101.shp")
 # le code INSEE a 5 chiffres y compris le zéro
 names(fr)
 sel <- fr [fr$insee %in% ville,]
 sel$insee
+# 43
 mapview(sel)
 # attention une ville en DROM
 (pb <- setdiff(ville, sel$insee))
@@ -261,7 +257,7 @@ tot <- rbind(parisSel, sel)
 st_write(tot, "data/concept.gpkg", "villes", delete_layer = T)
 ```
 
-51 villes y compris Bondy
+52 villes y compris Bondy
 
 ### Dernière vérif
 
@@ -292,6 +288,7 @@ equiv$code
 joint <- merge(tot [,1], equiv, all.x=T, by.x = "insee", by.y="code")
 names(joint)
 head(joint)
+# on retire les cp car pl cp pour 1 insee
 st_write(joint [,-7], "data/concept.gpkg", "ville", delete_layer = T)
 dpt <- joint$codeDepartement [!is.na(  joint$codeDepartement )]
 dpt <- unique(dpt)
@@ -415,6 +412,7 @@ bv <- st_read("data/gros/bureau.pmtiles")
 bv <- st_read("data/gros/bureau-de-vote-insee-reu-openstreetmap.gpkg")
 #st_write(bv,"data/gros/bvRodrigo.geojson", append = F)
 ```
+
 68596
 
 
@@ -437,7 +435,7 @@ bvCourt$insee <- substring(bvCourt$bureau,1,5)
 bvSel <- bvCourt [bvCourt$insee %in% ville$insee,]
 ```
 
-1756
+1768
 
 ### Vérification sur Paris
 
@@ -464,7 +462,7 @@ mapview(agg)
 
 1713 bureaux
 
-47 communnes
+49 communnes
 
 ```{r}
 pb <- setdiff(ville$insee, agg$insee)
@@ -476,7 +474,7 @@ bvFin <- rbind(bvSel, bvPb)
 ```
 
 
-1747 bureaux
+1759 bureaux
 
 ```{r}
 st_write(bvFin, "data/concept.gpkg", "bv", delete_layer = T)
@@ -557,18 +555,18 @@ mapview(lilleContour)
 
 ```{r}
 bv <- st_read("data/concept.gpkg", "bv")
-# 1747
+# 1759
 bv2 <- bv [st_is_valid(bv),]
-# 1747
+# 1759
 bv2 <- st_cast(bv, "POLYGON")
-#  4039 Du coup, pl polygone pour un bureau on supprime les petits poly
+#  4060 Du coup, pl polygone pour un bureau on supprime les petits poly
 bv2$aire <- st_area(bv2)/10000
 library(units)
 bv2$aire <- drop_units(bv2$aire)
 bv2 <- bv2 [bv2$aire > 5,]
 ```
 
-1747, puis 1712 à la fin
+1759, puis 1727 à la fin
 
 
 Comparaison en terme de nb de bv
@@ -586,6 +584,10 @@ Pas mal de perte, il faut regarder dans le détail, on tolère une différence d
 ```{r}
 pb <- ville [ville$insee == 97209,]
 ```
+Aie.
+
+### Fort de France
+
 
 ```{r}
 bv <- st_read("data/concept.gpkg", "bv")
@@ -612,7 +614,7 @@ st_write(bv2, "data/concept.gpkg", "bvValide", delete_layer = T)
 
 
 
-1712 bureaux enregistrés
+1727 bureaux enregistrés
 
 
 ### Nettoyage géométrie
@@ -658,12 +660,12 @@ REU et adresses bv  en format parquet
 library(arrow)
 adresse <- read_parquet("data/gros/table-adresses-reu.parquet")
 adresse <- adresse [adresse$code_commune_ref  %in% ville$insee, ]
-# 313 870 adresses
+# 317 150 adresses
 write_parquet(adresse, "data/gros/adresseBVsel.parquet")
 adresseBV <- read_parquet("data/gros/table-bv-reu.parquet")
 adresseBVSel <- adresseBV [adresseBV$code_commune %in% ville$insee,]
-write_parquet(adresseBV, "data/gros/bureauxLoc.csv")
-# 1767
+write_parquet(adresseBVSel, "data/gros/bureauxLoc.csv")
+# 1779
 ```
 
 
@@ -691,7 +693,7 @@ geoc <- geocode_tbl(tbl = adresses, adresse = compil)
 geoc$latitude
 mes_adresses_sf <- st_as_sf(geoc, coords = c("longitude", "latitude"), crs = 4326)
 bondyLocBureaux <- mes_adresses_sf [, c("libelle_reu", "voie_reu")]
-st_write(bondyLocBureaux, "data/bv.gpkg", "bondyLocBureau", delete_layer = T)
+st_write(bondyLocBureaux, "data/concept.gpkg", "bondyLocBureau", delete_layer = T)
 ```
 
 
@@ -702,9 +704,9 @@ st_write(bondyLocBureaux, "data/bv.gpkg", "bondyLocBureau", delete_layer = T)
 
 Comme avec les bv, les points de vigilance sont :
 
-- les arrondissements de Lyon et Marseille
+- les arrondissements de Marseille
 
-- le DROM Martinique
+- le DROM Martinique (Fort de France)
 
 - les bv unique 
 
@@ -715,7 +717,7 @@ L'objectif serait dés cette étape d'utiliser le code bureau : insee et numéro
 
 ```{r}
 bv <- st_read("data/concept.gpkg", "bv")
-# 1747
+# 1759
 # jointure ville code insee pour les résultats
 election2022 <- read.csv("data/gros/p2022-resultats-bureaux-t1.csv", fileEncoding = "UTF-8", header = T, colClasses = "character")
 ```
@@ -748,12 +750,13 @@ Total
 election2022Sel
 Martinique$CodeInsee <- "97209"
 # suppression de la colonne arr
+names(Paris)
 Paris <- Paris [, -55]
 election <- rbind(election2022Sel, Martinique, Paris)
 write.csv(election,"data/election2022.csv", fileEncoding = "UTF-8")
 ```
 
-2677 lg ou bv (1715 bv)
+2689 lg ou bv (1759 bv)
 
 
 ```{r}
@@ -762,12 +765,12 @@ election <- election [election$CodeInsee != "75056",]
 write.csv(election, "data/election2022.csv", fileEncoding = "UTF-8")
 ```
 
-1777
+1789
 
 
 ### combien de bv dans le fichier bv ? 17 et 18
 
-cas particuliers à explorer
+cas particuliers à explorer (pour 2024)
 
 ```{r}
 pb <- election2022 [election2022$INSEE_COM %in% c('13055', '69123'),]
@@ -806,8 +809,9 @@ https://www.insee.fr/fr/statistiques/4176293?sommaire=4176305
 
 ## Les données et la projection
 
-```{r}
+On utilise selon l'humeur le gpkg ou le shp (en fonction des ordis)
 
+```{r}
 car <- st_read("data/gros/Filosofi2015_carreaux_1000m_metropole.gpkg")
 st_layers("data/concept.gpkg")
 car <- st_read("data/gros/Filosofi2015_carreaux_1000m_metropole.shp")
@@ -827,7 +831,7 @@ Donc rester dans la projection pour faire les stats. Les
 carreaux sont faits pour faire 1km en Martinique
 
 ```{r}
-ville <- st_read("data/concept.gpkg", "villes")
+ville <- st_read("data/concept.gpkg", "ville")
 str(ville)
 # nettoyage fichier
 names(ville) [2] <- "nom"
@@ -871,7 +875,7 @@ inter <- st_intersection(car [, c("Ind")], ville)
 inter <- st_intersection (car, ville)
 inter
 st_write(inter, "data/concept.gpkg", "interCar1kmVille", delete_layer = T)
-# 1681 carreaux
+# 1744 carreaux
 str(inter)
 mf_map(inter)
 ```
@@ -928,6 +932,7 @@ Fort de France
 
 
 ```{r}
+carMartinique <- st_read("data/gros/Filosofi2015_carreaux_1000m_reg02.gpkg")
 st_crs(carMartinique)
 fDf <- ville [ville$insee == 97209,]
 st_crs(fDf)
@@ -989,7 +994,7 @@ st_write(inter, "data/concept.gpkg", "interCarVille" , delete_layer = T)
 mf_map(inter)
 ```
 
-1681 carreaux 
+1744 carreaux 
 
 ### Cas Bondy
 
