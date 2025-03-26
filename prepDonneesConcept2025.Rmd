@@ -45,7 +45,7 @@ On extrait pour chaque ville choisie par les étudiants :
 
 Définition de la liste des villes de base.
 
-Une première définition a été faite au 1er cours mais on reprend la liste dy td3
+Une première définition a été faite au 1er cours mais on reprend la liste du td3
 
 ## Première définition
 
