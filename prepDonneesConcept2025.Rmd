@@ -149,8 +149,8 @@ ville <- ville [ville$prénom!="",]
 ville <- ville [,2]
 # 57 villes différentes 49 uniques 
 ville <- unique(na.omit(ville))
-# On rajoute Champs sur Marne, Perpignan, Paris 19, Bondy, Paris 15
-ville <- c(ville,"77083", "66136", "75119","93010","75115")
+# On rajoute Champs sur Marne, Perpignan, Paris 19, Bondy, Paris 15, Lourdes
+ville <- c(ville,"77083", "66136", "75119","93010","75115", "65286")
 ```
 
 54 villes uniques y compris bondy
@@ -172,6 +172,7 @@ unzip(zipfile = "data/gros/communes-20220101-shp.zip", exdir = "data/gros")
 
 ```{r}
 fr <- st_read("data/gros/communes-20220101.shp")
+fr [grep('Lourdes', fr$nom),]
 # le code INSEE a 5 chiffres y compris le zéro
 names(fr)
 sel <- fr [fr$insee %in% ville,]
@@ -240,6 +241,7 @@ selCorse <- fr [fr$insee == "2A004", c("insee", "nom")]
 
 
 
+
 ### Enregistrement
 
 
@@ -253,6 +255,8 @@ st_write(tot, "data/concept.gpkg", "ville", delete_layer = T)
 ```
 
 52 villes y compris Bondy
+
+
 
 ### Dernière vérif
 
@@ -1003,6 +1007,7 @@ st_write(bv, "data/bondy.sqlite", "bv", delete_layer = T)
 
 
 ```{r}
+ville <- st_read("data/concept.gpkg", "ville")
 iris <- st_read("data/gros/CONTOURS-IRIS.shp")
 irisMart <- st_read("data/gros/MARTINIQUE/CONTOURS-IRIS.shp")
 dataIris <- read.csv("data/gros/BASE_TD_FILO_DEC_IRIS_2019.csv")  
@@ -1035,7 +1040,64 @@ filtre
 ```{r}
 jointSel <- joint [joint$INSEE_COM %in% ville$insee,]
 jointMartSel <- jointMart [jointMart$INSEE_COM %in% ville$insee,]
+```
+
+
+verif sur Lourdes
+
+```{r}
+grep("Lourdes", unique(jointSel$NOM_COM))
+```
+
+
+```{r}
 st_write(jointSel, "data/iris.gpkg", "irisMetropole")
 st_write(jointMartSel, "data/iris.gpkg", "irisMartinique")
+```
+
+# Données examen
+
+
+3 sujets une jointure attributaire et demande shéma de traitement sur jointure spatiale
+
+
+```{r}
+ville <- st_drop_geometry(ville)
+dpt <- st_read("data/gros/ADMIN-EXPRESS-COG_2-1__SHP__FRA_2020-11-20/ADMIN-EXPRESS-COG/1_DONNEES_LIVRAISON_2020-11-20/ADE-COG_2-1_SHP_WGS84G_FRA/DEPARTEMENT.shp")
+region <- st_read("data/gros/ADMIN-EXPRESS-COG_2-1__SHP__FRA_2020-11-20/ADMIN-EXPRESS-COG/1_DONNEES_LIVRAISON_2020-11-20/ADE-COG_2-1_SHP_WGS84G_FRA/REGION.shp")
+epci <- st_read("data/gros/ADMIN-EXPRESS-COG_2-1__SHP__FRA_2020-11-20/ADMIN-EXPRESS-COG/1_DONNEES_LIVRAISON_2020-11-20/ADE-COG_2-1_SHP_WGS84G_FRA/EPCI.shp")
+st_write(dpt, "data/examen.gpkg", "dpt", delete_layer = T)
+st_write(region, "data/examen.gpkg", "region", delete_layer = T)
+st_write(epci, "data/examen.gpkg", "epci", delete_layer = T)
+```
+
+
+Jointure dpt
+
+```{r}
+dpt$INSEE_DEP
+ville$codeDepartement
+jointDPT <- merge(dpt, ville, by.x = "INSEE_DEP", by.y = "codeDepartement"  )
+mf_map(jointDPT)
+```
+
+Jointure région
+
+
+```{r}
+ville$codeRegion
+region$INSEE_REG
+jointREGION <- merge(region, ville, by.x = "INSEE_REG", by.y = "codeRegion")
+mf_map(jointREGION)
+```
+
+Jointure EPCI
+
+
+```{r}
+ville$codeEpci
+epci$CODE_EPCI
+jointEPCI <- merge(epci, ville, by.x = "CODE_EPCI", by.y = "codeEpci")
+mf_map(jointEPCI)
 ```
 
