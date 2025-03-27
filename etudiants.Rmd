@@ -110,9 +110,22 @@ Créer une liste des mails pour tous les étudiants
 (communication défi)
 
 ```{r}
+mail <- read.csv("data/adresseMail.csv", fileEncoding = "UTF-8")
 liste <-paste0(mail$adresseMail, ";", collapse = "")
 write(liste,"data/mailEtudiant.txt")
 ```
+
+
+Création également en filtrant sur les groupes et sauvegardés dans
+
+```{r}
+mailL4GEOMAT <- read.csv("data/mailEtudiantL4GEOMAT.txt", fileEncoding = "UTF-8")
+mailL4GEOMAT
+mailL6ECSIG <- read.csv("data/mailEtudiantL6ECSIG.txt", fileEncoding = "UTF-8")
+mailL6ECSIG
+```
+
+
 
 
 Pb sur adresses mail, retour du mail

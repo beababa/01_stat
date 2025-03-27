@@ -68,7 +68,7 @@ Une première définition a été faite mais on reprend la liste.
 # recup fichier ville en character pour les codes commençant par zéro
 ville <- read.csv("data/constructionCours3.csv", colClasses = "character")
 ville <- ville [,5]
-# 57 villes différentes42 uniques 
+# 57 villes différentes 42 uniques 
 ville <- unique(na.omit(ville))
 ville <- ville [-1]
 ```
