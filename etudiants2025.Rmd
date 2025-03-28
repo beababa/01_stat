@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo  = TRUE)
 knitr::opts_chunk$set(warning  = FALSE)
 ``` 
 
-Bases conceptuelles, données
+Bases conceptuelles, cf projet L6 pour l'autre groupe
 
 # Chemin et librairies
 
@@ -44,6 +44,8 @@ barplot(tabVendredi, main = length(vendredi$prénom))
 
 ### Effectif et cours
 
+Comptage manuel à chaque cours pour les 4 groupes
+
 ```{r, eval=TRUE}
 effectif <- read.csv("data/effectif2025.csv")
 nom <- paste0(effectif$niveau, "_", effectif$groupe) 
@@ -54,15 +56,21 @@ p <- barplot(effectif, beside = T, main = "Nombre d'étudiants par groupe et par
 dev.off()
 ```
 
-
+![](img/presence.png)
 
 ### Les rendus d'exercices
 
 
 
 ```{r}
-rendu <- c(56,59, 56, 45,58,49)
-titre <- c("distribution", "univarié", "contingence", "khi2", "regression", "1er script")
+note <- read.csv("data/notes/L4GEOMAT - TD - Bases conceptuelles de la géomatique - BMaranget Notes.csv", fileEncoding = "UTF-8")
+names(note)
+note <- note [,c(4:10)]
+names(note)
+titre <- c("1_carte1", "5_schéma1", "2_geocoder", "8_storymap1", "4_jointure", "6_menageModeste", "7_SQL")
+names(note) <- titre
+# ordonner les colonnes
+note$num 
 par(mar = c(8,6,6,6))
 p <- barplot(rendu, names = titre, cex.names = 0.8, las = 2, main = "rendu devoirs (effectif 75 étudiants environ)", border = NA)
 text(p, y = rendu - 1, labels = rendu )
