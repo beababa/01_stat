@@ -215,6 +215,10 @@ utilisation de l'api
 ```{r}
 library(httr)
 library(jsonlite)
+```
+
+
+```{r}
 equiv <- NULL
 for (i in pb){
   print(i)
@@ -268,8 +272,30 @@ setdiff(ville, tot$insee)
 mapview(tot)
 ```
 
+### Population et nom ville
+
 On veut également récupérer la population des villes (pour comparaison avec votants 
 plus loin)
+
+
+pb sur les cp Paris
+
+La donnée est bizarrement difficile à trouver.
+Chat gpt renvoie sur les données santé (ARS), du coup on fait deux jointures
+
+
+#### ARS
+
+```{r}
+data <- read.csv("data/t-popref-com.csv")
+data <- data [,c("com_code", "popref_tot")]
+tot <- st_read("data/concept.gpkg", "ville")
+joint <- merge(tot [,1], data, all.x=T, by.x = "insee", by.y="com_code")
+st_write(joint, "data/concept.gpkg", "ville", delete_layer = T)
+```
+
+
+#### Insee
 
 ```{r}
 equiv <- NULL
@@ -285,14 +311,35 @@ for (i in insee){
 str(equiv)
 tot$insee
 equiv$code
-joint <- merge(tot [,1], equiv, all.x=T, by.x = "insee", by.y="code")
-names(joint)
-head(joint)
-# on retire les cp car pl cp pour 1 insee
-st_write(joint [,-7], "data/concept.gpkg", "ville", delete_layer = T)
-dpt <- joint$codeDepartement [!is.na(  joint$codeDepartement )]
-dpt <- unique(dpt)
+tot$dep <- substring(tot$insee,1,2)
 ```
+
+##### Cas Paris
+
+```{r}
+equiv[equiv$code == 75056,]
+jointParis <- merge(tot [, c("insee", "popref_tot", "dep")], equiv[equiv$code == 75056,], all.x=F, by.y = "codeDepartement", by.x="dep")
+jointParis
+```
+
+##### Le reste
+
+```{r}
+jointReste <- merge(tot [, c("insee", "popref_tot", "dep")], 
+                    equiv[equiv$code != 75056,], all.x=F, by.y = "code", by.x="insee")
+names(jointReste)
+names(jointParis)
+nom <- names(jointReste)
+nom <- nom [-c(5,9)]
+nom
+jointParis <- jointParis [,nom]
+jointReste <- jointReste [,nom]
+joint <- rbind(jointParis, jointReste)
+st_write(joint, "data/concept.gpkg", "ville", delete_layer = T)
+```
+
+
+
 
 ## Cartographie France
 
@@ -302,8 +349,16 @@ Idée : utiliser les flux ign opur récupérer uniquement les dpt
 
 ```{r}
 library(httr) # generic webservice package
-library(ows4R) # interface pour services ogc
+library(ows4R) # interface pour services ogc (long à télécharger)
 ```
+
+
+chargement couche ville
+
+```{r}
+tot <- st_read("data/concept.gpkg", "ville")
+```
+
 
 
 ```{r}
@@ -341,7 +396,7 @@ data$code_insee [data$code_insee == 972] <- "97"
 ```
 
 ```{r}
-tot$dep <- substring(tot$insee,1,2)
+table(tot$dep)
 dpt <- unique(names(table(tot$dep)))
 ```
 
@@ -392,6 +447,9 @@ table(tot$dep)
 
 
 
+```{r}
+tot [is.na(tot$codeRegion),]
+```
 
 
 # BV contours
@@ -401,6 +459,7 @@ Le format "pmtiles" s'ouvre très bien mais le fichier a un carroyage.
 
 ```{r}
 ville <- st_read("data/concept.gpkg", "ville")
+ville$nom
 ```
 
 53 communes
@@ -438,7 +497,10 @@ bvSel <- bvCourt [bvCourt$insee %in% ville$insee,]
 1863
 
 
-### Vérification sur Paris
+### Vérifications
+
+
+sur Paris
 
 
 ```{r}
@@ -446,6 +508,12 @@ bvSelParis <- bvSel [grep("^75", bvSel$insee),]
 mapview(bvSelParis, zcol="insee")
 ```
 
+Lourdes
+
+
+```{r}
+bvSel [bvSel$nom == "Lourdes",]
+```
 
 
 ```{r}
@@ -760,7 +828,7 @@ election <- rbind(election2022Sel, Martinique, Paris)
 write.csv(election,"data/election2022.csv", fileEncoding = "UTF-8")
 ```
 
-2689 lg ou bv (1759 bv)
+2785 lg ou bv (1759 bv)
 
 
 ```{r}
@@ -769,7 +837,7 @@ election <- election [election$CodeInsee != "75056",]
 write.csv(election, "data/election2022.csv", fileEncoding = "UTF-8")
 ```
 
-1789
+1885
 
 
 ### combien de bv dans le fichier bv ? 17 et 18
