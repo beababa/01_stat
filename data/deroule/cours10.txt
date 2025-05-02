@@ -1,0 +1,9 @@
+compléter le tableau
+----------------------------------
+- 1 story map par groupe dans vendredi_partage
+- réponse au questionnaire lien "story map" à titre individuel
+- commencer le travail de groupe
+-------------------
+essayer de faire un shéma de traitement / un travail sur les données et de le mettre dans la story map.
+
+
