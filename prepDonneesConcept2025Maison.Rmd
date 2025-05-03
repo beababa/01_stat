@@ -459,7 +459,7 @@ Le format "pmtiles" s'ouvre très bien mais le fichier a un carroyage.
 
 ```{r}
 ville <- st_read("data/concept.gpkg", "ville")
-ville$nom
+ville [ville$nom == 'Paris',]
 ```
 
 53 communes

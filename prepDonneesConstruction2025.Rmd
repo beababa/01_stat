@@ -213,6 +213,8 @@ dpt <- unique(names(table(tot$dep)))
 
 ```{r}
 dptSel <- data [data$code_insee %in% dpt,]
+st_write(dptSel, "data/construction.gpkg", "dptSel", delete_layer =T)
+st_write(data, "data/construction.gpkg", "dpt", delete_layer = T)
 ```
 
 
@@ -222,24 +224,29 @@ dptSel <- data [data$code_insee %in% dpt,]
 
 
 ```{r, eval=FALSE}
-png("img/communes.png")
+png("img/communesConstruction.png")
 mf_init(dptSel)
 mf_map(data, col = "wheat2" , border = NA,add = T)
 mf_map(dptSel, add = T, col = "antiquewhite1", border = "wheat")
 mf_map(tot, col = "red", border = NA,add = T)
-mf_label(tot, var = "dpt")
+#mf_label(tot, var = "dpt")
 mf_layout("Communes choisies par les étudiants", credits = "IGN")
 dev.off()
 ```
 
-![](img/communes.png)
+![](img/communesConstruction.png)
 
 Nb de choix par zone
 
 ```{r}
 table(tot$dep)
+st_write(tot, "data/construction.gpkg", "ville", delete_layer = T)
 ```
 
+```{r}
+ville <- st_read("data/construction.gpkg", "ville")
+st_write(ville, "data/construction.gpkg", "ville", delete_layer = T)
+```
 
 
 
