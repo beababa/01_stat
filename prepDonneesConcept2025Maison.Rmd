@@ -867,6 +867,20 @@ str(election2022$CodeBdeVote)
 write.csv(election2022,"data/election2022.csv", fileEncoding = "UTF-8")
 ```
 
+## Cas Lille, jointure abstention
+
+
+```{r}
+bv <- bv [bv$nom == 'Lille',]
+election2022 <- election2022 [election2022$Commune == 'Lille', c("CodeBdeVote", "Abstentions", "Abstentions_ins")]
+head(bv$bureau)
+head(election2022$CodeBdeVote)
+election2022$CodeBdeVote <- as.integer(election2022$CodeBdeVote)
+bv$bureau <- gsub("59350_", "", bv$bureau)
+joint <- merge(bv, election2022, by.x = "bureau", by.y="CodeBdeVote")
+mapview(joint)
+st_write(joint, "data/lille.gpkg", "abstention")
+```
 
 
 Ce fichier sera joint à celui des bureaux de vote.
@@ -879,7 +893,24 @@ On fait une base sqlite pour cours SQL par commune ? Un .gpkg suffit
 Les carreaux sont ceux du lien du cours :
 https://www.insee.fr/fr/statistiques/4176293?sommaire=4176305
 
-## Les données et la projection
+
+## Carreaux 200 m utilisés pour le projet
+
+```{r}
+car <- st_read("data/gros/carreaux_200m_met.gpkg")
+ville <- st_read("data/concept.gpkg", "ville")
+# Noisy-le-Grand, d'Etampes, de Saint-Denis et de Sarcelle
+ville <- ville [ville$insee %in% c(91223,93051, 93066,95585),]
+ville <- st_transform(ville, 2154)
+ville
+inter <- st_intersection(car, ville)
+mf_map(inter)
+inter
+st_write(inter, "data/carreaux_200m.gpkg", "carreaux")
+```
+
+
+## Les données et la projection carreux 1 km
 
 
 On utilise selon l'humeur le gpkg ou le shp (en fonction des ordis)
