@@ -109,16 +109,32 @@ for (i in (1:length(res))){
 
 
 ```{r, eval=FALSE}
-note <- read.csv("data/noteFinales.csv", fileEncoding = "UTF-8", na.strings = c("EN ATTENTE", "NA","-"), dec = ",")
-summary(note)
-png("img/noteFin.png")
-hist(note$NOTE.FINALE, main = "Etalement note finale - 64 obs", freq = T, border = NA)
-abline(v = mean(note$NOTE.FINALE, na.rm = T),  col = "red")
-abline(v = median(note$NOTE.FINALE, na.rm=T), col = "blue")
+noteL2 <- read.csv("data/L4GEOMAT_notes.csv", fileEncoding = "UTF-8", dec = ",")
+summary(noteL2)
+noteL3 <- read.csv("data/L6GECSIG_notes.csv", fileEncoding = "UTF-8", dec = ",")
+summary(noteL3)
+```
+
+
+```{r, eval=FALSE}
+png("img/noteFin_L2.png")
+hist(noteL2$TOTAL, main = "Etalement note finale - 53 obs", freq = T, border = NA)
+abline(v = mean(noteL2$TOTAL, na.rm = T),  col = "red")
+abline(v = median(noteL2$TOTAL, na.rm=T), col = "blue")
 dev.off()
 ```
 
-![](img/noteFin.png)
+![](img/noteFin_L2.png)
+```{r, eval=FALSE}
+png("img/noteFin_L3.png")
+hist(noteL3$Total.du.cours..Brut., main = "Etalement note finale - 43 obs", freq = T, border = NA)
+abline(v = mean(noteL3$Total.du.cours..Brut., na.rm = T),  col = "red")
+abline(v = median(noteL3$Total.du.cours..Brut., na.rm=T), col = "blue")
+dev.off()
+```
+
+![](img/noteFin_L3.png)
+
 
 # Donnée utilisées en cours
 
