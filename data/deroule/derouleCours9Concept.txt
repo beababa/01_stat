@@ -1,8 +1,0 @@
-oraux (5 mn maximum par groupe)
-
-pour le projet : données / traitement (shéma) / résultat (cartes) / sous R et site github
-
-10 mn pour faire les shéma de géotraitement de la partie correction / construction d'un indicateur.
-
-
-Sur la partie résultat du beababa.github.io, répondre aux questions sur éléments cartographiques et mettre le .pdf sur le moodle (TD10)
