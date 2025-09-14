@@ -1,0 +1,30 @@
+- faire une collection de story map (Pour accéder à la page Collections dans ArcGIS StoryMaps, cliquez sur Collections en haut de la page.)
+- montrer un le confinement
+- à observer le menu
+- plan : présentation des données, résultat et méthodes (intro et conclusion)
+
+
+- outil : palette de bloc
+
+    Titre - Saisissez # suivi d’un espace.
+    Sous-titre - Saisissez ## suivi d’un espace.
+    Citation - Saisissez > suivi d’un espace.
+    Paragraphe - Saisissez : suivi d’un espace.
+    Paragraphe long - Saisissez % suivi d’un espace.
+    Liste - Saisissez *, - ou 1 suivi d’un espace.
+
+Texte à interligne simple - Appuyez sur Maj+Entré
+
+Preview (Aperçu)
+
+mécanisme de publication
+
+dans la collection, penser à Cochez la case Hide story cover (Masquer la couverture du récit) pour cacher la couverture du récit lorsqu’il est consulté dans cette collection.
+https://doc.arcgis.com/fr/arcgis-storymaps/get-started/create-your-first-collection.htm
+
+
+https://storymaps.arcgis.com/stories/cea22a609a1d4cccb8d54c650b595bc4
+
+l'important la navigation. pas les effets sur les cartes (vous pouvez quand même essayer)
+
+obligation des crrédits
