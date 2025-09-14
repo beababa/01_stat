@@ -1,0 +1,247 @@
+---
+title: "Préparation des données debug"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval  = FALSE)
+knitr::opts_chunk$set(echo  = TRUE)
+knitr::opts_chunk$set(warning  = FALSE)
+``` 
+
+
+# Objectif
+
+Tester la source obtenue.
+
+
+```{r}
+library(sf)
+library(mapsf)
+```
+
+# Traitement final : concaténation de tous les fichiers.
+
+
+### Données 
+
+```{r}
+cog <- read.csv("data/cog.csv", fileEncoding = "UTF-8")
+cog [cog$INSEE_COM == 45203,]
+```
+
+
+### Vérification
+
+pour chacun des fichiers, on vérifie le nb de communes concernées, la décimale, et le 
+code bureau.
+
+
+```{r}
+fic <- list.files("data/devoirMaison/")
+fic
+# elimination des 3 premieres valeurs qui sont les résultats
+fic <- fic [-c(1:4,8)]
+for (f in fic){
+  print(f)
+  tmp <- read.csv(paste0("data/devoirMaison/", f), fileEncoding = "UTF-8")
+  assign(f, tmp)
+}
+```
+
+Election
+
+```{r}
+names(election2022.csv)
+names(election2022.csv)[8] <- "bureau"
+length(unique(election2022.csv [, c("INSEE_COM")]))
+str(election2022.csv)
+# filosofi.csv
+filosofi.csv$INSEE_COM <- substring(filosofi.csv$bureau,1,5)
+length(unique(filosofi.csv$INSEE_COM))
+filosofi.csv$bureau
+str(filosofi.csv)
+# normal il manque pointe à pitre
+#lgt.csv
+names(lgt.csv)
+lgt.csv$INSEE_COM <- substring(lgt.csv$bureau, 1,5)
+length(unique(lgt.csv$INSEE_COM))
+```
+
+
+### Traitement
+
+
+```{r}
+fic <- list.files("data/devoirMaison/")
+fic
+fic <- fic [-c(1:5, 8:9)]
+fin <- election2022.csv
+# 2148
+fin$bureau
+#f <- fic [1]
+for (f in fic){
+  print(f)
+  tmp <- read.csv(paste0("data/devoirMaison/", f), fileEncoding = "UTF-8")
+  fin <- merge(tmp,fin, by = "bureau", all.x = T)
+}
+str(fin)
+
+write.csv(fin,"data/devoirMaison/base.csv", fileEncoding = "UTF-8", row.names = FALSE)
+length(unique(fin$Libellé.de.la.commune))
+names(fin)
+```
+
+2061 obs
+
+71 communes
+
+
+Vérification
+
+```{r}
+
+fin <- na.omit(fin)
+```
+
+1909 avt
+1838
+1508
+1714
+
+```{r}
+bondy <- na.omit(fin [fin$INSEE_COM == "93010",])
+bondy
+election.csv$bureau [election.csv$Libellé.de.la.commune == 'Bondy']
+bondyFilo <-filosofi.csv$bureau [filosofi.csv$INSEE_COM == '93010']
+```
+
+```{r}
+car <- st_read("data/gros/geo.gpkg", "car")
+bv <-st_read("data/gros/geo.gpkg", "bvValide")
+bv$numBureau <- substring(bv$bureau, 7,8)
+bondy <- bv [bv$insee == '93010',]
+carBondy <- car [car$cog == '93010',]
+carBondyC <- st_centroid(carBondy)
+bondyC <- st_centroid(bondy)
+mf_init(bondy)
+mf_map(bondy, type = "typo", var ="bureau", add = T, border = "red", lwd=2)
+mf_map(carBondy, add = T, col=NA)
+mf_map(carBondyC, add = T)
+mf_label(bondy, var = "numBureau", col = "red", halo = T, overlap = T)
+# Cela signifie qu'un bv n'a aucun centroide de carreau sur son territoire.
+# je n'arrive pas à le voir sur la carte
+# TODO les carreaux couvrent le territoire
+setdiff(bondy$bureau, bondyFilo )
+inter <-st_intersection(bondy [, c("bureau")], st_centroid(carBondy [, c("idcar_200m")]))
+length(unique(inter$bureau))
+# il y a bien 32 bureaux : refaire l'intersection bureau carreau
+```
+
+
+On a perdu un bv...
+
+
+```{r}
+debut <- election2022.csv
+
+setdiff(debut$bureau, fin$bureau)
+
+setdiff(cog$INSEE_COM, fin$INSEE_COM)
+```
+
+
+
+# Pb des NA sur la base
+
+
+```{r}
+base <- read.csv("data/devoirMaison/base.csv", fileEncoding = "UTF-8")
+table(is.na(base))
+# 9602 NA
+base <- na.omit(base)
+bondy <- base [base$INSEE_COM == '93010',]
+write.csv(base, "data/devoirMaison/base.csv", row.names = F, fileEncoding = "UTF-8")
+```
+
+
+```{r}
+table(base$INSEE_COM)
+table(cog$INSEE_COM)
+```
+
+
+Pb des commlunes Troyes 10387 Dieppe 76217 et Pointe à Pitre
+on crée les fichiers à part
+
+
+```{r}
+choix <- '76217'
+elec <- (election2022.csv [election2022.csv$INSEE_COM== choix,] )
+filo <- (filosofi.csv [filosofi.csv$INSEE_COM == choix,])
+(filosofi.csv$bureau [filosofi.csv$INSEE_COM == choix ])
+lg <- (lgt.csv [lgt.csv$INSEE_COM == choix,])
+ind <-grep(choix, vfMoyenne.csv$bureau)
+vfChoix <- (vfMoyenne.csv [ind,])
+head(vf [vf$INSEE_COM == choix,])
+jointure <- merge(elec, filo, by="bureau", all.x=T)
+jointure2 <- merge(jointure, lg, by="bureau", all.x = T)
+jointure3 <- merge(jointure2, vfChoix, by="bureau", all.x = T)
+write.csv(jointure3,"data/devoirMaison/76217.csv", fileEncoding = "UTF-8")
+```
+
+```{r}
+head(filosofi.csv$bureau)
+```
+
+
+
+```{r}
+base <- read.csv("data/devoirMaison/base.csv", fileEncoding = "UTF-8")
+test <- base [base$INSEE_COM == choix,]
+test <- na.omit(test)
+table(is.na(test))
+str(test)
+write.csv(test,"data/devoirMaison/test.csv", fileEncoding = "UTF-8")
+```
+
+
+# Verif de la validité sur les variables
+
+Il y a des variables qui doivent être correlées.
+
+```{r}
+base <- read.csv("data/devoirMaison/base.csv", fileEncoding = "UTF-8")
+names(base)
+base <- base [!duplicated(base$bureau),]
+rownames(base) <- base$bureau
+```
+
+27:30 9:14
+
+```{r}
+base <- base  [,c(27:30, 9:14)]
+commune <- unique(substring(rownames (base),1,5))
+c <- commune [1]
+commune <- commune [-1]
+for (c in commune){
+  print(c)
+  tmp <- base [(substring(rownames (base),1,5))== c,]
+  acp <- prcomp(tmp)
+  png(paste0("img/biplot_",c,".png"))
+  biplot(acp)
+  dev.off()
+}
+
+
+```
+
+
+
+
+# Affichage de toutes les APC

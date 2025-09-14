@@ -1,0 +1,189 @@
+---
+title: "Introduction"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval  = FALSE)
+knitr::opts_chunk$set(echo  = TRUE)
+knitr::opts_chunk$set(warning  = FALSE)
+``` 
+
+
+# Intitulé et déroulé du cours
+
+
+*"L5GEABIM Analyses bivariées et multivariées"*
+
+
+
+
+```{r, eval=TRUE}
+data <- read.csv("data/deroule2025.csv", encoding = "UTF-8")
+knitr::kable(data)
+```
+
+
+# La donnée
+
+## Où les trouver ?
+
+Au départ les données sur les finances des communes
+
+https://www.data.gouv.fr/datasets/comptes-des-communes-2017-2024/
+
+
+
+## Préparer les données
+
+
+
+```{r, eval = FALSE}
+data <- read.csv("data/gros/ofgl-base-communes.csv", fileEncoding = "UTF-8", header = T)
+data93 <- data2002 [ data$ville == "Bondy",]
+write.csv(data93, "data/data93.csv", fileEncoding = "UTF-8")
+```
+
+
+
+
+
+
+
+# Présentation rapide (vous êtes nombreux !)
+
+## Qui sont les étudiants ?
+
+- 74 étudiants sur 3 cours
+
+Les questions posées sont sur le passé / présent / futur des étudiants, leur appétence en stats et 
+le nombre d'années depuis le dernier apprentissage.
+
+
+```{r}
+etudiant <-  read.csv("data/cours1.csv", fileEncoding = "UTF-8")
+names(etudiant)
+names(etudiant)[8:9] <- c("appétence", "nb d'années")
+png("img/quisontils.png", width = 10000, height = 10000, res=1800)
+#par(mar = c(2,16,2,4))
+par(mfrow = c(2,3))
+for (i in 5:9){
+  (mar = c(2,16,2,4))
+  barplot(sort(table(etudiant [,i])), border = NA,
+          horiz = T, las = 2, cex.names = 0.8, 
+          main = names (etudiant) [i])
+}
+dev.off()
+```
+
+
+![](img/quisontils.png)
+
+
+## Présence et rendu des devoirs : chiffres clés
+
+### Effectif et cours
+
+```{r, eval=FALSE}
+fic <- list.files("data/", pattern = "^cours")
+fic
+# on recherche le fichier le plus haut
+nb <- max(as.integer(substring(fic, 6,7)))
+tmp <- NULL
+tab <- NULL
+i <-  1
+for (i in 1:nb) {
+  print(i)
+  nomFic <- paste0("data/cours", i, ".csv")
+  data <- read.csv(nomFic, fileEncoding = "UTF-8")
+  data <- data [data [,2] == "oui",]
+  tmp <- table(data$groupe)
+  tab <- rbind(tab , tmp)
+}
+tab
+row.names(tab) <- paste0("cours ",seq(1,nb, by = 1))
+paste0("cours ",seq(1,nb, by = 1))
+knitr::kable(tab)
+# Graphique
+p <- barplot(tab, beside = T, main = "nombre d'étudiants par groupe et par cours", xlab = "groupe", ylab = "nb", col = terrain.colors(nb) 
+        , border = NA, legend =  F)
+
+```
+
+
+
+
+
+### Les rendus d'exercices
+
+
+
+```{r}
+rendu <- c(56,59, 56, 45,58,49)
+titre <- c("distribution", "univarié", "contingence", "khi2", "regression", "1er script")
+par(mar = c(8,6,6,6))
+p <- barplot(rendu, names = titre, cex.names = 0.8, las = 2, main = "rendu devoirs (effectif 75 étudiants environ)", border = NA)
+text(p, y = rendu - 1, labels = rendu )
+```
+
+
+#### Les notes des exercices
+
+
+- Le critère externe : des points faciles ?
+
+le nom du fichier
+le temps du rendu (avant la limite)
+
+- Distribution des totaux
+
+```{r, eval=T}
+res <- read.csv("data/exo.csv",  na.strings = '-', fileEncoding = "UTF-8")
+names(res)
+res <- res [, c(2:5,1,6)]
+# recodage : si note 2, alors note1 = 0 si NA
+res$X1_Univarié.1 [is.na(res$X1_Univarié.1 )& !is.na(res$X2_Univarié.2)] <- 0
+res$X1_Univarié.1 [ is.na(res$X2_Univarié.2)] <- NA
+# graphique
+par(mfrow= c(2,3))
+for (i in (1:length(res))){
+  p <-barplot(table(res[,i]), main = names(res)[i])
+}
+```
+
+
+
+
+## Notes finales
+
+
+
+```{r, eval=FALSE}
+note <- read.csv("data/noteFinales.csv", fileEncoding = "UTF-8", na.strings = c("EN ATTENTE", "NA","-"), dec = ",")
+summary(note)
+png("img/noteFin.png")
+hist(note$NOTE.FINALE, main = "Etalement note finale - 64 obs", freq = T, border = NA)
+abline(v = mean(note$NOTE.FINALE, na.rm = T),  col = "red")
+abline(v = median(note$NOTE.FINALE, na.rm=T), col = "blue")
+dev.off()
+```
+
+![](img/noteFin.png)
+
+# Ressources autre que la bibliographie officielle
+
+2 cours universitaires disponibles sur internet
+
+- http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm
+- http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm
+
+Pour R, la base de tout est 
+
+R et espace (https://archives.framabook.org/r-et-espace/index.html)
+
+
