@@ -44,7 +44,14 @@ https://www.data.gouv.fr/datasets/comptes-des-communes-2017-2024/
 
 
 ```{r, eval = FALSE}
-data <- read.csv("data/gros/ofgl-base-communes.csv", fileEncoding = "UTF-8", header = T)
+library(data.table)
+data <- fread("data/gros/ofgl-base-communes.csv", nrows = 5000000)
+data2 <- fread("data/gros/ofgl-base-communes.csv", skip = 5000000, nrows = 5000000)
+data3 <- fread("data/gros/ofgl-base-communes.csv", skip = 10000000, nrows = 5000000)
+
+names(data)
+table(data$`Code Insee 2024 Région`)
+table(data2$V3)
 data93 <- data2002 [ data$ville == "Bondy",]
 write.csv(data93, "data/data93.csv", fileEncoding = "UTF-8")
 ```
