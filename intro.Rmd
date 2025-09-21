@@ -41,23 +41,32 @@ https://www.data.gouv.fr/datasets/comptes-des-communes-2017-2024/
 
 ## Préparer les données
 
+23 millions d'observations au total, un fichier de 6 G°de données
+
+![](img/source.png)
+voir la [source originale]( https://data.ofgl.fr/explore/dataset/ofgl-base-communes/table/?disjunctive.nomen&disjunctive.agregat&disjunctive.tranche_revenu_imposable_par_habitant&disjunctive.tranche_population&disjunctive.epci_name&disjunctive.reg_name&disjunctive.dep_name&disjunctive.com_name&sort=exer)
+
 
 
 ```{r, eval = FALSE}
 library(data.table)
+# on charge par tranche de 5 millions d'enregistrements
 data <- fread("data/gros/ofgl-base-communes.csv", nrows = 5000000)
 data2 <- fread("data/gros/ofgl-base-communes.csv", skip = 5000000, nrows = 5000000)
 data3 <- fread("data/gros/ofgl-base-communes.csv", skip = 10000000, nrows = 5000000)
-
+# liste de toutes les colonnes
 names(data)
-table(data$`Code Insee 2024 Région`)
-table(data2$V3)
-data93 <- data2002 [ data$ville == "Bondy",]
+# combien d'enregistrement pour le 93 ?
+table(data$`Code Insee 2024 Département` == 93)
+# filtre sur le dpt
+data93 <- data [ data$`Code Insee 2024 Département` == 93,]
+# sauvegarde de la donnée
 write.csv(data93, "data/data93.csv", fileEncoding = "UTF-8")
+table(data93$Agrégat)
 ```
 
 
-
+Il est plus facile d'utiliser l'[outil](https://data.ofgl.fr/pages/cartographie/) proposé par l'Observatoire des finances et de la gestion publique locale.
 
 
 
@@ -66,21 +75,21 @@ write.csv(data93, "data/data93.csv", fileEncoding = "UTF-8")
 
 ## Qui sont les étudiants ?
 
-- 74 étudiants sur 3 cours
+- 80 étudiants sur 3 cours
 
 Les questions posées sont sur le passé / présent / futur des étudiants, leur appétence en stats et 
 le nombre d'années depuis le dernier apprentissage.
 
 
 ```{r}
-etudiant <-  read.csv("data/cours1.csv", fileEncoding = "UTF-8")
+etudiant <-  read.csv("data/TD3_stats_2025.csv", fileEncoding = "UTF-8")
 names(etudiant)
-names(etudiant)[8:9] <- c("appétence", "nb d'années")
+names(etudiant)[4] <- c("appétence")
 png("img/quisontils.png", width = 10000, height = 10000, res=1800)
 #par(mar = c(2,16,2,4))
-par(mfrow = c(2,3))
-for (i in 5:9){
-  (mar = c(2,16,2,4))
+par(mfrow = c(2,2))
+for (i in c(4,6,7)){
+  (mar = c(2,20,2,4))
   barplot(sort(table(etudiant [,i])), border = NA,
           horiz = T, las = 2, cex.names = 0.8, 
           main = names (etudiant) [i])

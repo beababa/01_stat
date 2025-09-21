@@ -81,7 +81,7 @@ Dans l'exemple proposé du cours (*Potentiel fiscal et police municipale*), on c
 
 Cet exercice permet d'utiliser dans le tableur :
 
-* utilisation de la barre d'adresse
+* utilisation de la barre de formule
 
 * formule frequence, formule matricielle (CTRL + MAJ + ENTREE)
 
@@ -96,9 +96,20 @@ formules du tableau
 ### Quel commentaire ?
 
 - étendue 
+
+```{r}
+summary(maData$Nombre.de.policiers.et.de.gardes.champêtres)
+```
+
+
+Concernant notre exemple, il y a une grande disparité entre les communes, certaines
+ont 3 agents, d'autres 63
+
 - forme de la distribution
 
-
+L'énorme majorité des communes ont moins de 20 agents. Une seule commune possède plus
+de 60 agents, il s'agit d'Aulnay sous Bois. Son maire étant un ancien lieutenant de la 
+police nationale.
 
 
 ## A explorer 
@@ -113,33 +124,53 @@ Sous R, l'histogramme est un des graphiques le plus simple à obtenir.
 hist(maData$Nombre.de.policiers.et.de.gardes.champêtres)
 ```
 
-
+L'histogramme souligne l'originalité d'Aulnay sous bois par rapport autres communes.
 
 ## Correction exercice dénombrement des agrégats financiers
 
 
-Des retours très nombreux.
+Des retours très nombreux (46 sur 60). Beaucoup d'étudiants ont buté sur la difficulté de la numérotation décimale et ont utilisé le fichier vu en classe, pas de problème dans le cadre d'un exercice.
 
-```{r}
-communes <- c("Annemasse", "Tasson la demi lune", "Clamart", "Epinay-sur-Seine",
-              "Santes", "Thionville", "Vitry-Sur-Seine", "Massy", "Montpon-Ménestérol", "Choisy-le-Roi", "Malakoff", "Caluire-et-Cuire", "Dieppe",
-              "Levallois-Perret", "Achères", "Neuily-Sur-Seine", "Nice", "Rueil-Malmaison", "Romainville", "Lagnieu", "Sannois", "Arpajon-sur-Cère",
-              "Limeil-Brévannes", "Saint-Maur", "Miribel", "Caen", "Ivry-sur-Seine", "Noirmoutier en l'île", "Orsay", "Amiens", "Troyes", "Meung-sur-Loire", "Guipavas", "Auxerre", "Issy-les-Moulineaux", "Saint-Ouen")
 
-```
+### Le séparateur décimal (, ou . ?)
 
-36 communes pour 55 étudiants. 
+Sous Calc, l'astuce consiste à modifier les paramètres linguistiques.
+
+![](img/decimal.png)
+
+Pour un tableur, le chiffre se positionne à droite de la cellule, le texte à gauche.
+
+L'autre solution était d'utiliser le format excel.
+
 
 ### Commentaires généraux qui valent pour tous les exercices et surtout le DST
 
 
+#### De quoi on parle ?
+
+Attention à toujours définir sa donnée dés le départ, dans le cadre de notre cours,
+c'est la commune et son *département* puis l'agrégat choisi.
+
+
+
 #### Pour la forme 
+
+Ne jamais mettre un tableau de données dans sa copie !
+
+Ne jamais prendre en photo son écran !
 
 Le mieux traitement de texte dans lequel on insère un 
 graphique image.
 
 Attention aux nombreuses pages inutiles si on passe directement du tableur
 au traitement de texte.
+
+Soigner ses titres
+
+Par contre, pas de carte, ce n'est pas le sujet du cours.
+La discrétisation avec un logiciel SIG est souvent automatisée, et ce cours permet
+de faire les choses *à la main*.
+
 
 
 #### Concision du commentaire
@@ -153,15 +184,15 @@ même si, un strict respect de la consigne donnait :
 ![](img/tropTechnique.png)
 
 
-Prochain exercice, commentaire plus court. 2 phrases maximum, aller à l'essentiel.
+Prochain exercice, commentaire plus court. 2 phrases maximum, 1 page au total, aller à l'essentiel.
 
-*Il y a plus de petits bureaux de vote que de gros* (ou l'inverse)
+*Il y plus de grosses dépenses en fonctionnement que de petites* (ou l'inverse)
 
 Ou plus osé :
 
-*La ville ne maîtrise pas le nombre d'électeurs par bureaux de vote*
+*Certaines villes ne maîtrisent pas leurs dépenses de personnel*
 
-Ou plus profond, répondre à la question : quelle est la répartition idéale pour les bureaux de vote ? Est-ce que mon exemple le respecte ?
+Et préciser quelle ville est remarquable et pourquoi ?
 
 ![](img/oui.png)
 
@@ -172,10 +203,8 @@ Revenir sur le terme : formule *fréquence et son graphique*
 
 Diagramme de fréquence, histogramme...
 
-Le mieux : *Discrétisation des bureaux de vote en fonction des inscrits*
-(cf le manuel Béguin Pumain)
+Le mieux : *Discrétisation des dépenses de personnel en fonction des villes*
 
-![](img/raleigh.png)
 
 
 ### Plus précisemment
@@ -187,23 +216,26 @@ Il faut afficher les bornes.
   
   ![](img/faux.png)
 
+*Bug* repéré sous Libre Office
 
-Affichage de l'histogramme dans R
-
-```{r}
-data <- read.csv("data/bondy2022.csv")
-hist(data$Inscrits)
-```
+Une solution, afficher les étiquettes sur les barres
 
 
-
-![](img/inscrits2002.png)
-
-
-#### Quelle opération fallait-il faire sur le fichier 2002 ?
+![](img/etikok.png)
 
 
-![](img/miseEnFormeDonnee.png)
+
+
+
+### Autres méthodes
+
+Une méthode différente est valide également (le tableau croisé dynamique)
+
+![](img/excel.png)
+
+
+
+
 
 
 
@@ -217,69 +249,67 @@ Ils servent à résumer la série statistique
 
 Nous allons montrer comment calculer médiane, moyenne et écart type dans le tableur. 
 
-Pour l'exemple, on prend la commune choisie l'abstention (votants / inscrits) puis tous les résultats des candidats dans
-chaque bureau de vote.
+Pour l'exemple, on prend l'agrégat financier de l'exercice : celui des frais du personnel.
+
+Afin de pouvoir comparer les communes de taille différente, on utilise plutôt les montants par habitant.
+
+![](img/agregat.png)
 
 
 ```{r}
-bondy2002 <- read.csv("data/bondy2002.csv", fileEncoding = "UTF-8")
-str(bondy2002)
-table(bondy2002$bv)
-# extraction abstention
-data <- bondy2002 [bondy2002$nom == "MEGRET",]
-png("img/inscrits2002.png")
-inscrits <- data$inscrits
-hist(inscrits)
-dev.off()
-abs <- round( (data$votants / data$inscrits) *100, 0)
-write.csv(abs,"data/abstention2002.csv", 
-          fileEncoding = "UTF-8")
+data <- read.csv2("data/fraisPersonnel.csv", dec= ".", fileEncoding = "UTF-8")
+str(data)
+hist(data$montant.par.hbt, freq = FALSE)
+lines(density(data$montant.par.hbt), col="red", lwd = 2)
 ```
 
-Le tableau de 2002 se présente différemment de celui de 2022.
 
-## Calcul :  valeurs centrales et dispersion
 
-### Valeurs centrales : moyenne et médiane
+
+## Valeurs centrales : moyenne et médiane
 
 Il s'agit de caractériser une distribution par son centre.
 
-#### Calcul
+### Calcul
 
 Le calcul de la moyenne est connu. Celui de la médiane beaucoup moins.
 
 Sur le tableau complet, créer une colonne rang. Et relever le rang médian
 
-![](img/mediane.jpg)
+![](img/mediane.png)
 
 
 
 
-#### Savoir faire tableur
+### Savoir faire tableur
 
-- valeur fixe et relative (utilisation du $ et F4)
+- nommer la plage de données 
 
-- au niveau graphique, rajout d'un axe par le menu insertion après double clic sur 
-le graphique (onglet positionnement, menu déroulant valeur)
+![](img/nom.png)
+### Représentation graphique
+
+Elle consiste à tracer moyenne et médiane sur le graphique, elle n'est pas possible
+sous le tableur.
+
+
 
 ```{r}
-moy <- mean(abs)
-med <- median(abs)
-hist(abs, main = "Distribution des abstentions")
+moy <- mean(data$montant.par.hbt)
+med <- median(data$montant.par.hbt)
+hist(data$montant.par.hbt, main = "Distribution des dépenses de personnel par hbt")
 abline(v = moy, col = 'blue')
 abline(v = med, col = 'red')
 ```
 
-Pour la variable abstention, quelle est l'indicateur le plus utile ?
+Pour la variable *dépense de personnel*, quelle est l'indicateur le plus utile ?
 
-#### Que retenir ?
+### Que retenir ?
 
 ##### Expliquer ces phrases issues du Chadule
 
 - La médiane est dans une distribution la valeur la plus *proche* de toutes les autres
 
-Il s'agit d'une propriété mathématique de la médiane. Si la distribution est disymétrique, cette valeur est le vrai centre de 
-la distribution.
+Il s'agit d'une propriété mathématique de la médiane. Si la distribution est disymétrique, cette valeur est le vrai centre de la distribution.
 
 - les valeurs extrêmes *décentrent* la moyenne
 
@@ -293,16 +323,36 @@ Que peut-on dire de la forme de la distribution
 
 -  si médiane > moyenne
 
+Démonstration avec les agrégats du 93
+
 
 ```{r}
-candidat <- unique(bondy2002$nom)
-png("img/medmoy.png")
-par(mfrow=c(4,4))
-for (i in 1:length(candidat)){
-  tmp <- bondy2002 [bondy2002$nom == candidat [i],]
-  moy <- mean(tmp$nb)
-  med <- median(tmp$nb)
-  hist(tmp$nb, main = candidat  [i])
+data <- read.csv("data/data93.csv")
+# liste des agrégats
+names(data)
+table(data$Exercice)
+# filtre sur le budget principal et l'année
+table(data$Type.de.budget)
+data <- data [data$Exercice == 2018 & data$Type.de.budget == 'Budget principal', c("Nom.2024.Commune", "Agrégat", "Montant.en...par.habitant" )]
+# simplification des noms des colonnes
+names(data) <- c("ville", "agregat","montant")
+agregat <- names(table(data$agregat))
+table(data$ville)
+```
+
+
+```{r}
+png("img/medmoy.png", width = 1200, height = 1200, res=90)
+par(mfrow=c(7,7))
+i <- 1
+for (i in 1:length(agregat)){
+  tmp <- data [data$agregat == agregat [i],]
+  moy <- mean(tmp$montant)
+  med <- median(tmp$montant)
+  sigma <- sd(tmp$montant)
+  mar = c(2,2,2,2)
+  titre <- paste0(substring(agregat [i], 1, 15),"\n",round(sigma,0))
+  hist(tmp$montant, main = titre, font.main=1,  xlab = "")
   abline(v = moy, col = 'blue')
   abline(v = med, col = 'red')
 }
@@ -310,28 +360,64 @@ dev.off()
 ```
 
 ![](img/medmoy.png)
+moyenne en bleue, médiane en rouge
 
-Chercher à caractériser les voix pour les différents candidats en fonction de la médiane / moyenne
+Chercher un ou deux agrégats pour lequel médiane et moyenne sont différentes.
 
-### Dispersion : Ecart-type et variance
+
+```{r}
+par(mfrow=c(1,2))
+# moyenne > médiane
+agregat [43]
+tmp <- data [data$agregat == agregat [43],]
+hist(tmp$montant, main = agregat [43])
+moy <- mean(tmp$montant)
+med <- median(tmp$montant)
+abline(v = moy, col = 'blue')
+abline(v = med, col = 'red')
+# également
+agregat [37]
+tmp <- data [data$agregat == agregat [37],]
+hist(tmp$montant, main = agregat [37])
+moy <- mean(tmp$montant)
+med <- median(tmp$montant)
+abline(v = moy, col = 'blue')
+abline(v = med, col = 'red')
+```
+
+
+## Dispersion : Ecart-type et variance
 
 La distribution est-elle hétérogène ?
 
 ```{r}
-png("img/ecartType.png")
-par(mfrow=c(4,4))
-for (i in 1:length(candidat)){
-  tmp <- bondy2002 [bondy2002$nom == candidat [i],]
-  sigma <- sd(tmp$nb)
-  med <- median(tmp$nb)
-  hist(tmp$nb, main = paste0(candidat  [i], " ", round(sigma,0)))
-}
-dev.off()
+agg <- aggregate(data$montant, by = list(data$agregat), sd)
+names(agg) <- c("agregat", "sigma")
+hist(agg$sigma)
+moy <- mean(agg$sigma)
+med <- median(agg$sigma)
+abline(v = moy, col = 'blue')
+abline(v = med, col = 'red')
+```
+
+Commenter l'écart type le plus élevé
+
+```{r}
+agg$agregat [agg$sigma == max(agg$sigma)]
+sel <- agregat [23]
+tmp <- data [data$agregat == sel,]
+hist(tmp$montant, 
+     main = paste0
+      (sel,"\n",
+        round(sd(tmp$montant),0)))
+moy <- mean(tmp$montant)
+med <- median(tmp$montant)
+abline(v = moy, col = 'blue')
+abline(v = med, col = 'red')
+knitr::kable(tmp [order(tmp$montant), c(1,3)])
 ```
 
 
-![](img/ecartType.png)
-Commenter l'écart type le plus élevé
 
 #### 2 définitions : 
 
@@ -370,7 +456,7 @@ liste des colonnes :
 
 
 
-### Corrections quelques remarques 
+### Corrections quelques remarques (attention correction exercice 2023) 
 
 L'objectif de l'exercice était d'obtenir un commentaire clair avec quelques repères statistiques.
 
