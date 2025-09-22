@@ -4,15 +4,18 @@ mots de passe
 8h-Lundi
 9h30-Lundi
 17h30-Vendredi
+
+
+
 ---------------------------------------------------
 
 correction exercice
 
 télécharger la donnée sur le site de l'ofcl
 
-exercice suivant : 2 pts attention
+exercice suivant : 2 pts attention nom fichier
 
-indicateurs centraux :
+indicateurs centraux et de dispersion :
 
 - calcul moyenne et médiane
 
