@@ -9,7 +9,7 @@ mots de passe
 
 ---------------------------------------------------
 
-correction exercice
+correction exercice (pour le C3 - attention à la source et au pdf voir avec Samuel / Latex)
 
 télécharger la donnée sur le site de l'ofcl
 

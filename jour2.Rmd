@@ -34,12 +34,12 @@ Comprendre la différence entre l'histogramme et le graphique à barres, c'est d
 entre les deux types de variables.
 
 ```{r}
-bondy2002 <- read.csv2("data/bondy_2002.csv", fileEncoding = "UTF-8")
-chirac <- bondy2002 [bondy2002$nom == "CHIRAC", c("bv", "nb")]
-rownames(chirac) <- chirac$bv
+data <- read.csv2("data/fraisPersonnel.csv", fileEncoding = "UTF-8", dec = ".")
 par(mfrow = c(2,1))
-hist(chirac$nb, main = "fréquence absolue", xlab = "classes", ylab="effectif" )
-barplot(chirac$nb, names.arg= chirac$bv,main = "distribution", xlab = "bv", ylab = "nb votes")
+par(mar = c(4,4,2,2))
+hist(data$montant.par.hbt, main = "fréquence absolue", xlab = "classes", ylab="effectif" , border = NA)
+par(mar = c(8,4,2,2))
+barplot(data$montant.par.hbt, names.arg= data$Nom,main = "distribution", xlab = "", ylab = "frais personnel (€ / hbt", las=2, cex.names =  0.6, border = NA)
 ```
 
 

@@ -132,6 +132,7 @@ L'histogramme souligne l'originalité d'Aulnay sous bois par rapport autres comm
 Des retours très nombreux (46 sur 60). Beaucoup d'étudiants ont buté sur la difficulté de la numérotation décimale et ont utilisé le fichier vu en classe, pas de problème dans le cadre d'un exercice.
 
 
+
 ### Le séparateur décimal (, ou . ?)
 
 Sous Calc, l'astuce consiste à modifier les paramètres linguistiques.
@@ -148,8 +149,11 @@ L'autre solution était d'utiliser le format excel.
 
 #### De quoi on parle ?
 
-Attention à toujours définir sa donnée dés le départ, dans le cadre de notre cours,
-c'est la commune et son *département* puis l'agrégat choisi.
+Attention à toujours définir sa donnée dés le départ y compris sa source.
+
+![](img/deQuoi.png)
+Dans le cadre de notre cours,
+c'est la commune et son *département* (ou *sa communauté de communes*) puis l'agrégat choisi.
 
 
 
@@ -159,11 +163,14 @@ Ne jamais mettre un tableau de données dans sa copie !
 
 Ne jamais prendre en photo son écran !
 
-Le mieux traitement de texte dans lequel on insère un 
-graphique image.
+Le mieux *traitement de texte* dans lequel on insère un 
+graphique image (copie d'écran CTRL + MAJ + S puis CTRL + V pour coller), puis
+enregistrement en .pdf au final.
 
 Attention aux nombreuses pages inutiles si on passe directement du tableur
 au traitement de texte.
+
+
 
 Soigner ses titres
 
@@ -227,7 +234,7 @@ Une solution, afficher les étiquettes sur les barres
 
 
 
-### Autres méthodes
+#### Autres méthodes
 
 Une méthode différente est valide également (le tableau croisé dynamique)
 
@@ -527,7 +534,7 @@ Dans les 2 cas, on analyse la médiane, c'est elle qui est la valeur centrale la
 
 - Attention, ce n'est pas parce que médiane et moyenne se confondent que l'écart type est petit...
 
-ex : vote pour un candidat clivant mais peu réprésentatif : 10 voix par bureau en moyenne.
+ex : vote pour un candidat clivant mais peu représentatif : 10 voix par bureau en moyenne.
 mais 5 bureaux avec 20 voix et 5 autres avec 0 voix
 Dans ce cas, la valeur de la moyenne (10) est égale à celle de l'écart type.
 
