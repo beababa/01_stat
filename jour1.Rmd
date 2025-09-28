@@ -440,7 +440,6 @@ https://qastack.fr/stats/118/why-square-the-difference-instead-of-taking-the-abs
 et notamment, pour l'oeil du géographe :
 
 
-
 *Une façon de penser à cela est que l’écart-type est similaire à une "distance par rapport à la moyenne".*
 
 *Comparez cela à des distances dans un espace euclidien - ceci vous donne la vraie distance, où ce que vous avez suggéré (qui, en fait, est la déviation absolue ) ressemble plus à un calcul de distance manhattan .*
@@ -463,82 +462,80 @@ liste des colonnes :
 
 
 
-### Corrections quelques remarques (attention correction exercice 2023) 
+### Corrections quelques remarques
 
 L'objectif de l'exercice était d'obtenir un commentaire clair avec quelques repères statistiques.
 
-![](img/bonmed.png)
+#### Forme
 
-![](img/indicComplet.png)
-![](img/indicAppui.png)
-
+A ne pas séparer du fond bien sûr ! 
 
 
+##### Le graphique
 
-##### Quelles erreurs  ?
+Il ne fallait pas tracer la médiane et la moyenne sur le tableur. Certains l'ont fait mais sous Excel voire autre ?
 
-
-##### Facile à évaluer
-
-- Mise en forme : zéro
-
-Pas d'export direct de vos tableaux excel, svp !
-
-étudiants exportant leur .pdf en entier 5
-
-1 page suffit, quelques lignes de commentaire pas technique
-
-A l'inverse, penser quand même à mettre ville, année, et candidat
+![](img/forme_presentationGraphique.png)
+##### Aspect général
 
 
-- Pas de respect de la consigne : zéro
+Un simple titre au graphique peut suffire
 
-exemple : variable des inscrits, graphique de la fréquence.
+![](img/forme_titregraphique.png)
 
+de type : chiffres / description / analyse
 
-* Le plus original :
+![](img/forme_organisation.png)
 
-![](img/indicOriginal.png)
-
-Pourquoi prendre le carré des moyennes ?
-
-* le plus incompréhensible :
-
-![](img/mauvaisindic.png)
-
-* attention aux commentaires trop techniques
+#### Problèmes de français (perles)
 
 
-![](img/indicTechnique.png)
+![](img/forme_pasClair.png)
 
-##### Non pris en compte
-
-- Affichage de la médiane : ce n'est pas très facile sous le tableur.
+![](img/forme_pasClair2.png)
 
 
-- graphique du TIG et forme de la distribution
-
-Attention, le graphique du TIG ne permet pas de voir la forme de la distribution.
-
-Du coup, sans doute beaucoup d'étudiants n'ont pas osé parler de symétrie / dissymétrie. 
-
-Le candidat a un petit nombre de votes dans beaucoup de bureaux, les valeurs faibles tirent la moyenne vers le bas,  moyenne < médiane (cas Taubira)
-Le candidat a un grand nombre de votes dans beaucoup de bureaux, les valeurs fortes tirent la moyenne vers le haut,  moyenne > médiane (cas Chevènement)
-
-Dans les 2 cas, on analyse la médiane, c'est elle qui est la valeur centrale la plus représentative.
-
-##### Erreurs intéressantes par rapport à l'écart type
 
 
-- Sauf cas extrême, L'écart type ne peut pas avoir le même ordre de grandeur que la moyenne / médiane.
+#### Fond : Quelles erreurs  ?
 
-- Attention, ce n'est pas parce que médiane et moyenne se confondent que l'écart type est petit...
 
-ex : vote pour un candidat clivant mais peu représentatif : 10 voix par bureau en moyenne.
-mais 5 bureaux avec 20 voix et 5 autres avec 0 voix
-Dans ce cas, la valeur de la moyenne (10) est égale à celle de l'écart type.
+![](img/fond_faux.png)
+![](img/fond_faux2.png)
 
-- La taille de l'écart type est à rapporter à l'indicateur central pour qualifier son importance.
 
-ex : écart type 25 sur une moyenne autour de 100
+#### Fond : remarques intéressantes
+
+
+##### Décentrer la moyenne de...
+
+
+![](img/fond_decentrerLaModyenneDe.png)
+
+##### Analyse trop courte
+
+![](img/fond_plusloin.png)
+
+... Un peu mieux, mais Marnes-la-Coquette sous-analysé.
+
+![](img/fond_analysePb.png)
+
+##### Trop court
+
+![](img/fond_plusloin2.png)
+
+
+##### Impeccable
+
+Autrement dit l'analyse, ce n'est pas que des chiffres !
+
+![](img/fond_analyse.png)
+
+Bien définir son agrégat peut suffire
+
+![](img/fond_analyseOK.png)
+
+
+
+
 

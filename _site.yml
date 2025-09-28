@@ -7,9 +7,9 @@ navbar:
       href: jour1.html
     - text: "bivariées"
       href: jour2.html
-    - text: "khi 2"
+    - text: "régression "
       href: jour3.html   
-    - text: "régression"
+    - text: "khi2"
       href: jour4.html 
     - text: "examen"
       href: jour5.html 

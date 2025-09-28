@@ -15,7 +15,7 @@ knitr::opts_chunk$set(eval = TRUE)
 
 # Données d'exemple
 
-On travaille à présent sur un croisement de deux agrégats financiers.
+On travaille à présent sur un croisement de deux agrégats financiers. On récupère la donnée à partir de l'interface [les données de l'ofgl](https://data.ofgl.fr/explore/?exclude.theme=INTERNE&disjunctive.theme&disjunctive.publisher&disjunctive.keyword&sort=title) plutôt que celle de *la cartographie*.
 
 Comprendre les variables
 
@@ -24,12 +24,13 @@ Enoncer les hypothèses possibles de la comparaison, attention variable explicat
 (cf moodle exercice *Introduction = régression*)
 
 
-Pour le cours, l'hypothèse est que la non maîtrise des frais de personnel (x) amènent l'augmentation des impôts locaux (y) sur le 93 (budgets consolidés)
+Pour le cours, l'hypothèse est que la non maîtrise des frais de personnel (x) amène l'augmentation des impôts locaux (y) sur le 93 (budgets consolidés).
 
 
 ```{r, echo = F}
 data <- read.csv("data/data93_2024.csv", fileEncoding = "UTF-8", dec =".")
 noms <- names(table(data$Agrégat))
+# filtre
 data <- data [data$Agrégat %in% noms [c(36,38)], c(2,4,5)]
 # mise en forme 1 colonne par agrégat
 impots <- data [data$Agrégat == 'Impôts locaux',]
@@ -43,13 +44,11 @@ write.csv(data, "data/regression.csv", row.names = F)
 
 ## Quel agregat choisir ?
 
-Quel variable pour expliquer l'augmentation des impôts ?
+Quelle variable est liée aux frais de personnel (X) ?
 
-```{r, echo=F}
+```{r, echo=T}
 data <- read.csv("data/data93_2024.csv", row.names = 1,dec = ",")
 noms <- names(table(data$Agrégat))
-personnel
-n <- noms [1]
 png("img/agregatChoix.png", width = 2400, height = 2400, res = 100)
 par(mfrow = c(8,8))
 for (n in noms){
@@ -72,7 +71,7 @@ Attention, variable explicative et expliquée.
 
 Mise en forme du tableau 
 
-- tcd (données table dynamique dans Calc)
+- tcd le fameux tableau croisé dynamique (données table dynamique dans Calc)
 
 ![](img/tcd.png)
 
@@ -287,6 +286,11 @@ dev.off()
 
 
 ![](img/residusCarte.png)
+
+Tremblay et Rosny sous Bois sont écartées, elles ne correspondent pas du tout au modèle.
+
+Les villes dans les teintes les plus foncées s'éloignent le plus du modèle.
+
 
 
 
