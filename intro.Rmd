@@ -79,11 +79,9 @@ Il est plus facile d'utiliser l'[outil](https://data.ofgl.fr/pages/cartographie/
 
 ## Qui sont les étudiants ?
 
-- 80 étudiants sur 3 cours
+- 84 étudiants inscrits sur 3 cours (70 présents environ)
 
-Les questions posées sont sur le passé / présent / futur des étudiants, leur appétence en stats et 
-le nombre d'années depuis le dernier apprentissage.
-
+Les questions posées sont sur le passé / présent / futur des étudiants, leur appétence en stats
 
 ```{r}
 etudiant <-  read.csv("data/TD3_stats_2025.csv", fileEncoding = "UTF-8")

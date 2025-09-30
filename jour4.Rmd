@@ -23,6 +23,10 @@ hypothèse : relation entre les villes et les agrégats
 
 Deux distributions de variables de catégorie.
 
+Pour récupérer les données, utiliser le site de l'OFGL comme vu le cours précédent
+
+![](img/interfaceOFGL.png)
+
 ## Différentes étapes
 
 - Tableau de contingence
@@ -45,7 +49,7 @@ Utiliser l'outil de table dynamique (dans le menu données) pour le créer
 
 Résultat attendu :
 
-![](img/tcd.png)
+![](img/restcd.png)
 
 
 
@@ -71,23 +75,33 @@ Pour pouvoir comparer les villes, chaque groupe est ramené à une même base
 savoir-faire tableur
 
 - Objectif : saisir une seule cellule et étendre la formule.
-quelle élément fixer, ligne ou colonne ?
 
-- utilisation du %
+Quel élément fixer, ligne ou colonne ?(raccourci clavier F4)
+
+
+![](img/fixer.png)
+
+- utilisation du format %
 
 ![](img/frequenceLG.png)
 
 Analyse après avoir mis le format conditionnel.
 
-- répartition des candidats puis lorsque ramené à une base 100, on peut comparer entre les zones.
+- Quelles sont les agrégats qui varient le plus entre les villes ?
 
-- les écarts à la moyenne par candidat sont plus parlants
+Les écarts à la moyenne par candidat sont peut-être plus parlants
+
+- pour pouvoir raisonner sur le graphique, il est nécessaire de poser un filtre sur quelques villes déjà repérées pour leur originalité (exemple pour le 93 : Tremblay en France et Le Raincy)
+
+
+
+![](img/filtreGraphEcMoyenne.png)
 
 ![](img/ecMoyenne.png)
 
 Qu'apporterait une étude des fréquences conditionnelles en colonnes ?
 
-# Tableau de contingence : correction
+# Tableau de contingence : correction (attention correction 2023)
 
 ## Manipulation du tableau
 
@@ -225,7 +239,7 @@ Le test est rejeté avec un risque de 5 % mais on aurait pu aller jusqu'au risqu
 Donc, le dé est truqué.
 
 
-# Mise en pratique sur les résultats des votes 2002
+# Mise en pratique sur les agrégats financiers
 
 
 
@@ -233,7 +247,7 @@ Donc, le dé est truqué.
 
 ## Ennoncer l'hypothèse H0
 
-La répartition des votes entre les différents candidats est indépendant du bureau de vote.
+Il n'y a pas de lien entre les villes et la sélection d'agrégats financiers retenue.
 
 ## Effectif théorique
 
@@ -242,6 +256,9 @@ La première case reçoit la formule :
 - (total lg / total) * total colonne
 
 C'est ce qu'on appelle également le produit des marges
+
+
+![](img/prodMARGE.pngS)
 
 ![](img/effectifTheorique.png)
 
