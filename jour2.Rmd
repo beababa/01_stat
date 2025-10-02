@@ -73,7 +73,7 @@ hypothèse : groupe d'éudiants et notes finales
 
 
 ```{r, echo=FALSE}
-data <- read.table("data/exKHI2.csv", sep = ",", row.names =1 , col.names = c("oui","non") ,fileEncoding = "UTF-8")
+data <- read.table("data/exKHI2.csv", sep = ",", row.names = 1 , col.names = c("oui","non") ,fileEncoding = "UTF-8")
 knitr::kable(data)
 chisq.test(data)
 ```
