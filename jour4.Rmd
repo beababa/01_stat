@@ -6,6 +6,8 @@ output:
     toc: yes
 editor_options:
   chunk_output_type: console
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -18,8 +20,9 @@ knitr::opts_chunk$set(eval = TRUE)
 
 ## Données d'exemple
 
+hypothèse : relation entre les villes et le montant par habitant de quelques agrégats
 
-hypothèse : relation entre les villes et les agrégats
+l'hypothèse nulle (H~0~) : indépendance entre villes et agrégats
 
 Deux distributions de variables de catégorie.
 
@@ -27,19 +30,31 @@ Pour récupérer les données, utiliser le site de l'OFGL comme vu le cours pré
 
 ![](img/interfaceOFGL.png)
 
+Proposition d'agrégats :
+
+- Annuité de la dette	(= poids de la dette)
+
+- Dépenses d'équipement
+
+- Dotation globale de fonctionnement
+
+- Frais de personnel	
+
+- Impôts locaux
+
+Ces 5 agrégats sont représentatifs de l'état des finances de chaque commune.
+
 ## Différentes étapes
 
-- Tableau de contingence
+-   Tableau de contingence
 
-- calcul du khi2
+-   calcul du khi2
 
-- comparaison avec le khi2 théorique
-
+-   comparaison avec le khi2 théorique
 
 # Tableau de contingence
 
 Au sens anglais du terme, *ce qui peut exister*
-
 
 ## Création
 
@@ -51,14 +66,11 @@ Résultat attendu :
 
 ![](img/restcd.png)
 
-
-
 ## Analyse d'un tableau de contingence
 
-- Il faut présenter les sources, la structure et le contenu du tableau.
+-   Il faut présenter les sources, la structure et le contenu du tableau.
 
-- Lister les questions susceptibles d'être posées, notamment en étudiant les fréquences conditionnelles
-
+-   Lister les questions susceptibles d'être posées, notamment en étudiant les fréquences conditionnelles
 
 ### Format conditionnel
 
@@ -66,34 +78,33 @@ Résultat attendu :
 
 Cet outil est-il utile ici ?
 
+
 ### Fréquences conditionnelles en ligne et colonne
 
-Pour pouvoir comparer les villes, chaque groupe est ramené à une même base
-égale à 100.
-
+Pour pouvoir comparer les villes, chaque groupe est ramené à une même
+base égale à 100.
 
 savoir-faire tableur
 
-- Objectif : saisir une seule cellule et étendre la formule.
+-   Objectif : saisir une seule cellule et étendre la formule.
 
 Quel élément fixer, ligne ou colonne ?(raccourci clavier F4)
 
-
 ![](img/fixer.png)
 
-- utilisation du format %
+-   utilisation du format %
 
 ![](img/frequenceLG.png)
 
 Analyse après avoir mis le format conditionnel.
 
-- Quelles sont les agrégats qui varient le plus entre les villes ?
+-   Quelles sont les agrégats qui varient le plus entre les villes ?
 
-Les écarts à la moyenne par candidat sont peut-être plus parlants
+Les écarts à la moyenne par agrégat sont peut-être plus parlants
 
-- pour pouvoir raisonner sur le graphique, il est nécessaire de poser un filtre sur quelques villes déjà repérées pour leur originalité (exemple pour le 93 : Tremblay en France et Le Raincy)
-
-
+-   pour pouvoir raisonner sur le graphique, il est nécessaire de poser
+    un filtre sur quelques villes déjà repérées pour leur originalité
+    (exemple pour le 93 : Tremblay en France et Le Raincy)
 
 ![](img/filtreGraphEcMoyenne.png)
 
@@ -105,35 +116,36 @@ Qu'apporterait une étude des fréquences conditionnelles en colonnes ?
 
 ## Manipulation du tableau
 
-Il fallait travailler sur les élections 2022. 
-Le tableau est présenté en longueur.
+Il fallait travailler sur les élections 2022. Le tableau est présenté en
+longueur.
 
 Pour pouvoir obtenir un tableau de contingence :
 
-- Récupérer le nom de chaque candidat avec une formule
+-   Récupérer le nom de chaque candidat avec une formule
 
+![](img/continRecup.png) - faire une recopie incrémentée sur la droite
 
-![](img/continRecup.png)
-- faire une recopie incrémentée sur la droite
+-   transposer le tableau et faire une copie spéciale valeurs uniquement
+    (CTRL + MAJ + V)
 
-- transposer le tableau et faire une copie spéciale valeurs uniquement (CTRL + MAJ + V)
-
-- poser un filtre et récupérer uniquement les noms des candidats
+-   poser un filtre et récupérer uniquement les noms des candidats
 
 ![](img/continFiltre.png)
 
-- ne pas oublier de faire un copier - coller du tableau final en transposant
+-   ne pas oublier de faire un copier - coller du tableau final en
+    transposant
 
 ## Correction rapide
 
 ### Description de la donnée
 
-Il s'agit des résultats de la présidentielle sur 2022 à Bondy (chiffres du ministère de l'intérieur via data.gouv.fr)
+Il s'agit des résultats de la présidentielle sur 2022 à Bondy (chiffres
+du ministère de l'intérieur via data.gouv.fr)
 
 La donnée comporte 2 variables :
 
-- les 32 bureaux de vote
--  les 12 candidats
+-   les 32 bureaux de vote
+-   les 12 candidats
 
 ### Graphique
 
@@ -141,19 +153,21 @@ La donnée comporte 2 variables :
 
 Remarquer le titre
 
-au niveau de la présentation des séries, la boite de dialogue *plages de données* permet de classer les séries
+au niveau de la présentation des séries, la boite de dialogue *plages de
+données* permet de classer les séries
 
 ![](img/continEtik.png)
 
 ### Analyse
 
-Sur les 12 candidats, 3 arrivent en tête dans tous les bureaux avec cependant un 
-vote majoritaire pour Mélenchon dans l'échantillon des 4 bureaux. Les voies se répartissent de manière quasiment homogène sur les 9 autres candidats.
-Même si les bureaux restent différents, les répartitions des votes se ressemblent. Les différences entre bureaux étaient plus marquées en 2002.
-
+Sur les 12 candidats, 3 arrivent en tête dans tous les bureaux avec
+cependant un vote majoritaire pour Mélenchon dans l'échantillon des 4
+bureaux. Les voies se répartissent de manière quasiment homogène sur les
+9 autres candidats. Même si les bureaux restent différents, les
+répartitions des votes se ressemblent. Les différences entre bureaux
+étaient plus marquées en 2002.
 
 ### Observations sur les villes choisies
-
 
 ```{r, eval =F}
 library(sf)
@@ -170,8 +184,6 @@ for (i in 1:nb) {
 }
 ```
 
-
-
 # Khi2 : un exemple sur un dé truqué
 
 Le dé est-il truqué ?
@@ -187,12 +199,12 @@ Le nombre total de lancers est de 60.
 
 ## Hypothèse d'indépendance
 
-hypothèse H0 : le dé n'est pas truqué (il y a indépendance entre la face et le
-nombre de fois où elle sort)
+hypothèse H~0~ : le dé n'est pas truqué (il y a indépendance entre la
+face et le nombre de fois où elle sort)
 
 ## Effectifs théoriques
 
-Sur le total des lancers (60), chaque face aurait pû sortir 10 fois.
+Sur le total des lancers (60), chaque face pourrait sortir 10 fois.
 
 ```{r}
 effectifThéorique <- rep (10,6)
@@ -206,7 +218,8 @@ distance entre effectifs théoriques et observés
 
 Elle se mesure avec le khi2
 
-On calcule l'écart, puis le carré de cet écart et on pondère par l'effectif théorique.
+On calcule l'écart, puis le carré de cet écart et on pondère par
+l'effectif théorique.
 
 ```{r, echo = T}
 (ecart <- df$effectif - df$effectifThéorique)
@@ -219,33 +232,44 @@ On calcule l'écart, puis le carré de cet écart et on pondère par l'effectif 
 
 ### Paramètres du test
 
-- degré de liberté : 5
+-   degré de liberté : 5
 
-C'est le nombre de valeurs possibles -1 (car on peut déterminer la 6e valeur à partir des 5 autres)
+C'est le nombre de valeurs possibles -1 (car on peut déterminer la 6e
+valeur à partir des 5 autres)
 
-- Pour un risque à 0,05 (5 chances sur 100 de se tromper)
+-   Pour un risque à 0,05 (5 chances sur 100 de se tromper)
 
 ### Résultat
 
 Lecture dans la table du khi2
 
-![](img/khi2table.png)
-le khi2 théorique est de 11,7, il est donc inférieur au khi2 observé.
+![](img/khi2table.png) 
+
+Le khi2 théorique est de 11,07, il est donc
+inférieur au khi2 observé (13,6).
 
 Quand le khi2 théorique est inférieur, le test est rejeté.
 
-Le test est rejeté avec un risque de 5 % mais on aurait pu aller jusqu'au risque de 2.5 % (1 chance sur 25)
+Le test est rejeté avec 
+
+- un risque de 5 % (on se trompe 5 fois sur 100) 
+
+- mais on aurait pu aller jusqu'au risque de 2.5 % (2,5 chances de se tromper sur 100)
 
 Donc, le dé est truqué.
+
+Version R
+
+
+```{r}
+df
+chisq.test(df [, 2])
+```
 
 
 # Mise en pratique sur les agrégats financiers
 
-
-
-
-
-## Ennoncer l'hypothèse H0
+## Ennoncer l'hypothèse H~0~
 
 Il n'y a pas de lien entre les villes et la sélection d'agrégats financiers retenue.
 
@@ -253,7 +277,7 @@ Il n'y a pas de lien entre les villes et la sélection d'agrégats financiers re
 
 La première case reçoit la formule :
 
-- (total lg / total) * total colonne
+-   (total lg / total) \* total colonne
 
 C'est ce qu'on appelle également le produit des marges
 
@@ -262,37 +286,39 @@ C'est ce qu'on appelle également le produit des marges
 
 ![](img/effectifTheorique.png)
 
-
-
 ## Ecarts entre observés et théoriques
 
 Que signifie une valeur zéro ?
 
 Utiliser la notion
 
-- sur représentation / sous représentation
-
+-   sur représentation / sous représentation
 
 ![](img/ecartsTableauComplet.png)
 
-Sur les bureaux 1 et 2, on observe une sur-représentation de Bayrou et une sous-représentation
-de Taubira. (en principe, les bureaux 1 et 2 sont plutôt au centre ville)
+Sur Tremblay, on observe une sur-représentation des impôts locaux et des
+frais de personnel et une sous-représentation de la DGF. C'est le
+contraire sur Clichy sous Bois. On voit également bien l'importance des
+impôts locaux au Raincy.
 
+A noter que la ville d'Aulnay sous Bois se rapproche du modèle défini
+par le hasard.
 
-## Le Khi2 
+Bref, les villes semblent très différentes.
+
+## Le Khi2
 
 Le khi2 va permettre de valider le rejet de l'hypothèse d'indépendance.
 
-rappel : métrique euclidienne plutôt que les valeurs absolues on utilise les carrés
-
+rappel : métrique euclidienne plutôt que les valeurs absolues on utilise
+les carrés
 
 ### Le Khi2 partiel
 
-- On met les écarts rapportés à la valeur théorique d'indépendance au carré (on mesure ainsi une *distance*)
+-   On met les écarts rapportés à la valeur théorique d'indépendance au
+    carré (on mesure ainsi une *distance*)
 
-- on divise par l'effectif théorique (on relativise)
-
-
+-   on divise par l'effectif théorique (on relativise)
 
 ![](img/khi2partiel.png)
 
@@ -300,214 +326,104 @@ rappel : métrique euclidienne plutôt que les valeurs absolues on utilise les c
 
 C'est le total des khi2 partiels (dans notre exemple 768)
 
-
 ![](img/khi2Total.png)
+
+Ici le montant du khi2 est très élevé.
+On sait tout de suite qu'il sera supérieur au khi2 théorique.
+
+Quel est le maximum dans le tableau ?
+
+
+### Test du Khi2
 
 On définit :
 
-- degré de liberté
-lg -1 * col -1
+-   degré de liberté lg -1 \* col -1
 
-16 candidats et 17 bureaux
+5 agrégats et 40 villes
+
+```{r}
+4*39
+```
+
+Le risque est extrêmement faible puisque nous sommes hors tableau.
+
+-   risque 1, 5 et 10 %
+
+Sur internet, dans n'importe quelle table, on cherche les valeurs
+correspondantes.
+
+<https://jeanpaullaurent.fr/media/docetud/table_khi2_complete.pdf>
 
 
-- risque 1, 5 et 10 %
 
-Sur internet, dans n'importe quelle table, on cherche les valeurs correspondantes.
-
-https://jeanpaullaurent.fr/media/docetud/table_khi2_complete.pdf
-
-Comme le nombre de degrés de liberté est important, on peut aussi utiliser la formule du tableur
-
-![](img/khi2Test.png)
 
 
 ### Rejet de H0 ou pas
 
-
 HO hypothèse d'indépendance. son rejet implique qu'il y a une relation.
 
-Les variables bureau de vote et candidats ont une relation avec une marge d'erreur très faible puisque le khi2 augmente quand le risque d'erreur baisse.
+Les villes et les agrégats financiers ont une relation avec une marge
+d'erreur faible puisque le khi2 augmente quand le risque d'erreur
+baisse.
 
-Les logiciels de stats proposent le risque limite, la valeur de bascule entre le rejet et l'acceptation de l'hypothèse nulle.
-
-
-
-# Correction exercice
-
-Rappel de la consigne 
-
-Sur votre commune, pour 2002 et 2022, recoder les données et faire le khi2 pour les 2 élections afin de montrer l'existence d'une relation entre les bureaux de vote et les tendances politiques.  Commenter les contributions au khi2 si c'est le cas.
-
-rendu : un .pdf avec votre prénom comportant 
-
-    - la justification du recodage
-    
-    - les 2 exemples de khi2 partiels,
-    
-    - les 2 tests d'indépendance,
-    
-    - et le commentaire.
-    
-
-Privilégier les termes : variable, catégorie, individu, distance, H0, indépendance, risque d’erreur.
+Les logiciels de stats proposent le risque limite, la valeur de bascule
+entre le rejet et l'acceptation de l'hypothèse nulle.
 
 
+# Sous R, vérification des calculs
 
-
-
-
-
-
-
-## données 2022 et 2002
+Constitution de la table de contingence
 
 ```{r}
-tab2022 <- read.table("data/tabBondy2022.csv", row.names = 1,header = T, sep = ",", fileEncoding = "UTF-8")
-tab2002 <- read.csv("data/bondy2002.csv")
-tab2002 <- xtabs(tab2002$nb~tab2002$bv+tab2002$nom)
-knitr::kable(head(tab2002), caption = "2002")
-knitr::kable(head(tab2022), caption = "2022")
-```
-
-On remarque en passant que les ordres de grandeur des votes sont différents.
-Il y a moins de voix exprimées en 2022 qu'en 2002.
-
-## Recodage
-
-Le recodage se fait entre petits et grands en fonction des résultats nationaux
-
-
-```{r, echo=T}
-names(tab2022) <- c("petit gauche", "petit gauche", "droite", "petit droit", "droite", "petit droit", "gauche", "petit gauche", "petit gauche", "petit droit",
-                    "petit gauche", "petit droit")
-categ <-unique(names(tab2022))
-colnames(tab2002) <- c("petit droit", "petit gauche", "petit droit", "petit gauche", "droite", "petit gauche", "gauche", "gauche", "petit gauche", "droite", "petit gauche", "petit droit", "petit gauche", "petit droit", "petit droit", "gauche")
-```
-
-
-## Agrégation données
-
-On somme les colonnes ayant le même terme, c'est une agrégation.
-
-```{r}
-# fonction pour sommer les colonnes correspondant au tendance
-grouperCol <- function(col, tab){
-  ind <-grep(col,colnames(tab))
-  if (length(ind) > 1){
-    v <- rowSums(tab [, ind])
-  }else{
-    v <- tab [,ind]
-  }
-  return(v)
+data <- read.csv("data/data93_2024.csv")
+data <- data [, c("Nom.2024.Commune", "Agrégat", "Montant.en...par.habitant")]
+agregat <- names(table(data$Agrégat))
+agregat <- agregat [c(2,14, 23, 36, 38)] 
+data <- data [data$Agrégat %in% agregat,]
+jointure <- data [data$Agrégat == agregat [1], c(1,3)]
+names(jointure) [2] <- agregat [1]
+agregat <- agregat [-1]
+for (a in agregat){
+  tmp <- data [data$Agrégat == a, c(1,3)]
+  names(tmp) [2] <- a
+  jointure <- merge(jointure, tmp, by="Nom.2024.Commune")
 }
-# liste pour manipuler les 2 tableaux
-nomTab <- c("tab2002", "tab2022")
-ltab <- list(tab2002,tab2022)
-for (i in c(1:2)){
-tab <- ltab [[i]]  
-df <- NULL
-  for (j in  (1:4)){
-    v <- grouperCol(categ [j], tab )
-    df <- cbind(v, df)
-  }
-df <- as.data.frame(df)
-names(df) <- rev(categ)
-assign(nomTab [i], df)
-}
-write.table(tab2022,"data/tab2022Tendance.csv")
-write.table(tab2002, "data/tab2002Tendance.csv")
+summary(jointure)
 ```
-
-
-```{r}
-tendance2022 <- read.table("data/tab2022Tendance.csv")
-tendance2002 <- read.table("data/tab2002Tendance.csv")
-knitr::kable(head(tendance2022), caption = "Début 2022", row.names = T)
-knitr::kable(head(tendance2002), caption = "Début 2002", row.names = T)
-```
-
-
-La différence d'ordre de grandeur est ici flagrante...
-
-```{r}
-tab <- list(tendance2002, tendance2022)
-ltest <- lapply(tab, chisq.test)
-names (ltest) <- c("election 2002","election 2022")
-ltest
-```
-
-Mais il y a indépendance bureau de vote et candidats en 2002 comme en 2022.
-
-
-## Analyse des khi2 partiels
-
-Les tableaux pouvaient être affichés, mais on pouvait penser à afficher la distribution des khi2 partiel (en % du total)
-
-```{r}
-par(mfrow= c(2,1))
-khi2Partiels <- function(test){
-  res <- round(
-    apply( (test$expected - test$observed) ^2/test$expected, 1,sum)
-    ,0)
-  resPtc <- (res / sum(res)) * 100
-}
-res <-lapply(ltest, khi2Partiels)
-knitr::kable(res$`election 2002`, col.names = "khi2 partiel", caption = "2002", row.names = T)
-knitr::kable(res$`election 2022`, col.names = "khi2 partiel", caption = "2022")
-hist(res$`election 2002`, main = "2002", xlab = "contrib khi2 (%)", ylab = "Effectif")
-hist(res$`election 2022`, main = "2022", xlab = "contrib khi2 (%)", ylab = "Effectif")
-```
-
-Dans les deux cas, il y a beaucoup de bureaux qui sont proches de l'indépendance.
-En 2002, la dispersion est plus importante. Donc 3 bureaux ont un profil très spécifiques.
-En 2022, un seul bureau est important pour la spécificité des résultats de l'élection.
-Il s'agit du bureau 5. La caractéristique est d'avoir une polarisation des voix de gauche par rapport aux autres bureaux bondynois.
-
-```{r}
-tendance2022 <- read.table("data/tab2022Tendance.csv")
-tendance2022$b.vote <- rownames(tendance2022)
-knitr::kable(tendance2022 [tendance2022$b.vote %in% c(5, 14, 24),] , row.names = F)
-```
-
-Le bureau 24 apporte une plus forte contribution au modèle observé que le bureau 14.
-La droite représente 1/3 de la gauche et les petits candidats ont moins de voix.
-Le bureau 14 est plus proche de l'indépendance, la droite représente la moitié de la gauche et les petits candidats ont un peu plus de voix.
-
-
-# Complément cartographique
-
-
-
-Une cartographie semble intéressante mais seuls les périmètres de 2022 sont connus.
 
 
 
 ```{r}
-vecteur <- res$`election 2022`
-df <- data.frame(bv = names(vecteur),
-                 contrib = vecteur, row.names = NULL)
-hist(df$contrib)
-bks <- c(0,4,10, 16)
+(test <- chisq.test(jointure [,-1]))
+
+```
+
+
+
+```{r}
+distance <- (test$observed - test$expected)^2/test$observed
+khi2Partiel <- apply(distance,1, sum)
+khi2 <- sum(khi2Partiel)
+contribution <- round((khi2Partiel/khi2)*100, 1)
+```
+
+carto
+
+```{r}
+hist(contribution)
+name <- jointure$Nom.2024.Commune
+df <- data.frame(name, contribution)
 library(sf)
 library(mapsf)
-png("img/khi2Carte.png")
-bv <- st_read("data/vote.gpkg", "bureauPolyZone", quiet=T)
-jointure <- merge(bv, df, by.x ="numBureau", by.y="bv")
-#jointure$num <- rownames(jointure)
-mf_init(bv)
-mf_map(jointure, type = "choro", border = "antiquewhite2", var = "contrib", breaks = bks ,leg_val_rnd = 0,add = T)
-mf_label(jointure, var = "numBureau", overlap = FALSE, col= "white",bg ="black", halo = T, cex = 0.8)
-mf_layout("Votes par bureau 2022 : contribution au chi2", credits = "data.gouv")
-dev.off()
+geo <- st_read("data/communes93.geojson")
+geo <- geo [!is.na(geo$ref.INSEE), c("name", "ref.INSEE")]
+mf_map(geo)
+jointure <- merge(geo [, c("name")], df, all.x=T, by = "name")
+mf_choro(jointure, var = "contribution", border = NA, leg_pos = "right")
+mf_label(jointure, var="name", cex = 0.4, overlap = F)
+mf_layout("Contribution au khi2", "OFGL 2024" )
 ```
-
-![](img/khi2Carte.png)
-
-Cette carte permet de situer précisemment les bureaux qui s'écartent le plus de modèle bondinois, en l’occurrence, il s'agit d'abord du bureau 5. On peut imaginer soit un trucage de l'élection, soit les efforts d'un groupe militant spécifique.
-
-Ce qui est intéressant ici est que ces bureaux sont situés sur l'ensemble du 
-territoire de la commune, dans les zones pavillonnaires.
 
 
 
@@ -521,19 +437,13 @@ Comparaison des 2 tableaux
 Fréquence conditionnelle en ligne
 
 
-![](img/tabFreqLg.png)
-
+![](img/frequenceLG.png)
 
 La distance entre les données observées et théoriques
 
 ![](img/tabObsTheo.png)
 
 Estimation des écarts fondés sur la pondération des masses
-
-
-
-
-
 
 
 
