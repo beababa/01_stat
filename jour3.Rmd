@@ -17,6 +17,9 @@ knitr::opts_chunk$set(eval = TRUE)
 
 On travaille à présent sur un croisement de deux agrégats financiers. On récupère la donnée à partir de l'interface [les données de l'ofgl](https://data.ofgl.fr/explore/?exclude.theme=INTERNE&disjunctive.theme&disjunctive.publisher&disjunctive.keyword&sort=title) plutôt que celle de *la cartographie*.
 
+![](img/interfaceOFGL.png)
+
+
 Enoncer les hypothèses possibles de la comparaison, attention variable explicative (X) et à expliquer (Y)
 
 (cf moodle exercice *Introduction = régression*)
