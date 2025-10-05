@@ -461,7 +461,8 @@ div.tocify {
 <div id="données-dexemple" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Données
 d’exemple</h2>
-<p>hypothèse : relation entre les villes et les agrégats</p>
+<p>hypothèse : relation entre les villes et le montant par habitant de
+quelques agrégats</p>
 <p>l’hypothèse nulle (H<sub>0</sub>) : indépendance entre villes et
 agrégats</p>
 <p>Deux distributions de variables de catégorie.</p>
@@ -828,6 +829,9 @@ au carré (on mesure ainsi une <em>distance</em>)</p></li>
 <h3><span class="header-section-number">5.4.2</span> Le Khi2</h3>
 <p>C’est le total des khi2 partiels (dans notre exemple 768)</p>
 <p><img src="img/khi2Total.png" /></p>
+<p>Ici le montant du khi2 est très élevé. On sait tout de suite qu’il
+sera supérieur au khi2 théorique.</p>
+<p>Quel est le maximum dans le tableau ?</p>
 </div>
 <div id="test-du-khi2-1" class="section level3" number="5.4.3">
 <h3><span class="header-section-number">5.4.3</span> Test du Khi2</h3>
@@ -835,7 +839,10 @@ au carré (on mesure ainsi une <em>distance</em>)</p></li>
 <ul>
 <li>degré de liberté lg -1 * col -1</li>
 </ul>
-<p>4 agrégats et 40 villes</p>
+<p>5 agrégats et 40 villes</p>
+<pre><code>## [1] 156</code></pre>
+<p>Le risque est extrêmement faible puisque nous sommes hors
+tableau.</p>
 <ul>
 <li>risque 1, 5 et 10 %</li>
 </ul>
@@ -844,9 +851,6 @@ correspondantes.</p>
 <p><a
 href="https://jeanpaullaurent.fr/media/docetud/table_khi2_complete.pdf"
 class="uri">https://jeanpaullaurent.fr/media/docetud/table_khi2_complete.pdf</a></p>
-<p>Comme le montant du khi2 est important (hors tableau), on peut aussi
-utiliser la formule du tableur</p>
-<p><img src="img/khi2Test.png" /></p>
 </div>
 <div id="rejet-de-h0-ou-pas" class="section level3" number="5.4.4">
 <h3><span class="header-section-number">5.4.4</span> Rejet de H0 ou
@@ -887,7 +891,7 @@ des calculs</h1>
 ## X-squared = 11605, df = 156, p-value &lt; 2.2e-16</code></pre>
 <p>carto</p>
 <pre><code>## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.3.1; sf_use_s2() is TRUE</code></pre>
-<p><img src="jour4_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="jour4_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <pre><code>## Reading layer `communes93&#39; from data source 
 ##   `C:\Users\tachasa\01_stat\data\communes93.geojson&#39; using driver `GeoJSON&#39;
 ## Simple feature collection with 307 features and 48 fields
@@ -895,7 +899,7 @@ des calculs</h1>
 ## Dimension:     XY
 ## Bounding box:  xmin: 2.288278 ymin: 48.80725 xmax: 2.6033 ymax: 49.01233
 ## Geodetic CRS:  WGS 84</code></pre>
-<p><img src="jour4_files/figure-html/unnamed-chunk-9-2.png" width="672" /><img src="jour4_files/figure-html/unnamed-chunk-9-3.png" width="672" /></p>
+<p><img src="jour4_files/figure-html/unnamed-chunk-10-2.png" width="672" /><img src="jour4_files/figure-html/unnamed-chunk-10-3.png" width="672" /></p>
 </div>
 <div id="en-guise-de-conclusion-pourquoi-le-khi2" class="section level1"
 number="7">
@@ -907,7 +911,7 @@ class="section level2" number="7.1">
 conditionnelles suffisent-t-elles ?</h2>
 <p>Comparaison des 2 tableaux</p>
 <p>Fréquence conditionnelle en ligne</p>
-<p><img src="img/tabFreqLg.png" /></p>
+<p><img src="img/frequenceLG.png" /></p>
 <p>La distance entre les données observées et théoriques</p>
 <p><img src="img/tabObsTheo.png" /></p>
 <p>Estimation des écarts fondés sur la pondération des masses</p>

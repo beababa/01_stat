@@ -17,12 +17,19 @@ knitr::opts_chunk$set(eval = TRUE)
 
 On travaille à présent sur un croisement de deux agrégats financiers. On récupère la donnée à partir de l'interface [les données de l'ofgl](https://data.ofgl.fr/explore/?exclude.theme=INTERNE&disjunctive.theme&disjunctive.publisher&disjunctive.keyword&sort=title) plutôt que celle de *la cartographie*.
 
+![](img/interfaceOFGL.png)
+
+
 Enoncer les hypothèses possibles de la comparaison, attention variable explicative (X) et à expliquer (Y)
 
-(cf moodle exercice *Introduction = régression*)
+
+![](img/XYexplicatif.png)
 
 
-Pour le cours, l'hypothèse est que la non maîtrise des frais de personnel (x) amène l'augmentation des impôts locaux (y) sur le 93 (budgets).
+Pour le cours, l'hypothèse est que la non maîtrise des frais de personnel (X) amène l'augmentation des impôts locaux (Y) sur le 93 (budgets).
+
+
+Pour mémoire, l'hypothèse nulle (H~0~) est l'absence de relation entre impôts locaux et frais de personnel.
 
 
 ```{r, echo = F}
@@ -60,7 +67,7 @@ dev.off()
 
 ![](img/agregatChoix.png)
 
-Attention, variable explicative et expliquée.
+Attention, encore une fois, variable explicative et expliquée.
 
 
 
@@ -69,7 +76,7 @@ Attention, variable explicative et expliquée.
 
 Mise en forme du tableau 
 
-- tcd le fameux tableau croisé dynamique (données table dynamique dans Calc)
+- tcd le fameux *tableau croisé dynamique* (données table dynamique dans Calc)
 
 ![](img/tcd.png)
 
@@ -80,7 +87,7 @@ Mise en forme du tableau
 - types de diagramme ; xy - dispersion
 
 
-
+Attention, le diagramme ne s'affiche pas correctement à partir du tcd, il faut faire une copie des deux variables.
 
 ## Simplification des chiffres
 
@@ -129,7 +136,37 @@ Pour une droite aX+b
 La distance MP doit être minimale d'où le terme *droite des moindres carrées*
 
 
-#### Droite de régression sous R
+### Correction exercice droite de régression
+
+#### Analyse : le message est passé
+
+![](img/detailPrecis.png)
+
+
+#### Vocabulaire
+
+
+Les variables
+
+
+![](img/combienDeVariable.png)
+
+![](img/erreur.png)
+Hypothèse nulle
+
+![](img/hypotheseNulle.png)
+
+#### Le graphique
+
+![](img/joliGraphique.png)
+![](img/relationForte.png)
+
+
+![](img/dispersionMaisRelation.png)
+
+![](img/nonPasDeRelation.png)
+
+### Droite de régression sous R
 
 ```{r, echo=TRUE}
 par(mfrow = c(2,1))
@@ -149,8 +186,10 @@ text( sel$fraisPersonnel, sel$impots,labels = as.character(row.names(sel))
 ```
 
 
-Dans calc, cliquer sur les points et insérer courbe de tendance
-(on peut également afficher l'équation de la droite.)
+### Dans Calc
+
+Dans Calc, cliquer sur les points et insérer courbe de tendance
+(Trouver comment afficher l'équation de la droite.)
 
 ![](img/graphiqueRegression.png)
 
@@ -252,7 +291,7 @@ A Rosny sous Bois, les frais de personnel sont bas mais les impôt sont élévé
 A Clichy sous Bois, les frais de personnel sont élévés mais les impots sont bas.
 
 
-# cartographie des résidus
+# Cartographie des résidus
 
 
 ```{r, eval=F}
@@ -285,7 +324,7 @@ dev.off()
 
 ![](img/residusCarte.png)
 
-Tremblay et Rosny sous Bois sont écartées, elles ne correspondent pas du tout au modèle.
+Tremblay et Rosny sous Bois sont écartées, elles représentaient des extrêmes.
 
 Les villes dans les teintes les plus foncées s'éloignent le plus du modèle.
 
