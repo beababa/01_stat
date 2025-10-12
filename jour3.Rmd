@@ -199,7 +199,10 @@ Visuellement, on voit bien qu'il existe un lien entre les deux variables, mais i
 
 Il s'agit maintenant de mesurer précisemment l'intensité du lien à l'aide de calculs.
 
-# Intensité du lien : covariance et coefficient de Bravais-Pearson
+# Coefficient de correlation
+
+Autrement dit, le coefficient de Bravais-Pearson (1896).
+Pearson propose une formule mathématique pour la notion de corrélation.
 
 Savoir-faire tableur : utiliser les noms pour les colonnes
 
@@ -262,7 +265,19 @@ Le coefficient est plus fort si les deux valeurs extrêmes, Rosny et Tremblay so
 
 # Coefficient de détermination
 
-C'est le carré du coefficient de corrélation linéaire
+Au niveau mathématiques, c'est le carré du coefficient de corrélation linéaire
+
+Mais c'est surtout :
+
+Le rapport entre 
+
+- la variation de Y expliquée par le modèle
+
+et
+
+- la variation totale de Y
+
+
 
 ```{r}
 cor(varCorr)^2

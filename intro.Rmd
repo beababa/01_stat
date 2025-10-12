@@ -142,46 +142,35 @@ barplot(presence$TD3~presence$Cours, beside = T, main = "Evolution de la présen
 
 
 ```{r}
-renduTD1 <- c(24,NA,NA,NA,NA,NA)
-renduTD2 <- c(28, NA,NA,NA,NA,NA)
-renduTD3 <- c(28, NA,NA,NA,NA,NA)
-titre <- c("distribution", "univarié", "contingence", "khi2", "regression", "1er script")
-png("img/rendu.png", width = 500, height = 1000, res = 100)
-par(mar = c(8,6,6,6), mfrow = c(3,1))
-barplot(renduTD1, names = titre, cex.names = 0.8, las = 2, main = "rendu devoirs Gr 1 (effectif 30 étudiants)", border = NA)
-text(p, y = renduTD1 - 1, labels = renduTD1 )
-barplot(renduTD2, names = titre, cex.names = 0.8, las = 2, main = "rendu devoirs Gr 2 (effectif 36 étudiants)", border = NA)
-text(p, y = renduTD2 - 1, labels = renduTD2 )
-barplot(renduTD3, names = titre, cex.names = 0.8, las = 2, main = "rendu devoirs Gr 1 (effectif 20 étudiants)", border = NA)
-text(p, y = renduTD3 - 1, labels = renduTD3 )
+data <- read.csv("data/notesDM1_4.csv", na.strings = "-")
+data <- data [, c(2:5)]
+data <- data [, c(4,1,3,2)]
+titre <- c("1_distribution", "2_univarié", "3_regression", "4_contingence")
+
+png("img/rendu.png", width = 1000, height = 1000, res = 100)
+par( mfrow = c(2,2))
+tot <- length(data)
+i <-1
+for (i in c(1:tot)){
+  tmp <- table(data [,i])
+  barplot(tmp,  cex.names = 0.8, las = 1, 
+          main = paste0(titre [i], " (", sum(tmp), " observations)"), border = NA, col = "wheat")
+  }
+
 dev.off()
 ```
 
 ![](img/rendu.png)
 
-#### Les notes des exercices
-
-
 - Le critère externe : des points faciles ?
 
 le nom du fichier
+
 le temps du rendu (avant la limite)
 
-- Distribution des totaux
+- Augmentation des erreurs avec l'exercice 4
 
-```{r, eval=T}
-res <- read.csv("data/exo.csv",  na.strings = '-', fileEncoding = "UTF-8")
-names(res)
-res <- res [, c(2:5,1,6)]
-# recodage : si note 2, alors note1 = 0 si NA
-res$X1_Univarié.1 [is.na(res$X1_Univarié.1 )& !is.na(res$X2_Univarié.2)] <- 0
-res$X1_Univarié.1 [ is.na(res$X2_Univarié.2)] <- NA
-# graphique
-par(mfrow= c(2,3))
-for (i in (1:length(res))){
-  p <-barplot(table(res[,i]), main = names(res)[i])
-}
-```
+Attention à la consigne !
 
 
 

@@ -112,77 +112,64 @@ Les écarts à la moyenne par agrégat sont peut-être plus parlants
 
 Qu'apporterait une étude des fréquences conditionnelles en colonnes ?
 
-# Tableau de contingence : correction (attention correction 2023)
+# Tableau de contingence : correction 
 
-## Manipulation du tableau
+Beaucoup de rendus et ... beaucoup de mauvaises notes
 
-Il fallait travailler sur les élections 2022. Le tableau est présenté en
-longueur.
+![](img/rendu.png)
 
-Pour pouvoir obtenir un tableau de contingence :
+## Définition des variables
 
--   Récupérer le nom de chaque candidat avec une formule
 
-![](img/continRecup.png) - faire une recopie incrémentée sur la droite
+- Il ne s'agissait pas de décrire les variables du graphique
 
--   transposer le tableau et faire une copie spéciale valeurs uniquement
-    (CTRL + MAJ + V)
+![](img/defVariableEtik.png)
 
--   poser un filtre et récupérer uniquement les noms des candidats
+La bonne réponse correspondait au cours :
 
-![](img/continFiltre.png)
+- exemple 1 : au moins, c'est clair
 
--   ne pas oublier de faire un copier - coller du tableau final en
-    transposant
 
-## Correction rapide
+![](img/defVariable.png)
 
-### Description de la donnée
+- Le plus complet
 
-Il s'agit des résultats de la présidentielle sur 2022 à Bondy (chiffres
-du ministère de l'intérieur via data.gouv.fr)
+![](img/defVariableNormand.png)
+![](img/defVariableGraphique.png)
 
-La donnée comporte 2 variables :
+- le moins clair
 
--   les 32 bureaux de vote
--   les 12 candidats
+![](img/defVariableIncomprehensible.png)
 
-### Graphique
 
-![](img/continGraphique.png)
+- le plus court
 
-Remarquer le titre
+![](img/defVariableConcis.png)
 
-au niveau de la présentation des séries, la boite de dialogue *plages de
-données* permet de classer les séries
+- on y est presque
 
-![](img/continEtik.png)
+![](img/defVariableDommage.png)
+![](img/defVariableDommage2.png)
 
-### Analyse
 
-Sur les 12 candidats, 3 arrivent en tête dans tous les bureaux avec
-cependant un vote majoritaire pour Mélenchon dans l'échantillon des 4
-bureaux. Les voies se répartissent de manière quasiment homogène sur les
-9 autres candidats. Même si les bureaux restent différents, les
-répartitions des votes se ressemblent. Les différences entre bureaux
-étaient plus marquées en 2002.
+## Ecart à la moyenne des fréquences par commune
 
-### Observations sur les villes choisies
+### Pas un déficit
 
-```{r, eval =F}
-library(sf)
-data <- st_read("data/geo.gpkg", "data2022")
-ind <- grep("^Voix", names(data))
-data <- data [,c(1:4,ind)]
-nb <-length(unique(data$INSEE_COM))
-cog <-unique(data$INSEE_COM)
-i <- 2
-for (i in 1:nb) {
-  tmp <- data [data$INSEE_COM == cog [i], ]
-  tmp <- st_drop_geometry(tmp)
-  apply(tmp, 1, sum)
-}
-```
+Attention, dans ce cas une valeur négative n'est pas un déficit !
+
+![](img/ecartMoyenne.png)
+
+### Pourquoi calculer au niveau départemental ?
+
+* exemple 1
+
+![](img/ecartDpt.png)
+
+
+* exemple 2 
+  
+![](img/ecartDpt2.png)
 
 # Khi2 : un exemple sur un dé truqué
 
@@ -373,7 +360,7 @@ entre le rejet et l'acceptation de l'hypothèse nulle.
 
 # Sous R, vérification des calculs
 
-Constitution de la table de contingence
+## Constitution de la table de contingence
 
 ```{r}
 data <- read.csv("data/data93_2024.csv")
@@ -408,7 +395,7 @@ khi2 <- sum(khi2Partiel)
 contribution <- round((khi2Partiel/khi2)*100, 1)
 ```
 
-carto
+## Cartographie : contribution au khi2
 
 ```{r}
 hist(contribution)
@@ -418,7 +405,6 @@ library(sf)
 library(mapsf)
 geo <- st_read("data/communes93.geojson")
 geo <- geo [!is.na(geo$ref.INSEE), c("name", "ref.INSEE")]
-mf_map(geo)
 jointure <- merge(geo [, c("name")], df, all.x=T, by = "name")
 mf_choro(jointure, var = "contribution", border = NA, leg_pos = "right")
 mf_label(jointure, var="name", cex = 0.4, overlap = F)
