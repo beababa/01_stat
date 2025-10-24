@@ -112,77 +112,64 @@ Les écarts à la moyenne par agrégat sont peut-être plus parlants
 
 Qu'apporterait une étude des fréquences conditionnelles en colonnes ?
 
-# Tableau de contingence : correction (attention correction 2023)
+# Tableau de contingence : correction 
 
-## Manipulation du tableau
+Beaucoup de rendus et ... beaucoup de mauvaises notes
 
-Il fallait travailler sur les élections 2022. Le tableau est présenté en
-longueur.
+![](img/rendu.png)
 
-Pour pouvoir obtenir un tableau de contingence :
+## Définition des variables
 
--   Récupérer le nom de chaque candidat avec une formule
 
-![](img/continRecup.png) - faire une recopie incrémentée sur la droite
+- Il ne s'agissait pas de décrire les variables du graphique
 
--   transposer le tableau et faire une copie spéciale valeurs uniquement
-    (CTRL + MAJ + V)
+![](img/defVariableEtik.png)
 
--   poser un filtre et récupérer uniquement les noms des candidats
+La bonne réponse correspondait au cours :
 
-![](img/continFiltre.png)
+- exemple 1 : au moins, c'est clair
 
--   ne pas oublier de faire un copier - coller du tableau final en
-    transposant
 
-## Correction rapide
+![](img/defVariable.png)
 
-### Description de la donnée
+- Le plus complet
 
-Il s'agit des résultats de la présidentielle sur 2022 à Bondy (chiffres
-du ministère de l'intérieur via data.gouv.fr)
+![](img/defVariableNormand.png)
+![](img/defVariableGraphique.png)
 
-La donnée comporte 2 variables :
+- le moins clair
 
--   les 32 bureaux de vote
--   les 12 candidats
+![](img/defVariableIncomprehensible.png)
 
-### Graphique
 
-![](img/continGraphique.png)
+- le plus court
 
-Remarquer le titre
+![](img/defVariableConcis.png)
 
-au niveau de la présentation des séries, la boite de dialogue *plages de
-données* permet de classer les séries
+- on y est presque
 
-![](img/continEtik.png)
+![](img/defVariableDommage.png)
+![](img/defVariableDommage2.png)
 
-### Analyse
 
-Sur les 12 candidats, 3 arrivent en tête dans tous les bureaux avec
-cependant un vote majoritaire pour Mélenchon dans l'échantillon des 4
-bureaux. Les voies se répartissent de manière quasiment homogène sur les
-9 autres candidats. Même si les bureaux restent différents, les
-répartitions des votes se ressemblent. Les différences entre bureaux
-étaient plus marquées en 2002.
+## Ecart à la moyenne des fréquences par commune
 
-### Observations sur les villes choisies
+### Pas un déficit
 
-```{r, eval =F}
-library(sf)
-data <- st_read("data/geo.gpkg", "data2022")
-ind <- grep("^Voix", names(data))
-data <- data [,c(1:4,ind)]
-nb <-length(unique(data$INSEE_COM))
-cog <-unique(data$INSEE_COM)
-i <- 2
-for (i in 1:nb) {
-  tmp <- data [data$INSEE_COM == cog [i], ]
-  tmp <- st_drop_geometry(tmp)
-  apply(tmp, 1, sum)
-}
-```
+Attention, dans ce cas une valeur négative n'est pas un déficit !
+
+![](img/ecartMoyenne.png)
+
+### Pourquoi calculer au niveau départemental ?
+
+* exemple 1
+
+![](img/ecartDpt.png)
+
+
+* exemple 2 
+  
+![](img/ecartDpt2.png)
 
 # Khi2 : un exemple sur un dé truqué
 
@@ -373,7 +360,7 @@ entre le rejet et l'acceptation de l'hypothèse nulle.
 
 # Sous R, vérification des calculs
 
-Constitution de la table de contingence
+## Constitution de la table de contingence
 
 ```{r}
 data <- read.csv("data/data93_2024.csv")
@@ -408,7 +395,7 @@ khi2 <- sum(khi2Partiel)
 contribution <- round((khi2Partiel/khi2)*100, 1)
 ```
 
-carto
+## Cartographie : contribution au khi2
 
 ```{r}
 hist(contribution)
@@ -418,13 +405,130 @@ library(sf)
 library(mapsf)
 geo <- st_read("data/communes93.geojson")
 geo <- geo [!is.na(geo$ref.INSEE), c("name", "ref.INSEE")]
-mf_map(geo)
 jointure <- merge(geo [, c("name")], df, all.x=T, by = "name")
 mf_choro(jointure, var = "contribution", border = NA, leg_pos = "right")
 mf_label(jointure, var="name", cex = 0.4, overlap = F)
 mf_layout("Contribution au khi2", "OFGL 2024" )
 ```
 
+
+# Correction de l'exercice sur le Khi2
+
+## Rappel de la consigne
+
+- une description de la donnée (agrégats (au moins 5) et communes (au moins 10), attention il s'agit de deux variables de catégorie / classe
+
+- poser l'hypothèse nulle
+
+- calculer le khi2 et la contribution au khi2 (en %), faire un graphique de fréquence de la contribution au khi2 (en %).
+
+- analyser cette contribution : que signifie une forte contribution ?
+
+
+### Fallait-il comparer khi2 théorique et khi2 observé ?
+
+Il n'était pas nécessaire de chercher si le test était significatif ou non.
+
+Les khi2 observés étaient-ils des chiffres importants ?
+
+Si on observe une table de khi2, quelle est la grandeur des chiffres ?
+
+
+## Analyse de la contribution
+
+
+L'erreur surprise
+
+
+![](img/contribution02.png)
+
+L'erreur intéressante : confusion significativité du test et importance de la contribution
+
+
+![](img/confusionContributionRejet.png)
+
+
+
+![](img/confusionContrib.png)
+![](img/confusionContrib3.png)
+
+
+## Le graphique
+
+
+consigne : faire un graphique de fréquence de la contribution au khi2 (en %)
+
+
+![](img/mauvaisGraphiquePasJoli.png)
+
+![](img/mauvaisGraphiqueJoli.png)
+
+![](img/mauvaisGraphiqueBonneIdee.png)
+
+![](img/bonGraphique.png)
+
+![](img/chatGPT.png)
+
+## Correction complète
+
+
+Cas de la communauté d'agglo de Cergy-Pontoise
+
+Il y a ici croisement de deux variables de type classe / catégorie :
+- Communes (effectif = 12)
+- Agrégats (effectif = 3), modalités = dépense de fonctionnement / frais de personnel / impôts locaux
+
+
+Comme il s'agit de deux variables qualitatives, on utilise un test de khi^2^ Celui va nous permettre de tester l'hypothèse H~0~, à savoir les variables communes et agrégats sont indépendantes.
+
+
+Mise en forme de la donnée
+
+```{r}
+data <- read.csv2("data/caCergy.csv", dec = ".")
+names(data)
+data <- data [, c(16, 24, 28)]
+data <- data [data$Agrégat %in% c("Dépenses de fonctionnement", "Frais de personnel","Impôts locaux"),]           
+eclat <- split(data,  list(data$Agrégat))
+jointure <- merge(eclat [[1]], eclat [[2]], by = "Nom.2024.Commune")
+jointure <- merge(jointure, eclat [[3]], by = "Nom.2024.Commune")
+jointure <- jointure [, c("Nom.2024.Commune", "Montant.en...par.habitant.x", "Montant.en...par.habitant.y", "Montant.en...par.habitant")]
+names(jointure) <- c("ville","fonctionnement", "personnel", "impots")
+head(jointure)
+rownames(jointure) <- jointure$ville
+data <- jointure [,-1]
+```
+
+
+```{r}
+chisq.test(data)
+test <- chisq.test(data)
+chi2partiel <- apply((test$observed - test$expected)^2/test$observed, 1, sum)
+contrib <- round (chi2partiel / sum(chi2partiel), 2)*100
+hist(contrib, xlab = "contribution au khi2 (%)", ylab = "Nb de communes", main = "Fréquence des contributions au khi2")
+```
+
+```{r}
+par(mar = c(12,4,2,2))
+barplot(contrib, las = 2, main = "Communes et contribution au khi2 (%)", ylab = "Contribution au khi2 (%)")
+```
+
+
+Analyse :
+
+Boisemont et Neuville sur Oise contribuent fortement au khi^2^.
+Boisement est un petit village qui ne doit pas avoir beaucoup d'agent.
+Neuville sur Oise est un peu plus gros mais a des impôts élevés.
+Dans les deux cas, ces deux communes sont différentes des autres communes de la ca de Cergy.
+
+```{r}
+round(test$residuals, 2)
+```
+
+
+Voir l'outil stat locale de l'insee.
+
+https://www.insee.fr/fr/outil-interactif/7737357/map.html
 
 
 
