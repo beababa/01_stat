@@ -11,7 +11,7 @@ navbar:
       href: jour3.html   
     - text: "khi2"
       href: jour4.html 
-    - text: "examen"
+    - text: "bases R"
       href: jour5.html 
     - text: "variance"
       href: jour6.html 

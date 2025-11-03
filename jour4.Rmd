@@ -412,6 +412,124 @@ mf_layout("Contribution au khi2", "OFGL 2024" )
 ```
 
 
+# Correction de l'exercice sur le Khi2
+
+## Rappel de la consigne
+
+- une description de la donnée (agrégats (au moins 5) et communes (au moins 10), attention il s'agit de deux variables de catégorie / classe
+
+- poser l'hypothèse nulle
+
+- calculer le khi2 et la contribution au khi2 (en %), faire un graphique de fréquence de la contribution au khi2 (en %).
+
+- analyser cette contribution : que signifie une forte contribution ?
+
+
+### Fallait-il comparer khi2 théorique et khi2 observé ?
+
+Il n'était pas nécessaire de chercher si le test était significatif ou non.
+
+Les khi2 observés étaient-ils des chiffres importants ?
+
+Si on observe une table de khi2, quelle est la grandeur des chiffres ?
+
+
+## Analyse de la contribution
+
+
+L'erreur surprise
+
+
+![](img/contribution02.png)
+
+L'erreur intéressante : confusion significativité du test et importance de la contribution
+
+
+![](img/confusionContributionRejet.png)
+
+
+
+![](img/confusionContrib.png)
+![](img/confusionContrib3.png)
+
+
+## Le graphique
+
+
+consigne : faire un graphique de fréquence de la contribution au khi2 (en %)
+
+
+![](img/mauvaisGraphiquePasJoli.png)
+
+![](img/mauvaisGraphiqueJoli.png)
+
+![](img/mauvaisGraphiqueBonneIdee.png)
+
+![](img/bonGraphique.png)
+
+![](img/chatGPT.png)
+
+## Correction complète
+
+
+Cas de la communauté d'agglo de Cergy-Pontoise
+
+Il y a ici croisement de deux variables de type classe / catégorie :
+- Communes (effectif = 12)
+- Agrégats (effectif = 3), modalités = dépense de fonctionnement / frais de personnel / impôts locaux
+
+
+Comme il s'agit de deux variables qualitatives, on utilise un test de khi^2^ Celui va nous permettre de tester l'hypothèse H~0~, à savoir les variables communes et agrégats sont indépendantes.
+
+
+Mise en forme de la donnée
+
+```{r}
+data <- read.csv2("data/caCergy.csv", dec = ".")
+names(data)
+data <- data [, c(16, 24, 28)]
+data <- data [data$Agrégat %in% c("Dépenses de fonctionnement", "Frais de personnel","Impôts locaux"),]           
+eclat <- split(data,  list(data$Agrégat))
+jointure <- merge(eclat [[1]], eclat [[2]], by = "Nom.2024.Commune")
+jointure <- merge(jointure, eclat [[3]], by = "Nom.2024.Commune")
+jointure <- jointure [, c("Nom.2024.Commune", "Montant.en...par.habitant.x", "Montant.en...par.habitant.y", "Montant.en...par.habitant")]
+names(jointure) <- c("ville","fonctionnement", "personnel", "impots")
+head(jointure)
+rownames(jointure) <- jointure$ville
+data <- jointure [,-1]
+```
+
+
+```{r}
+chisq.test(data)
+test <- chisq.test(data)
+chi2partiel <- apply((test$observed - test$expected)^2/test$observed, 1, sum)
+contrib <- round (chi2partiel / sum(chi2partiel), 2)*100
+hist(contrib, xlab = "contribution au khi2 (%)", ylab = "Nb de communes", main = "Fréquence des contributions au khi2")
+```
+
+```{r}
+par(mar = c(12,4,2,2))
+barplot(contrib, las = 2, main = "Communes et contribution au khi2 (%)", ylab = "Contribution au khi2 (%)")
+```
+
+
+Analyse :
+
+Boisemont et Neuville sur Oise contribuent fortement au khi^2^.
+Boisement est un petit village qui ne doit pas avoir beaucoup d'agent.
+Neuville sur Oise est un peu plus gros mais a des impôts élevés.
+Dans les deux cas, ces deux communes sont différentes des autres communes de la ca de Cergy.
+
+```{r}
+round(test$residuals, 2)
+```
+
+
+Voir l'outil stat locale de l'insee.
+
+https://www.insee.fr/fr/outil-interactif/7737357/map.html
+
 
 
 # En guise de conclusion : pourquoi le khi2 ?
