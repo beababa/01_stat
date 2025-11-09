@@ -93,6 +93,8 @@ names (sel) <- c("dpt", "montant", "commune")
 
 # Représentation graphique
 
+## La commande boxplot
+
 La boite à moustaches permet de comparer rapidement des distributions.
 Les moustaches montrent les 1ers et 9e déciles. Les limites des boites correspondent au 1e et 3e quartile
 Le trait indique la médiane.
@@ -127,6 +129,36 @@ Les deux communes sont Le Plessis-Robinson pour le 92 et Le Bourget pour le 93
 En fait, pour les Hauts de Seine, cette valeur décentre un peu la moyenne.
 
 Mis à part l'amplitude, les deux départements se ressemblent.
+
+
+## Correction exercice sur la boite à moustaches
+
+Le but de l'exercice était d'utiliser un filtre permettant de faire une *jolie* boite
+à moustaches.
+
+Mais il s'agissait également de faire une rapide analyse en utilisant les noms des variables.
+
+Pour cela, un premier exercice avait été fait en cours sur l'analyse faite en classe.
+*Boîte à moustaches - analyse* (26 réponses sur 60 étudiants présents environ)
+
+
+```{r}
+data <- read.csv("data/boiteMoustacheCorrection.csv")
+knitr::kable(t(data))
+```
+
+
+Globalement, les étudiants ont réussi à faire les 2 séries de boites à moustaches (avec
+et sans filtre).
+
+A noter, des étudiants qui utilisent un histogramme, et un autre qui n'a pas réussi à 
+ouvrir correctement son fichier.
+
+Le commentaire les plus intéressant :
+
+- une opposition entre départements ruraux et département avec une grande métropole.
+
+
 
 
 # La variance
@@ -349,23 +381,5 @@ test$`Mean Sq` [1] / sum(test$`Mean Sq`)
 L'échelon régional permet d'expliquer 96% de la variation de la dette, mais pas celui de département.
 (Mais on a conservé uniquement les valeurs entre -200 et 200)
 
-## Correction (année 2022)
-
-### Boite à moustaches
-
-Il existe des différences entre les groupes, la variation des notes au sein de chaque groupe est différente. Seul le 3e groupe a une distribution symétrique.
-
-Le premier groupe a des notes de faible amplitudes mais avec 3 notes très fortes.
-Et le 2e groupe a beaucoup de notes basses.
-
-La variation entre les groupes risque donc d'être plus importante que la variation intragroupe.
-
-###  Pvalue
-
-Le chiffre de la p-value (0.039) est bas. Donc la relation est significative.
-H0 est rejetée avec un risque de 4 %.
 
 
-#### Intensité
-
-L'intensité est forte, plus de 75 % de la variation est expliquée par la structure en groupe.

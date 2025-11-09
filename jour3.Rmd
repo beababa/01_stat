@@ -60,8 +60,8 @@ for (n in noms){
   tmp <- data [data$Agrégat==n,]
   jointure <- merge(tmp, personnel, by = "Nom.2024.Commune")
   plot(jointure$Montant.en...par.habitant.y,jointure$Montant.en...par.habitant.x,  xlab = "Frais de personnel", ylab = n, col="coral", pch =  16)
-}
-dev.off()
+}()
+dev.off
 ```
 
 
