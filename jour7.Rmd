@@ -1,5 +1,5 @@
 ---
-title: "Multivariées"
+title: "Multivariées : régression linéaire multiples"
 output:
   html_document:
     number_sections: yes
@@ -24,411 +24,163 @@ library(mapsf)
 
 # Préparation de la donnée
 
-On lit la donnée, on filtre sur Bondy
+Il s'agit de réfléchir à de nombreux X pour expliquer un seul Y
+
+Dans notre exemple, nous reprenons comme 
+
+- facteur à expliquer (Y) = les frais de personnel
+
+- facteurs explicatifs (X) = les dépenses d'équipement, les emprunts, et les ventes de biens et service
+
+Le choix des variables est très important, il ne faut notamment pas qu'elles soient corrélées entre elles, ce qui, sur nos données, est assez difficile puisqu'il s'agit de comptes équilibrés.
+
+... Mais avoir une situation où une seule variable est expliquée par plusieurs autres reste une gageure.
+
+exemples utilisés dans l'ouvrage de référence, le chadule :
+
+- précipitation par longitude et latitude
+
+- vote pour LE PEN et étrangers, délinquants, chômeurs, population urbaine
+
 
 ```{r}
-data <- read.csv("data/election2022.csv", fileEncoding = "UTF-8", dec = ",")
+data <- read.csv2("data/dataRegressionMultiple.csv", fileEncoding = "UTF-8", dec = ".")
 names(data)
-data <- data [data$INSEE_COM == '93010',]
-#data <- data [data$INSEE_COM == '72154',]
-# la flèche
-```
-
-On la met en forme au niveau des colonnes :
-
-- colonne des % des inscrits
-
-- récupération des noms des candidats
-
-```{r}
-ind <- grep("Ins", names(data))
-pct <- data [, ind]
-ind <- grep("Nom", names(data))
-# la 1e ligne suffit
-noms <- data [1,ind]
-# on attribue les noms des candidats
-names(pct) [c(7:18)] 
-names(pct) [c(7:18)] <- noms
-```
-
-On retient uniquement l'abstention
-
-```{r}
-pct <- pct [,c(2, 7:18)]
-names(pct) [1] <- "abst"
-```
-
-On attribue les numéros des bureaux
-
-```{r}
-rownames(pct) <- c(1:length(data$Code.du.b.vote))
-rownames(pct)
-```
-
-On sauvegarde pour pouvoir l'utiliser à nouveau
-
-```{r}
-write.csv(pct, "data/pctBondy.csv", fileEncoding = "UTF-8")
-```
-```{r}
-
-# Exploration de la donnée
-
-
-pct <- read.csv("data/pctBondy.csv", fileEncoding = "UTF-8")
-pct
-# élimination de la 1e colonne si nécessaire
-pct <- pct [,-1]
-summary(pct)
-cor(pct)
-pairs(pct)
+# filtre colonne
+data <- data [, c(16, 24,28)]
+names(data) <- c("commune", "agregat", "montant")
+table(data$agregat)
 ```
 
 
+# Etude de chaque régression 
 
-# ACP analyse en composante principale
 
 ```{r}
-res <- prcomp(pct, scale. = F)
-plot(res)
-png("img/acpCentreNONReduite.png")
-biplot(res)
+varX <- names(table(data$agregat))
+personnel <- data [data$agregat == "Frais de personnel", c(1,3)]
+names (personnel) [2] <- "personnel"
+png("img/regressionChoix.png", width = 1400, height = 1400, res = 200)
+par(mfrow = c(2,2))
+fin <- personnel
+for (v in varX){
+  tmp <- data [data$agregat==v, c(1,3)]
+  names(tmp) [2] <- v
+  jointure <- merge(tmp, personnel, by = "commune")
+  plot(jointure [,v] ,jointure$personnel,  ylab = "Frais de personnel", xlab = v, col="coral", pch =  16)
+  tmp <- jointure [, 2]
+  fin <- cbind(fin, tmp)
+}
+dev.off()
+names(fin)  [3:6] <- varX 
+names(fin) [3:6] <- c("equipement", "emprunt", "personnel2", "services")
+```
+
+![](img/regressionChoix.png)
+
+
+A vue de nez, il peut exister une relation entre les variables choisies et les dépenses
+de personnel, même s'il y a beaucoup de valeurs aberrantes.
+
+
+
+# Modèle de régression multiple
+
+
+## Préparation de la donnée
+
+```{r}
+head(fin)
+rownames(fin) <- fin$commune
+fin <- fin [, c(2,3,4,6)]
+```
+
+On obtient ainsi un tableau dont les étiquettes sont intégrées dans l'entête des lignes
+et qui ne contient que des chiffres.
+
+## Coefficient de correlation / détermination
+
+```{r}
+pairs(fin)
+cor(fin)
+cor(fin)^2
+```
+
+
+Seule la 1e ligne nous interesse
+
+```{r}
+modele <- lm (formula = personnel ~ equipement + emprunt + services, data = fin)
+modele <- lm (formula = personnel ~ ., data = fin)
+```
+
+Tout s'est-il bien déroulé ?
+
+
+```{r}
+summary(modele)
+```
+
+
+Le modèle n'est pas utile la valeur p est trop importante.
+
+Aucune des variables n'a un lien significatif (pas d'étoiles)
+
+Si équipement et emprunt restent constants, les services sont associés à une baisse
+de 0,16 quand les dépenses de personnel augmentent d'une unité.
+
+
+
+Résidus
+
+
+```{r}
+hist(modele$residuals)
+residus <- modele$residuals
+residus <- as.data.frame(residus)
+residus$name <- row.names(residus)
+```
+
+
+
+```{r, eval=F}
+library(sf)
+communes <- st_read("data/communes93.geojson")
+communes <- communes [!is.na(communes$ref.INSEE), c("name", "ref.INSEE")]
+communes$name
+residus$name
+# on calcule les résidus
+jointure <- merge(communes, residus, by = "name")
+setdiff(residus$name, jointure$name)
+summary(jointure$residus)
+jointure
+```
+
+
+
+
+```{r, eval=FALSE}
+library(mapsf)
+png("img/residusCarte2.png")
+mf_map(jointure, var = "residus", type="choro", breaks = c(-600, -250,0,250,800), pal = cm.colors(4), border = NA, leg_pos = c(2.31589950651953, 48.8793057936166) )
+mf_label(communes, var = "name", overlap = FALSE, col= "wheat4", cex = 0.8)
+mf_layout("Frais de personnel et 4 variables : étude des résidus", credits = "OFGL, 2024")
 dev.off()
 ```
 
-![](img/acpCentreNONReduite.png)
 
-Deux graphiques superposés : 
+![](img/residusCarte2.png)
 
-- cercle des corrélations (les candidats)
+Deuxième modèle
 
-- nuage de points (les bureaux de vote)
-
-On résume la donnée sur 2 axes seulement (PC1 et PC2)
-
-
-Dans le cercle de correlations :
-
-- longueur flèche (mauvaise / bonne représentation)
-
-- position - proche / opposée - orthogonale (= aucune relation)
-
-# Classification hiérarchique
-
-```{r}
-# matrice des distances
-d.pct <- dist(pct)
-cah <- hclust(d.pct)
-plot(cah)
-```
-
-Dendrogramme avec matérialisation des groupes
-
-```{r}
-#png("img/lafleche3.png")
-plot(cah)
-rect.hclust(cah,k=4)
-groupes.cah <- cutree(cah,k=4)
-#dev.off()
-#liste des groupes
-print(sort(groupes.cah))
-```
-
-# Quelques remarques autour de ces premiers résultats
-
-
-## Correspondance cercle de correlation et dendrogramme
-
-
-
-![](img/lafleche.png) ![](img/lafleche3.png)
-
-
-
-Cas de la Flèche : isolement du bureau 17
-
-L'abstention est beaucoup plus basse qu'ailleurs (17), Mélenchon très sous représenté et Macron sur représenté.
-
-On prend le bureau 13 qui est à l'opposé sur le cercle de corrélation
-
-```{r, eval=FALSE}
-# on filtre sur les deux bureaux
-pct_13_17 <- pct [c(13,17),]
-# on transforme en matrice pour pouvoir faire un graphique de comparaison des répartitions
-mat <- as.matrix(pct_13_17)
-png("img/lafleche2.png")
-barplot(mat, las = 2, beside = T, col = terrain.colors(2))
-dev.off()
-```
-
-![](img/lafleche2.png)
-
-## Quelques graphiques pour mieux observer
-
-
-### Comparer les bureaux variable par variable
+Que se passe-t-il si on retire les valeurs aberrantes ?
 
 
 ```{r}
-commune <- read.csv("data/election2022.csv", fileEncoding = "UTF-8", dec =",")
-commune <- commune [commune$INSEE_COM == '93010',]
-barplot(commune$Inscrits~commune$Code.du.b.vote, las =2)
-barplot(commune$Abstentions~commune$Code.du.b.vote, las =2)
+fin <- fin [fin$personnel > 500 & fin$personnel < 1600,]
+modele <- lm (formula = personnel ~ ., data = fin)
+summary(modele)
+hist(modele$residuals)
 ```
 
-
-### Plus complexe, bureau par bureau
-
-Il faut transformer en matrice
-
-```{r}
-data <- read.csv("data/pctBondy.csv")
-data <- data [,-1]
-# suppression 1e colonne si nécessaire
-matrice <- as.matrix(data)
-boxplot(matrice, las= 2)
-# transposition de la matrice
-boxplot(t(matrice), las=2)
-```
-
-
-
-```{r}
-candidats <- colnames(matrice)
-matrice <- matrice [1:5,]
-colnames(matrice)
-barplot(t(matrice), beside = T, 
-        xlab = "bureaux de vote", names.arg = c(1:5), legend.text = candidats)
-
-```
-
-
-
-# Deuxième approche de l'ACP, on filtre
-
-Deux directions possibles :
-
-- on cherche les autres candidats
-
-- on zoome sur certains bureaux de vote
-
-## Les candidats
-
-On veut montrer uniquement les petits candidats
-
-```{r}
-names(pct)
-pct <- pct [, c(2,3,5,7,9,10:13)]
-```
-
-Et on reproduit le code.
-
-
-![](img/ptit.png)
-
-
-
-
-## Les bureaux de vote
-
-On choisit un bureau dans chacun des 4 groupes : 3 15 29 13
-
-```{r}
-pct <- read.csv("data/pctBondy.csv", fileEncoding = "UTF-8")
-pct <- pct [,-1]
-pct <- pct [c(3,15,29,13),]
-acp <- prcomp(pct)
-biplot(acp)
-```
-
-
-
-# Compléments pour le devoir maison
-
-voir item scriptEtudiant.html pour le groupe 1
-
-## Une vision cartographique
-
-
-https://demo-terravisu.solutions-territoriales.fr/visualiser/elections#map=14.27/48.9005/2.46921&layers=a0c5903b79811fda82ef73b9dca9aacc
-
-### Dessin des bureaux de vote
-
-Cette carte permet de comprendre les problèmes liés à la base.
-En effet, comme le dessin du bureau est fait automatiquement, il y a des bureaux discontinus.
-
-
-```{r}
-bv <- st_read("data/gros/geo.gpkg", "bv")
-bvBondy <- bv [bv$insee == '93010',]
-bureau <- substring(bvBondy$bureau,7,9)
-rownames(bvBondy) <- bureau
-bv32 <- bvBondy [rownames(bvBondy)==32,]
-png("img/bv32.png")
-mf_init(bv32)
-mf_map(bvBondy, type = "typo", var = "bureau", add = T, leg_pos = NA)
-mf_map(bv32, col = NA, border ="red",lwd=2, add = T)
-mf_label(bvBondy, var = "bureau", overlap = F)
-mf_layout("Bureau de vote discontinu", "opendata, réutilisation des REU")
-dev.off()
-```
-
-![](img/bv32.png)
-
-
-### Une aide à la compréhension des résultats ?
-
-Cette carte permet également de savoir situer les bureaux de vote sur la commune, et éventuellement d'opposer nord, centre et sud par exemple.
-
-
-![](img/bondyBV.png)
-
-Ainsi, sur Bondy
-
-Les bureaux 10, 12, 14, 23 représentent des profils
-
-
-![](img/acpCentreNONReduite.png)
-
-
-```{r}
-bvBondy <- st_read("data/gros/geo.gpkg", "bv")
-bvBondy  <- bvBondy [bvBondy$nom == "Bondy",] 
-mf_map(bvBondy)
-bvBondy$nom <- substring(bvBondy$bureau,7,9)
-bvProfil <- bvBondy[bvBondy$nom %in% c(10,12,14,23),]
-mf_label(bvProfil, var = "nom")
-mf_layout ("Des profils différents au centre de Bondy même", "opendata/ élections 2022 et REU")
-```
-
-
-
-
-## Filtrer la base du devoir maison : pb éventuels
-
-La géographie discontinue des bureaux de vote génère des problèmes qui doivent être
-réglés avant de lancer l'ACP.
-
-### Disparition de bureaux
-
-Cela fonctionne mais on a perdu 2 bureaux
-
-
-```{r}
-base <- read.csv("data/devoirMaison/base.csv", fileEncoding = "UTF-8")
-bondy <- base [base$INSEE_COM == '93010',]
-length(bondy$bureau)
-```
-
-
-
-### Doublons
-
-
-```{r}
-table(bondy$bureau)
-# 2 fois le bureau 7
-# la commande duplicated permet de voir les doublons
-# le ! indique que l'on ne veut pas du doublon
-doublon <- bondy [duplicated(bondy$bureau),]
-bondy <- bondy [!duplicated(bondy$bureau),]
-# la donnée sans doublons est considérée comme propre, on met les num de bureaux
-# et on enregistre
-rownames(bondy) <- substring(bondy$bureau,7,9)
-# on supprime la 1e colonne, celle des bureaux puisqu'on a les étiquettes
-bondy <- bondy [,-1]
-write.csv(bondy,"data/baseBondy.csv", row.names = F, fileEncoding = "UTF-8")
-```
-
-
-
-### Données incomplètes
-
-Rappel : le dictionnaire des données indique la provenance.
-
-
-#### Cas de Pointe à Pitre
-
-```{r}
-data <- read.csv("data/devoirMaison/97120.csv", fileEncoding = "UTF-8")
-names(data)
-```
-
-Il manque toutes les données IRIS car pour l'INSEE, les chiffres ne sont pas fiables.
-
-Colmar n'a pas les valeurs foncières.
-
-## Centrer et réduire
-
-Centrer et réduire permet de comparer les variables dont les montants sont très différents.
-
-Centrer : on compte les écarts à la moyenne
-
-Réduire : on divise toutes les valeurs par l'écart type.
-
-### Comprendre l'option "scale." dans la commande
-
-```{r, eval=FALSE}
-res <- prcomp(pct, scale. = FALSE)
-```
-
-Il faut faire varier l'option avec FALSE et TRUE.
-
-Le FALSE permet d'obtenir uniquement les gros candidats.
-
-![](img/acpCentreNONReduite.png)
-
-Le TRUE permet de pouvoir comparer tous les candidats
-
-![](img/acpCentreReduite.png)
-
-
-
-
-### Idem avec la classification
-
-```{r, eval=FALSE}
-pct.cr <- scale(pct, center = T, scale = T)
-```
-
-### Au niveau des données
-
-On peut également utiliser la fonction scale pour les données elles-mêmes
-
-```{r}
-base <- read.csv("data/baseBondy.csv")
-# filtre sur 2 colonnes 
-base <- base [,c("Valeur.fonciere", "X..Voix.Exp.11")]
-# renommer les colonnes
-names(base) <- c("vf", "Dupont Aignant")
-# transformation en matrice
-mat <- as.matrix(base)
-# graphiques pour comparer les 2 variables par bureau de vote
-barplot(mat, beside=T)
-# on ne voit rien, il faut centrer réduire
-mat <- scale(mat)
-barplot(mat, beside = T)
-```
-
-
-## Utiliser toutes les variables
-
-
-```{r}
-data <- read.csv("data/baseBondy.csv", fileEncoding = "UTF-8")
-names(data)
-table(data$Valeur.fonciere)
-
-data <- data [, -c(43:49)]
-ind <- grep("Voix", names(data))
-data<- data [,c( 2:57, ind)] 
-data <- data [,-42]
-pca <- prcomp(data, scale = F)
-biplot(pca)
-data <- data [,c(1,43,15,41)]
-pca <- prcomp(data, scale = T)
-biplot(pca)
-```
-
-Reprendre le script en classe et indiquer les commentaires
-
+Le modèle n'est pas plus significatif, même si la vente de services se distingue.

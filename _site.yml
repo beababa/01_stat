@@ -15,8 +15,10 @@ navbar:
       href: jour5.html 
     - text: "variance"
       href: jour6.html 
-    - text: "multivariées"
+    - text: "multivariées 1"
       href: jour7.html 
+    - text: "multivariées 2"
+      href: jour8.html 
   right:
     - icon: fa-github
       href: https://github.com/beababa/01_stat
