@@ -1,0 +1,23 @@
+cours : L5GEABIM - TD - Analyses bivariées et multivariées - BMaranget
+mots de passe Moodle
+8h-Lundi
+9h30-Lundi
+17h30-Vendredi
+---------------------------------
+connexion cours https://beababa.github.io/intro.html
+beatrice.maranget@bondy.fr
+--------------------------------------
+télécharger les données avec plusieurs communes dans 2 entités géographiques
+--------------------------------------------------------------boit
+Ouvrir le fichier
+-----------------
+Poser un filtre en suivant l'exemple
+FILTRE
+filtre2 <- data [data$montant < 200 & data$montant > - 200,]
+Poser un filtre pour enlever les valeurs aberrantes des boites à moustache en suivant l'exemple.
+[LG, COL]
+et faire un boxplot
+
+
+data$Montant
+sel3 <- sel2 [sel2$montant < 200,]
