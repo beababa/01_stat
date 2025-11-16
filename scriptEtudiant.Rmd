@@ -1,5 +1,5 @@
 ---
-title: "Analyse script étudiant groupe 1"
+title: "Devoir maison perspectives"
 output:
   html_document:
     number_sections: yes
@@ -17,17 +17,36 @@ knitr::opts_chunk$set(warning  = FALSE)
 
 # Objectif
 
-11 étudiants ont déposé un script multivarié pour remplacer l'heure de cours
-non effectuée lundi 27 novembre.
-
-Le retour est personnalisé.
+Analyser les difficultés que peuvent rencontrer les étudiants avec l'outil
+statistiques locales
 
 ```{r}
 library(sf)
 library(mapsf)
 ```
 
-# Ouverture des scripts
+# Sélection des zones
+
+
+La manipulation n'est pas très claire, il faut mettre la zone en favoris pour pouvoir
+faire l'export des indicateurs
+
+
+
+
+# Lecture du fichier
+
+
+Utilisation de la variable skip en plus
+
+```{r}
+data <- read.csv2("data/statLocale.csv", skip = 3, dec ="." )
+names(data) <- c("code", "commune", "boulang", "emploiF", "GSurface", "horsEcole")
+hist(data$boulang)
+hist(data$horsEcole)
+plot(data$boulang, data$GSurface)
+```
+
 
 
 ```{r}

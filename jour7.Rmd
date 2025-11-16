@@ -1,5 +1,5 @@
 ---
-title: "Multivariées : régression linéaire multiples"
+title: "Multivariées : démarche explicative"
 output:
   html_document:
     number_sections: yes
@@ -15,11 +15,7 @@ knitr::opts_chunk$set(warning  = FALSE)
 ``` 
 
 
-```{r}
-library(sf)
-library(mapsf)
-```
-
+La régression multiple est une démarche explicative.
 
 
 # Préparation de la donnée
@@ -28,11 +24,11 @@ Il s'agit de réfléchir à de nombreux X pour expliquer un seul Y
 
 Dans notre exemple, nous reprenons comme 
 
-- facteur à expliquer (Y) = les frais de personnel
+- facteur à expliquer (Y) = la population d'une ville (que nous assimilons à la taille d'une ville)
 
-- facteurs explicatifs (X) = les dépenses d'équipement, les emprunts, et les ventes de biens et service
+- facteurs explicatifs (X) = les frais de personnel, les dépenses d'équipement, les emprunts, et les ventes de biens et service
 
-Le choix des variables est très important, il ne faut notamment pas qu'elles soient corrélées entre elles, ce qui, sur nos données, est assez difficile puisqu'il s'agit de comptes équilibrés.
+Le choix des variables est très important, il ne faut pas qu'elles soient corrélées entre elles, ce qui, sur nos données, est assez difficile puisqu'il s'agit de comptes équilibrés.
 
 ... Mais avoir une situation où une seule variable est expliquée par plusieurs autres reste une gageure.
 
@@ -43,44 +39,118 @@ exemples utilisés dans l'ouvrage de référence, le chadule :
 - vote pour LE PEN et étrangers, délinquants, chômeurs, population urbaine
 
 
+
 ```{r}
 data <- read.csv2("data/dataRegressionMultiple.csv", fileEncoding = "UTF-8", dec = ".")
 names(data)
 # filtre colonne
-data <- data [, c(16, 24,28)]
-names(data) <- c("commune", "agregat", "montant")
+data <- data [, c(27,16, 24,25,26,28)]
+names(data)
+names(data) <- c("pop", "commune", "agregat", "montant", "montantM", "montantTX")
 table(data$agregat)
 ```
 
 
-# Etude de chaque régression 
+exercice : utiliser l'aide F1 pour voir les options utiles de *read.csv2*
+
+
+# Transformation du tableau
+
+Il s'agit d'abord de simplifier les chiffres, puis de faire un choix sur le montant et
+enfin d'éclater les agrégats pour obtenir une colonne pour chaque agrégat.
+
+Le travail sur la préparation du tableau est donc essentiel et représente une grosse partie de l'étude.
+
+
+## Simplifier les chiffres
+
+
+Concernant la population de la ville, l'ordre de grandeurs se voit au travers de l'histogramme
+
+```{r}
+hist(data$pop)
+```
+
+
+Afin d'avoir des chiffres plus faciles à appréhender, on raisonne en dizaine de milliers pour la population.
+
+
+Mais, il ne faudra pas oublier de le rappeler à chaque graphique.
+
+```{r}
+data$pop <-  data$pop/10000
+hist(data$pop, main = "Répartition population villes 93", xlab = "population (en dizaine de milliers)", ylab = "nb de communes")
+```
+
+
+2 exercices à faire :
+
+
+- comment utiliser l'aide F1 pour trouver les options nécessaires pour présenter le 
+graphique
+
+- quelle est l'analyse de ce graphique ?
 
 
 ```{r}
-varX <- names(table(data$agregat))
-personnel <- data [data$agregat == "Frais de personnel", c(1,3)]
-names (personnel) [2] <- "personnel"
-png("img/regressionChoix.png", width = 1400, height = 1400, res = 200)
-par(mfrow = c(2,2))
-fin <- personnel
-for (v in varX){
-  tmp <- data [data$agregat==v, c(1,3)]
-  names(tmp) [2] <- v
-  jointure <- merge(tmp, personnel, by = "commune")
-  plot(jointure [,v] ,jointure$personnel,  ylab = "Frais de personnel", xlab = v, col="coral", pch =  16)
-  tmp <- jointure [, 2]
-  fin <- cbind(fin, tmp)
-}
-dev.off()
-names(fin)  [3:6] <- varX 
-names(fin) [3:6] <- c("equipement", "emprunt", "personnel2", "services")
+data$popArr <- round(data$pop,0)
+unique(data [order(data$popArr), c(2,7)])
 ```
 
-![](img/regressionChoix.png)
+exercice :
+
+- A quoi servent les fonctions *round*, *unique* et *order* ?
+
+## Montant relatif ou montant absolu ?
+
+On choisit d'utiliser le montant en millions puisque le but de l'exercice est d'avoir des variables indépendantes.
 
 
-A vue de nez, il peut exister une relation entre les variables choisies et les dépenses
-de personnel, même s'il y a beaucoup de valeurs aberrantes.
+```{r}
+plot(data$montantTX, data$pop, xlab = "Montant / hbt", ylab = "population (en dizaine de milliers)", main = "Utilisation du montant par habitant")
+plot(data$montantM, data$pop, xlab = "Montant (millions)", ylab = "population (en dizaine de milliers)")
+```
+
+exercice : que permettent de voir ces deux graphiques ?
+
+## Constitution de la base
+
+Les agregats sont sur une seule colonne, il faut créer une colonne par agrégat.
+
+Sous le tableur, on ferait des copier-coller, ou du tcd.
+
+Sous R, on utilise une jointure : pour chaque commune, donne moi l'élément correspondant
+de l'agrégat.
+
+On répète l'opération dans une boucle afin d'aller plus vite
+
+```{r}
+varX <- names(table(data$agregat))
+fin <- unique(data [, c("commune","pop")])
+# A chaque variable
+for (v in varX){
+  # définir une table temporaire uniquement pour la variable choisie
+  tmp <- data [data$agregat==v, c("commune","montantM")]
+  # nommer les sommes sélectionnées du nom de la variable
+  names(tmp) [2] <- v
+  jointure <- merge(tmp, fin, by = "commune")
+  # Récupérer le tableau pour le tableau final
+  fin <- jointure
+}
+fin
+# anciens noms
+names(fin)  [2:5]
+# simplification des noms
+names(fin) [2:5] <- c("vente", "personnel", "emprunt", "equipement")
+```
+
+
+Enregistrement du tableau de données mis en forme
+
+```{r}
+write.csv(fin, "data/baseMultivarie.csv", fileEncoding = "UTF-8")
+```
+
 
 
 
@@ -92,7 +162,7 @@ de personnel, même s'il y a beaucoup de valeurs aberrantes.
 ```{r}
 head(fin)
 rownames(fin) <- fin$commune
-fin <- fin [, c(2,3,4,6)]
+fin <- fin [, -1]
 ```
 
 On obtient ainsi un tableau dont les étiquettes sont intégrées dans l'entête des lignes
@@ -107,31 +177,43 @@ cor(fin)^2
 ```
 
 
-Seule la 1e ligne nous interesse
+On cherche :
+
+- des variables corrélées avec la population (dernière ligne)
+
+- des variables faiblement corrélées entre elles afin d'éviter un effet de redondance
+
+On retire la variable emprunt qui n'apparaît pas liée à la population
+
+Vente, personnel et équipement semblent corrélées entre elle, mais, les plus
+fortes corrélations restent avec la population sauf pour l'équipement.
 
 ```{r}
-modele <- lm (formula = personnel ~ equipement + emprunt + services, data = fin)
-modele <- lm (formula = personnel ~ ., data = fin)
+modele <- lm (formula = pop ~ equipement + personnel + vente, data = fin)
 ```
 
 Tout s'est-il bien déroulé ?
 
 
 ```{r}
+modele
 summary(modele)
 ```
 
+On se contente de faire la lecture de la significativité du test (les étoiles) qui 
+ne fait que confirmer l'analyse de la matrice de corrélation.
 
-Le modèle n'est pas utile la valeur p est trop importante.
+Le modèle est utile  car la valeur de p est modeste.
 
-Aucune des variables n'a un lien significatif (pas d'étoiles)
+Population et personnel ont une liaison particulièrement significative.
 
-Si équipement et emprunt restent constants, les services sont associés à une baisse
-de 0,16 quand les dépenses de personnel augmentent d'une unité.
-
+Si équipement et vente restent constants, le personnel augmente de 0.07 (millions d'euros, 70 000 euros) quand la population augmente d'une unité (ici 10 000 hbt).
 
 
-Résidus
+
+# Résidus
+
+L'étude spatiale des résidus peut permettre de déterminer une organisation du territoire.
 
 
 ```{r}
@@ -149,11 +231,10 @@ communes <- st_read("data/communes93.geojson")
 communes <- communes [!is.na(communes$ref.INSEE), c("name", "ref.INSEE")]
 communes$name
 residus$name
-# on calcule les résidus
+# on fait une jointure entre les résidus et la géographie des communes
 jointure <- merge(communes, residus, by = "name")
 setdiff(residus$name, jointure$name)
 summary(jointure$residus)
-jointure
 ```
 
 
@@ -162,25 +243,70 @@ jointure
 ```{r, eval=FALSE}
 library(mapsf)
 png("img/residusCarte2.png")
-mf_map(jointure, var = "residus", type="choro", breaks = c(-600, -250,0,250,800), pal = cm.colors(4), border = NA, leg_pos = c(2.31589950651953, 48.8793057936166) )
-mf_label(communes, var = "name", overlap = FALSE, col= "wheat4", cex = 0.8)
-mf_layout("Frais de personnel et 4 variables : étude des résidus", credits = "OFGL, 2024")
+mf_map(jointure, var = "residus", type="choro", breaks = c(-2, -0.5,0,0.5,1.5), pal = cm.colors(4), border = NA, leg_pos = c(2.31589950651953, 48.8793057936166) )
+#mf_label(communes, var = "name", overlap = FALSE, col= "wheat4", cex = 0.8)
+mf_layout("Population  et 3 variables (personnel / vente / équipement ) : étude des résidus", credits = "OFGL, 2024")
 dev.off()
 ```
 
 
 ![](img/residusCarte2.png)
 
-Deuxième modèle
 
-Que se passe-t-il si on retire les valeurs aberrantes ?
+Les villes se conforment mieux au modèle quand elles sont à proximité de Paris sauf
+Montreuil et Tremblay.
+
+# Deuxième modèle
+
+On refait l'analyse sans les dépenses d'équipement
+
+```{r}
+modele <- lm (formula = pop ~ personnel + vente, data = fin)
+```
+
+
+## Représentation graphique
+
+Comme il n'y a que 3 variables, on peut faire un graphique en 3D
+
+```{r}
+library(scatterplot3d)
+s3d <- scatterplot3d(fin$vente, fin$personnel, fin$pop, color = "blue")
+# plan de régression
+s3d$plane3d(modele)
+text(s3d$xyz.convert (fin  [,c(1,2,5)]), labels = rownames(fin), cex = 0.5)
+```
+
+
+Comparer Saint Denis et Montreuil, par exemple
+
+Globalement, cela n'est pas si lisible même à 3 dimensions.
+
+## Résultat algébrique
+
+Tout s'est-il bien déroulé ?
 
 
 ```{r}
-fin <- fin [fin$personnel > 500 & fin$personnel < 1600,]
-modele <- lm (formula = personnel ~ ., data = fin)
 summary(modele)
-hist(modele$residuals)
 ```
 
-Le modèle n'est pas plus significatif, même si la vente de services se distingue.
+
+La significativité entre vente et population augmente si on supprime la variable
+équipement.
+
+La carte des résidus varie un peu
+
+```{r, eval=FALSE}
+hist(modele$residuals)
+# permet de voir les bornes pour la cartographie
+library(mapsf)
+png("img/residusCarte3.png")
+mf_map(jointure, var = "residus", type="choro", breaks = c(-2, -0.5,0,0.5,1.5), pal = cm.colors(4), border = NA, leg_pos = c(2.31589950651953, 48.8793057936166) )
+#mf_label(communes, var = "name", overlap = FALSE, col= "wheat4", cex = 0.8)
+mf_layout("Population  et 3 variables (personnel / vente / équipement ) : étude des résidus", credits = "OFGL, 2024")
+dev.off()
+```
+
+
+![](img/residusCarte2.png)![](img/residusCarte3.png)

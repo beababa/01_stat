@@ -1,5 +1,5 @@
 ---
-title: "Multivariées"
+title: "Multivariées : descriptif"
 output:
   html_document:
     number_sections: yes
@@ -21,67 +21,33 @@ library(mapsf)
 ```
 
 
+Les analyses factorielles sont une démarche descriptive. Il s'agit de résumer de grands 
+tableaux d'informations en passant des colonnes aux axes factoriels.
+
+
+Attention, contrairement à la régression il ne s'agit pas d'expliquer mais de résumer.
+
 
 # Préparation de la donnée
 
-On lit la donnée, on filtre sur Bondy
+On reprend la donnée construite pour la régression multiple
 
 ```{r}
-data <- read.csv("data/election2022.csv", fileEncoding = "UTF-8", dec = ",")
-names(data)
-data <- data [data$INSEE_COM == '93010',]
-#data <- data [data$INSEE_COM == '72154',]
-# la flèche
+data <- read.csv("data/baseMultivarie.csv", row.names = 1 )
+head(data)
 ```
 
-On la met en forme au niveau des colonnes :
+Il s'agit d'une matrice numérique.
 
-- colonne des % des inscrits
-
-- récupération des noms des candidats
-
-```{r}
-ind <- grep("Ins", names(data))
-pct <- data [, ind]
-ind <- grep("Nom", names(data))
-# la 1e ligne suffit
-noms <- data [1,ind]
-# on attribue les noms des candidats
-names(pct) [c(7:18)] 
-names(pct) [c(7:18)] <- noms
-```
-
-On retient uniquement l'abstention
-
-```{r}
-pct <- pct [,c(2, 7:18)]
-names(pct) [1] <- "abst"
-```
-
-On attribue les numéros des bureaux
-
-```{r}
-rownames(pct) <- c(1:length(data$Code.du.b.vote))
-rownames(pct)
-```
-
-On sauvegarde pour pouvoir l'utiliser à nouveau
-
-```{r}
-write.csv(pct, "data/pctBondy.csv", fileEncoding = "UTF-8")
-```
-```{r}
 
 # Exploration de la donnée
 
+Il s'agit de commandes à faire à chaque fois que l'on découvre une donnée
 
-pct <- read.csv("data/pctBondy.csv", fileEncoding = "UTF-8")
-pct
-# élimination de la 1e colonne si nécessaire
-pct <- pct [,-1]
-summary(pct)
-cor(pct)
-pairs(pct)
+```{r}
+summary(data)
+cor(data)
+pairs(data)
 ```
 
 
@@ -89,7 +55,7 @@ pairs(pct)
 # ACP analyse en composante principale
 
 ```{r}
-res <- prcomp(pct, scale. = F)
+res <- prcomp(data, scale. = F)
 plot(res)
 png("img/acpCentreNONReduite.png")
 biplot(res)
@@ -100,14 +66,14 @@ dev.off()
 
 Deux graphiques superposés : 
 
-- cercle des corrélations (les candidats)
+- cercle des corrélations (les agrégats et la population)
 
-- nuage de points (les bureaux de vote)
+- nuage de points (les communes du 93)
 
 On résume la donnée sur 2 axes seulement (PC1 et PC2)
 
 
-Dans le cercle de correlations :
+Dans le cercle de corrélations :
 
 - longueur flèche (mauvaise / bonne représentation)
 
@@ -117,8 +83,8 @@ Dans le cercle de correlations :
 
 ```{r}
 # matrice des distances
-d.pct <- dist(pct)
-cah <- hclust(d.pct)
+ddata <- dist(data)
+cah <- hclust(ddata)
 plot(cah)
 ```
 
@@ -141,65 +107,42 @@ print(sort(groupes.cah))
 
 
 
-![](img/lafleche.png) ![](img/lafleche3.png)
-
-
-
-Cas de la Flèche : isolement du bureau 17
-
-L'abstention est beaucoup plus basse qu'ailleurs (17), Mélenchon très sous représenté et Macron sur représenté.
-
-On prend le bureau 13 qui est à l'opposé sur le cercle de corrélation
 
 ```{r, eval=FALSE}
-# on filtre sur les deux bureaux
-pct_13_17 <- pct [c(13,17),]
+# on filtre sur les communes de Pantin et d'Aulnay sous Bois
+rownames(data)
+sel <- data [c(2,28),]
 # on transforme en matrice pour pouvoir faire un graphique de comparaison des répartitions
-mat <- as.matrix(pct_13_17)
-png("img/lafleche2.png")
-barplot(mat, las = 2, beside = T, col = terrain.colors(2))
+mat <- as.matrix(sel)
+png("img/lafleche.png")
+barplot(mat, las = 2, beside = T, col = terrain.colors(2), border = NA)
 dev.off()
 ```
 
-![](img/lafleche2.png)
+![](img/lafleche.png)
 
 ## Quelques graphiques pour mieux observer
 
 
-### Comparer les bureaux variable par variable
+### Comparer les communes variable par variable
 
 
 ```{r}
-commune <- read.csv("data/election2022.csv", fileEncoding = "UTF-8", dec =",")
-commune <- commune [commune$INSEE_COM == '93010',]
-barplot(commune$Inscrits~commune$Code.du.b.vote, las =2)
-barplot(commune$Abstentions~commune$Code.du.b.vote, las =2)
+par(mfrow = c(2,1))
+barplot(data$vente~rownames(data), las =2)
+barplot(data$personnel~rownames(data), las =2)
 ```
 
 
-### Plus complexe, bureau par bureau
+### Plus complexe, commune par commune
 
 Il faut transformer en matrice
 
 ```{r}
-data <- read.csv("data/pctBondy.csv")
-data <- data [,-1]
-# suppression 1e colonne si nécessaire
 matrice <- as.matrix(data)
-boxplot(matrice, las= 2)
+boxplot((matrice), las= 2)
 # transposition de la matrice
 boxplot(t(matrice), las=2)
-```
-
-
-
-```{r}
-candidats <- colnames(matrice)
-matrice <- matrice [1:5,]
-colnames(matrice)
-barplot(t(matrice), beside = T, 
-        xlab = "bureaux de vote", names.arg = c(1:5), legend.text = candidats)
-
 ```
 
 
@@ -208,155 +151,45 @@ barplot(t(matrice), beside = T,
 
 Deux directions possibles :
 
-- on cherche les autres candidats
+- on distingue petites et grandes villes
 
-- on zoome sur certains bureaux de vote
+- on zoome sur certaines villes
 
-## Les candidats
+## Les variables
 
-On veut montrer uniquement les petits candidats
+On veut montrer uniquement les petites villes, celles dont la population est moindre
 
 ```{r}
-names(pct)
-pct <- pct [, c(2,3,5,7,9,10:13)]
+hist(data$pop)
+data <- data [data$pop < 6,]
 ```
 
-Et on reproduit le code.
+Et on reproduit le code jusqu'à l'ACP
 
+```{r}
+png("img/ptit.png")
+biplot(res)
+dev.off()
+```
 
 ![](img/ptit.png)
 
 
 
 
-## Les bureaux de vote
+## Les communes
 
-On choisit un bureau dans chacun des 4 groupes : 3 15 29 13
+On choisit une ville dans chacun des r4 groupes : Pantin, Aubervilliers, Vaujours et Villepinte
 
 ```{r}
-pct <- read.csv("data/pctBondy.csv", fileEncoding = "UTF-8")
-pct <- pct [,-1]
-pct <- pct [c(3,15,29,13),]
-acp <- prcomp(pct)
+data <- read.csv("data/baseMultivarie.csv", row.names = 1)
+sel <- data [row.names(data) %in% c("Pantin", "Aubervilliers", "Vaujours","Villepinte"),]
+acp <- prcomp(sel)
 biplot(acp)
 ```
 
 
 
-# Compléments pour le devoir maison
-
-voir item scriptEtudiant.html pour le groupe 1
-
-## Une vision cartographique
-
-
-https://demo-terravisu.solutions-territoriales.fr/visualiser/elections#map=14.27/48.9005/2.46921&layers=a0c5903b79811fda82ef73b9dca9aacc
-
-### Dessin des bureaux de vote
-
-Cette carte permet de comprendre les problèmes liés à la base.
-En effet, comme le dessin du bureau est fait automatiquement, il y a des bureaux discontinus.
-
-
-```{r}
-bv <- st_read("data/gros/geo.gpkg", "bv")
-bvBondy <- bv [bv$insee == '93010',]
-bureau <- substring(bvBondy$bureau,7,9)
-rownames(bvBondy) <- bureau
-bv32 <- bvBondy [rownames(bvBondy)==32,]
-png("img/bv32.png")
-mf_init(bv32)
-mf_map(bvBondy, type = "typo", var = "bureau", add = T, leg_pos = NA)
-mf_map(bv32, col = NA, border ="red",lwd=2, add = T)
-mf_label(bvBondy, var = "bureau", overlap = F)
-mf_layout("Bureau de vote discontinu", "opendata, réutilisation des REU")
-dev.off()
-```
-
-![](img/bv32.png)
-
-
-### Une aide à la compréhension des résultats ?
-
-Cette carte permet également de savoir situer les bureaux de vote sur la commune, et éventuellement d'opposer nord, centre et sud par exemple.
-
-
-![](img/bondyBV.png)
-
-Ainsi, sur Bondy
-
-Les bureaux 10, 12, 14, 23 représentent des profils
-
-
-![](img/acpCentreNONReduite.png)
-
-
-```{r}
-bvBondy <- st_read("data/gros/geo.gpkg", "bv")
-bvBondy  <- bvBondy [bvBondy$nom == "Bondy",] 
-mf_map(bvBondy)
-bvBondy$nom <- substring(bvBondy$bureau,7,9)
-bvProfil <- bvBondy[bvBondy$nom %in% c(10,12,14,23),]
-mf_label(bvProfil, var = "nom")
-mf_layout ("Des profils différents au centre de Bondy même", "opendata/ élections 2022 et REU")
-```
-
-
-
-
-## Filtrer la base du devoir maison : pb éventuels
-
-La géographie discontinue des bureaux de vote génère des problèmes qui doivent être
-réglés avant de lancer l'ACP.
-
-### Disparition de bureaux
-
-Cela fonctionne mais on a perdu 2 bureaux
-
-
-```{r}
-base <- read.csv("data/devoirMaison/base.csv", fileEncoding = "UTF-8")
-bondy <- base [base$INSEE_COM == '93010',]
-length(bondy$bureau)
-```
-
-
-
-### Doublons
-
-
-```{r}
-table(bondy$bureau)
-# 2 fois le bureau 7
-# la commande duplicated permet de voir les doublons
-# le ! indique que l'on ne veut pas du doublon
-doublon <- bondy [duplicated(bondy$bureau),]
-bondy <- bondy [!duplicated(bondy$bureau),]
-# la donnée sans doublons est considérée comme propre, on met les num de bureaux
-# et on enregistre
-rownames(bondy) <- substring(bondy$bureau,7,9)
-# on supprime la 1e colonne, celle des bureaux puisqu'on a les étiquettes
-bondy <- bondy [,-1]
-write.csv(bondy,"data/baseBondy.csv", row.names = F, fileEncoding = "UTF-8")
-```
-
-
-
-### Données incomplètes
-
-Rappel : le dictionnaire des données indique la provenance.
-
-
-#### Cas de Pointe à Pitre
-
-```{r}
-data <- read.csv("data/devoirMaison/97120.csv", fileEncoding = "UTF-8")
-names(data)
-```
-
-Il manque toutes les données IRIS car pour l'INSEE, les chiffres ne sont pas fiables.
-
-Colmar n'a pas les valeurs foncières.
 
 ## Centrer et réduire
 
@@ -368,27 +201,29 @@ Réduire : on divise toutes les valeurs par l'écart type.
 
 ### Comprendre l'option "scale." dans la commande
 
-```{r, eval=FALSE}
-res <- prcomp(pct, scale. = FALSE)
-```
+
 
 Il faut faire varier l'option avec FALSE et TRUE.
 
-Le FALSE permet d'obtenir uniquement les gros candidats.
+Le FALSE permet d'obtenir uniquement les variables les plus importantes.
 
-![](img/acpCentreNONReduite.png)
+```{r}
+acp <- prcomp(data, scale. = FALSE)
+biplot(acp)
+```
 
-Le TRUE permet de pouvoir comparer tous les candidats
+Le TRUE permet de pouvoir comparer toutes les variables
 
-![](img/acpCentreReduite.png)
-
-
+```{r}
+acp <- prcomp(data, scale. = TRUE)
+biplot(acp)
+```
 
 
 ### Idem avec la classification
 
 ```{r, eval=FALSE}
-pct.cr <- scale(pct, center = T, scale = T)
+data.cr <- scale(data, center = T, scale = T)
 ```
 
 ### Au niveau des données
@@ -396,39 +231,14 @@ pct.cr <- scale(pct, center = T, scale = T)
 On peut également utiliser la fonction scale pour les données elles-mêmes
 
 ```{r}
-base <- read.csv("data/baseBondy.csv")
-# filtre sur 2 colonnes 
-base <- base [,c("Valeur.fonciere", "X..Voix.Exp.11")]
-# renommer les colonnes
-names(base) <- c("vf", "Dupont Aignant")
+par(mfrow = c(2,2))
 # transformation en matrice
-mat <- as.matrix(base)
+mat <- as.matrix(data [, c("emprunt", "pop")])
 # graphiques pour comparer les 2 variables par bureau de vote
-barplot(mat, beside=T)
+barplot(mat, beside=T, border = NA)
+hist(mat)
 # on ne voit rien, il faut centrer réduire
 mat <- scale(mat)
-barplot(mat, beside = T)
+barplot(mat, beside = T, border = NA)
+hist(mat)
 ```
-
-
-## Utiliser toutes les variables
-
-
-```{r}
-data <- read.csv("data/baseBondy.csv", fileEncoding = "UTF-8")
-names(data)
-table(data$Valeur.fonciere)
-
-data <- data [, -c(43:49)]
-ind <- grep("Voix", names(data))
-data<- data [,c( 2:57, ind)] 
-data <- data [,-42]
-pca <- prcomp(data, scale = F)
-biplot(pca)
-data <- data [,c(1,43,15,41)]
-pca <- prcomp(data, scale = T)
-biplot(pca)
-```
-
-Reprendre le script en classe et indiquer les commentaires
-
