@@ -165,7 +165,7 @@ Le commentaire les plus intéressant :
 
 ## Rappel
 
-Pour mémoire, la variance est le carré de la moyenne des écarts à la moyenne.
+Pour mémoire, la variance est la moyenne du carré des écarts à la moyenne.
 
 Dans le tableur, nous aurions fait une série de tableaux de calcul autour des 
 écarts à la moyennes (en mettant des carrés). Dans R, c'est une formule var.

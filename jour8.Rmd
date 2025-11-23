@@ -33,8 +33,11 @@ Attention, contrairement à la régression il ne s'agit pas d'expliquer mais de 
 On reprend la donnée construite pour la régression multiple
 
 ```{r}
-data <- read.csv("data/baseMultivarie.csv", row.names = 1 )
+data <- read.csv("data/baseMultivarie.csv", row.names = 2 )
+# les noms de commune deviennent des étiquettes
 head(data)
+# attention supprimer la première colonne X
+data <- data [, -1]
 ```
 
 Il s'agit d'une matrice numérique.
