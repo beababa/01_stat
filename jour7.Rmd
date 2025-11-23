@@ -295,6 +295,9 @@ summary(modele)
 La significativité entre vente et population augmente si on supprime la variable
 équipement.
 
+
+## Cartographie
+
 La carte des résidus varie un peu
 
 ```{r, eval=FALSE}
@@ -304,7 +307,7 @@ library(mapsf)
 png("img/residusCarte3.png")
 mf_map(jointure, var = "residus", type="choro", breaks = c(-2, -0.5,0,0.5,1.5), pal = cm.colors(4), border = NA, leg_pos = c(2.31589950651953, 48.8793057936166) )
 #mf_label(communes, var = "name", overlap = FALSE, col= "wheat4", cex = 0.8)
-mf_layout("Population  et 3 variables (personnel / vente / équipement ) : étude des résidus", credits = "OFGL, 2024")
+mf_layout("Population  et 2 variables (personnel / vente) : étude des résidus", credits = "OFGL, 2024")
 dev.off()
 ```
 
