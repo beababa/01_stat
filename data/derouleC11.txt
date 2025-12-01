@@ -1,0 +1,14 @@
+COURS 11
+----------------------------------
+cours : L5GEABIM - TD - Analyses bivariées et multivariées - BMaranget
+mots de passe Moodle
+8h-Lundi
+9h30-Lundi
+17h30-Vendredi
+---------------------------------
+connexion cours https://beababa.github.io/intro.html
+beatrice.maranget@bondy.fr
+--------------------------------------
+lire le fichier sous R et faire l'ACP (comme à la fin du dernier cours)
+- fichier
+- script
