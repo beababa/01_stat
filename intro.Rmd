@@ -41,6 +41,9 @@ https://www.data.gouv.fr/datasets/comptes-des-communes-2017-2024/
 
 ## Préparer les données
 
+
+### Des données trop nombreuses
+
 23 millions d'observations au total, un fichier de 6 G°de données
 
 ![](img/source.png)
@@ -51,26 +54,99 @@ Portail données
 
 https://data.ofgl.fr/explore/dataset/
 
-Comptes consolidées, sur le département choisi
+
+### Portail cartographie
+
+Pour les premiers cours, il est plus facile d'utiliser l'[outil](https://data.ofgl.fr/pages/cartographie/) proposé par l'OFGL
+### Filtres
 
 
-```{r, eval = FALSE}
-data <- read.csv2("data/ofgl-base-communes-consolidee.csv")
+#### Choix de base : type de budget et année
+
+
+- budget principal et 2024 (pour avoir une ligne par commune)
+
+![](img/choixDeBase.png)
+
+
+- choisir un ou plusieurs agrégats
+
+![](img/agregatListe.png)
+
+
+
+#### Un choix géographique différent par étudiant
+
+
+
+```{r}
+lieu <- read.csv("data/etudiant.csv")
+lieu <- unique(lieu$code.insee.commune.choisie)
+lieu <- lieu [!is.na(lieu)]
+library(sf)
+communes <- st_read("data/gros/communes-1000m.geojson")
+communes <- communes [st_is_valid(communes),]
+
+region <- aggregate(communes [,c("region")], by = list(communes$region), length)
+
+data <- communes [communes$code %in% lieu,]
+table(data$departement, data$region)
+library(mapsf)
+hist(region$region)
+met <- region [region$region > 900,]
+mf_map(met, col = "wheat", border = NA)
+mf_map(data, col= "red", add = T, border = NA)
+mf_layout("Choix des communes sur la métropole par les étudiants", "data.gouv et sources internes\nNovembre 2025")
+```
+
+Deux étudiants ont fait un choix hors métropole
+
+
+```{r}
+horsMet <- data [data$departement %in% c(971,972),]
+mf_init(st_buffer(horsMet,20000))
+mf_map(region, col = "wheat", border = NA, add = T)
+mf_map(data, col= "red", add = T, border = NA)
+mf_layout("Choix des communes hors métropole par 2 étudiants", "data.gouv et sources internes\nNovembre 2025")
+```
+
+
+Enregistrement de la donnée
+
+```{r}
+st_write(data, "data/data.gpkg", "data", append = F)
+data <- st_drop_geometry(data)
+write.csv(data, "data/communeEtudiant.csv", row.names = F)
+```
+
+
+
+#### Choix pour le cours
+
+
+Le cours sera basé sur la commune de Bondy et le département du 93 (1967 enregistrements
+pour tous les agrégats)
+
+
+![](img/sel93.png)
+
+A noter, sélectionner la région permet de choisir plus facilement le département 93
+
+```{r}
+data <- read.csv2("data/agregatEnsemble.csv")
 names(data)
 head(data)
 # combien d'enregistrement par ville et par exercice ?
-table(data$Code.Insee.2024.Commune, data$Exercice)
-# filtre sur l'année
-data <- data [ data$Exercice == 2024,]
+table(data$Code.Insee.2024.Commune)
+# filtre sur Bondy, 93010, et les variables spécifiques (agrégat et montant par hbt)
+head(data [ data$Code.Insee.2024.Commune == 93010, c(5,16,24,28)])
 # sauvegarde de la donnée
-write.csv(data [,c(16,20,21,28)], "data/data93_2024.csv", fileEncoding = "UTF-8")
-
+write.csv(data [,c(16,24,28)], "data/data93_2024.csv", fileEncoding = "UTF-8")
+# Les agrégats ont-ils tous la même importance ?
 table(data$Agrégat)
 ```
 
-Portail cartographie
 
-Il est plus facile d'utiliser l'[outil](https://data.ofgl.fr/pages/cartographie/) proposé par l'Observatoire des finances et de la gestion publique locale.
 
 
 
@@ -124,7 +200,7 @@ dev.off()
 ```{r}
 presence <- read.csv("data/presence.csv")
 knitr::kable(presence)
-presence <- presence [c(1:5),]
+presence <- presence [c(1:9),]
 par(mfrow = c(3,1))
 barplot(presence$TD1~presence$Cours, col="chartreuse", beside = T, main = "Evolution de la présence groupe 1", xlab = "cours", ylab = "nb" 
         , border = NA, legend =  F)
@@ -150,11 +226,11 @@ barplot(presence, beside = T, col = pal, border = NA, main = "Evolution de la pr
 
 
 ```{r}
-data <- read.csv("data/notesDM1_4.csv", na.strings = "-", fileEncoding = "UTF-8")
-data <- data [, c(2:6)]
+data <- read.csv("data/notesDM1_7.csv", na.strings = "-", fileEncoding = "UTF-8")
+data <- data [, c(7:12)]
 names(data)
-data <- data [, c(5,1,4,2,3)]
-titre <- c("1_distribution", "2_univarié", "3_regression", "4_contingence", "5_khi2")
+data <- data [, c(5,1,4,2,3,6)]
+titre <- c("1_distribution", "2_univarié", "3_regression", "4_contingence", "5_khi2", "6_variance")
 
 png("img/rendu.png", width = 600, height = 600, res = 100)
 par( mfrow = c(2,3))
