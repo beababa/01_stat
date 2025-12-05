@@ -1,0 +1,204 @@
+---
+title: "Questions autour du devoir maison (rendu 12 décembre)"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval  = TRUE)
+knitr::opts_chunk$set(echo  = TRUE)
+knitr::opts_chunk$set(warning  = FALSE)
+``` 
+
+
+
+
+Plusieurs difficultés possibles en fonction de votre état d'avancement
+
+
+# Utilisation stats locales
+
+
+# Lecture du fichier = quels paramètres
+
+
+
+```{r}
+data <- read.csv("data/baseDM.csv")
+# 1 seule variable, pb séparateur on passe en csv2
+data <- read.csv2("data/baseDM.csv")
+summary(data)
+# pb titre colonne
+data <- read.csv2("data/baseDM.csv", skip = 3)
+# chiffres non reconnus. Quel est le séparateur ?
+# éventuellement une valeur NA (not available) notamment si on charge des données dpt avec Mayotte
+data <- read.csv2("data/baseDM.csv", skip = 3, na.strings = "N/A - secret statistique")
+```
+
+
+# traitement des NA
+
+
+
+# univarié
+
+Prendre la donnée la plus centrale. Dans mon cas le nombre d'hébergemetns est moins importante que la médiane.
+
+
+```{r}
+hist(data$Médiane.du.niveau.de.vie.2021)
+# avec un peu de mise en forme
+hist(data$Médiane.du.niveau.de.vie.2021/1000, main = "Histogramme de la médiane du niveau de vie\nIle de France", xlab = "Montants (milliers d'euros)", ylab = "Nb de communes", border = NA, col = "cadetblue")
+# affichage médiane / moyenne
+abline(v=mean(data$Médiane.du.niveau.de.vie.2021, na.rm = T)/1000, col="red")
+abline (v=median(data$Médiane.du.niveau.de.vie.2021, na.rm = T)/1000, col="blue")
+```
+
+
+
+## bivariée
+
+le problème du tableau de contingence, base du Khi2
+
+```{r}
+summary(data$Nombre.d.autres.hébergements.collectifs.de.tourisme.2025)
+hist(data$Nombre.d.autres.hébergements.collectifs.de.tourisme.2025)
+table(data$Code,data$Nombre.d.autres.hébergements.collectifs.de.tourisme.2025)
+table(data$Code, data$Unités.légales.dans.construction..en.nombre..2023)
+```
+
+
+
+```{r}
+summary(data$Unités.légales.dans.construction..en.nombre..2023)
+# cut 5 50 500
+data$batiment [data$Unités.légales.dans.construction..en.nombre..2023 < 5] <- "Petit"
+data$batiment [data$Unités.légales.dans.construction..en.nombre..2023 > 5 &  data$Unités.légales.dans.construction..en.nombre..2023 < 50] <- "Moyen"
+data$batiment [data$Unités.légales.dans.construction..en.nombre..2023 > 49] <- "grand"
+# ou bcp plus simple
+data$categorie <- cut(data$Unités.légales.dans.construction..en.nombre..2023, breaks = c(0,50,500,5000,20000))
+data$dpt <- substring(data$Code,1,2)
+table(data$dpt,data$batiment)
+table(data$dpt,data$categorie)
+```
+
+
+Jouer sur les bornes pour avoir un tableau avec des valeur à + 5 condition du khi2...ou simplifier le tableau.
+
+# ACP : conjurer l'illisbilité des graphiques
+
+Commandes à faire à chaque fois que l'on découvre une donnée
+
+```{r}
+#row.names (data) <- data$Libellé
+data$etik <- paste0(data$Code,"_", data$Libellé)
+row.names (data) <- data$etik
+data <- data [,c(3:6)]
+names(data) <- c("Hébergemet", "niveau de vie", "entreprises", "scolaire+15")
+# on enlève les NA
+data <- na.omit(data)
+```
+
+
+
+```{r}
+summary(data)
+# ordres de grandeur
+round(cor(data),1)
+# relations (numériques)
+pairs(data)
+# relations (graphiques)
+```
+
+Paris pose pb
+
+```{r}
+data <- data [-1,]
+```
+
+
+```{r}
+res <- prcomp(data, scale. = F)
+# ACP normée
+res2 <- prcomp(data, scale. = T)
+```
+
+
+
+
+```{r}
+par(mfrow=c(1,2), bg="cornsilk")
+biplot(res, main= "Résultat d'une ACP", col=c("black", "brown"))
+biplot(res2, main= "Résultat d'une ACP normée", col= c("black", "chartreuse"))
+
+```
+
+
+Le plus simple est de sélectionner quelques individus
+
+```{r}
+data <- data [c(1:100),]
+```
+
+
+```{r}
+res <- prcomp(data, scale. = F)
+# ACP normée
+res2 <- prcomp(data, scale. = T)
+```
+
+
+
+
+```{r}
+par(mfrow=c(1,2), bg="cornsilk")
+biplot(res, main= "Résultat d'une ACP", col=c("black", "brown"))
+biplot(res2, main= "Résultat d'une ACP normée", col= c("black", "chartreuse"))
+
+```
+
+
+
+Au niveau des individus, il faudrait procéder groupe par groupe pour identifier chacun,
+c'est le rôle des classifications.
+
+
+# Classification hiérarchique
+
+## Dendogramme
+
+```{r}
+par(mfrow=c(1,2))
+# matrice des distances
+ddata <- dist(data)
+cah <- hclust(ddata)
+plot(cah, cex=0.5, main = "CAH")
+# normée
+data2 <- scale(data, center = T, scale = T)
+ddata2 <- dist(data2)
+cah2 <- hclust(ddata2)
+plot(cah2, cex=0.5, main = "CAH normée")
+```
+
+
+
+
+Dendrogramme avec matérialisation des groupes
+
+```{r}
+par(mfrow=c(1,2))
+plot(cah,  cex=0.5,  main = "CAH")
+rect.hclust(cah,k=4)
+groupes.cah <- cutree(cah,k=4)
+# normée
+plot(cah2, cex=0.5, main = "CAH normée")
+rect.hclust(cah2,k=4)
+groupes.cah2 <- cutree(cah2,k=4)
+```
+
+Observer Pantin / La Courneuve et Aubervilliers / Aulnay sous Bois, par exemple
+
