@@ -22,10 +22,18 @@ Plusieurs difficultés possibles en fonction de votre état d'avancement
 
 # Utilisation stats locales
 
+combinaison avec le catalogue données insee
 
-# Lecture du fichier = quels paramètres
+réfléchir dés le départ à sa problématique multivariée et à son échelle (commune / dpt / région)
 
 
+# Lecture du fichier = quelques paramètres
+
+Hormis le problème du séparateur, il existe deux problèmes récurrents
+
+- l'entête du tableau de données n'est pas sur la 1e ligne
+
+- il y a des valeurs NA dans le fichier (Not Avalaible)
 
 ```{r}
 data <- read.csv("data/baseDM.csv")
@@ -42,12 +50,7 @@ data <- read.csv2("data/baseDM.csv", skip = 3, na.strings = "N/A - secret statis
 
 # traitement des NA
 
-
-
-# univarié
-
-Prendre la donnée la plus centrale. Dans mon cas le nombre d'hébergemetns est moins importante que la médiane.
-
+# Aspect esthétique des graphiques
 
 ```{r}
 hist(data$Médiane.du.niveau.de.vie.2021)
@@ -58,9 +61,13 @@ abline(v=mean(data$Médiane.du.niveau.de.vie.2021, na.rm = T)/1000, col="red")
 abline (v=median(data$Médiane.du.niveau.de.vie.2021, na.rm = T)/1000, col="blue")
 ```
 
+# Univariés
+
+## Problème possible sur l'histogramme
 
 
-## bivariée
+
+## Table de contingence
 
 le problème du tableau de contingence, base du Khi2
 
