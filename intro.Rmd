@@ -200,23 +200,14 @@ dev.off()
 ```{r}
 presence <- read.csv("data/presence.csv")
 knitr::kable(presence)
-presence <- presence [c(1:9),]
+presence$numCours <-as.numeric(substring(presence$Cours,2,3))
 par(mfrow = c(3,1))
-barplot(presence$TD1~presence$Cours, col="chartreuse", beside = T, main = "Evolution de la présence groupe 1", xlab = "cours", ylab = "nb" 
+barplot(presence$TD1~presence$numCours, col="chartreuse", beside = T, main = "Evolution de la présence groupe 1", xlab = "cours", ylab = "nb" 
         , border = NA, legend =  F)
-barplot(presence$TD2~presence$Cours, col = "cyan", beside = T, main = "Evolution de la présence groupe 2", xlab = "cours", ylab = "nb" 
+barplot(presence$TD2~presence$numCours, col = "cyan", beside = T, main = "Evolution de la présence groupe 2", xlab = "cours", ylab = "nb" 
         , border = NA, legend =  F)
-barplot(presence$TD3~presence$Cours, col="darkorange",beside = T, main = "Evolution de la présence groupe 3", xlab = "cours", ylab = "nb" 
+barplot(presence$TD3~presence$numCours, col="darkorange",beside = T, main = "Evolution de la présence groupe 3", xlab = "cours", ylab = "nb" 
         , border = NA, legend =  F)
-# Sur le même graphique
-par(mfrow = c(1,1))
-rownames(presence) <- presence [,1]
-presence <- presence [,-1]
-presence <- as.matrix(presence)
-library(RColorBrewer)
-pal <- brewer.pal(5, "Set1")
-# graph
-barplot(presence, beside = T, col = pal, border = NA, main = "Evolution de la présence des 3 groupes")
 ```
 
 

@@ -19,6 +19,8 @@ navbar:
       href: jour7.html 
     - text: "multivariées 2"
       href: jour8.html 
+    - text: "DM"
+      href: jour9.html
   right:
     - icon: fa-github
       href: https://github.com/beababa/01_stat

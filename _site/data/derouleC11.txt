@@ -9,6 +9,19 @@ mots de passe Moodle
 connexion cours https://beababa.github.io/intro.html
 beatrice.maranget@bondy.fr
 --------------------------------------
+attention annonce prochain cours
+--------------------------------------
 lire le fichier sous R et faire l'ACP (comme à la fin du dernier cours)
 - fichier
 - script
+----------------
+définitions à connaître après avoir regardé vidéo Husson
+-----------------
+esthétique de l'ACP
+présentation centrer / réduire à partir des img
+le faire
+------------------
+interprétation : ajouter commentaire dans le tableau
+-----------------
+CAH : repérer deux valeurs dans le graphique et vérifier qu'elles sont dans le même groupe
+
