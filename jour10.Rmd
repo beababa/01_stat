@@ -1,0 +1,311 @@
+---
+title: "Préparation partiel"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval  = TRUE)
+knitr::opts_chunk$set(echo  = TRUE)
+knitr::opts_chunk$set(warning  = FALSE)
+``` 
+
+
+
+
+Plusieurs difficultés possibles en fonction de votre état d'avancement
+
+
+# Ouverture et lecture de fichiers
+
+Ces exercices permettent de vous familiariser avec différents types d'interface.
+
+Votre objectif restent de filtrer au maximum les données et de télécharger un .csv pour l'ouvrir
+directement sous R.
+
+Evitez de passer par un tableur...
+
+
+## Logements vacants
+
+Attention il faut faire :
+
+
+Pour avoir accès à la plateforme de la donnée. On retrouve alors la même interface que pour 
+les statistiques locales de l'insee.
+
+
+
+```{r}
+logvac <- read.csv2("data/LOGVAC.csv", skip = 3)
+# séparateur ";" et 2 lignes de titre
+summary(logvac)
+# vérification du type de la variable
+```
+
+## Eurostat
+
+Passer par 
+
+
+
+```{r}
+eurostat <- read.csv("data/eurostat.csv")
+summary(eurostat)
+# filtre sur colonnes geo et OBS_VALUE
+eurostat <- eurostat [,c(6,8)]
+head(eurostat)
+```
+
+## Valeurs foncières data.gouv
+
+Passer par 
+
+
+```{r}
+dvf <- read.csv("data/gros/dvf.csv", dec = ".")
+dvf <- dvf [dvf$nom_commune == 'Bondy', c("id_parcelle","valeur_fonciere")]
+summary(dvf)
+# on filtre sur la commune et comme colonne l'identifiant parcelle et la valeur foncière
+# on force le champs valeur foncière en numérique ce qui crée des NA que l'on supprime
+dvf$valeur_fonciere <- as.numeric(dvf$valeur_fonciere)
+dvf <- na.omit(dvf)
+```
+
+
+## Origine et taille de chacune des données.
+
+Dans chacun des 3 cas, il s'agit de sources fiables.
+
+La taille des dvf est beaucoup plus importante que les 2 autres sources (problème de téléchargement possible en salle de cours)
+
+
+```{r}
+data <- read.csv("data/donnees_cours13.csv", fileEncoding = "UTF-8")
+knitr::kable(data)
+```
+
+
+
+# univarié
+
+
+## Logements vacants
+
+```{r}
+hist(logvac$Nombre.de.logements.vacants.2022)
+head(logvac [order(logvac$Nombre.de.logements.vacants.2022, decreasing = T),])
+# Exclure Paris
+logvac <- logvac [logvac$Code != 75056,]
+# avec un peu de mise en forme
+hist(logvac$Nombre.de.logements.vacants.2022/1000, main = "Répartition du nb de logements vacants\nIle de France", xlab = "Montants (milliers de logements)", ylab = "Nb de communes du 93", border = NA, col = "cadetblue")
+# affichage médiane / moyenne
+abline(v=mean(logvac$Nombre.de.logements.vacants.2022, na.rm = T)/1000, col="red")
+abline (v=median(logvac$Nombre.de.logements.vacants.2022, na.rm = T)/1000, col="blue")
+```
+
+## Inflation
+
+```{r}
+hist(eurostat$OBS_VALUE)
+# il y a une valeur extrême
+summary(eurostat)
+head(eurostat [order(eurostat$OBS_VALUE, decreasing = T),])
+# c'est la Turquie, si on l'enlève
+eurostat <- eurostat [eurostat$geo != 'Turquie',]
+```
+
+
+```{r}
+hist(eurostat$OBS_VALUE)
+# avec un peu de mise en forme
+hist(eurostat$OBS_VALUE, main = "Répartition des taux d'inflation 2024\nEurope", xlab = "Tx de variation moyen sur 2024 (%)", ylab = "Nb de pays européens", border = NA, col = "wheat")
+# affichage médiane / moyenne
+abline(v=mean(eurostat$OBS_VALUE), col="red")
+abline (v=median(eurostat$OBS_VALUE), col="blue")
+```
+
+
+## Valeurs foncières
+
+```{r}
+options(scipen = 100)
+summary(dvf$valeur_fonciere/1000)
+hist(dvf$valeur_fonciere)
+```
+
+
+```{r}
+hist(dvf$valeur_fonciere/1000, main = "Répartition du montant des transactions immobilières\nBondy", xlab = "Montant", ylab = "Nb de transactions", border = NA, col = "wheat")
+# affichage médiane / moyenne
+abline(v=mean(dvf$valeur_fonciere/1000), col="red")
+abline (v=median(dvf$valeur_fonciere/1000), col="blue")
+```
+
+
+
+
+## Courte analyse
+
+```{r}
+data <- read.csv("data/analyseCours13.csv")
+knitr::kable(data)
+```
+
+
+## bivariée
+
+### Tableau de contingence
+
+```{r}
+table(logvac$Nombre.de.logements.vacants.2022)
+logvac$categorie <- cut(logvac$Nombre.de.logements.vacants.2022, breaks = c(0,500,750,5000))
+table(logvac$categorie)
+```
+
+
+
+```{r}
+logvac$dpt <- substring(logvac$Code,1,2)
+tab <- table(logvac$dpt,logvac$categorie)
+tab
+```
+
+
+### Khi2
+
+Pas de chiffre < 5, on peut faire un khi2
+
+
+```{r}
+test <- chisq.test(tab)
+test
+```
+
+La p-value est réduite donc l'hypothèse nulle est rejetée, il y a bien un lien entre les dpts et le
+nombre de logements vacants en Ile de France.
+
+Il paraît évident au vu du tableau de contingence qu'il y a moins de logements vacants dans le
+77 78, 91 et 95 que dans le 92,93,94.
+
+Mais, encore une fois, le nombre de logements vacants doit être dépendant de la taille des villes.
+
+
+
+# ACP : conjurer l'illisbilité des graphiques
+
+Commandes à faire à chaque fois que l'on découvre une donnée
+
+```{r}
+#row.names (data) <- data$Libellé
+data$etik <- paste0(data$Code,"_", data$Libellé)
+row.names (data) <- data$etik
+data <- data [,c(3:6)]
+names(data) <- c("Hébergemet", "niveau de vie", "entreprises", "scolaire+15")
+# on enlève les NA
+data <- na.omit(data)
+```
+
+
+
+```{r}
+summary(data)
+# ordres de grandeur
+round(cor(data),1)
+# relations (numériques)
+pairs(data)
+# relations (graphiques)
+```
+
+Paris pose pb
+
+```{r}
+data <- data [-1,]
+```
+
+
+```{r}
+res <- prcomp(data, scale. = F)
+# ACP normée
+res2 <- prcomp(data, scale. = T)
+```
+
+
+
+
+```{r}
+par(mfrow=c(1,2), bg="cornsilk")
+biplot(res, main= "Résultat d'une ACP", col=c("black", "brown"))
+biplot(res2, main= "Résultat d'une ACP normée", col= c("black", "chartreuse"))
+
+```
+
+
+Le plus simple est de sélectionner quelques individus
+
+```{r}
+data <- data [c(1:100),]
+```
+
+
+```{r}
+res <- prcomp(data, scale. = F)
+# ACP normée
+res2 <- prcomp(data, scale. = T)
+```
+
+
+
+
+```{r}
+par(mfrow=c(1,2), bg="cornsilk")
+biplot(res, main= "Résultat d'une ACP", col=c("black", "brown"))
+biplot(res2, main= "Résultat d'une ACP normée", col= c("black", "chartreuse"))
+
+```
+
+
+
+Au niveau des individus, il faudrait procéder groupe par groupe pour identifier chacun,
+c'est le rôle des classifications.
+
+
+# Classification hiérarchique
+
+## Dendogramme
+
+```{r}
+par(mfrow=c(1,2))
+# matrice des distances
+ddata <- dist(data)
+cah <- hclust(ddata)
+plot(cah, cex=0.5, main = "CAH")
+# normée
+data2 <- scale(data, center = T, scale = T)
+ddata2 <- dist(data2)
+cah2 <- hclust(ddata2)
+plot(cah2, cex=0.5, main = "CAH normée")
+```
+
+
+
+
+Dendrogramme avec matérialisation des groupes
+
+```{r}
+par(mfrow=c(1,2))
+plot(cah,  cex=0.5,  main = "CAH")
+rect.hclust(cah,k=4)
+groupes.cah <- cutree(cah,k=4)
+# normée
+plot(cah2, cex=0.5, main = "CAH normée")
+rect.hclust(cah2,k=4)
+groupes.cah2 <- cutree(cah2,k=4)
+```
+
+Observer Pantin / La Courneuve et Aubervilliers / Aulnay sous Bois, par exemple
+
