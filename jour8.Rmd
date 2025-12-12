@@ -67,7 +67,7 @@ pairs(data)
 
 ## Termes de vocabulaire
 
-Définir 
+Définir et classer en 2 groupes (important / pas important)
 
 - matrice d'information spatiale
 
@@ -165,7 +165,7 @@ Dans le cercle de corrélations, retenir 2 éléments :
 # le résultat premier est  les coordonnées sur les axes de chaque variable
 res$rotation
 # les coordonnées sur les axes de chaque individu
-res$x
+head(res$x,5)
 ```
 
 
@@ -190,7 +190,9 @@ L'ACP permet ainsi de simplifier la description des variables.
 
 ### Interprétation des individus
 
+
 ![](img/acpVariableIndividu.png)
+
 L'ACP permet de situer les individus par rapport aux variables.
 
 ```{r}

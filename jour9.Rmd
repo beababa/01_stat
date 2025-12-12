@@ -1,5 +1,5 @@
 ---
-title: "Questions autour du devoir maison (rendu 12 décembre)"
+title: "Questions autour du devoir maison"
 output:
   html_document:
     number_sections: yes
@@ -17,15 +17,34 @@ knitr::opts_chunk$set(warning  = FALSE)
 
 
 
-Plusieurs difficultés possibles en fonction de votre état d'avancement
+Plusieurs difficultés possibles en fonction de votre état d'avancement, le questionnaire
+sur le moodle permet d'aborder les problèmes considérés comme les plus importants.
 
+
+Le cours sera complété à posteriori en fonction de vos interventions.
 
 # Utilisation stats locales
 
+Combinaison avec le catalogue données insee permet de réfléchir dés le départ à sa problématique multivariée et à son échelle (commune / dpt / région)
 
-# Lecture du fichier = quels paramètres
+Les difficultés peuvent être les suivantes :
+
+- comment sélectionner uniquement le niveau choisi ?
+
+- comment sélectionner uniquement la zone choisie ?
+
+Prendre plus de variables permet d'affiner après.
 
 
+# Lecture du fichier = quelques paramètres
+
+Attention à ne pas enregistrer le fichier sous le tableur si vous l'ouvrez pour le regarder !
+
+Hormis le problème du séparateur, il existe deux problèmes récurrents
+
+- l'entête du tableau de données n'est pas sur la 1e ligne
+
+- il y a des valeurs NA dans le fichier (Not Available)
 
 ```{r}
 data <- read.csv("data/baseDM.csv")
@@ -34,75 +53,163 @@ data <- read.csv2("data/baseDM.csv")
 summary(data)
 # pb titre colonne
 data <- read.csv2("data/baseDM.csv", skip = 3)
-# chiffres non reconnus. Quel est le séparateur ?
+# chiffres non reconnus pour certaines variables
 # éventuellement une valeur NA (not available) notamment si on charge des données dpt avec Mayotte
 data <- read.csv2("data/baseDM.csv", skip = 3, na.strings = "N/A - secret statistique")
 ```
 
+Attention renommer les colonnes pour simplifier les opérations.
+
+
+```{r}
+names(data)
+names(data) <- c("code", "nom", "tourisme", "niveau", "entrepriseBat", "ecole+15")
+```
+
+
+
 
 # traitement des NA
 
+Nous n'avons pas eu de NA sur les tableaux de l'OFGL.
 
+```{r}
+table(is.na(data$niveau))
+# Qu'est ce qui caractérise ces communes ?
+pbNA <-data [is.na(data$niveau),]
+```
 
-# univarié
-
-Prendre la donnée la plus centrale. Dans mon cas le nombre d'hébergemetns est moins importante que la médiane.
+les NA dans les formules
 
 
 ```{r}
-hist(data$Médiane.du.niveau.de.vie.2021)
+mean(data$niveau)
+mean(data$niveau, na.rm = T)
+sum(data$niveau)
+sum(data$niveau, na.rm = T)
+length(data$niveau)
+sum(data$niveau, na.rm = T) / length(data$niveau)
+```
+
+Supprimer tous les NA d'un coup
+
+
+```{r}
+data <- na.omit(data)
+```
+
+Combien de données perdues ? sont-elles importantes ? Ne vaut-il pas mieux faire un filtre avant ?
+
+Dans tous les cas, préciser par une phrase ce que sont ces NA.
+
+# Histogramme et barplot
+
+## Habillage d'un histogramme
+
+
+```{r}
+hist(data$niveau)
 # avec un peu de mise en forme
-hist(data$Médiane.du.niveau.de.vie.2021/1000, main = "Histogramme de la médiane du niveau de vie\nIle de France", xlab = "Montants (milliers d'euros)", ylab = "Nb de communes", border = NA, col = "cadetblue")
+hist(data$niveau/1000, main = "Histogramme de la médiane du niveau de vie\nIle de France", xlab = "Montants (milliers d'euros)", ylab = "Nb de communes", border = NA, col = "cadetblue")
 # affichage médiane / moyenne
-abline(v=mean(data$Médiane.du.niveau.de.vie.2021, na.rm = T)/1000, col="red")
-abline (v=median(data$Médiane.du.niveau.de.vie.2021, na.rm = T)/1000, col="blue")
+abline(v=mean(data$niveau)/1000, col="red")
+abline (v=median(data$niveau)/1000, col="blue")
+```
+
+
+## Différence barplot / histogramme
+
+L'histogramme reste lisible même s'il y a beaucoup de valeurs
+
+```{r}
+hist(data$`ecole+15`)
+hist(data$`ecole+15` [data$`ecole+15`< 500000]/10000)
+barplot(data$`ecole+15` [data$`ecole+15`< 500000]/10000)
+```
+
+Le barplot sert quand on zoome sur une situation
+
+Il faut alors choisir la colonne d'étiquette
+
+```{r}
+sel <- head(data [order(data$`ecole+15`, decreasing = T ),])
+barplot(sel$`ecole+15`, names.arg = sel$nom, las = 2)
 ```
 
 
 
-## bivariée
-
-le problème du tableau de contingence, base du Khi2
-
-```{r}
-summary(data$Nombre.d.autres.hébergements.collectifs.de.tourisme.2025)
-hist(data$Nombre.d.autres.hébergements.collectifs.de.tourisme.2025)
-table(data$Code,data$Nombre.d.autres.hébergements.collectifs.de.tourisme.2025)
-table(data$Code, data$Unités.légales.dans.construction..en.nombre..2023)
-```
 
 
+
+# Table de contingence
+
+Le problème du tableau de contingence, base du Khi2
+
+
+Pour la variable entrepriseBat
 
 ```{r}
-summary(data$Unités.légales.dans.construction..en.nombre..2023)
+summary(data$entrepriseBat)
 # cut 5 50 500
-data$batiment [data$Unités.légales.dans.construction..en.nombre..2023 < 5] <- "Petit"
-data$batiment [data$Unités.légales.dans.construction..en.nombre..2023 > 5 &  data$Unités.légales.dans.construction..en.nombre..2023 < 50] <- "Moyen"
-data$batiment [data$Unités.légales.dans.construction..en.nombre..2023 > 49] <- "grand"
+data$batiment [data$entrepriseBat < 5] <- "Petit"
+data$batiment [data$entrepriseBat > 5 &  data$entrepriseBat < 50] <- "Moyen"
+data$batiment [data$entrepriseBat > 49] <- "grand"
 # ou bcp plus simple
-data$categorie <- cut(data$Unités.légales.dans.construction..en.nombre..2023, breaks = c(0,50,500,5000,20000))
-data$dpt <- substring(data$Code,1,2)
+data$categorie <- cut(data$entrepriseBat, breaks = c(0,50,500,5000,20000))
+data$dpt <- substring(data$code,1,2)
 table(data$dpt,data$batiment)
 table(data$dpt,data$categorie)
 ```
 
 
-Jouer sur les bornes pour avoir un tableau avec des valeur à + 5 condition du khi2...ou simplifier le tableau.
+Jouer sur les bornes pour avoir un tableau avec des valeur à + 5 condition du khi2
+
+ou découper le tableau entres dpt 
+
+- ceux avec bcp d'entreprises (77, 78, 91 et 95)
+
+- ceux avec moins d'entreprises (92, 93, 94)
+
+
+
+Pour la variable tourisme
+
+```{r}
+summary(data$tourisme)
+hist(data$tourisme)
+sel <- data [data$tourisme > 0,]
+hist(sel$tourisme)
+table(sel$tourisme)
+sel$categorie <- cut(sel$tourisme, breaks = c(1,2,3,101))
+tab <- table(sel$categorie)
+barplot(tab)
+table(sel$categorie, substring(sel$code,1,2))
+```
+
+
+
+
 
 # ACP : conjurer l'illisbilité des graphiques
 
-Commandes à faire à chaque fois que l'on découvre une donnée
+## Matrice de chiffres
+
+Attention aux étiquettes, il faut une matrice de chiffres
 
 ```{r}
 #row.names (data) <- data$Libellé
-data$etik <- paste0(data$Code,"_", data$Libellé)
+data$etik <- paste0(data$code,"_", data$nom)
 row.names (data) <- data$etik
 data <- data [,c(3:6)]
-names(data) <- c("Hébergemet", "niveau de vie", "entreprises", "scolaire+15")
-# on enlève les NA
-data <- na.omit(data)
 ```
 
+## Filtrer
+
+Paris pose pb
+
+```{r}
+data <- data [-1,]
+```
 
 
 ```{r}
@@ -114,11 +221,6 @@ pairs(data)
 # relations (graphiques)
 ```
 
-Paris pose pb
-
-```{r}
-data <- data [-1,]
-```
 
 
 ```{r}
@@ -134,14 +236,15 @@ res2 <- prcomp(data, scale. = T)
 par(mfrow=c(1,2), bg="cornsilk")
 biplot(res, main= "Résultat d'une ACP", col=c("black", "brown"))
 biplot(res2, main= "Résultat d'une ACP normée", col= c("black", "chartreuse"))
-
 ```
 
+
+## Réduire arbitrairement la sélection
 
 Le plus simple est de sélectionner quelques individus
 
 ```{r}
-data <- data [c(1:100),]
+data <- data [c(1:20),]
 ```
 
 
@@ -156,49 +259,10 @@ res2 <- prcomp(data, scale. = T)
 
 ```{r}
 par(mfrow=c(1,2), bg="cornsilk")
-biplot(res, main= "Résultat d'une ACP", col=c("black", "brown"))
-biplot(res2, main= "Résultat d'une ACP normée", col= c("black", "chartreuse"))
-
+biplot(res, main= "Résultat d'une ACP", col=c("black", "brown"), cex = 0.5)
+biplot(res2, main= "Résultat d'une ACP normée", col= c("black", "chartreuse"), cex=0.5)
 ```
-
 
 
 Au niveau des individus, il faudrait procéder groupe par groupe pour identifier chacun,
 c'est le rôle des classifications.
-
-
-# Classification hiérarchique
-
-## Dendogramme
-
-```{r}
-par(mfrow=c(1,2))
-# matrice des distances
-ddata <- dist(data)
-cah <- hclust(ddata)
-plot(cah, cex=0.5, main = "CAH")
-# normée
-data2 <- scale(data, center = T, scale = T)
-ddata2 <- dist(data2)
-cah2 <- hclust(ddata2)
-plot(cah2, cex=0.5, main = "CAH normée")
-```
-
-
-
-
-Dendrogramme avec matérialisation des groupes
-
-```{r}
-par(mfrow=c(1,2))
-plot(cah,  cex=0.5,  main = "CAH")
-rect.hclust(cah,k=4)
-groupes.cah <- cutree(cah,k=4)
-# normée
-plot(cah2, cex=0.5, main = "CAH normée")
-rect.hclust(cah2,k=4)
-groupes.cah2 <- cutree(cah2,k=4)
-```
-
-Observer Pantin / La Courneuve et Aubervilliers / Aulnay sous Bois, par exemple
-
