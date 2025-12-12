@@ -383,7 +383,6 @@ summary(jointure)
 
 ```{r}
 (test <- chisq.test(jointure [,-1]))
-
 ```
 
 
