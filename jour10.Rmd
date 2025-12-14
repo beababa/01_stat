@@ -27,7 +27,7 @@ Ces exercices permettent de vous familiariser avec différents types d'interface
 Votre objectif restent de filtrer au maximum les données et de télécharger un .csv pour l'ouvrir
 directement sous R.
 
-Evitez de passer par un tableur...
+Évitez de passer par un tableur...
 
 
 ## Logements vacants
@@ -36,7 +36,7 @@ Attention il faut faire :
 
 
 Pour avoir accès à la plateforme de la donnée. On retrouve alors la même interface que pour 
-les statistiques locales de l'insee.
+les statistiques locales de l'Insee vue pour le DM.
 
 
 
@@ -77,6 +77,8 @@ dvf <- na.omit(dvf)
 ```
 
 
+5 lignes supprimées sur 1266 = c'est minime
+
 ## Origine et taille de chacune des données.
 
 Dans chacun des 3 cas, il s'agit de sources fiables.
@@ -91,7 +93,7 @@ knitr::kable(data)
 
 
 
-# univarié
+# Univarié
 
 
 ## Logements vacants
@@ -157,12 +159,14 @@ knitr::kable(data)
 ```
 
 
-## bivariée
+# Bivariée
 
-### Tableau de contingence
+## Khi2 : logements vacants par dpt
+
+#### Tableau de contingence
 
 ```{r}
-table(logvac$Nombre.de.logements.vacants.2022)
+hist(logvac$Nombre.de.logements.vacants.2022)
 logvac$categorie <- cut(logvac$Nombre.de.logements.vacants.2022, breaks = c(0,500,750,5000))
 table(logvac$categorie)
 ```
@@ -176,7 +180,7 @@ tab
 ```
 
 
-### Khi2
+#### Khi2
 
 Pas de chiffre < 5, on peut faire un khi2
 
@@ -189,123 +193,158 @@ test
 La p-value est réduite donc l'hypothèse nulle est rejetée, il y a bien un lien entre les dpts et le
 nombre de logements vacants en Ile de France.
 
-Il paraît évident au vu du tableau de contingence qu'il y a moins de logements vacants dans le
+Il paraît d'ailleurs évident au vu du tableau de contingence qu'il y a moins de logements vacants dans le
 77 78, 91 et 95 que dans le 92,93,94.
 
 Mais, encore une fois, le nombre de logements vacants doit être dépendant de la taille des villes.
 
+## Régression : tx d'inflation et chomage (milliers de personnes)
 
-
-# ACP : conjurer l'illisbilité des graphiques
-
-Commandes à faire à chaque fois que l'on découvre une donnée
+### Constitution de la base : inflation et chômage
 
 ```{r}
-#row.names (data) <- data$Libellé
-data$etik <- paste0(data$Code,"_", data$Libellé)
-row.names (data) <- data$etik
-data <- data [,c(3:6)]
-names(data) <- c("Hébergemet", "niveau de vie", "entreprises", "scolaire+15")
-# on enlève les NA
-data <- na.omit(data)
+chomage <- read.csv("data/chomage.csv")
+chomage <- chomage [, c("geo","OBS_VALUE")]
+jointure <- merge (eurostat, chomage, by = "geo")
+names(jointure) <- c("pays", "inflation", "chomage")
+hist(jointure$chomage)
+filtre <- jointure  [jointure$chomage < 2000,]
+hist(filtre$chomage)
+filtre <- jointure  [jointure$chomage < 500,]
+```
+
+On a effectué un double filtre de manière à avoir une donnée de taille comparable.
+
+
+### Modèle
+
+```{r}
+lm <- lm(filtre$chomage~filtre$inflation)
+plot(filtre$inflation, filtre$chomage, xlab="variable explicative\ninflation", ylab= "à expliquer : chômage")
+abline(lm, lty =2, lwd = 1, col = "red")
+text(filtre$inflation, filtre$chomage,labels = filtre$pays
+      , cex=0.6, pos = 2)
 ```
 
 
 
 ```{r}
-summary(data)
+cor(filtre [,c(2,3)])
+```
+
+
+Il apparaît qu'il n'y a pas de relation entre tx d'inflation et chomage.
+Le filtre a sélectionné des pays de taille comparable mais leur position est trop dispersée.
+Apparaît cependant des groupes qui pourraient éventuellement permettre d'établir
+une division spatiale des pays européens.
+
+
+
+## Variance : logements vacants par dpt
+
+
+```{r}
+boxplot(logvac$Nombre.de.logements.vacants.2022~logvac$dpt)
+names(logvac)[3] <- "nb"
+modele <- lm (nb ~ dpt, data = logvac)
+anova(modele)
+```
+
+
+Comme le montre le résultat de l'ANOVA, il y a une forte différenciation entre les
+départements d'île de France autour des logements vacants.
+
+
+# ACP : déplacements domicile travail
+
+## Travail préparatoire sur le fichier avant l'ACP : le fichier est trop gros
+
+Préparation du fichier final, on filtre sur les dpts utilisés en cours
+
+```{r, eval = FALSE}
+# très gros fichier, on filtre sur les dpts 
+dep <- read.csv2("data/gros/depl_dom_trav_co2_2022.csv", na.strings = "NA")
+lieu <- c(lieu, "06088")
+filtre <- dep [dep$LIEU_RESID %in% lieu,]
+write.csv(filtre,"data/gros/deplacement.csv", fileEncoding = "UTF-8" )
+```
+
+On coupe le fichier par dpt pour que les étudiants puissent l'ouvrir
+
+
+```{r, eval=FALSE}
+dep <- read.csv("data/gros/deplacement.csv", fileEncoding = "UTF-8")
+names (dep)
+dpt <- names(table(dep$DEP_RESID))
+for (d in dpt){
+  tmp <- dep [dep$DEP_RESID == d,]
+  write.csv(tmp, paste0("data/deplacement", d, ".csv"), fileEncoding = "UTF-8")
+}
+```
+
+## Au choix on traite d'un département
+
+
+
+```{r}
+dep <- read.csv("data/gros/deplacement93.csv", fileEncoding = "UTF-8")
+```
+
+
+On fait le choix des numériques DIST_HEBDO CO2_HEBDO DUREE CARBU_HEBDO avec l'idée 
+que toutes les valeurs sont corrélées
+
+```{r}
+dep <- dep [, c("DIST_HEBDO", "CO2_HEBDO", "DUREE", "CARBU_HEBDO")]
+dep <- na.omit(dep)
+# attention bcp de na on passe de  50 M à 16 M
+```
+
+
+
+```{r}
+summary(dep)
 # ordres de grandeur
-round(cor(data),1)
+round(cor(dep),1)
 # relations (numériques)
-pairs(data)
+pairs(dep)
 # relations (graphiques)
 ```
 
-Paris pose pb
-
-```{r}
-data <- data [-1,]
-```
+On voit que si CARBU et HEBDO sont totalement liées, distance et durée vers les
+valeurs hautes sont plus diversifiées
 
 
 ```{r}
-res <- prcomp(data, scale. = F)
-# ACP normée
-res2 <- prcomp(data, scale. = T)
+
 ```
 
 
 
 
-```{r}
-par(mfrow=c(1,2), bg="cornsilk")
-biplot(res, main= "Résultat d'une ACP", col=c("black", "brown"))
-biplot(res2, main= "Résultat d'une ACP normée", col= c("black", "chartreuse"))
 
-```
-
-
-Le plus simple est de sélectionner quelques individus
+On sélectionne  les individus à la durée la plus longue
 
 ```{r}
-data <- data [c(1:100),]
+hist(dep$DUREE)
+dep <- dep [dep$DUREE > 40,]
 ```
 
+L'ACP est normée car les unités sont différentes
 
 ```{r}
-res <- prcomp(data, scale. = F)
-# ACP normée
-res2 <- prcomp(data, scale. = T)
+res <- prcomp(dep, scale. = T)
+biplot(res, main= "Résultat d'une ACP normée", col= c("black", "chartreuse"), cex = 0.5)
 ```
 
-
-
+Il y a beaucoup d'individus qui sont loin des axes. Il faut examiner leur caractéristiques.
 
 ```{r}
-par(mfrow=c(1,2), bg="cornsilk")
-biplot(res, main= "Résultat d'une ACP", col=c("black", "brown"))
-biplot(res2, main= "Résultat d'une ACP normée", col= c("black", "chartreuse"))
-
+remarquable <- c(48327, 48421, 48324)
+dep$id <- rownames(dep)
+dep [dep$id %in% remarquable,]
 ```
 
+On peut voit donc avec ces 3 cas que pour une durée similaire, les consommations de carburant et l'émission de CO2 vont du simple au double. Cela dépend du moyen de transport utilisé, à noter également que la distance est plus faible pour celui qui doit utiliser un transport en commun.
 
-
-Au niveau des individus, il faudrait procéder groupe par groupe pour identifier chacun,
-c'est le rôle des classifications.
-
-
-# Classification hiérarchique
-
-## Dendogramme
-
-```{r}
-par(mfrow=c(1,2))
-# matrice des distances
-ddata <- dist(data)
-cah <- hclust(ddata)
-plot(cah, cex=0.5, main = "CAH")
-# normée
-data2 <- scale(data, center = T, scale = T)
-ddata2 <- dist(data2)
-cah2 <- hclust(ddata2)
-plot(cah2, cex=0.5, main = "CAH normée")
-```
-
-
-
-
-Dendrogramme avec matérialisation des groupes
-
-```{r}
-par(mfrow=c(1,2))
-plot(cah,  cex=0.5,  main = "CAH")
-rect.hclust(cah,k=4)
-groupes.cah <- cutree(cah,k=4)
-# normée
-plot(cah2, cex=0.5, main = "CAH normée")
-rect.hclust(cah2,k=4)
-groupes.cah2 <- cutree(cah2,k=4)
-```
-
-Observer Pantin / La Courneuve et Aubervilliers / Aulnay sous Bois, par exemple
 
