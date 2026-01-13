@@ -34,6 +34,7 @@ directement sous R.
 
 Attention il faut faire :
 
+![](img/lvac.png)
 
 Pour avoir accès à la plateforme de la donnée. On retrouve alors la même interface que pour 
 les statistiques locales de l'Insee vue pour le DM.
@@ -49,8 +50,18 @@ summary(logvac)
 
 ## Eurostat
 
-Passer par 
+Trouver la zone de recherche dans l'onglet données
 
+![](img/rechercheTauxInflation.png)
+
+puis le filtre
+
+![](img/eurostatfiltre.png)
+
+et enfin les paramètres de téléchargement
+
+
+![](img/eurostattelechargement.png)
 
 
 ```{r}
@@ -313,11 +324,6 @@ pairs(dep)
 
 On voit que si CARBU et HEBDO sont totalement liées, distance et durée vers les
 valeurs hautes sont plus diversifiées
-
-
-```{r}
-
-```
 
 
 
