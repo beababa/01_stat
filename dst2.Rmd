@@ -1,5 +1,5 @@
 ---
-title: "DST 2 : BNDB"
+title: "DST 2025"
 output:
   html_document:
     number_sections: yes
@@ -15,6 +15,62 @@ knitr::opts_chunk$set(warning  = FALSE)
 ``` 
 
 
+
+# Objet
+
+7 sujets pour 2025 2026
+
+
+- eurostat : agriculture europe
+
+
+```{r}
+eurostat <- read.csv("data/examen/tableauSujet1.csv")
+str(eurostat)
+hist(eurostat$Superficie.agricole.utilisée)
+```
+
+
+- insee : agriculture fr
+
+```{r}
+read.csv2("tableauSujet2.csv", fileEncoding = "UTF-8", dec = ".")
+```
+
+
+ 
+
+```{r}
+insee <- read.csv2("data/examen/tableauSujet2.csv", fileEncoding = "UTF-8", dec = ".")
+str(insee)
+hist(insee$Céréales)
+```
+
+
+- banque mondiale
+
+```{r}
+read.csv2("tableauSujet3.csv", fileEncoding = "UTF-8", dec = ".")
+```
+
+
+
+```{r}
+dvp <- read.csv2("data/examen/tableauSujet3.csv", fileEncoding = "UTF-8", dec = ".")
+str(dvp)
+hist(dvp$agriculture)
+```
+
+
+
+- filosofi :
+
+```{r}
+filosofi <- read.csv2("data/examen/93_carEXAMEN.csv")
+str(filosofi)
+options(scipen = 999)
+filosofi$lcog_geo
+```
 
 
 
