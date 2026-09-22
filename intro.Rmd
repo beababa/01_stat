@@ -24,56 +24,71 @@ knitr::opts_chunk$set(warning  = FALSE)
 
 
 ```{r, eval=TRUE}
-data <- read.csv("data/deroule2025.csv", encoding = "UTF-8")
+data <- read.csv("data/deroule2026.csv", encoding = "UTF-8")
 knitr::kable(data)
 ```
 
 
+Comptes des villes et élections municipales : quels sont les liens ?
+
+
 # La donnée
 
-## Où les trouver ?
 
-Au départ les données sur les finances des communes
-
-https://www.data.gouv.fr/datasets/comptes-des-communes-2017-2024/
+## Où la trouver ?
 
 
+Data.gouv, portail externe voire portail cartographique
 
-## Préparer les données
+### Data.gouv
+
+définir avec wikipedia, que retenir par rapport à l'IA ?
+
+apprendre à chercher :
+
+- les élections (que préciser ?)
+
+- les finances des communes (mot clé *compte des communes*)
 
 
-### Des données trop nombreuses
+### Le portail externe
 
-23 millions d'observations au total, un fichier de 6 G°de données
+Trouver la source originale pour les comptes des communes et apprendre à utiliser cet
+outil plutôt que le fichier de data.gouv
+
+car : 23 millions d'observations au total, un fichier de 6 G°de données
 
 ![](img/source.png)
-voir la [source originale]( https://data.ofgl.fr/explore/dataset/ofgl-base-communes/table/?disjunctive.nomen&disjunctive.agregat&disjunctive.tranche_revenu_imposable_par_habitant&disjunctive.tranche_population&disjunctive.epci_name&disjunctive.reg_name&disjunctive.dep_name&disjunctive.com_name&sort=exer)
 
 
-Portail données
 
-https://data.ofgl.fr/explore/dataset/
+### Portail cartographique
 
+Utiliser l'[outil](https://data.ofgl.fr/pages/cartographie/) proposé par l'OFGL
 
-### Portail cartographie
-
-Pour les premiers cours, il est plus facile d'utiliser l'[outil](https://data.ofgl.fr/pages/cartographie/) proposé par l'OFGL
-### Filtres
+Quel est l'apport de la cartographie ?
 
 
-#### Choix de base : type de budget et année
+## Extraire la donnée à partir du portail externe
+
+Explication des différents filtres
 
 
-- budget principal et 2024 (pour avoir une ligne par commune)
+#### Choix de base : compte consolidé et année
+
+
+- compte consolidé
 
 ![](img/choixDeBase.png)
 
 
-- choisir un ou plusieurs agrégats
+- pour le premier cours, ne pas faire de choix d'agrégat
 
 ![](img/agregatListe.png)
 
+savoir distinguer investissement et fonctionnement
 
+dans quelle catégorie classer les frais de personnel ?
 
 #### Un choix géographique différent par étudiant
 
@@ -133,17 +148,18 @@ pour tous les agrégats)
 A noter, sélectionner la région permet de choisir plus facilement le département 93
 
 ```{r}
-data <- read.csv2("data/agregatEnsemble.csv")
+data <- read.csv2("data/agregatEnsemble.csv", dec=".")
 names(data)
 head(data)
-# combien d'enregistrement par ville et par exercice ?
-table(data$Code.Insee.2024.Commune)
-# filtre sur Bondy, 93010, et les variables spécifiques (agrégat et montant par hbt)
-head(data [ data$Code.Insee.2024.Commune == 93010, c(5,16,24,28)])
+str(data)
+# combien d'enregistrement par ville ?
+table(data$Code.Insee.2025.Commune)
+# filtre sur l'agrégat et le montant par hbt)
+head(data [ , c(21,28)])
 # sauvegarde de la donnée
-write.csv(data [,c(16,24,28)], "data/data93_2024.csv", fileEncoding = "UTF-8")
+write.csv(data [,c(21,28)], "data/agregat.csv", fileEncoding = "UTF-8")
 # Les agrégats ont-ils tous la même importance ?
-table(data$Agrégat)
+hist(data$Montant.en...par.habitant)
 ```
 
 
@@ -214,7 +230,13 @@ barplot(presence$TD3~presence$numCours, col="darkorange",beside = T, main = "Evo
 
 ### Les rendus d'exercices
 
+Attention, les exercices sont à rendre 2 jours avant le cours (temps de la correction), 
 
+- gr 3 : mercredi 20 h
+
+- gr 1 et 2 : vendredi 20 h
+
+Aucun retard toléré
 
 ```{r}
 data <- read.csv("data/notesDM1_7.csv", na.strings = "-", fileEncoding = "UTF-8")
@@ -269,10 +291,6 @@ dev.off()
 
 # Ressources autre que la bibliographie officielle
 
-2 cours universitaires disponibles sur internet
-
-- http://www.ipt.univ-paris8.fr/vgodard/enseigne/statisti/framstat.htm
-- http://grasland.script.univ-paris-diderot.fr/STAT98/STAT98.htm
 
 Pour R, la base de tout est 
 

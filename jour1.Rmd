@@ -74,23 +74,34 @@ Et non pas :
 
 ### Préparation de l'exercice
 
-#### Pour obtenir un TIG avec une seule variable, quelle variable choisir et pour quels individus ?
+#### Filtres colonne pour TIG
+
+
+Pour obtenir un TIG avec une seule variable, quelle variable choisir et pour quels individus ?
 
 Dans l'exemple proposé du cours (*Potentiel fiscal et police municipale*), on choisit la colonne de la dénomination des communes (26 communes sur le 93) et le nombre d'agents
 
+![](img/choixCol.png)
+
+
+#### Savoir faire tableur
 
 Cet exercice permet d'utiliser dans le tableur :
 
 * utilisation de la barre de formule
+
+* formule simple : minimum et maximum
 
 * formule frequence, formule matricielle (CTRL + MAJ + ENTREE)
 
 * le graphique en barre et la personnalisation (transformation données étiquettes)
 
 
-formules du tableau
+Pour mémoire, formules du tableau
 
 ![](img/frequence.png)
+
+
 
 
 ### Quel commentaire ?
@@ -103,7 +114,7 @@ summary(maData$Nombre.de.policiers.et.de.gardes.champêtres)
 
 
 Concernant notre exemple, il y a une grande disparité entre les communes, certaines
-ont 3 agents, d'autres 63
+ont 3 agents, d'autres 63.
 
 - forme de la distribution
 
@@ -337,10 +348,7 @@ Démonstration avec les agrégats du 93
 data <- read.csv("data/data93.csv")
 # liste des agrégats
 names(data)
-table(data$Exercice)
-# filtre sur le budget principal et l'année
-table(data$Type.de.budget)
-data <- data [data$Exercice == 2018 & data$Type.de.budget == 'Budget principal', c("Nom.2024.Commune", "Agrégat", "Montant.en...par.habitant" )]
+table(data$Libellé.Budget)
 # simplification des noms des colonnes
 names(data) <- c("ville", "agregat","montant")
 agregat <- names(table(data$agregat))
