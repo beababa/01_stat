@@ -88,6 +88,8 @@ Dans l'exemple proposé du cours (*Potentiel fiscal et police municipale*), on c
 
 Cet exercice permet d'utiliser dans le tableur :
 
+* raccourcis claviers de déplacement (CTRL et flèches) et de sélection (CTRL et flèches + MAJ)
+
 * utilisation de la barre de formule
 
 * formule simple : minimum et maximum
@@ -102,6 +104,7 @@ Pour mémoire, formules du tableau
 ![](img/frequence.png)
 
 
+Voir également cette [vidéo](https://www.youtube.com/watch?v=xW27DzWoYI4) sur internet
 
 
 ### Quel commentaire ?
@@ -125,24 +128,26 @@ police nationale.
 
 ## A explorer 
 
-graphique en barres, lignes (lissage)
+Autres graphiques : graphique en barres, lignes (lissage)
+
+![](img/graphAutres.png)
+
 
 Observer la disposition des bornes : elles sont utilisées comme des étiquettes et non pas comme une série de valeurs.
 
 Sous R, l'histogramme est un des graphiques le plus simple à obtenir.
 
 ```{r}
-hist(maData$Nombre.de.policiers.et.de.gardes.champêtres)
+hist(maData$Nombre.de.policiers.et.de.gardes.champêtres, xlab = "Effectif PM", ylab = "Nb de communes",
+     main = "Répartition des effectifs de PM par commune")
 ```
 
 L'histogramme souligne l'originalité d'Aulnay sous bois par rapport autres communes.
 
-## Correction exercice dénombrement des agrégats financiers
+## Correction exercice dénombrement des agrégats financiers (MAISON 1)
 
 
-Des retours très nombreux (46 sur 60). Beaucoup d'étudiants ont buté sur la difficulté de la numérotation décimale et ont utilisé le fichier vu en classe, pas de problème dans le cadre d'un exercice.
-
-
+Remise 55 sur 74 inscrits.
 
 ### Le séparateur décimal (, ou . ?)
 
@@ -152,7 +157,6 @@ Sous Calc, l'astuce consiste à modifier les paramètres linguistiques.
 
 Pour un tableur, le chiffre se positionne à droite de la cellule, le texte à gauche.
 
-L'autre solution était d'utiliser le format excel.
 
 
 ### Commentaires généraux qui valent pour tous les exercices et surtout le DST
@@ -163,56 +167,58 @@ L'autre solution était d'utiliser le format excel.
 Attention à toujours définir sa donnée dés le départ y compris sa source.
 
 ![](img/deQuoi.png)
-Dans le cadre de notre cours,
-c'est la commune et son *département* (ou *sa communauté de communes*) puis l'agrégat choisi.
+
+
+Dans le cadre de l'exercice, c'est la commune et ses agrégats financiers :
+
+- comptes consolidés (tous les budgets de la commune)
+
+- agrégats liés au budget (dépenses - recettes à l'équilibre), mais également solde, bilans...
 
 
 
 #### Pour la forme 
 
-Ne jamais mettre un tableau de données dans sa copie !
+J'ai sanctionné les copies illisibles.
 
-Ne jamais prendre en photo son écran !
+A retenir :
+
+- Ne jamais mettre un tableau de données dans sa copie !
+
+- Ne jamais prendre en photo son écran !
+
+- Eviter absolument une copie d'écran de l'ensemble de son écran.
 
 Le mieux *traitement de texte* dans lequel on insère un 
 graphique image (copie d'écran CTRL + MAJ + S puis CTRL + V pour coller), puis
 enregistrement en .pdf au final.
 
 Attention aux nombreuses pages inutiles si on passe directement du tableur
-au traitement de texte.
+au traitement de texte (la palme revient à un étudiant qui m'a envoyé 63 pages)
 
+Attention également, enregistrement en .pdf de sa copie (éviter le .pdf.pdf)
 
+Ne pas oublier de soigner ses titres.
 
-Soigner ses titres
-
-Par contre, pas de carte, ce n'est pas le sujet du cours.
-La discrétisation avec un logiciel SIG est souvent automatisée, et ce cours permet
-de faire les choses *à la main*.
 
 
 
 #### Concision du commentaire
 
+Ne jamais oublier que l'exercice ne vaut que 1 ou 2 points et que je les corrige rapidement.
 
 ![](img/trop.png)
 
-même si, un strict respect de la consigne donnait :
 
-
-![](img/tropTechnique.png)
 
 
 Prochain exercice, commentaire plus court. 2 phrases maximum, 1 page au total, aller à l'essentiel.
 
-*Il y plus de grosses dépenses en fonctionnement que de petites* (ou l'inverse)
+*Il y plus de gros agrégats que de petits* (ou l'inverse)
 
-Ou plus osé :
+Et préciser quel agrégat est remarquable et pourquoi ?
 
-*Certaines villes ne maîtrisent pas leurs dépenses de personnel*
-
-Et préciser quelle ville est remarquable et pourquoi ?
-
-![](img/oui.png)
+![](img/agregatDepense.png)
 
 
 #### Vocabulaire
@@ -221,11 +227,17 @@ Revenir sur le terme : formule *fréquence et son graphique*
 
 Diagramme de fréquence, histogramme...
 
-Le mieux : *Discrétisation des dépenses de personnel en fonction des villes*
+Le mieux : *Discrétisation des agrégats financiers en fonction de leur montant (euros / hbt)*
 
 
 
 ### Plus précisemment
+
+
+#### Résultat faux
+
+![](img/faux2.png)
+
 
 ####  Problème sur les classes dans le graphique 
 
@@ -247,40 +259,44 @@ Une solution, afficher les étiquettes sur les barres
 
 #### Autres méthodes
 
-Une méthode différente est valide également (le tableau croisé dynamique)
+Une méthode différente est valide également (le tableau croisé dynamique dit pilote dans libre office)
 
 ![](img/excel.png)
 
 
 
+### Les agrégats à supprimer
 
+La bonne réponse était les totaux, j'ai accepté les réponses autour des valeurs aberrantes.
 
-
+![](img/agregatAgreges.png)
 
 
 
 
 # Pour raffiner : les indicateurs
 
-Nous avons déjà vu l'amplitude à travers minimum et maximum. Il y en a d'autres.
+Nous avons déjà vu l'amplitude à travers minimum et maximum. Il y a d'autres indicateurs.
 Ils servent à résumer la série statistique
 
 Nous allons montrer comment calculer médiane, moyenne et écart type dans le tableur. 
 
-Pour l'exemple, on prend l'agrégat financier de l'exercice : celui des frais du personnel.
+Pour l'exemple, on prend un agrégat budgétaire connu : celui des frais du personnel.
 
-Afin de pouvoir comparer les communes de taille différente, on utilise plutôt les montants par habitant.
+Afin de pouvoir comparer les communes de taille différente, on utilise les montants par habitant.
 
-![](img/agregat.png)
 
 
 ```{r}
 data <- read.csv2("data/fraisPersonnel.csv", dec= ".", fileEncoding = "UTF-8")
 str(data)
-hist(data$montant.par.hbt, freq = FALSE)
+hist(data$montant.par.hbt, freq = FALSE, main = "Dpt 93 - répartition des dépenses du personnel par commune", xlab = "euros par habitant")
 lines(density(data$montant.par.hbt), col="red", lwd = 2)
 ```
 
+La majorité des communes ont des dépenses moyennes (1000) par habitant.
+
+Cas extrêmes : Le Raincy (peu), Tremblay (beaucoup)
 
 
 
@@ -294,16 +310,16 @@ Le calcul de la moyenne est connu. Celui de la médiane beaucoup moins.
 
 Sur le tableau complet, créer une colonne rang. Et relever le rang médian
 
+savoir-faire tableur : recopie incrémentée
+
 ![](img/mediane.png)
 
 
 
 
-### Savoir faire tableur
 
-- nommer la plage de données 
 
-![](img/nom.png)
+
 ### Représentation graphique
 
 Elle consiste à tracer moyenne et médiane sur le graphique, elle n'est pas possible
@@ -348,17 +364,17 @@ Démonstration avec les agrégats du 93
 data <- read.csv("data/data93.csv")
 # liste des agrégats
 names(data)
-table(data$Libellé.Budget)
 # simplification des noms des colonnes
 names(data) <- c("ville", "agregat","montant")
 agregat <- names(table(data$agregat))
-table(data$ville)
 ```
 
 
+Affichage de tous les agrégats
+
 ```{r}
 png("img/medmoy.png", width = 1200, height = 1200, res=90)
-par(mfrow=c(7,7))
+par(mfrow=c(7,8))
 i <- 1
 for (i in 1:length(agregat)){
   tmp <- data [data$agregat == agregat [i],]
@@ -375,25 +391,46 @@ dev.off()
 ```
 
 ![](img/medmoy.png)
+
 moyenne en bleue, médiane en rouge
 
 Chercher un ou deux agrégats pour lequel médiane et moyenne sont différentes.
 
 
 ```{r}
-par(mfrow=c(1,2))
+liste <- split(data$montant, data$agregat)
+moyenne <- sapply(liste, mean)
+mediane <- sapply(liste, median)
+maxi <- which((moyenne-mediane)==max(moyenne-mediane))
+mini <- which((moyenne-mediane)==min(moyenne-mediane))
+nulle <- which(round(moyenne-mediane,0)==0)
+```
+
+
+
+
+```{r}
+par(mfrow=c(1,3))
 # moyenne > médiane
-agregat [43]
-tmp <- data [data$agregat == agregat [43],]
-hist(tmp$montant, main = agregat [43])
+agregat [maxi]
+tmp <- data [data$agregat == agregat [maxi],]
+hist(tmp$montant, main = agregat [maxi])
 moy <- mean(tmp$montant)
 med <- median(tmp$montant)
 abline(v = moy, col = 'blue')
 abline(v = med, col = 'red')
-# également
-agregat [37]
-tmp <- data [data$agregat == agregat [37],]
-hist(tmp$montant, main = agregat [37])
+# médiane > moyenne
+agregat [mini]
+tmp <- data [data$agregat == agregat [mini],]
+hist(tmp$montant, main = agregat [mini])
+moy <- mean(tmp$montant)
+med <- median(tmp$montant)
+abline(v = moy, col = 'blue')
+abline(v = med, col = 'red')
+# Moyenne = médiane
+agregat [nulle]
+tmp <- data [data$agregat == agregat [nulle],]
+hist(tmp$montant, main = agregat [nulle])
 moy <- mean(tmp$montant)
 med <- median(tmp$montant)
 abline(v = moy, col = 'blue')
@@ -403,12 +440,13 @@ abline(v = med, col = 'red')
 
 ## Dispersion : Ecart-type et variance
 
-La distribution est-elle hétérogène ?
+La distribution des écarts-type est-elle hétérogène ?
 
 ```{r}
 agg <- aggregate(data$montant, by = list(data$agregat), sd)
 names(agg) <- c("agregat", "sigma")
 hist(agg$sigma)
+
 moy <- mean(agg$sigma)
 med <- median(agg$sigma)
 abline(v = moy, col = 'blue')
@@ -418,18 +456,18 @@ abline(v = med, col = 'red')
 Commenter l'écart type le plus élevé
 
 ```{r}
-agg$agregat [agg$sigma == max(agg$sigma)]
-sel <- agregat [23]
-tmp <- data [data$agregat == sel,]
+maxiSigma <- agg$agregat [agg$sigma == max(agg$sigma)]
+tmp <- data [data$agregat == maxiSigma,]
 hist(tmp$montant, 
      main = paste0
-      (sel,"\n",
+      (maxiSigma,"\n",
         round(sd(tmp$montant),0)))
 moy <- mean(tmp$montant)
 med <- median(tmp$montant)
 abline(v = moy, col = 'blue')
 abline(v = med, col = 'red')
-knitr::kable(tmp [order(tmp$montant), c(1,3)])
+knitr::kable(head(tmp [order(tmp$montant), c(1,3)]))
+knitr::kable(tail(tmp [order(tmp$montant), c(1,3)]))
 ```
 
 
@@ -468,9 +506,21 @@ liste des colonnes :
 - et à part sur une seule case : moyenne du carré des écarts (variance), l'écart type est la racine carrée.
 
 
+- nommer *maMoy* la cellule contenant la moyenne
+
+![](img/nomMoyenne.png)
 
 
-### Corrections quelques remarques
+
+Pour mémoire, les formules :
+
+
+
+![](img/formuleVariance.png)
+
+
+### Corrections MAISON 2 quelques remarques (attention exercice 2025)
+
 
 L'objectif de l'exercice était d'obtenir un commentaire clair avec quelques repères statistiques.
 

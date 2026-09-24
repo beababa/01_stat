@@ -1,0 +1,44 @@
+---
+title: "Compléments"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval  = TRUE)
+knitr::opts_chunk$set(echo  = TRUE)
+knitr::opts_chunk$set(warning  = FALSE)
+``` 
+
+
+# fichier étudiant
+
+
+concaténation
+
+```{r}
+fic <- list.files("data/", pattern = "etudiantCours")
+data <- lapply(fic, function(x) {
+  tmp <- read.csv(paste0("data/",x))
+  write.csv(tmp, x)
+  return(tmp)
+})
+# extraction colonne 6
+insee <- unlist(sapply(data,  "[[", 6))
+insee <- unique (insee)
+write.csv(insee, "data/insee.csv", row.names = F)
+# colonne appétence
+appetence <- unlist(sapply(data,  "[[", 5))
+futur  <- unlist(sapply(data,  "[[", 4))
+passe <- unlist(sapply(data,  "[[", 3))
+cours <- unlist(sapply(data, "[[",2))
+data <- data.frame(appetence, futur, present, cours)
+write.csv(data, "data/etudiant.csv")
+```
+
+
+

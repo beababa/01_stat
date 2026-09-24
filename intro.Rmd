@@ -74,7 +74,7 @@ Quel est l'apport de la cartographie ?
 Explication des différents filtres
 
 
-#### Choix de base : compte consolidé et année
+### Choix de base : compte consolidé et année
 
 
 - compte consolidé
@@ -86,61 +86,65 @@ Explication des différents filtres
 
 ![](img/agregatListe.png)
 
-savoir distinguer investissement et fonctionnement
+Sur la notion d'agrégat, au minimum :
 
-dans quelle catégorie classer les frais de personnel ?
+- Savoir distinguer investissement et fonctionnement
 
-#### Un choix géographique différent par étudiant
+- Dans quelle catégorie classer les frais de personnel ?
 
 
+### La commune : un choix géographique différent par étudiant
+
+Chaque étudiant choisit une commune et indique son code INSEE
 
 ```{r}
-lieu <- read.csv("data/etudiant.csv")
-lieu <- unique(lieu$code.insee.commune.choisie)
+lieu <- read.csv("data/insee.csv")
 lieu <- lieu [!is.na(lieu)]
-library(sf)
-communes <- st_read("data/gros/communes-1000m.geojson")
-communes <- communes [st_is_valid(communes),]
-
-region <- aggregate(communes [,c("region")], by = list(communes$region), length)
-
+suppressMessages(library(sf))
+communes <- st_read("data/gros/communes-1000m.geojson", quiet = T)
+region <- st_read("data/regions-20140306-100m.shp", quiet = T)
+region$code_insee <- as.integer(region$code_insee)
+region <- region [region$code_insee > 10,] 
 data <- communes [communes$code %in% lieu,]
-table(data$departement, data$region)
-library(mapsf)
-hist(region$region)
-met <- region [region$region > 900,]
-mf_map(met, col = "wheat", border = NA)
-mf_map(data, col= "red", add = T, border = NA)
-mf_layout("Choix des communes sur la métropole par les étudiants", "data.gouv et sources internes\nNovembre 2025")
 ```
 
-Deux étudiants ont fait un choix hors métropole
+
+5 communes problématiques
+
+```{r}
+lieu [!(lieu %in% data$code)]
+lieu <- c(lieu,"94028", "94003", "06088", "94037", "92062", "94080" )
+data <- communes [communes$code %in% lieu,]
+```
+
+
+Cartographie des choix étudiants
 
 
 ```{r}
-horsMet <- data [data$departement %in% c(971,972),]
-mf_init(st_buffer(horsMet,20000))
-mf_map(region, col = "wheat", border = NA, add = T)
-mf_map(data, col= "red", add = T, border = NA)
-mf_layout("Choix des communes hors métropole par 2 étudiants", "data.gouv et sources internes\nNovembre 2025")
+library(mapsf)
+mf_map(region, col = "wheat", border="cornsilk")
+mf_map(st_buffer(data, 10000), col= "red", add = T, border = NA)
+mf_layout("Choix des communes\n(tampons autour des communes)", "data.gouv et sources internes\nseptembre 2026")
 ```
+
+
 
 
 Enregistrement de la donnée
 
 ```{r}
-st_write(data, "data/data.gpkg", "data", append = F)
+st_write(data, "data/cours.gpkg", "commune", append = F, quiet = T)
 data <- st_drop_geometry(data)
 write.csv(data, "data/communeEtudiant.csv", row.names = F)
 ```
 
 
 
-#### Choix pour le cours
+### Choix pour le cours
 
 
-Le cours sera basé sur la commune de Bondy et le département du 93 (1967 enregistrements
-pour tous les agrégats)
+Le cours sera basé sur la commune de Bondy (49 enregistrements pour tous les agrégats) et le département du 93 (1967 enregistrements)
 
 
 ![](img/sel93.png)
@@ -149,15 +153,18 @@ A noter, sélectionner la région permet de choisir plus facilement le départem
 
 ```{r}
 data <- read.csv2("data/agregatEnsemble.csv", dec=".")
+# liste des agrégats
 names(data)
+# début du fichier
 head(data)
+# structure du fichier
 str(data)
 # combien d'enregistrement par ville ?
 table(data$Code.Insee.2025.Commune)
 # filtre sur l'agrégat et le montant par hbt)
 head(data [ , c(21,28)])
 # sauvegarde de la donnée
-write.csv(data [,c(21,28)], "data/agregat.csv", fileEncoding = "UTF-8")
+write.csv(data [,c(21,28)], "data/agregatBondy.csv", fileEncoding = "UTF-8")
 # Les agrégats ont-ils tous la même importance ?
 hist(data$Montant.en...par.habitant)
 ```
@@ -171,23 +178,9 @@ hist(data$Montant.en...par.habitant)
 
 ## Qui sont les étudiants ?
 
-- 84 étudiants inscrits sur 3 cours (70 présents environ)
+- 84 étudiants inscrits sur 3 cours (54 présents environ)
 
 Les questions posées sont sur le passé / présent / futur des étudiants, leur appétence en stats
-
-```{r}
-etudiant <-  read.csv("data/TD3_stats_2025.csv", fileEncoding = "UTF-8")
-etudiant2 <- read.csv("data/tdLundi.csv", fileEncoding = "UTF-8")
-names(etudiant)
-names(etudiant2)
-names(etudiant2)[1] <- 'prenom'
-names(etudiant2)[4] <- 'appetence'
-etudiant2 <- etudiant2 [, names(etudiant)]
-etudiant <- rbind(etudiant, etudiant2)
-etudiant <- etudiant [!is.na(etudiant$prenom),]
-table(etudiant$groupe, useNA = "always")
-write.csv(etudiant, "data/etudiant.csv", fileEncoding = "UTF-8")
-```
 
 
 ```{r}
@@ -195,7 +188,7 @@ etudiant <- read.csv("data/etudiantModifie.csv", fileEncoding = "UTF-8")
 png("img/quisontils.png", width = 10000, height = 10000, res=1000)
 #par(mar = c(2,16,2,4))
 par(mfrow = c(2,2))
-for (i in c(3,4,6,7)){
+for (i in c(4, 3,2,1)){
   (mar = c(2,30,2,4))
   barplot(table(etudiant [,i]), border = NA,
           horiz = T, las = 2, cex.names = 0.8, 
@@ -234,7 +227,7 @@ Attention, les exercices sont à rendre 2 jours avant le cours (temps de la corr
 
 - gr 3 : mercredi 20 h
 
-- gr 1 et 2 : vendredi 20 h
+- gr 1 et 2 : jeudi 20 h
 
 Aucun retard toléré
 
