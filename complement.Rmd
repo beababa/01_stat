@@ -40,5 +40,294 @@ data <- data.frame(appetence, futur, present, cours)
 write.csv(data, "data/etudiant.csv")
 ```
 
+Ajout 4e fichier
 
+
+```{r}
+data <- read.csv("data/etudiant4.csv")
+etudiant <- read.csv("data/etudiantModifie.csv")
+nom <- names(etudiant)[1:4]
+gr4 <- data [, nom]
+gr4 <- gr4 [!is.na(gr4$appetence),]
+data <- rbind(etudiant, gr4)
+write.csv(data, "data/etudiantModifie.csv")
+```
+
+
+```{r}
+insee <- read.csv("data/insee.csv")
+code <- data$code
+insee <- c(insee$x, code)
+insee <- insee [!is.na(insee)]
+write.csv(insee, "data/insee.csv", row.names = F)
+```
+
+pb NA
+
+```{r}
+insee <- read.csv("data/insee.csv")
+insee <- insee [!is.na(insee$x),]
+insee <- unique (insee)
+write.csv(insee, "data/insee.csv", row.names = F)
+```
+
+## Verif code insee ?
+
+https://www.data.gouv.fr/datasets/base-officielle-des-codes-postaux
+
+
+
+```{r}
+correspondance <- read.csv2("data/correspondance.csv", colClasses = "character", fileEncoding = "latin1" )
+# 39 192
+etudiant <- read.csv("data/insee.csv")
+etudiant <- etudiant$x
+# 50
+correspondance <- correspondance [correspondance$X.Code_commune_INSEE %in% etudiant,]
+# 70
+correspondance [duplicated(correspondance$X.Code_commune_INSEE),]
+corrInsee <- unique(correspondance$X.Code_commune_INSEE)
+# 46
+etudiantErreur <- etudiant [!(etudiant %in% corrInsee)]
+# on enlève les cp en erreur
+etudiant <- etudiant [!(etudiant %in% etudiantErreur)]
+write.csv(etudiant, "data/insee.csv", row.names = F)
+```
+
+On a 46 codes insee vérifiés
+
+
+Un pb sur 86280
+
+
+```{r}
+correspondance [correspondance$X.Code_commune_INSEE == "86280",]
+# 396 habitants
+etudiant <- etudiant [etudiant!="86280"]
+write.csv(etudiant, "data/insee.csv", row.names = F)
+```
+
+trop petit, on le retire donc on aura 45 communes
+
+
+
+# Résultats élections
+
+
+Extraction par commune
+
+## 2e tour
+
+```{r}
+etudiant <- read.csv("data/insee.csv")
+etudiant <- etudiant$x
+# 45
+election <- read.csv2("data/2020-06-29-resultats-t2-communes-de-1000-hab-et-plus.csv", header = F, skip= 1, fileEncoding = "latin1")
+# fichier simplifié pour test pour récup en tête
+simple <-  read.csv("data/2020Resulat93.csv")
+nom <- names(simple)
+names(election) <- nom[-1]
+# recherches colonnes nuance et nb élus
+col <- grep("Nuance", names(election))
+col1 <- grep("Elu", names(election))
+col <- sort(c(col, col1))
+# base
+base <- election [,c(1,3,4,col)]
+# code  postal
+base$code  <- paste0(base$Code.du.département, base$Code.de.la.commune)
+# bizarre ni un code insee, ni un code postal
+base$code
+```
+
+
+
+
+
+
+## Extraction 1 = code insee dans base tour 2
+
+```{r}
+base$code
+baseSel <- base [base$code %in% etudiant,]
+# 21 sur 46 !
+etudiantErreur <- etudiant [!(etudiant %in% baseEquivalence$code) ]
+etudiantErreur
+# 1 exemple
+base [grep("^315",base$code),]
+# Commune de Saint-Orens-de-Gameville (31506) 14 M hbt 10 M electeur
+# pas de 2e tour 
+```
+
+
+## pb des codes arrondissements
+
+
+```{r}
+pb <- base [grep("SR", base$code),]
+pb$code
+```
+
+règle Paris 75056SR15 devient 75115
+
+13077 132 69123 69
+
+Dans les choix étudiants, uniquement Paris 4 arrondissemetns
+
+```{r}
+insee [grep ("^75", insee)]
+arr <- c( 16, 18, 19, 20)
+inseeElec <- paste0("75056SR", arr)
+insee [grep("^13", insee)]
+insee [grep("^69", insee)]
+pb$Code.du.département
+paris <- base [base$code %in% inseeElec,] 
+# 4
+baseSel <- rbind(paris, baseSel)
+names(baseSel)
+baseSel$tour <- 2
+write.csv(baseSel [,c(12, 3, 4:11,13)], "data/siegeTour2.csv")
+```
+
+21 + 4 ok
+
+## La base ne comprend pas le 1er tour !
+
+
+```{r}
+tour1 <- read.csv("data/2020-05-18-resultats-communes-de-1000-et-plus.txt", sep = "\t",
+                   header = T, skip= 0, dec=",", fileEncoding = "latin1")
+head(tour1)
+names(tour1)[1:33]
+titre <- names(tour1)[19:30]
+names(tour1)[31:42] <- titre
+180/12
+length(names(tour1)[31:210])
+names(tour1)[31:210] <- rep(titre, 15)
+```
+
+Le fichier du premier tour pas codé pareil
+
+```{r}
+# pb des zéros...
+tour1$Code.du.département
+tour1$Code.de.la.commune
+table(nchar(tour1$Code.de.la.commune))
+table(nchar(tour1$Code.du.département))
+tour1$codeDep <- ifelse(nchar(tour1$Code.du.département)==1, paste0("0", tour1$Code.du.département), tour1$Code.du.département)
+tour1$nbZero <- 3 - nchar(tour1$Code.de.la.commune)
+table(tour1$nbZero)
+tour1$txt <- NULL
+tour1$txt   [tour1$nbZero == 1] <- "0" 
+tour1$txt   [tour1$nbZero == 2] <- "00" 
+table(tour1$txt)
+tour1$codeCommune <- tour1$Code.de.la.commune
+tour1$codeCommune [tour1$nbZero > 0]  <- paste0(tour1$txt [tour1$nbZero > 0], tour1$Code.de.la.commune [tour1$nbZero > 0])
+table(nchar(tour1$codeCommune))
+tour1$codeCommune
+# code fin
+tour1$code <- paste0(tour1$codeDep, tour1$codeCommune)
+table(nchar(tour1$code))
+```
+
+
+Extraction des villes pas dans tour2 (25 à priori)
+
+
+```{r}
+tour1 <- tour1 [tour1$code %in% etudiantErreur,]
+#20
+names(tour1)
+```
+
+
+
+```{r}
+col <- grep("Nuance|Elu", names(tour1))
+siegeTour1 <- tour1 [,c(215, 4,col)]
+siegeTour1$tour <- 1
+write.csv(siegeTour1, "data/siegestour1.csv")
+```
+
+
+## Les manquants
+
+45 choix
+
+20 1er tour (sieges)
+4 Paris
+21 2e tour
+
+```{r}
+etudiant
+inseeTour1 <- tour1$code # 20
+inseeTour2 <- baseSel$code # 25
+tot <- c(inseeTour1, inseeTour2)
+etudiantPb <- etudiant [!(etudiant %in% tot)]
+etudiantPb
+```
+
+
+## Vainqueur et nb de siège
+
+
+```{r}
+siegeTour2 <- read.csv("data/siegeTour2.csv")
+siegeTour1 <- read.csv("data/siegestour1.csv")
+data <- siegeTour2
+# OU
+data  <- siegeTour1
+# traitements
+# identification colonne
+col <- grep("Elu", names(data))
+# calcul total sièges
+data$total <- rowSums(data  [, col], na.rm = T)
+# valeur maximum pour le siège
+data$maxi <- apply(data [, col], 1, max, na.rm = T)
+# pct
+data$pct <- (data$maxi/ data$total)*100
+# indice du siège maximum
+data$indiceMaxi <- apply(data [, col], 1, which.max)
+# freq indice max
+tab <- table(data$indiceMaxi)
+tab
+# maximum recodage
+ind <- which.max(tab)
+siegeTour2$recodage <- col [tab [ind]] 
+# suppression du maximum de la table
+tab <- tab [-ind]
+# boucle pour les autres recodages
+i <- 1
+tab[i]
+tab[i]-1
+data [,tab [i]-1]
+data [,]
+for (i in c(1:length(tab))){
+  tmpCol <- col [tab [i]]-1
+  data$recodage  <- col [tab [i]]  - 1
+}
+data$recodage
+trouverVainqueur <- function(id){
+  vainqueur <- data[id,data$recodage [id]]
+}
+
+data$vainqueur <- sapply(data$recodage, trouverVainqueur)
+```
+
+
+```{r}
+data <- data [,c("code", "Libellé.de.la.commune", "vainqueur", "pct")]
+head(data)
+write.csv(data, "data/tour2.csv")
+# OU
+write.csv(data, "data/tour1.csv")
+```
+
+
+```{r}
+siegeTour1 <- read.csv("data/siegestour1.csv")
+```
+
+```{r}
+
+```
 

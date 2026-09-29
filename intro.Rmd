@@ -128,9 +128,6 @@ mf_map(st_buffer(data, 10000), col= "red", add = T, border = NA)
 mf_layout("Choix des communes\n(tampons autour des communes)", "data.gouv et sources internes\nseptembre 2026")
 ```
 
-
-
-
 Enregistrement de la donnée
 
 ```{r}
@@ -180,7 +177,7 @@ hist(data$Montant.en...par.habitant)
 
 - 84 étudiants inscrits sur 3 cours (54 présents environ)
 
-Les questions posées sont sur le passé / présent / futur des étudiants, leur appétence en stats
+Les questions posées sont sur le passé /  futur des étudiants, leur appétence en stats
 
 
 ```{r}
@@ -188,7 +185,7 @@ etudiant <- read.csv("data/etudiantModifie.csv", fileEncoding = "UTF-8")
 png("img/quisontils.png", width = 10000, height = 10000, res=1000)
 #par(mar = c(2,16,2,4))
 par(mfrow = c(2,2))
-for (i in c(4, 3,2,1)){
+for (i in c(5, 4,3,2)){
   (mar = c(2,30,2,4))
   barplot(table(etudiant [,i]), border = NA,
           horiz = T, las = 2, cex.names = 0.8, 

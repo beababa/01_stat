@@ -15,7 +15,14 @@ knitr::opts_chunk$set(eval = TRUE)
 
 # Données d'exemple
 
-On travaille à présent sur un croisement de deux agrégats financiers. On récupère la donnée à partir de l'interface [les données de l'ofgl](https://data.ofgl.fr/explore/?exclude.theme=INTERNE&disjunctive.theme&disjunctive.publisher&disjunctive.keyword&sort=title) plutôt que celle de *la cartographie*.
+On travaille à présent sur un croisement 
+
+
+- d'un agrégat financier et 
+
+- d'un résultat électorla. 
+
+On récupère la donnée à partir de l'interface [les données de l'ofgl](https://data.ofgl.fr/explore/?exclude.theme=INTERNE&disjunctive.theme&disjunctive.publisher&disjunctive.keyword&sort=title) plutôt que celle de *la cartographie*.
 
 ![](img/interfaceOFGL.png)
 
@@ -26,10 +33,10 @@ Enoncer les hypothèses possibles de la comparaison, attention variable explicat
 ![](img/XYexplicatif.png)
 
 
-Pour le cours, l'hypothèse est que la non maîtrise des frais de personnel (X) amène l'augmentation des impôts locaux (Y) sur le 93 (budgets).
+Pour le cours, le vote pour la gauche (X) amène la non maîtrise des frais de personnel (Y) 
 
 
-Pour mémoire, l'hypothèse nulle (H~0~) est l'absence de relation entre impôts locaux et frais de personnel.
+Pour mémoire, l'hypothèse nulle (H~0~) est l'absence de relation entre vote pour la gauche et frais de personnel.
 
 
 ```{r, echo = F}
