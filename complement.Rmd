@@ -123,6 +123,7 @@ etudiant <- read.csv("data/insee.csv")
 etudiant <- etudiant$x
 # 45
 election <- read.csv2("data/2020-06-29-resultats-t2-communes-de-1000-hab-et-plus.csv", header = F, skip= 1, fileEncoding = "latin1")
+# on a changé le txt en csv -- cela a conservé les zéros dans les codes ?
 # fichier simplifié pour test pour récup en tête
 simple <-  read.csv("data/2020Resulat93.csv")
 nom <- names(simple)
@@ -137,11 +138,8 @@ base <- election [,c(1,3,4,col)]
 base$code  <- paste0(base$Code.du.département, base$Code.de.la.commune)
 # bizarre ni un code insee, ni un code postal
 base$code
+write.csv(base, "data/baseElectionTour2.csv", row.names = F, fileEncoding = "UTF-8")
 ```
-
-
-
-
 
 
 ## Extraction 1 = code insee dans base tour 2
@@ -149,8 +147,8 @@ base$code
 ```{r}
 base$code
 baseSel <- base [base$code %in% etudiant,]
-# 21 sur 46 !
-etudiantErreur <- etudiant [!(etudiant %in% baseEquivalence$code) ]
+# 21 sur 45 !
+etudiantErreur <- etudiant [!(etudiant %in% baseSel$code) ]
 etudiantErreur
 # 1 exemple
 base [grep("^315",base$code),]
@@ -185,7 +183,7 @@ paris <- base [base$code %in% inseeElec,]
 baseSel <- rbind(paris, baseSel)
 names(baseSel)
 baseSel$tour <- 2
-write.csv(baseSel [,c(12, 3, 4:11,13)], "data/siegeTour2.csv")
+write.csv(baseSel [,c(1,12, 3, 4:11,13)], "data/siegeTour2.csv")
 ```
 
 21 + 4 ok
@@ -243,9 +241,9 @@ names(tour1)
 
 ```{r}
 col <- grep("Nuance|Elu", names(tour1))
-siegeTour1 <- tour1 [,c(215, 4,col)]
+siegeTour1 <- tour1 [,c(211,215, 4,col)] # code dpt + code commune
 siegeTour1$tour <- 1
-write.csv(siegeTour1, "data/siegestour1.csv")
+write.csv(siegeTour1, "data/siegestour1.csv", row.names = F)
 ```
 
 
@@ -276,9 +274,11 @@ siegeTour1 <- read.csv("data/siegestour1.csv")
 data <- siegeTour2
 # OU
 data  <- siegeTour1
+#OU
+data <- tour2
 # traitements
 # identification colonne
-col <- grep("Elu", names(data))
+(col <- grep("Elu", names(data)))
 # calcul total sièges
 data$total <- rowSums(data  [, col], na.rm = T)
 # valeur maximum pour le siège
@@ -288,22 +288,22 @@ data$pct <- (data$maxi/ data$total)*100
 # indice du siège maximum
 data$indiceMaxi <- apply(data [, col], 1, which.max)
 # freq indice max
-tab <- table(data$indiceMaxi)
-tab
+(tab <- table(data$indiceMaxi))
+# correspondance col et col réel par lg
 # maximum recodage
-ind <- which.max(tab)
-siegeTour2$recodage <- col [tab [ind]] 
+(ind <- which.max(tab))
+(equiv <- data [,col [ind]])
+# on met toute la colonne en correspondance
+data$recodage <- equiv 
 # suppression du maximum de la table
-tab <- tab [-ind]
+(tab <- tab [-ind])
 # boucle pour les autres recodages
 i <- 1
-tab[i]
-tab[i]-1
-data [,tab [i]-1]
-data [,]
 for (i in c(1:length(tab))){
-  tmpCol <- col [tab [i]]-1
-  data$recodage  <- col [tab [i]]  - 1
+  tmpCol <- col [i]
+  data$recodage [data$indiceMaxi == i] 
+  data [, tmpCol & data$indiceMaxi == i]
+  data$recodage [data$indiceMaxi == i]  <- data [,tmpCol]  
 }
 data$recodage
 trouverVainqueur <- function(id){
@@ -326,6 +326,42 @@ write.csv(data, "data/tour1.csv")
 ```{r}
 siegeTour1 <- read.csv("data/siegestour1.csv")
 ```
+
+
+## Base par dpt 
+
+```{r}
+tour1 <- read.csv("data/siege")
+sel2 <- read.csv("data/siegeTour2.csv")
+tour2 <- read.csv("data/baseElectionTour2.csv")
+
+```
+
+
+### 2e tour
+
+Extraction dpt
+
+
+```{r}
+dpt <- unique(sel2$Code.du.département)
+tour2 <- tour2 [tour2$Code.du.département %in% dpt,]
+```
+
+nb siège et vainqueur
+
+
+```{r}
+
+```
+
+
+### 1er tour
+
+
+
+
+
 
 ```{r}
 
