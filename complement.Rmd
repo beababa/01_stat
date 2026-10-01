@@ -94,7 +94,7 @@ etudiant <- etudiant [!(etudiant %in% etudiantErreur)]
 write.csv(etudiant, "data/insee.csv", row.names = F)
 ```
 
-On a 46 codes insee vérifiés
+On a 45 codes insee vérifiés
 
 
 Un pb sur 86280
@@ -360,10 +360,191 @@ nb siège et vainqueur
 
 
 
+# Base pour nuance et tx 1er tour
+
+
+```{r}
+insee <- read.csv("data/insee.csv")
+insee$dpt <- substr(insee$x,1,2)
+dpt <- unique(insee$dpt)
+```
+
+sauvegarde
+
+```{r}
+write.csv(tour1,"data/tour1.csv", fileEncoding = "UTF-8", row.names = F)
+```
+
+
+extraction
+
+```{r}
+tour1 <- read.csv("data/tour1.csv")
+tour1$codeDep
+dpt
+# rajout 06
+dpt <- c("06", dpt)
+# extraction
+tour1 <- tour1 [tour1$codeDep %in% dpt,]
+```
+
+
+extraction colonne
+
+```{r}
+names(tour1)
+voix <- grep("Voix.Ins", names(tour1))
+total <- NULL
+i <- 1
+for (i in c(1:length(voix))){
+  tmp <- tour1 [,voix[i]]
+  total <- c(total, tmp)
+}
+voix <- total
+nb <- length(voix)/ length(tour1$code)
+code <- rep(tour1$code, nb)
+dpt <- rep(tour1$codeDep, nb)
+ville <- rep(tour1$Libellé.de.la.commune)
+```
+
 
 
 
 ```{r}
+nuance <- grep("Nuance", names(tour1))
+total <- NULL
+i <- 1
+for (i in c(1:length(nuance))){
+  tmp <- tour1 [,nuance[i]]
+  total <- c(total, tmp)
+}
+nuance <- total
+```
 
+
+
+```{r}
+base <- data.frame(dpt, code, ville, nuance, voix)
+str(base)
+summary(base$voix)
+# valeur aberrante dans le 29
+hist(base$voix)
+base [which.max(base$voix),]
+```
+
+
+
+Ajout var agregat
+
+
+manuellement, ex 93
+
+
+Enregistrement par dpt
+
+```{r}
+dpt <- unique(dpt)
+for (d in dpt){
+  tmp <- base [base$dpt == d, ]
+  tmp <- tmp [!is.na(tmp$voix),]
+  write.csv(tmp, paste0("data/dpt", d, ".csv"), fileEncoding = "UTF-8", row.names = F)
+}
+```
+
+
+
+Sur les nuances
+
+
+
+```{r}
+(tab <- table(base$nuance, useNA = "always"))
+```
+
+
+recoder gauche droite
+
+
+```{r}
+barplot(tab)
+baseNuance <- base [base$nuance != "",]
+barplot(table(baseNuance$nuance), las = 2)
+```
+
+LDIV
+LDVC
+LDVD
+LDVG
+LNC
+
+
+```{r}
+agg <- aggregate(baseNuance$voix, by = list(baseNuance$dpt,baseNuance$ville, baseNuance$nuance), sum)
+names(agg) <- c("dpt", "ville", "nuance", "voix")
+table(agg$dpt, agg$nuance)
+```
+
+
+```{r}
+dpt <- unique(dpt)
+for (d in dpt){
+  tmp <- agg [agg$dpt == d, ]
+  tmp <- tmp [!is.na(tmp$voix),]
+  write.csv(tmp, paste0("data/dptAgg", d, ".csv"), fileEncoding = "UTF-8", row.names = F)
+}
+```
+
+
+# par bloc
+
+```{r}
+equiv <- read.csv("data/equivNuanceBloc.csv")
+baseBloc <- merge(baseNuance, equiv, by = "nuance")
+agg <- aggregate(baseBloc$voix, by = list(baseBloc$dpt,baseBloc$code,baseBloc$ville, baseBloc$bloc), sum)
+names(agg) <- c("dpt", "code", "ville", "bloc", "voix")
+table(agg$dpt, agg$bloc)
+```
+
+
+```{r}
+dpt <- unique(dpt)
+for (d in dpt){
+  tmp <- agg [agg$dpt == d, ]
+  tmp <- tmp [!is.na(tmp$voix),]
+  write.csv(tmp, paste0("data/dptAggBloc", d, ".csv"), fileEncoding = "UTF-8", row.names = F)
+}
+```
+
+
+# Jointure ofgl baseBloc
+
+
+1 agrégat choisi frais perso sur ofgl pour toute la france (10 M°)
+
+```{r}
+ofgl <- read.csv2("data/fraisPersoFrance.csv", dec = ".")
+head(ofgl)
+ofgl <- ofgl [, c("Code.Insee.2025.Département", "Code.Insee.Collectivité", "Nom.2025.Commune", "Montant.en...par.habitant")]
+names(ofgl) <- c("dpt", "code", "ville", "montant")
+ofgl <- ofgl [ofgl$dpt %in% dpt,]
+```
+
+
+```{r}
+ofgl # 6 M
+agg # 2 M
+joint <- merge(agg, ofgl [,c("code", "montant")], by = "code", all.x = F) # 1851
+head(joint)
+unique(joint$ville [is.na(joint$montant)])
+```
+
+Uniquement Paris sans data et Pierrefitte
+
+
+```{r}
+for (d in dpt){
+  tmp <- joint [joint$dpt == d, ]
+  write.csv(tmp, paste0("data/baseCours3_", d, ".csv"), fileEncoding = "UTF-8", row.names = F)
+}
 ```
 
