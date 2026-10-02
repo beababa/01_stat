@@ -51,6 +51,33 @@ apprendre à chercher :
 - les finances des communes (mot clé *compte des communes*)
 
 
+### Données élections
+
+Il s'agit d'extraire les résultats municipales 1er tour 2020, le filtre est possible sur la zone géographique
+
+
+choix : élections municipales 2020 - 1er tour - plus de 1000 hbts - en .xls (sinon pas de filtre)
+
+
+bouton explorer les données
+
+![](img/2filtre.png)
+
+Bien vérifier qu’il s’agit du bon fichier
+
+![](img/3filtre.png)
+
+
+Poser le filtre sur le dpt
+
+![](img/4filtre.png)
+
+Et importer les données uniquement les données filtrées
+
+![](img/5filtre.png)
+
+Le fichier obtenu sera en .csv
+
 ### Le portail externe
 
 Trouver la source originale pour les comptes des communes et apprendre à utiliser cet

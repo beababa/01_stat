@@ -548,3 +548,33 @@ for (d in dpt){
 }
 ```
 
+
+# cas de Paris arrondissement
+
+Election
+
+```{r}
+tour1 <- read.csv("data/tour1.csv")
+paris <- tour1 [tour1$Libellé.du.département == 'Paris',]
+paris$Libellé.de.la.commune
+names(paris)
+id <- grep("Voix.Ins", names(paris))
+id2 <- grep("Nuance", names(paris))
+idDrop <- seq(1:length(names(paris)))
+idDrop <- idDrop[c(-id, -id2, -215)]
+parisLong <- reshape(data = paris, 
+                     idvar = "code", 
+                     varying = list(id, id2), 
+                     direction = "long", drop = idDrop )
+```
+
+
+Pop
+
+```{r}
+parisPop <- read.csv2("data/popParis.csv")
+```
+
+
+
+
