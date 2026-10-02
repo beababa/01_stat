@@ -45,6 +45,12 @@ table(data$bloc)
 GAU <- data [data$bloc == "GAU",]
 ```
 
+Sous libre office, on peut utiliser un tableau dynamique pour dénombrer le nombre de blocs sur l'ensemble des villes.
+
+![](img/tableDynamique.png)
+
+
+
 # Nuage de points
 
 ## Quel bloc choisir ?
