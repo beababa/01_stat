@@ -20,29 +20,15 @@ knitr::opts_chunk$set(eval = TRUE)
 
 ## Données d'exemple
 
-hypothèse : relation entre les villes et le montant par habitant de quelques agrégats
+hypothèse : relation entre la couleur du vote majoritaire du 4er tour et le montant par habitant de 5 agrégats.
 
-l'hypothèse nulle (H~0~) : indépendance entre villes et agrégats
+l'hypothèse nulle (H~0~) : indépendance entre couleur politique 1er tour et résultat final élections.
 
-Deux distributions de variables de catégorie.
+Deux distributions de variables de catégorie
 
-Pour récupérer les données, utiliser le site de l'OFGL comme vu le cours précédent
+Les données sont fournies sur le moodle.
 
-![](img/interfaceOFGL.png)
 
-Proposition d'agrégats :
-
-- Annuité de la dette	(= poids de la dette)
-
-- Dépenses d'équipement
-
-- Dotation globale de fonctionnement
-
-- Frais de personnel	
-
-- Impôts locaux
-
-Ces 5 agrégats sont représentatifs de l'état des finances de chaque commune.
 
 ## Différentes étapes
 
