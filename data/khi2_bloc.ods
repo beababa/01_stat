@@ -1,0 +1,10 @@
+dpt,- tout -,,,,,,
+,,,,,,,
+Compter - ville,t2,,,,,,
+t1,AUT,CENT,DTE,EXD,GAU,NA,Total Résultat
+AUT,18,1,1,,,9,29
+CENT,1,20,2,,,15,38
+DTE,3,2,63,,2,15,85
+EXD,,,,1,,,1
+GAU,,1,2,,28,7,38
+Total Résultat,22,24,68,1,30,46,191

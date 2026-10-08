@@ -20,9 +20,10 @@ knitr::opts_chunk$set(eval = TRUE)
 
 ## Données d'exemple
 
-hypothèse : relation entre la couleur du vote majoritaire du 4er tour et le montant par habitant de 5 agrégats.
+hypothèse : relation entre la couleur du vote majoritaire du 1er tour victorieux et le celui du second tour. 
+Les vainqueurs du 1er tour sont également celui du 2e tour par département.
 
-l'hypothèse nulle (H~0~) : indépendance entre couleur politique 1er tour et résultat final élections.
+l'hypothèse nulle (H~0~) : indépendance entre couleur politique 1er tour et résultat final élections par dpt
 
 Deux distributions de variables de catégorie
 
