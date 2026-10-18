@@ -74,7 +74,14 @@ write.csv(insee, "data/insee.csv", row.names = F)
 
 45 obs au final
 
+Rajout du Mans
 
+```{r}
+insee <- insee$x
+insee <- c(insee, 72181)
+```
+
+47 obs
 
 
 ```{r}
@@ -139,7 +146,7 @@ Une première extraction par commune permet de voir :
 - pb codification paris (sans l'étendre à toutes les communes)
 
 
-## 2 fichiers identiques
+## 2 fichiers quasiment identiques
 
 ### Mise en forme : code insee + nom colonnes
 
@@ -175,10 +182,14 @@ Pour le titre, 2 parties :
 simple <-  read.csv("data/2020Resulat93.csv")
 nom <- names(simple)
 nom <- nom[-1]
+nom
 (partie1 <- nom [1:18])
 (partie2 <-  nom [19:30])
+# nb de noms t2 sauf les chiffres généraux
 nb <- length(names(t2)) - length(partie1)  
+# combien de fois la partie 2 dans le t2 sans les chiffres généraux
 nb <- nb/length(partie2)
+# donc on répète nb fois la partie 2
 nom <- c(partie1, rep(partie2, nb))
 names(t2) <- nom
 ```
@@ -213,13 +224,24 @@ On construit une table d'équivalence uniquement pour Paris
 
 
 ```{r}
+etudiant <- scan("data/insee.csv", skip = 1, what = "character")
+```
+
+
+```{r}
 etudiant [grep ("^75", etudiant)]
 etudiant [grep("^13", etudiant)]
 etudiant [grep("^69", etudiant)]
-arr <- c( 16, 18, 19, 20)
+# pb du zero pour les arrondissements
+arr <- seq(1,20, 1)
+zero <- 0
+deb <- paste0(0,arr [1:9] )
+fin <- arr [10:20]
+arr <- c(deb,fin)
 # table equivalence
 elec <- paste0("75056SR", arr)
-insee <- etudiant [grep ("^75", etudiant)]
+
+insee <- seq(75101,75120, 1)
 (equiv <- data.frame(elec, insee))
 ```
 
@@ -228,10 +250,11 @@ insee <- etudiant [grep ("^75", etudiant)]
 # jointure et remplacement
 t2 <- merge(t2, equiv, by.x = "code", by.y = "elec", all.x = T)
 t2$code <- ifelse(!is.na(t2$insee), t2$insee, t2$code) 
-table(nchar(t2$code))
+t2$tab <- (nchar(t2$code))
+t2 [t2$tab == 9,1]
 ```
 
-ok 29 au lieu de 31
+ok plus de paris
 
 
 ##### Filtrage colonnes
@@ -298,13 +321,15 @@ table(nchar(tour1$code))
 
 ##### Equivalence code arrondissement
 
+equiv est la table équivalence arr code elec
+
 ```{r}
 # jointure et remplacement
 tour1 <- merge(tour1, equiv, by.x = "code", by.y = "elec", all.x = T)
 tour1$code <- ifelse(!is.na(tour1$insee), tour1$insee, tour1$code) 
 table(nchar(tour1$code))
 ```
-30 ok (-4)
+17 ok (-4)
 
 ```{r}
 names(t2)
@@ -345,9 +370,10 @@ names(t2)
 L'extraction permet de sélectionner les communes sans 2e tour
 
 
+lecture avec scan, permet de vectoriser automatiquement
+
 ```{r}
-etudiant <- read.csv("data/insee.csv") # 46
-etudiant <- etudiant$x
+etudiant <- scan("data/insee.csv", what = "character", skip = 1)# 47
 ```
 
 
@@ -361,7 +387,7 @@ base <- read.csv("data/baseElectionTour2.csv")
 # 1429
 base$code
 baseSel <- base [base$code %in% etudiant,]
-# 26 sur 45 !
+# 27 sur 45 !
 etudiantErreur <- etudiant [!(etudiant %in% baseSel$code) ]
 etudiantErreur
 # 1 exemple
@@ -390,7 +416,9 @@ La base ne comprend pas le 1er tour !
 
 
 #### Extraction des villes pas dans tour2 (20 à priori)
+```{r}
 
+```
 
 ```{r}
 base <- read.csv("data/baseElectionTour1.csv")
@@ -423,16 +451,19 @@ Extraction dpt
 
 ```{r}
 dpt <- unique(t2Ville$Code.du.département)
-# 13 dpts
+# 16 dpts
 tour2 <- tour2 [tour2$Code.du.département %in% dpt,]
 ```
 
-231 obs pour 2e tour (uniquement les dpts des villes ayant un 2e tour)
+239 obs pour 2e tour (uniquement les dpts des villes ayant un 2e tour)
 
 #### Format long
 
 
+utilisation de *reshape* car base R
+
 ```{r}
+str(tour2)
 nuan <- grep("Nuance", names(tour2))
 sieg <- grep("Siège", names(tour2))
 idDrop <- seq(1:length(names(tour2)))
@@ -442,21 +473,31 @@ tour2Long <- reshape(data = tour2, idvar= c(1:3,12), varying = list(nuan, sieg),
 ```
 
 
-1155 obs
+1195 obs
 
 #### Extraction max par ville
 
 ```{r}
+# aggregate
 aggMax <- aggregate(tour2Long$nbSiege, 
-          by = list(dpt = tour2Long [,"Code.du.département"], commune = tour2Long [,"Libellé.de.la.commune"])
+          by = list(dpt = tour2Long [,"Code.du.département"], commune = tour2Long [,"Libellé.de.la.commune"], code = tour2Long [,"code"])
           , max, na.rm = TRUE) 
+# verification 
+aggMax [aggMax$dpt == 93,]
+tour2 [tour2$code == 93006,]
+tour2 [tour2$code == 93001,]
+# cle pour faire jointure avec nuance
+# afin d'éviter des erreurs d'agrégation
 aggMax$cle <- apply(aggMax [, c("dpt", "commune", "x")],1, paste, collapse = "")
 tour2Long$cle <- apply(tour2Long [,c("Code.du.département", "Libellé.de.la.commune","nbSiege")],1, paste, collapse ="")
 jointure <- merge(aggMax, tour2Long [,c("cle", "nuance", "code")], by = "cle")
-write.csv(jointure [, c(1,2:5)],"data/siegeTour2nuanceNb.csv")
+# verif
+tour2Long [tour2Long$code == 93006,]
+tour2Long [tour2Long$code == 93010,]
+write.csv(jointure [, c(1:3,5,6)],"data/siegeTour2nuanceNb.csv")
 ```
 
-231 obs
+239 obs
 
 ### 1er tour
 
@@ -466,16 +507,19 @@ write.csv(jointure [, c(1,2:5)],"data/siegeTour2nuanceNb.csv")
 toutes les villes, tous les dpts
 
 ```{r}
-insee <- read.csv("data/insee.csv")
-insee$dpt <- substr(insee$x,1,2)
-dpt <- unique(insee$dpt)
+insee <- scan("data/insee.csv", skip = 1, what = "character")
+dpt <- substr(insee,1,2)
+dpt <- unique(dpt)
 ```
 
-22 dpts au 1er tour
+23 dpts au 1er tour
 
 extraction
 
-on repart de tour1 car on veut extraire les pct voix
+on repart de tour1 car on veut extraire les pct voix et non
+les sièges
+
+de plus on extrait le tour1 pour tous les dpts = fichier cours régression. BLOC / % VOIX / VILLE / DPT
 
 ```{r}
 tour1 <- read.csv("data/tour1.csv")
@@ -484,10 +528,12 @@ table(tour1$codeDep)
 tour1 <- tour1 [tour1$codeDep %in% dpt,]
 ```
 
-2286 obs
+2409 obs
 
 extraction colonne pourcentage voix inscrites et non pas sièges
 on repart donc du fichier de départ
+
+Au lieu de faire un reshape, on travaille avec les vecteurs qu'on rassemblera à la fin
 
 
 ```{r}
@@ -534,11 +580,6 @@ write.csv(base, "data/voixTour1Nuance.csv", fileEncoding = "UTF-8", row.names = 
 
 
 
-Ajout var agregat
-
-
-manuellement, ex 93
-
 
 Enregistrement par dpt
 
@@ -579,12 +620,13 @@ LNC
 
 
 ```{r}
-agg <- aggregate(baseNuance$voix, by = list(baseNuance$dpt,baseNuance$ville, baseNuance$nuance), sum)
-names(agg) <- c("dpt", "ville", "nuance", "voix")
+agg <- aggregate(baseNuance$voix, by = list(baseNuance$dpt, baseNuance$code,baseNuance$ville, baseNuance$nuance), sum)
+names(agg) <- c("dpt", "code", "ville", "nuance", "voix")
 table(agg$dpt, agg$nuance)
-
 ```
 
+
+4143 obs
 
 ```{r}
 dpt <- unique(dpt)
@@ -607,7 +649,7 @@ table(agg$dpt, agg$bloc)
 write.csv(agg,"data/voixTour1Bloc.csv", fileEncoding = "UTF-8", row.names = F)
 ```
 
-1951 obs
+2339 obs
 
 
 Enregistrement par dpt
@@ -625,11 +667,33 @@ for (d in dpt){
 # nuance t1 et nuance t2 (pour le khi2)
 
 
-t1
+
+on cumule les victorieux 1er et 2e tour par dpt
+
+(cause Bondy, pb tour1 c'est la gauche qui gagne)
+
+Or on découvre que c'est une exception
+
 
 ```{r}
 t1 <- read.csv("data/voixTour1Bloc.csv")
 t1 <- t1 [, c("dpt", "ville", "bloc", "voix")]
+t1 [t1$ville == 'Bondy',]
+base <- read.csv("data/voixTour1Nuance.csv")
+base [base$code == 93010,]
+```
+
+
+
+
+
+
+
+## t1
+
+Vainqueur T1
+
+```{r}
 agg <- aggregate(t1 [,c("voix")], by = list(dpt = t1$dpt, 
                                 ville= t1$ville), max)
 head(agg)
@@ -667,7 +731,7 @@ write.csv(tot, "data/bloct1t2.csv", fileEncoding = "UTF-8", row.names = F)
 ```
 
 
-en large
+## en large t1 t2
 
 
 ```{r}
@@ -678,8 +742,49 @@ write.csv(filtre, "data/bloct1t2.csv", fileEncoding = "UTF-8", row.names = F)
 table(filtre$t1, filtre$t2,useNA = "always")
 ```
 
-# Jointure ofgl baseBloc
 
+Donc globalement 1er tour 2e tour sauf pour la gauche
+
+De plus bcp de couleur politique
+
+On va plutôt reprendre comme base en recodant l'agrégat
+
+
+# Base khi2 2
+
+```{r}
+base <- read.csv("data/baseRegression.csv")
+# max
+agg <- aggregate(base$voix, by = list(base$code), max)
+agg$cle <- paste0(agg$Group.1, agg$x)
+base$cle <- paste0(base$code, base$voix)
+joint <- merge(agg, base, by = "cle")
+joint <- joint [, c("dpt", "code", "ville" ,"bloc", "voix", "montant")]
+```
+
+
+recodage montant
+
+```{r}
+summary(joint$montant)
+hist(joint$montant)
+joint [joint$montant > 3000,]
+joint$montantRecode <- cut(joint$montant, breaks = c(0, 500, 700, 1000, 1500, 3000, 7000), labels = c("petit", "moyen petit", "moyen grand", "grand", "très grand", "aberrant ?"))
+table(joint$montantRecode)
+table(joint$montantRecode, joint$bloc)
+write.csv(joint, "data/baseKhi2.csv", row.names = F)          
+```
+
+
+
+
+
+
+
+
+
+
+# Jointure ofgl baseBloc pour la régression
 
 1 agrégat choisi frais perso sur ofgl pour toute la france (10 M°)
 
@@ -693,11 +798,18 @@ ofgl <- ofgl [ofgl$dpt %in% dpt,]
 
 
 ```{r}
+tour1 <- read.csv("data/voixTour1Bloc.csv")
+```
+
+
+
+```{r}
 ofgl # 6 M
-agg # 2 M
-joint <- merge(agg, ofgl [,c("code", "montant")], by = "code", all.x = F) # 1851
+tour1 # 2 M
+joint <- merge(tour1, ofgl [,c("code", "montant")], by = "code", all.x = F) # 2239
 head(joint)
 unique(joint$ville [is.na(joint$montant)])
+write.csv(joint,"data/baseRegression.csv")
 ```
 
 Uniquement Paris sans data et Pierrefitte
@@ -713,40 +825,58 @@ for (d in dpt){
 
 # cas de Paris arrondissement
 
-Election
+La jointure ne s'est pas faite
 
 ```{r}
-tour1 <- read.csv("data/tour1.csv")
-paris <- tour1 [tour1$Libellé.du.département == 'Paris',]
-paris$Libellé.de.la.commune
-names(paris)
-id <- grep("Voix.Ins", names(paris))
-id2 <- grep("Nuance", names(paris))
-idDrop <- seq(1:length(names(paris)))
-idDrop <- idDrop[c(-id, -id2, -215)]
-parisLong <- reshape(data = paris, 
-                     idvar = "code", 
-                     varying = list(id, id2), 
-                     direction = "long", drop = idDrop )
+tour1Paris <- tour1 [grep("^75", tour1$code),]
+ofgl [ofgl$ville == 'Paris',]
 ```
+
+
+budget
+
+```{r}
+budget <- read.csv2("data/Paris-budgets-votes-etats-speciaux-darrondissements-m57-ville.csv" )
+unique(budget$Fonction...Texte)
+budget <- budget [budget$Fonction...Texte== "SERVICES GENERAUX",]
+budget <- budget [budget$Nature.Réglementaire...Texte ==  "Fêtes et cérémonies",]
+budget <- budget [budget$Type.du.Vote == "Budget Primitif",]
+budget <- budget [, c(2, 13)]
+budget$code <- gsub("[a-z, A-Z,è]", "", budget$Arrondissement)
+budget$nbCar <- nchar(budget$code)
+budget$code2 <- ifelse(budget$nbCar == 1, paste0("7510",budget$code), paste0("751", budget$code))
+budget$code <- budget$code2
+budget <- budget [, c(2,3)]
+```
+
 
 
 Pop
 
 ```{r}
 parisPop <- read.csv2("data/popParis.csv")
+names(parisPop)
+parisPop <- parisPop [, c(3,7)]
+names(parisPop) <- c("code", "pop")
 ```
 
 
-# Victoire 1er et 2e tour par dpt
-
-on cumule les victorieux 1er et 2e tour par dpt
-
-(cause Bondy, pb tour1 c'est la gauche qui gagne)
+Jointure 
 
 
+```{r}
+joint <- merge(budget [], parisPop, by = "code")
+joint$montant <- joint$Budgets.votés..paiement. / (joint$pop/1000)
+joint$montant
+```
 
+Jointure election
 
+```{r}
+joint2 <- merge (tour1Paris, joint, by = "code")
+joint2 <- joint2  [, c("code", "bloc", "voix", "montant")]
+write.csv(joint2,"data/baseCours3_75.csv")
+```
 
 
 

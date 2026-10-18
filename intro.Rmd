@@ -18,6 +18,12 @@ knitr::opts_chunk$set(warning  = FALSE)
 # Intitulé et déroulé du cours
 
 
+Mise à jour du 18/10 : 
+
+Le cours est mis à jour mais seul compte le cours en présentiel.
+Actuellement, seuls les étudiants du groupe 1 et 2 ont vu les bases de la régression.
+
+
 *"L5GEABIM Analyses bivariées et multivariées"*
 
 

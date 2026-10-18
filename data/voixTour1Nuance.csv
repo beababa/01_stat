@@ -1175,20 +1175,143 @@
 "67","67547","Wittisheim","LNC",25.47
 "67","67550","Woerth","LNC",16.29
 "67","67551","Wolfisheim","LDVD",25.03
-"75","75056SR01","Paris 1er secteur","LVEC",4.71
-"75","75056SR05","Paris 5eme secteur","LFI",1.41
-"75","75056SR06","Paris 6eme secteur","LEXG",0.14
-"75","75056SR07","Paris 7eme secteur","LUD",23.27
-"75","75056SR08","Paris 8eme secteur","LDIV",0.21
-"75","75056SR09","Paris 9eme secteur","LVEC",4.36
-"75","75056SR10","Paris 10eme secteur","LRN",0.66
-"75","75056SR11","Paris 11eme secteur","LDVC",2.67
-"75","75056SR12","Paris 12eme secteur","LFI",2.08
-"75","75056SR13","Paris 13eme secteur","LUC",5.01
-"75","75056SR14","Paris 14eme secteur","LEXG",0.27
-"75","75056SR15","Paris 15eme secteur","LDVD",9.08
+"72","72001","Aigné","LNC",10.08
+"72","72003","Allonnes","LDVG",3.49
+"72","72006","Arçonnay","LNC",27.01
+"72","72008","Arnage","LUG",29.84
+"72","72013","Aubigné-Racan","LNC",34.27
+"72","72016","Auvers-le-Hamon","LNC",27.31
+"72","72022","Le Bailleul","LNC",29.96
+"72","72023","Ballon-Saint Mars","LNC",27.28
+"72","72024","La Bazoge","LDVD",16.95
+"72","72025","Bazouges Cré sur Loir","LNC",31.53
+"72","72026","Beaufay","LNC",40.55
+"72","72029","Beaumont-sur-Sarthe","LNC",38.01
+"72","72035","Bessé-sur-Braye","LNC",33.52
+"72","72039","Bonnétable","LDVD",23.42
+"72","72042","Bouloire","LNC",23.19
+"72","72046","Le Breil-sur-Mérize","LNC",34.17
+"72","72047","Brette-les-Pins","LNC",25.02
+"72","72050","Brûlon","LNC",31.66
+"72","72051","Cérans-Foulletourte","LNC",16.21
+"72","72053","Challes","LNC",19.53
+"72","72054","Champagné","LDVG",30.48
+"72","72056","Champfleur","LNC",27.55
+"72","72058","Changé","LDVG",24.82
+"72","72061","La Chapelle-d'Aligné","LNC",39.2
+"72","72065","La Chapelle-Saint-Aubin","LNC",34.03
+"72","72068","La Chartre-sur-le-Loir","LNC",31.88
+"72","72071","Montval-sur-Loir","LDVC",23.86
+"72","72073","Chaufour-Notre-Dame","LNC",39.72
+"72","72080","Cherré-au","LNC",36.27
+"72","72084","Clermont-Créans","LNC",21.24
+"72","72089","Conlie","LNC",14.35
+"72","72090","Connerré","LNC",25.35
+"72","72095","Coulaines","LDVG",24.64
+"72","72096","Coulans-sur-Gée","LNC",15.65
+"72","72110","Crosmières","LNC",41.56
+"72","72118","Dollon","LNC",29.63
+"72","72119","Domfront-en-Champagne","LNC",42.93
+"72","72122","Duneau","LNC",36.67
+"72","72124","Ecommoy","LDVD",7.93
+"72","72127","Etival-lès-le-Mans","LNC",39.51
+"72","72132","La Ferté-Bernard","LDVC",22.81
+"72","72133","Fillé-sur-Sarthe","LNC",32.46
+"72","72137","Villeneuve en Perseigne","LNC",13.73
+"72","72138","Fresnay-sur-Sarthe","LNC",29.15
+"72","72143","Le Grand-Lucé","LNC",2.55
+"72","72146","Guécélard","LNC",24.55
+"72","72147","La Guierche","LNC",44.91
+"72","72150","Joué-l'Abbé","LNC",29.79
+"72","72151","Juigné-sur-Sarthe","LNC",31.24
+"72","72154","La Flèche","LDVD",13.48
+"72","72155","Laigné-en-Belin","LNC",28.46
+"72","72165","Lombron","LNC",25.6
+"72","72168","Loué","LNC",21.87
+"72","72169","Louplande","LNC",32.92
+"72","72172","Le Luart","LNC",37.08
+"72","72173","Luceau","LNC",23.92
+"72","72175","Luché-Pringé","LNC",33.65
+"72","72176","Le Lude","LDVG",15.55
+"72","72179","Malicorne-sur-Sarthe","LNC",14.54
+"72","72180","Mamers","LLR",26.76
+"72","72181","Le Mans","LSOC",15.03
+"72","72182","Mansigné","LNC",30.82
+"72","72183","Marçon","LNC",32.19
+"72","72187","Marigné-Laillé","LNC",33.31
+"72","72189","Marolles-les-Braults","LNC",36.15
+"72","72191","Mayet","LNC",20.28
+"72","72195","Mézeray","LNC",26.44
+"72","72198","La Milesse","LNC",29.08
+"72","72200","Moncé-en-Belin","LDVC",27.33
+"72","72205","Montbizot","LNC",33.64
+"72","72213","Mulsanne","LDIV",27.96
+"72","72215","Neufchâtel-en-Saosnois","LNC",34.49
+"72","72217","Neuville-sur-Sarthe","LNC",35.88
+"72","72223","Noyen-sur-Sarthe","LNC",34.07
+"72","72226","Oizé","LNC",29.17
+"72","72228","Parcé-sur-Sarthe","LNC",25.61
+"72","72230","Parigné-le-Pôlin","LNC",13.87
+"72","72231","Parigné-l'Evêque","LDVG",22.05
+"72","72241","Montfort-le-Gesnois","LNC",26.48
+"72","72243","Pontvallain","LNC",23.59
+"72","72244","Précigné","LNC",25.36
+"72","72247","Pruillé-le-Chétif","LNC",41.28
+"72","72252","Requeil","LNC",38.04
+"72","72253","Roézé-sur-Sarthe","LNC",22.84
+"72","72257","Rouillon","LNC",31.1
+"72","72260","Ruaudin","LNC",14.58
+"72","72262","Loir en Vallée","LNC",32.54
+"72","72264","Sablé-sur-Sarthe","LDVG",4.09
+"72","72269","Saint-Calais","LNC",8.72
+"72","72275","Saint-Corneille","LNC",37.01
+"72","72276","Saint-Cosme-en-Vairais","LNC",31.45
+"72","72280","Saint-Georges-du-Bois","LNC",30.31
+"72","72287","Saint-Gervais-en-Belin","LNC",27.53
+"72","72289","Sainte-Jamme-sur-Sarthe","LNC",25.6
+"72","72290","Saint-Jean-d'Assé","LNC",13.73
+"72","72299","Saint-Mars-d'Outillé","LNC",32.08
+"72","72300","Saint-Mars-la-Brière","LNC",24.67
+"72","72305","Saint-Ouen-de-Mimbré","LNC",49.06
+"72","72306","Saint-Ouen-en-Belin","LNC",35.92
+"72","72308","Saint Paterne-Le Chevain","LNC",23.79
+"72","72310","Saint-Pavace","LNC",28.06
+"72","72320","Saint-Saturnin","LNC",26.93
+"72","72328","Sargé-lès-le-Mans","LDVD",20.79
+"72","72329","Savigné-l'Evêque","LDVD",7.82
+"72","72334","Sillé-le-Guillaume","LNC",28.19
+"72","72335","Sillé-le-Philippe","LNC",14.65
+"72","72336","Solesmes","LNC",40
+"72","72340","Souligné-sous-Ballon","LNC",45.89
+"72","72344","Spay","LNC",15.08
+"72","72346","La Suze-sur-Sarthe","LDVD",21.87
+"72","72350","Teloché","LNC",32.35
+"72","72351","Tennie","LNC",29.7
+"72","72358","Thorigné-sur-Dué","LNC",30.78
+"72","72359","Torcé-en-Vallée","LNC",19.1
+"72","72360","Trangé","LNC",38.19
+"72","72363","Tuffé Val de la Chéronne","LNC",28.2
+"72","72364","Vaas","LNC",10.4
+"72","72373","Vibraye","LNC",34.37
+"72","72377","Villaines-sous-Malicorne","LNC",45.91
+"72","72378","Vion","LNC",21.48
+"72","72381","Voivres-lès-le-Mans","LNC",15.95
+"72","72385","Yvré-le-Pôlin","LNC",36.78
+"72","72386","Yvré-l'Evêque","LDVG",9.02
+"75","75101","Paris 1er secteur","LVEC",4.71
+"75","75105","Paris 5eme secteur","LFI",1.41
+"75","75106","Paris 6eme secteur","LEXG",0.14
+"75","75107","Paris 7eme secteur","LUD",23.27
+"75","75108","Paris 8eme secteur","LDIV",0.21
+"75","75109","Paris 9eme secteur","LVEC",4.36
+"75","75110","Paris 10eme secteur","LRN",0.66
+"75","75111","Paris 11eme secteur","LDVC",2.67
+"75","75112","Paris 12eme secteur","LFI",2.08
+"75","75113","Paris 13eme secteur","LUC",5.01
+"75","75114","Paris 14eme secteur","LEXG",0.27
+"75","75115","Paris 15eme secteur","LDVD",9.08
 "75","75116","Paris 16eme secteur","LUD",19.03
-"75","75056SR17","Paris 17eme secteur","LRN",0.74
+"75","75117","Paris 17eme secteur","LRN",0.74
 "75","75118","Paris 18eme secteur","LFI",3.67
 "75","75119","Paris 19eme secteur","LDVC",4.09
 "75","75120","Paris 20eme secteur","LDIV",0.22
@@ -3461,20 +3584,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","LNC",31.47
 "67","67551","Wolfisheim","LDIV",13.82
-"75","75056SR01","Paris 1er secteur","LUC",9.56
-"75","75056SR05","Paris 5eme secteur","LDIV",0.06
-"75","75056SR06","Paris 6eme secteur","LVEC",3.34
-"75","75056SR07","Paris 7eme secteur","LDVD",0.98
-"75","75056SR08","Paris 8eme secteur","LUD",14.48
-"75","75056SR09","Paris 9eme secteur","LDVC",3.22
-"75","75056SR10","Paris 10eme secteur","LDVC",2.92
-"75","75056SR11","Paris 11eme secteur","LEXG",0.3
-"75","75056SR12","Paris 12eme secteur","LEXG",0.32
-"75","75056SR13","Paris 13eme secteur","LDIV",0.85
-"75","75056SR14","Paris 14eme secteur","LDVC",5.25
-"75","75056SR15","Paris 15eme secteur","LUC",7.1
+"72","72001","Aigné","LNC",23.72
+"72","72003","Allonnes","LDVG",20.92
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","LNC",18.59
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","LNC",32.46
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","LDVD",23.26
+"72","72025","Bazouges Cré sur Loir","LNC",16.47
+"72","72026","Beaufay","LNC",9.7
+"72","72029","Beaumont-sur-Sarthe","LNC",7.69
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","LNC",28.75
+"72","72053","Challes","LNC",34.84
+"72","72054","Champagné","LDVD",30.56
+"72","72056","Champfleur","",NA
+"72","72058","Changé","LDIV",13.73
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","LNC",20.59
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","LNC",31.61
+"72","72089","Conlie","LNC",32.71
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","LDVG",5.91
+"72","72096","Coulans-sur-Gée","LNC",38.24
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","LNC",22.81
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","LDVD",14.21
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","LNC",39.11
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","LNC",11.89
+"72","72146","Guécélard","LNC",23.06
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","LNC",24.88
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","LSOC",31.34
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","LNC",35.98
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","LNC",18.08
+"72","72173","Luceau","LNC",27.76
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","LDVD",22.26
+"72","72179","Malicorne-sur-Sarthe","LNC",39.76
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","LDVC",1.74
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","LNC",12.65
+"72","72189","Marolles-les-Braults","LNC",19.35
+"72","72191","Mayet","LNC",29.72
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","LDVD",18.98
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","LNC",32.72
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","LNC",26.3
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","LNC",14.01
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","LNC",25.15
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","LLR",14.01
+"72","72269","Saint-Calais","LNC",23.76
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","LNC",32.77
+"72","72299","Saint-Mars-d'Outillé","LNC",10.71
+"72","72300","Saint-Mars-la-Brière","LNC",21.08
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","LNC",26.28
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","LDVG",16.44
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","LNC",46.79
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","LNC",38.29
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","LNC",26.41
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","LNC",28.32
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","LNC",40.41
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","LNC",20.28
+"72","72381","Voivres-lès-le-Mans","LNC",41.52
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","LDVD",19.13
+"75","75101","Paris 1er secteur","LUC",9.56
+"75","75105","Paris 5eme secteur","LDIV",0.06
+"75","75106","Paris 6eme secteur","LVEC",3.34
+"75","75107","Paris 7eme secteur","LDVD",0.98
+"75","75108","Paris 8eme secteur","LUD",14.48
+"75","75109","Paris 9eme secteur","LDVC",3.22
+"75","75110","Paris 10eme secteur","LDVC",2.92
+"75","75111","Paris 11eme secteur","LEXG",0.3
+"75","75112","Paris 12eme secteur","LEXG",0.32
+"75","75113","Paris 13eme secteur","LDIV",0.85
+"75","75114","Paris 14eme secteur","LDVC",5.25
+"75","75115","Paris 15eme secteur","LUC",7.1
 "75","75116","Paris 16eme secteur","LUC",9.38
-"75","75056SR17","Paris 17eme secteur","LDVC",2.49
+"75","75117","Paris 17eme secteur","LDVC",2.49
 "75","75118","Paris 18eme secteur","LUG",12.51
 "75","75119","Paris 19eme secteur","LDIV",0.21
 "75","75120","Paris 20eme secteur","LEXG",0.37
@@ -5747,20 +5993,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","LFI",1.13
-"75","75056SR05","Paris 5eme secteur","LDVD",0.85
-"75","75056SR06","Paris 6eme secteur","LDVC",3.88
-"75","75056SR07","Paris 7eme secteur","LRN",0.65
-"75","75056SR08","Paris 8eme secteur","LDVD",5.01
-"75","75056SR09","Paris 9eme secteur","LUD",7.16
-"75","75056SR10","Paris 10eme secteur","LFI",2.07
-"75","75056SR11","Paris 11eme secteur","LVEC",5.8
-"75","75056SR12","Paris 12eme secteur","LUG",14.25
-"75","75056SR13","Paris 13eme secteur","LDIV",0.2
-"75","75056SR14","Paris 14eme secteur","LDVG",0.38
-"75","75056SR15","Paris 15eme secteur","LEXG",0.18
+"72","72001","Aigné","LNC",17.67
+"72","72003","Allonnes","LDVD",14.48
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","LNC",16.28
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","LDVC",20.72
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","LNC",33.92
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","LUD",3.05
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","LREM",2.01
+"72","72269","Saint-Calais","LNC",17.69
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","LDVD",22.17
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","LNC",11.67
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","LDVG",18.79
+"75","75101","Paris 1er secteur","LFI",1.13
+"75","75105","Paris 5eme secteur","LDVD",0.85
+"75","75106","Paris 6eme secteur","LDVC",3.88
+"75","75107","Paris 7eme secteur","LRN",0.65
+"75","75108","Paris 8eme secteur","LDVD",5.01
+"75","75109","Paris 9eme secteur","LUD",7.16
+"75","75110","Paris 10eme secteur","LFI",2.07
+"75","75111","Paris 11eme secteur","LVEC",5.8
+"75","75112","Paris 12eme secteur","LUG",14.25
+"75","75113","Paris 13eme secteur","LDIV",0.2
+"75","75114","Paris 14eme secteur","LDVG",0.38
+"75","75115","Paris 15eme secteur","LEXG",0.18
 "75","75116","Paris 16eme secteur","LVEC",1.58
-"75","75056SR17","Paris 17eme secteur","LFI",0.89
+"75","75117","Paris 17eme secteur","LFI",0.89
 "75","75118","Paris 18eme secteur","LUC",6.71
 "75","75119","Paris 19eme secteur","LUG",14.69
 "75","75120","Paris 20eme secteur","LUG",14.65
@@ -8033,20 +8402,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","LUD",9.29
-"75","75056SR05","Paris 5eme secteur","LEXG",0.21
-"75","75056SR06","Paris 6eme secteur","LDIV",0.19
-"75","75056SR07","Paris 7eme secteur","LUC",10.62
-"75","75056SR08","Paris 8eme secteur","LUG",4.24
-"75","75056SR09","Paris 9eme secteur","LUC",16.79
-"75","75056SR10","Paris 10eme secteur","LVEC",6.75
-"75","75056SR11","Paris 11eme secteur","LFI",2.07
-"75","75056SR12","Paris 12eme secteur","LRN",0.43
-"75","75056SR13","Paris 13eme secteur","LDVC",2.86
-"75","75056SR14","Paris 14eme secteur","LVEC",4.89
-"75","75056SR15","Paris 15eme secteur","LVEC",3.38
+"72","72001","Aigné","",NA
+"72","72003","Allonnes","",NA
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","",NA
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","",NA
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","",NA
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","LREM",2.51
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","LDIV",15.77
+"72","72269","Saint-Calais","",NA
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","",NA
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","",NA
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","",NA
+"75","75101","Paris 1er secteur","LUD",9.29
+"75","75105","Paris 5eme secteur","LEXG",0.21
+"75","75106","Paris 6eme secteur","LDIV",0.19
+"75","75107","Paris 7eme secteur","LUC",10.62
+"75","75108","Paris 8eme secteur","LUG",4.24
+"75","75109","Paris 9eme secteur","LUC",16.79
+"75","75110","Paris 10eme secteur","LVEC",6.75
+"75","75111","Paris 11eme secteur","LFI",2.07
+"75","75112","Paris 12eme secteur","LRN",0.43
+"75","75113","Paris 13eme secteur","LDVC",2.86
+"75","75114","Paris 14eme secteur","LVEC",4.89
+"75","75115","Paris 15eme secteur","LVEC",3.38
 "75","75116","Paris 16eme secteur","LUG",3.21
-"75","75056SR17","Paris 17eme secteur","LUC",9.53
+"75","75117","Paris 17eme secteur","LUC",9.53
 "75","75118","Paris 18eme secteur","LRN",0.36
 "75","75119","Paris 19eme secteur","LVEC",5.25
 "75","75120","Paris 20eme secteur","LRN",0.75
@@ -10319,20 +10811,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","LRN",0.5
-"75","75056SR05","Paris 5eme secteur","LDVC",3.54
-"75","75056SR06","Paris 6eme secteur","LUG",8.15
-"75","75056SR07","Paris 7eme secteur","LUG",5.25
-"75","75056SR08","Paris 8eme secteur","LVEC",2.4
-"75","75056SR09","Paris 9eme secteur","LRN",0.58
-"75","75056SR10","Paris 10eme secteur","LEXG",0.35
-"75","75056SR11","Paris 11eme secteur","LDIV",0.17
-"75","75056SR12","Paris 12eme secteur","LUC",7.06
-"75","75056SR13","Paris 13eme secteur","LFI",2.41
-"75","75056SR14","Paris 14eme secteur","LUD",8.87
-"75","75056SR15","Paris 15eme secteur","LFI",0.86
+"72","72001","Aigné","",NA
+"72","72003","Allonnes","",NA
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","",NA
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","",NA
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","",NA
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","LEXG",0.24
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","",NA
+"72","72269","Saint-Calais","",NA
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","",NA
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","",NA
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","",NA
+"75","75101","Paris 1er secteur","LRN",0.5
+"75","75105","Paris 5eme secteur","LDVC",3.54
+"75","75106","Paris 6eme secteur","LUG",8.15
+"75","75107","Paris 7eme secteur","LUG",5.25
+"75","75108","Paris 8eme secteur","LVEC",2.4
+"75","75109","Paris 9eme secteur","LRN",0.58
+"75","75110","Paris 10eme secteur","LEXG",0.35
+"75","75111","Paris 11eme secteur","LDIV",0.17
+"75","75112","Paris 12eme secteur","LUC",7.06
+"75","75113","Paris 13eme secteur","LFI",2.41
+"75","75114","Paris 14eme secteur","LUD",8.87
+"75","75115","Paris 15eme secteur","LFI",0.86
 "75","75116","Paris 16eme secteur","LDVC",2.21
-"75","75056SR17","Paris 17eme secteur","LUD",16.84
+"75","75117","Paris 17eme secteur","LUD",16.84
 "75","75118","Paris 18eme secteur","LVEC",6.78
 "75","75119","Paris 19eme secteur","LDVC",2.07
 "75","75120","Paris 20eme secteur","LDVD",0.52
@@ -12605,20 +13220,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","LEXG",0.2
-"75","75056SR05","Paris 5eme secteur","LDVD",0.94
-"75","75056SR06","Paris 6eme secteur","LUC",9.92
-"75","75056SR07","Paris 7eme secteur","LFI",0.31
-"75","75056SR08","Paris 8eme secteur","LUC",11.1
-"75","75056SR09","Paris 9eme secteur","LDIV",0.24
-"75","75056SR10","Paris 10eme secteur","LDIV",0.16
-"75","75056SR11","Paris 11eme secteur","LUD",5.59
-"75","75056SR12","Paris 12eme secteur","LUD",9.76
-"75","75056SR13","Paris 13eme secteur","LUG",15.9
-"75","75056SR14","Paris 14eme secteur","LUC",6.8
-"75","75056SR15","Paris 15eme secteur","LDVC",3
+"72","72001","Aigné","",NA
+"72","72003","Allonnes","",NA
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","",NA
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","",NA
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","",NA
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","LDVG",1.97
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","",NA
+"72","72269","Saint-Calais","",NA
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","",NA
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","",NA
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","",NA
+"75","75101","Paris 1er secteur","LEXG",0.2
+"75","75105","Paris 5eme secteur","LDVD",0.94
+"75","75106","Paris 6eme secteur","LUC",9.92
+"75","75107","Paris 7eme secteur","LFI",0.31
+"75","75108","Paris 8eme secteur","LUC",11.1
+"75","75109","Paris 9eme secteur","LDIV",0.24
+"75","75110","Paris 10eme secteur","LDIV",0.16
+"75","75111","Paris 11eme secteur","LUD",5.59
+"75","75112","Paris 12eme secteur","LUD",9.76
+"75","75113","Paris 13eme secteur","LUG",15.9
+"75","75114","Paris 14eme secteur","LUC",6.8
+"75","75115","Paris 15eme secteur","LDVC",3
 "75","75116","Paris 16eme secteur","LDVG",0.12
-"75","75056SR17","Paris 17eme secteur","LEXG",0.2
+"75","75117","Paris 17eme secteur","LEXG",0.2
 "75","75118","Paris 18eme secteur","LDVC",2.42
 "75","75119","Paris 19eme secteur","LRN",0.65
 "75","75120","Paris 20eme secteur","LUD",5.33
@@ -14891,20 +15629,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","LDIV",0.17
-"75","75056SR05","Paris 5eme secteur","LDIV",0.17
-"75","75056SR06","Paris 6eme secteur","LUD",16.73
-"75","75056SR07","Paris 7eme secteur","LVEC",1.84
-"75","75056SR08","Paris 8eme secteur","LRN",0.65
-"75","75056SR09","Paris 9eme secteur","LFI",1.17
-"75","75056SR10","Paris 10eme secteur","LDVG",0.35
-"75","75056SR11","Paris 11eme secteur","LRN",0.26
-"75","75056SR12","Paris 12eme secteur","LDVC",3.37
-"75","75056SR13","Paris 13eme secteur","LVEC",4.17
-"75","75056SR14","Paris 14eme secteur","LFI",1.53
-"75","75056SR15","Paris 15eme secteur","LUD",9.69
+"72","72001","Aigné","",NA
+"72","72003","Allonnes","",NA
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","",NA
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","",NA
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","",NA
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","LDVG",4.74
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","",NA
+"72","72269","Saint-Calais","",NA
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","",NA
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","",NA
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","",NA
+"75","75101","Paris 1er secteur","LDIV",0.17
+"75","75105","Paris 5eme secteur","LDIV",0.17
+"75","75106","Paris 6eme secteur","LUD",16.73
+"75","75107","Paris 7eme secteur","LVEC",1.84
+"75","75108","Paris 8eme secteur","LRN",0.65
+"75","75109","Paris 9eme secteur","LFI",1.17
+"75","75110","Paris 10eme secteur","LDVG",0.35
+"75","75111","Paris 11eme secteur","LRN",0.26
+"75","75112","Paris 12eme secteur","LDVC",3.37
+"75","75113","Paris 13eme secteur","LVEC",4.17
+"75","75114","Paris 14eme secteur","LFI",1.53
+"75","75115","Paris 15eme secteur","LUD",9.69
 "75","75116","Paris 16eme secteur","LDIV",0.22
-"75","75056SR17","Paris 17eme secteur","LVEC",3.82
+"75","75117","Paris 17eme secteur","LVEC",3.82
 "75","75118","Paris 18eme secteur","LEXG",0.17
 "75","75119","Paris 19eme secteur","LUD",5
 "75","75120","Paris 20eme secteur","LDVG",0.56
@@ -17177,20 +18038,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","LUG",15.3
-"75","75056SR05","Paris 5eme secteur","LRN",0.56
-"75","75056SR06","Paris 6eme secteur","LDIV",0.21
-"75","75056SR07","Paris 7eme secteur","LDIV",0.14
-"75","75056SR08","Paris 8eme secteur","LDVD",0.22
-"75","75056SR09","Paris 9eme secteur","LUG",11.4
-"75","75056SR10","Paris 10eme secteur","LUD",6.04
-"75","75056SR11","Paris 11eme secteur","LDVD",1.3
-"75","75056SR12","Paris 12eme secteur","LDIV",0.3
-"75","75056SR13","Paris 13eme secteur","LEXG",0.39
-"75","75056SR14","Paris 14eme secteur","LUG",14.26
-"75","75056SR15","Paris 15eme secteur","LRN",0.88
+"72","72001","Aigné","",NA
+"72","72003","Allonnes","",NA
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","",NA
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","",NA
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","",NA
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","LRN",2.17
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","",NA
+"72","72269","Saint-Calais","",NA
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","",NA
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","",NA
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","",NA
+"75","75101","Paris 1er secteur","LUG",15.3
+"75","75105","Paris 5eme secteur","LRN",0.56
+"75","75106","Paris 6eme secteur","LDIV",0.21
+"75","75107","Paris 7eme secteur","LDIV",0.14
+"75","75108","Paris 8eme secteur","LDVD",0.22
+"75","75109","Paris 9eme secteur","LUG",11.4
+"75","75110","Paris 10eme secteur","LUD",6.04
+"75","75111","Paris 11eme secteur","LDVD",1.3
+"75","75112","Paris 12eme secteur","LDIV",0.3
+"75","75113","Paris 13eme secteur","LEXG",0.39
+"75","75114","Paris 14eme secteur","LUG",14.26
+"75","75115","Paris 15eme secteur","LRN",0.88
 "75","75116","Paris 16eme secteur","LFI",0.2
-"75","75056SR17","Paris 17eme secteur","LDIV",0.19
+"75","75117","Paris 17eme secteur","LDIV",0.19
 "75","75118","Paris 18eme secteur","LEXG",0.25
 "75","75119","Paris 19eme secteur","LEXG",0.32
 "75","75120","Paris 20eme secteur","LDVC",2.65
@@ -19463,20 +20447,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","LDVC",3.63
-"75","75056SR05","Paris 5eme secteur","LUG",11.9
-"75","75056SR06","Paris 6eme secteur","LRN",0.64
-"75","75056SR07","Paris 7eme secteur","LDIV",0.21
-"75","75056SR08","Paris 8eme secteur","LFI",0.38
-"75","75056SR09","Paris 9eme secteur","LDIV",0.18
-"75","75056SR10","Paris 10eme secteur","LUG",18.12
-"75","75056SR11","Paris 11eme secteur","LUG",18.62
-"75","75056SR12","Paris 12eme secteur","LVEC",5.1
-"75","75056SR13","Paris 13eme secteur","LUD",6.76
-"75","75056SR14","Paris 14eme secteur","LRN",0.72
-"75","75056SR15","Paris 15eme secteur","LUG",8.37
+"72","72001","Aigné","",NA
+"72","72003","Allonnes","",NA
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","",NA
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","",NA
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","",NA
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","LDIV",0.77
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","",NA
+"72","72269","Saint-Calais","",NA
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","",NA
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","",NA
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","",NA
+"75","75101","Paris 1er secteur","LDVC",3.63
+"75","75105","Paris 5eme secteur","LUG",11.9
+"75","75106","Paris 6eme secteur","LRN",0.64
+"75","75107","Paris 7eme secteur","LDIV",0.21
+"75","75108","Paris 8eme secteur","LFI",0.38
+"75","75109","Paris 9eme secteur","LDIV",0.18
+"75","75110","Paris 10eme secteur","LUG",18.12
+"75","75111","Paris 11eme secteur","LUG",18.62
+"75","75112","Paris 12eme secteur","LVEC",5.1
+"75","75113","Paris 13eme secteur","LUD",6.76
+"75","75114","Paris 14eme secteur","LRN",0.72
+"75","75115","Paris 15eme secteur","LUG",8.37
 "75","75116","Paris 16eme secteur","LDVD",2.09
-"75","75056SR17","Paris 17eme secteur","LUG",7.06
+"75","75117","Paris 17eme secteur","LUG",7.06
 "75","75118","Paris 18eme secteur","LUD",4.47
 "75","75119","Paris 19eme secteur","LFI",3.06
 "75","75120","Paris 20eme secteur","LFI",4.18
@@ -21749,20 +22856,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","LDVD",0.63
-"75","75056SR05","Paris 5eme secteur","LDIV",0.41
-"75","75056SR06","Paris 6eme secteur","LFI",0.54
-"75","75056SR07","Paris 7eme secteur","LDVC",2.63
-"75","75056SR08","Paris 8eme secteur","LDVC",3.02
-"75","75056SR09","Paris 9eme secteur","LEXG",0.22
-"75","75056SR10","Paris 10eme secteur","LUC",6.37
-"75","75056SR11","Paris 11eme secteur","LDIV",0.36
-"75","75056SR12","Paris 12eme secteur","",NA
-"75","75056SR13","Paris 13eme secteur","LRN",0.85
-"75","75056SR14","Paris 14eme secteur","LDIV",0.24
-"75","75056SR15","Paris 15eme secteur","",NA
+"72","72001","Aigné","",NA
+"72","72003","Allonnes","",NA
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","",NA
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","",NA
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","",NA
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","LVEC",3.57
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","",NA
+"72","72269","Saint-Calais","",NA
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","",NA
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","",NA
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","",NA
+"75","75101","Paris 1er secteur","LDVD",0.63
+"75","75105","Paris 5eme secteur","LDIV",0.41
+"75","75106","Paris 6eme secteur","LFI",0.54
+"75","75107","Paris 7eme secteur","LDVC",2.63
+"75","75108","Paris 8eme secteur","LDVC",3.02
+"75","75109","Paris 9eme secteur","LEXG",0.22
+"75","75110","Paris 10eme secteur","LUC",6.37
+"75","75111","Paris 11eme secteur","LDIV",0.36
+"75","75112","Paris 12eme secteur","",NA
+"75","75113","Paris 13eme secteur","LRN",0.85
+"75","75114","Paris 14eme secteur","LDIV",0.24
+"75","75115","Paris 15eme secteur","",NA
 "75","75116","Paris 16eme secteur","LDVD",1.31
-"75","75056SR17","Paris 17eme secteur","LDIV",0.25
+"75","75117","Paris 17eme secteur","LDIV",0.25
 "75","75118","Paris 18eme secteur","LDIV",0.16
 "75","75119","Paris 19eme secteur","LEXG",0.25
 "75","75120","Paris 20eme secteur","LUC",4.82
@@ -24035,20 +25265,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","LDIV",0.26
-"75","75056SR05","Paris 5eme secteur","LUD",8.09
-"75","75056SR06","Paris 6eme secteur","",NA
-"75","75056SR07","Paris 7eme secteur","",NA
-"75","75056SR08","Paris 8eme secteur","",NA
-"75","75056SR09","Paris 9eme secteur","LDIV",0.17
-"75","75056SR10","Paris 10eme secteur","",NA
-"75","75056SR11","Paris 11eme secteur","LUC",6.12
-"75","75056SR12","Paris 12eme secteur","",NA
-"75","75056SR13","Paris 13eme secteur","LDIV",0.21
-"75","75056SR14","Paris 14eme secteur","LEXG",0.18
-"75","75056SR15","Paris 15eme secteur","",NA
+"72","72001","Aigné","",NA
+"72","72003","Allonnes","",NA
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","",NA
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","",NA
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","",NA
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","",NA
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","",NA
+"72","72269","Saint-Calais","",NA
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","",NA
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","",NA
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","",NA
+"75","75101","Paris 1er secteur","LDIV",0.26
+"75","75105","Paris 5eme secteur","LUD",8.09
+"75","75106","Paris 6eme secteur","",NA
+"75","75107","Paris 7eme secteur","",NA
+"75","75108","Paris 8eme secteur","",NA
+"75","75109","Paris 9eme secteur","LDIV",0.17
+"75","75110","Paris 10eme secteur","",NA
+"75","75111","Paris 11eme secteur","LUC",6.12
+"75","75112","Paris 12eme secteur","",NA
+"75","75113","Paris 13eme secteur","LDIV",0.21
+"75","75114","Paris 14eme secteur","LEXG",0.18
+"75","75115","Paris 15eme secteur","",NA
 "75","75116","Paris 16eme secteur","LRN",0.45
-"75","75056SR17","Paris 17eme secteur","",NA
+"75","75117","Paris 17eme secteur","",NA
 "75","75118","Paris 18eme secteur","LDVD",1.37
 "75","75119","Paris 19eme secteur","",NA
 "75","75120","Paris 20eme secteur","LVEC",4.4
@@ -26321,20 +27674,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","",NA
-"75","75056SR05","Paris 5eme secteur","LVEC",5.34
-"75","75056SR06","Paris 6eme secteur","",NA
-"75","75056SR07","Paris 7eme secteur","",NA
-"75","75056SR08","Paris 8eme secteur","",NA
-"75","75056SR09","Paris 9eme secteur","",NA
-"75","75056SR10","Paris 10eme secteur","",NA
-"75","75056SR11","Paris 11eme secteur","",NA
-"75","75056SR12","Paris 12eme secteur","",NA
-"75","75056SR13","Paris 13eme secteur","",NA
-"75","75056SR14","Paris 14eme secteur","",NA
-"75","75056SR15","Paris 15eme secteur","",NA
+"72","72001","Aigné","",NA
+"72","72003","Allonnes","",NA
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","",NA
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","",NA
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","",NA
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","",NA
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","",NA
+"72","72269","Saint-Calais","",NA
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","",NA
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","",NA
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","",NA
+"75","75101","Paris 1er secteur","",NA
+"75","75105","Paris 5eme secteur","LVEC",5.34
+"75","75106","Paris 6eme secteur","",NA
+"75","75107","Paris 7eme secteur","",NA
+"75","75108","Paris 8eme secteur","",NA
+"75","75109","Paris 9eme secteur","",NA
+"75","75110","Paris 10eme secteur","",NA
+"75","75111","Paris 11eme secteur","",NA
+"75","75112","Paris 12eme secteur","",NA
+"75","75113","Paris 13eme secteur","",NA
+"75","75114","Paris 14eme secteur","",NA
+"75","75115","Paris 15eme secteur","",NA
 "75","75116","Paris 16eme secteur","",NA
-"75","75056SR17","Paris 17eme secteur","",NA
+"75","75117","Paris 17eme secteur","",NA
 "75","75118","Paris 18eme secteur","LDIV",0.2
 "75","75119","Paris 19eme secteur","",NA
 "75","75120","Paris 20eme secteur","",NA
@@ -28607,20 +30083,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","",NA
-"75","75056SR05","Paris 5eme secteur","LUC",13.34
-"75","75056SR06","Paris 6eme secteur","",NA
-"75","75056SR07","Paris 7eme secteur","",NA
-"75","75056SR08","Paris 8eme secteur","",NA
-"75","75056SR09","Paris 9eme secteur","",NA
-"75","75056SR10","Paris 10eme secteur","",NA
-"75","75056SR11","Paris 11eme secteur","",NA
-"75","75056SR12","Paris 12eme secteur","",NA
-"75","75056SR13","Paris 13eme secteur","",NA
-"75","75056SR14","Paris 14eme secteur","",NA
-"75","75056SR15","Paris 15eme secteur","",NA
+"72","72001","Aigné","",NA
+"72","72003","Allonnes","",NA
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","",NA
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","",NA
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","",NA
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","",NA
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","",NA
+"72","72269","Saint-Calais","",NA
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","",NA
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","",NA
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","",NA
+"75","75101","Paris 1er secteur","",NA
+"75","75105","Paris 5eme secteur","LUC",13.34
+"75","75106","Paris 6eme secteur","",NA
+"75","75107","Paris 7eme secteur","",NA
+"75","75108","Paris 8eme secteur","",NA
+"75","75109","Paris 9eme secteur","",NA
+"75","75110","Paris 10eme secteur","",NA
+"75","75111","Paris 11eme secteur","",NA
+"75","75112","Paris 12eme secteur","",NA
+"75","75113","Paris 13eme secteur","",NA
+"75","75114","Paris 14eme secteur","",NA
+"75","75115","Paris 15eme secteur","",NA
 "75","75116","Paris 16eme secteur","",NA
-"75","75056SR17","Paris 17eme secteur","",NA
+"75","75117","Paris 17eme secteur","",NA
 "75","75118","Paris 18eme secteur","LDIV",0.31
 "75","75119","Paris 19eme secteur","",NA
 "75","75120","Paris 20eme secteur","",NA
@@ -30893,20 +32492,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","",NA
-"75","75056SR05","Paris 5eme secteur","",NA
-"75","75056SR06","Paris 6eme secteur","",NA
-"75","75056SR07","Paris 7eme secteur","",NA
-"75","75056SR08","Paris 8eme secteur","",NA
-"75","75056SR09","Paris 9eme secteur","",NA
-"75","75056SR10","Paris 10eme secteur","",NA
-"75","75056SR11","Paris 11eme secteur","",NA
-"75","75056SR12","Paris 12eme secteur","",NA
-"75","75056SR13","Paris 13eme secteur","",NA
-"75","75056SR14","Paris 14eme secteur","",NA
-"75","75056SR15","Paris 15eme secteur","",NA
+"72","72001","Aigné","",NA
+"72","72003","Allonnes","",NA
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","",NA
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","",NA
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","",NA
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","",NA
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","",NA
+"72","72269","Saint-Calais","",NA
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","",NA
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","",NA
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","",NA
+"75","75101","Paris 1er secteur","",NA
+"75","75105","Paris 5eme secteur","",NA
+"75","75106","Paris 6eme secteur","",NA
+"75","75107","Paris 7eme secteur","",NA
+"75","75108","Paris 8eme secteur","",NA
+"75","75109","Paris 9eme secteur","",NA
+"75","75110","Paris 10eme secteur","",NA
+"75","75111","Paris 11eme secteur","",NA
+"75","75112","Paris 12eme secteur","",NA
+"75","75113","Paris 13eme secteur","",NA
+"75","75114","Paris 14eme secteur","",NA
+"75","75115","Paris 15eme secteur","",NA
 "75","75116","Paris 16eme secteur","",NA
-"75","75056SR17","Paris 17eme secteur","",NA
+"75","75117","Paris 17eme secteur","",NA
 "75","75118","Paris 18eme secteur","LDIV",0.11
 "75","75119","Paris 19eme secteur","",NA
 "75","75120","Paris 20eme secteur","",NA
@@ -33179,20 +34901,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","",NA
-"75","75056SR05","Paris 5eme secteur","",NA
-"75","75056SR06","Paris 6eme secteur","",NA
-"75","75056SR07","Paris 7eme secteur","",NA
-"75","75056SR08","Paris 8eme secteur","",NA
-"75","75056SR09","Paris 9eme secteur","",NA
-"75","75056SR10","Paris 10eme secteur","",NA
-"75","75056SR11","Paris 11eme secteur","",NA
-"75","75056SR12","Paris 12eme secteur","",NA
-"75","75056SR13","Paris 13eme secteur","",NA
-"75","75056SR14","Paris 14eme secteur","",NA
-"75","75056SR15","Paris 15eme secteur","",NA
+"72","72001","Aigné","",NA
+"72","72003","Allonnes","",NA
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","",NA
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","",NA
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","",NA
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","",NA
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","",NA
+"72","72269","Saint-Calais","",NA
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","",NA
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","",NA
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","",NA
+"75","75101","Paris 1er secteur","",NA
+"75","75105","Paris 5eme secteur","",NA
+"75","75106","Paris 6eme secteur","",NA
+"75","75107","Paris 7eme secteur","",NA
+"75","75108","Paris 8eme secteur","",NA
+"75","75109","Paris 9eme secteur","",NA
+"75","75110","Paris 10eme secteur","",NA
+"75","75111","Paris 11eme secteur","",NA
+"75","75112","Paris 12eme secteur","",NA
+"75","75113","Paris 13eme secteur","",NA
+"75","75114","Paris 14eme secteur","",NA
+"75","75115","Paris 15eme secteur","",NA
 "75","75116","Paris 16eme secteur","",NA
-"75","75056SR17","Paris 17eme secteur","",NA
+"75","75117","Paris 17eme secteur","",NA
 "75","75118","Paris 18eme secteur","",NA
 "75","75119","Paris 19eme secteur","",NA
 "75","75120","Paris 20eme secteur","",NA
@@ -35465,20 +37310,143 @@
 "67","67547","Wittisheim","",NA
 "67","67550","Woerth","",NA
 "67","67551","Wolfisheim","",NA
-"75","75056SR01","Paris 1er secteur","",NA
-"75","75056SR05","Paris 5eme secteur","",NA
-"75","75056SR06","Paris 6eme secteur","",NA
-"75","75056SR07","Paris 7eme secteur","",NA
-"75","75056SR08","Paris 8eme secteur","",NA
-"75","75056SR09","Paris 9eme secteur","",NA
-"75","75056SR10","Paris 10eme secteur","",NA
-"75","75056SR11","Paris 11eme secteur","",NA
-"75","75056SR12","Paris 12eme secteur","",NA
-"75","75056SR13","Paris 13eme secteur","",NA
-"75","75056SR14","Paris 14eme secteur","",NA
-"75","75056SR15","Paris 15eme secteur","",NA
+"72","72001","Aigné","",NA
+"72","72003","Allonnes","",NA
+"72","72006","Arçonnay","",NA
+"72","72008","Arnage","",NA
+"72","72013","Aubigné-Racan","",NA
+"72","72016","Auvers-le-Hamon","",NA
+"72","72022","Le Bailleul","",NA
+"72","72023","Ballon-Saint Mars","",NA
+"72","72024","La Bazoge","",NA
+"72","72025","Bazouges Cré sur Loir","",NA
+"72","72026","Beaufay","",NA
+"72","72029","Beaumont-sur-Sarthe","",NA
+"72","72035","Bessé-sur-Braye","",NA
+"72","72039","Bonnétable","",NA
+"72","72042","Bouloire","",NA
+"72","72046","Le Breil-sur-Mérize","",NA
+"72","72047","Brette-les-Pins","",NA
+"72","72050","Brûlon","",NA
+"72","72051","Cérans-Foulletourte","",NA
+"72","72053","Challes","",NA
+"72","72054","Champagné","",NA
+"72","72056","Champfleur","",NA
+"72","72058","Changé","",NA
+"72","72061","La Chapelle-d'Aligné","",NA
+"72","72065","La Chapelle-Saint-Aubin","",NA
+"72","72068","La Chartre-sur-le-Loir","",NA
+"72","72071","Montval-sur-Loir","",NA
+"72","72073","Chaufour-Notre-Dame","",NA
+"72","72080","Cherré-au","",NA
+"72","72084","Clermont-Créans","",NA
+"72","72089","Conlie","",NA
+"72","72090","Connerré","",NA
+"72","72095","Coulaines","",NA
+"72","72096","Coulans-sur-Gée","",NA
+"72","72110","Crosmières","",NA
+"72","72118","Dollon","",NA
+"72","72119","Domfront-en-Champagne","",NA
+"72","72122","Duneau","",NA
+"72","72124","Ecommoy","",NA
+"72","72127","Etival-lès-le-Mans","",NA
+"72","72132","La Ferté-Bernard","",NA
+"72","72133","Fillé-sur-Sarthe","",NA
+"72","72137","Villeneuve en Perseigne","",NA
+"72","72138","Fresnay-sur-Sarthe","",NA
+"72","72143","Le Grand-Lucé","",NA
+"72","72146","Guécélard","",NA
+"72","72147","La Guierche","",NA
+"72","72150","Joué-l'Abbé","",NA
+"72","72151","Juigné-sur-Sarthe","",NA
+"72","72154","La Flèche","",NA
+"72","72155","Laigné-en-Belin","",NA
+"72","72165","Lombron","",NA
+"72","72168","Loué","",NA
+"72","72169","Louplande","",NA
+"72","72172","Le Luart","",NA
+"72","72173","Luceau","",NA
+"72","72175","Luché-Pringé","",NA
+"72","72176","Le Lude","",NA
+"72","72179","Malicorne-sur-Sarthe","",NA
+"72","72180","Mamers","",NA
+"72","72181","Le Mans","",NA
+"72","72182","Mansigné","",NA
+"72","72183","Marçon","",NA
+"72","72187","Marigné-Laillé","",NA
+"72","72189","Marolles-les-Braults","",NA
+"72","72191","Mayet","",NA
+"72","72195","Mézeray","",NA
+"72","72198","La Milesse","",NA
+"72","72200","Moncé-en-Belin","",NA
+"72","72205","Montbizot","",NA
+"72","72213","Mulsanne","",NA
+"72","72215","Neufchâtel-en-Saosnois","",NA
+"72","72217","Neuville-sur-Sarthe","",NA
+"72","72223","Noyen-sur-Sarthe","",NA
+"72","72226","Oizé","",NA
+"72","72228","Parcé-sur-Sarthe","",NA
+"72","72230","Parigné-le-Pôlin","",NA
+"72","72231","Parigné-l'Evêque","",NA
+"72","72241","Montfort-le-Gesnois","",NA
+"72","72243","Pontvallain","",NA
+"72","72244","Précigné","",NA
+"72","72247","Pruillé-le-Chétif","",NA
+"72","72252","Requeil","",NA
+"72","72253","Roézé-sur-Sarthe","",NA
+"72","72257","Rouillon","",NA
+"72","72260","Ruaudin","",NA
+"72","72262","Loir en Vallée","",NA
+"72","72264","Sablé-sur-Sarthe","",NA
+"72","72269","Saint-Calais","",NA
+"72","72275","Saint-Corneille","",NA
+"72","72276","Saint-Cosme-en-Vairais","",NA
+"72","72280","Saint-Georges-du-Bois","",NA
+"72","72287","Saint-Gervais-en-Belin","",NA
+"72","72289","Sainte-Jamme-sur-Sarthe","",NA
+"72","72290","Saint-Jean-d'Assé","",NA
+"72","72299","Saint-Mars-d'Outillé","",NA
+"72","72300","Saint-Mars-la-Brière","",NA
+"72","72305","Saint-Ouen-de-Mimbré","",NA
+"72","72306","Saint-Ouen-en-Belin","",NA
+"72","72308","Saint Paterne-Le Chevain","",NA
+"72","72310","Saint-Pavace","",NA
+"72","72320","Saint-Saturnin","",NA
+"72","72328","Sargé-lès-le-Mans","",NA
+"72","72329","Savigné-l'Evêque","",NA
+"72","72334","Sillé-le-Guillaume","",NA
+"72","72335","Sillé-le-Philippe","",NA
+"72","72336","Solesmes","",NA
+"72","72340","Souligné-sous-Ballon","",NA
+"72","72344","Spay","",NA
+"72","72346","La Suze-sur-Sarthe","",NA
+"72","72350","Teloché","",NA
+"72","72351","Tennie","",NA
+"72","72358","Thorigné-sur-Dué","",NA
+"72","72359","Torcé-en-Vallée","",NA
+"72","72360","Trangé","",NA
+"72","72363","Tuffé Val de la Chéronne","",NA
+"72","72364","Vaas","",NA
+"72","72373","Vibraye","",NA
+"72","72377","Villaines-sous-Malicorne","",NA
+"72","72378","Vion","",NA
+"72","72381","Voivres-lès-le-Mans","",NA
+"72","72385","Yvré-le-Pôlin","",NA
+"72","72386","Yvré-l'Evêque","",NA
+"75","75101","Paris 1er secteur","",NA
+"75","75105","Paris 5eme secteur","",NA
+"75","75106","Paris 6eme secteur","",NA
+"75","75107","Paris 7eme secteur","",NA
+"75","75108","Paris 8eme secteur","",NA
+"75","75109","Paris 9eme secteur","",NA
+"75","75110","Paris 10eme secteur","",NA
+"75","75111","Paris 11eme secteur","",NA
+"75","75112","Paris 12eme secteur","",NA
+"75","75113","Paris 13eme secteur","",NA
+"75","75114","Paris 14eme secteur","",NA
+"75","75115","Paris 15eme secteur","",NA
 "75","75116","Paris 16eme secteur","",NA
-"75","75056SR17","Paris 17eme secteur","",NA
+"75","75117","Paris 17eme secteur","",NA
 "75","75118","Paris 18eme secteur","",NA
 "75","75119","Paris 19eme secteur","",NA
 "75","75120","Paris 20eme secteur","",NA

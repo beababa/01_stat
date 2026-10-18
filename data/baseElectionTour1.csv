@@ -7875,20 +7875,20 @@
 "74311","74","Viuz-en-Sallaz","LDVD","27","","","",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
 "74312","74","Vougy","LNC","19","","","",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
 "74314","74","Vulbens","LNC","3","LNC","16","",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
-"75056SR01","75","Paris 1er secteur","LVEC","0","LUC","0","LFI",0,"LUD",0,"LRN",0,"LEXG",0,"LDIV",0,"LUG",0,"LDVC",0,"LDVD",0,"LDIV",0,"",NA,"",NA,"",NA,"",NA,"",NA
-"75056SR05","75","Paris 5eme secteur","LFI","0","LDIV","0","LDVD",0,"LEXG",0,"LDVC",0,"LDVD",0,"LDIV",0,"LRN",0,"LUG",0,"LDIV",0,"LUD",0,"LVEC",0,"LUC",0,"",NA,"",NA,"",NA
-"75056SR06","75","Paris 6eme secteur","LEXG","0","LVEC","0","LDVC",0,"LDIV",0,"LUG",0,"LUC",0,"LUD",0,"LDIV",0,"LRN",0,"LFI",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
-"75056SR07","75","Paris 7eme secteur","LUD","4","LDVD","0","LRN",0,"LUC",0,"LUG",0,"LFI",0,"LVEC",0,"LDIV",0,"LDIV",0,"LDVC",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
-"75056SR08","75","Paris 8eme secteur","LDIV","0","LUD","0","LDVD",0,"LUG",0,"LVEC",0,"LUC",0,"LRN",0,"LDVD",0,"LFI",0,"LDVC",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
-"75056SR09","75","Paris 9eme secteur","LVEC","0","LDVC","0","LUD",0,"LUC",0,"LRN",0,"LDIV",0,"LFI",0,"LUG",0,"LDIV",0,"LEXG",0,"LDIV",0,"",NA,"",NA,"",NA,"",NA,"",NA
-"75056SR10","75","Paris 10eme secteur","LRN","0","LDVC","0","LFI",0,"LVEC",0,"LEXG",0,"LDIV",0,"LDVG",0,"LUD",0,"LUG",0,"LUC",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
-"75056SR11","75","Paris 11eme secteur","LDVC","0","LEXG","0","LVEC",0,"LFI",0,"LDIV",0,"LUD",0,"LRN",0,"LDVD",0,"LUG",0,"LDIV",0,"LUC",0,"",NA,"",NA,"",NA,"",NA,"",NA
-"75056SR12","75","Paris 12eme secteur","LFI","0","LEXG","0","LUG",0,"LRN",0,"LUC",0,"LUD",0,"LDVC",0,"LDIV",0,"LVEC",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
-"75056SR13","75","Paris 13eme secteur","LUC","0","LDIV","0","LDIV",0,"LDVC",0,"LFI",0,"LUG",0,"LVEC",0,"LEXG",0,"LUD",0,"LRN",0,"LDIV",0,"",NA,"",NA,"",NA,"",NA,"",NA
-"75056SR14","75","Paris 14eme secteur","LEXG","0","LDVC","0","LDVG",0,"LVEC",0,"LUD",0,"LUC",0,"LFI",0,"LUG",0,"LRN",0,"LDIV",0,"LEXG",0,"",NA,"",NA,"",NA,"",NA,"",NA
-"75056SR15","75","Paris 15eme secteur","LDVD","0","LUC","0","LEXG",0,"LVEC",0,"LFI",0,"LDVC",0,"LUD",0,"LRN",0,"LUG",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
+"75101","75","Paris 1er secteur","LVEC","0","LUC","0","LFI",0,"LUD",0,"LRN",0,"LEXG",0,"LDIV",0,"LUG",0,"LDVC",0,"LDVD",0,"LDIV",0,"",NA,"",NA,"",NA,"",NA,"",NA
+"75105","75","Paris 5eme secteur","LFI","0","LDIV","0","LDVD",0,"LEXG",0,"LDVC",0,"LDVD",0,"LDIV",0,"LRN",0,"LUG",0,"LDIV",0,"LUD",0,"LVEC",0,"LUC",0,"",NA,"",NA,"",NA
+"75106","75","Paris 6eme secteur","LEXG","0","LVEC","0","LDVC",0,"LDIV",0,"LUG",0,"LUC",0,"LUD",0,"LDIV",0,"LRN",0,"LFI",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
+"75107","75","Paris 7eme secteur","LUD","4","LDVD","0","LRN",0,"LUC",0,"LUG",0,"LFI",0,"LVEC",0,"LDIV",0,"LDIV",0,"LDVC",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
+"75108","75","Paris 8eme secteur","LDIV","0","LUD","0","LDVD",0,"LUG",0,"LVEC",0,"LUC",0,"LRN",0,"LDVD",0,"LFI",0,"LDVC",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
+"75109","75","Paris 9eme secteur","LVEC","0","LDVC","0","LUD",0,"LUC",0,"LRN",0,"LDIV",0,"LFI",0,"LUG",0,"LDIV",0,"LEXG",0,"LDIV",0,"",NA,"",NA,"",NA,"",NA,"",NA
+"75110","75","Paris 10eme secteur","LRN","0","LDVC","0","LFI",0,"LVEC",0,"LEXG",0,"LDIV",0,"LDVG",0,"LUD",0,"LUG",0,"LUC",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
+"75111","75","Paris 11eme secteur","LDVC","0","LEXG","0","LVEC",0,"LFI",0,"LDIV",0,"LUD",0,"LRN",0,"LDVD",0,"LUG",0,"LDIV",0,"LUC",0,"",NA,"",NA,"",NA,"",NA,"",NA
+"75112","75","Paris 12eme secteur","LFI","0","LEXG","0","LUG",0,"LRN",0,"LUC",0,"LUD",0,"LDVC",0,"LDIV",0,"LVEC",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
+"75113","75","Paris 13eme secteur","LUC","0","LDIV","0","LDIV",0,"LDVC",0,"LFI",0,"LUG",0,"LVEC",0,"LEXG",0,"LUD",0,"LRN",0,"LDIV",0,"",NA,"",NA,"",NA,"",NA,"",NA
+"75114","75","Paris 14eme secteur","LEXG","0","LDVC","0","LDVG",0,"LVEC",0,"LUD",0,"LUC",0,"LFI",0,"LUG",0,"LRN",0,"LDIV",0,"LEXG",0,"",NA,"",NA,"",NA,"",NA,"",NA
+"75115","75","Paris 15eme secteur","LDVD","0","LUC","0","LEXG",0,"LVEC",0,"LFI",0,"LDVC",0,"LUD",0,"LRN",0,"LUG",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
 "75116","75","Paris 16eme secteur","LUD","0","LUC","0","LVEC",0,"LUG",0,"LDVC",0,"LDVG",0,"LDIV",0,"LFI",0,"LDVD",0,"LDVD",0,"LRN",0,"",NA,"",NA,"",NA,"",NA,"",NA
-"75056SR17","75","Paris 17eme secteur","LRN","0","LDVC","0","LFI",0,"LUC",0,"LUD",0,"LEXG",0,"LVEC",0,"LDIV",0,"LUG",0,"LDIV",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
+"75117","75","Paris 17eme secteur","LRN","0","LDVC","0","LFI",0,"LUC",0,"LUD",0,"LEXG",0,"LVEC",0,"LDIV",0,"LUG",0,"LDIV",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
 "75118","75","Paris 18eme secteur","LFI","0","LUG","0","LUC",0,"LRN",0,"LVEC",0,"LDVC",0,"LEXG",0,"LEXG",0,"LUD",0,"LDIV",0,"LDVD",0,"LDIV",0,"LDIV",0,"LDIV",0,"",NA,"",NA
 "75119","75","Paris 19eme secteur","LDVC","0","LDIV","0","LUG",0,"LVEC",0,"LDVC",0,"LRN",0,"LUD",0,"LEXG",0,"LFI",0,"LEXG",0,"",NA,"",NA,"",NA,"",NA,"",NA,"",NA
 "75120","75","Paris 20eme secteur","LDIV","0","LEXG","0","LUG",0,"LRN",0,"LDVD",0,"LUD",0,"LDVG",0,"LDVC",0,"LFI",0,"LUC",0,"LVEC",0,"",NA,"",NA,"",NA,"",NA,"",NA

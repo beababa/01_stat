@@ -83,6 +83,8 @@ Attention, encore une fois, variable explicative et expliquée.
 
 ![](img/xylibreoffice.png)
 
+
+
 - insertion courbe de tendance linéaire et afficher le R²
 
 ![](img/xylibreofficecourbe.png)
@@ -221,6 +223,8 @@ et pour les deux variables
 
 - produit des écarts (pour étudier le rapport entre 2 variables, techniquement on utilise une division ou une multiplication)
 
+![](img/prodEcart.png)
+
 ### Deuxième temps
 
 Dans un nouveau tableau, pour chaque variable
@@ -312,16 +316,16 @@ A Clichy sous Bois, les frais de personnel sont élévés mais les impots sont b
 # Cartographie des résidus
 
 
-```{r, eval=F}
+```{r}
 library(sf)
-communes <- st_read("data/communes93.geojson")
+communes <- st_read("data/communes93.geojson", quiet = T)
 communes <- communes [!is.na(communes$ref.INSEE), c("name", "ref.INSEE")]
 ```
 
 
 
 
-```{r, eval=FALSE}
+```{r}
 residus <- lm$residuals
 hist(residus)
 sel <- cbind(sel, residus)
@@ -330,7 +334,7 @@ jointure <- merge(communes, sel, by.x = "name", by.y = "ville")
 summary(jointure$residus)
 ```
 
-```{r, eval=FALSE}
+```{r}
 library(mapsf)
 png("img/residusCarte.png")
 mf_map(jointure, var = "residus", type="choro", breaks = c(-500, -250,0,250,500), pal = cm.colors(4), border = NA, leg_pos = c(2.31589950651953, 48.8793057936166) )

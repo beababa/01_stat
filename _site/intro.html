@@ -13,7 +13,7 @@
 
 <title>Introduction</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
@@ -470,23 +470,29 @@ div.tocify {
 number="1">
 <h1><span class="header-section-number">1</span> Intitulé et déroulé du
 cours</h1>
+<p>Mise à jour du 18/10 :</p>
+<p>Le cours est mis à jour mais seul compte le cours en présentiel.
+Actuellement, les étudiants du groupe 1 et 2 ont vu les bases de la
+régression.</p>
 <p><em>“L5GEABIM Analyses bivariées et multivariées”</em></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/deroule2026.csv&quot;</span>, <span class="at">encoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(data)</span></code></pre></div>
-<table>
+<table style="width:100%;">
 <colgroup>
+<col width="4%" />
 <col width="6%" />
-<col width="9%" />
+<col width="4%" />
+<col width="32%" />
+<col width="40%" />
+<col width="3%" />
 <col width="7%" />
-<col width="60%" />
-<col width="5%" />
-<col width="10%" />
 </colgroup>
 <thead>
 <tr class="header">
 <th align="right">num.cours</th>
 <th align="left">Date.gr.1.et.2</th>
 <th align="left">date.gr.3</th>
+<th align="left">pb.fermeture</th>
 <th align="left">thème</th>
 <th align="left">outil</th>
 <th align="right">exercice.nb.pts</th>
@@ -497,6 +503,7 @@ cours</h1>
 <td align="right">1</td>
 <td align="left">21.09.26</td>
 <td align="left">18.09.26</td>
+<td align="left"></td>
 <td align="left">statistique univariée base</td>
 <td align="left">tableur</td>
 <td align="right">1</td>
@@ -505,6 +512,7 @@ cours</h1>
 <td align="right">2</td>
 <td align="left">28.09.26</td>
 <td align="left">25.09.26</td>
+<td align="left">blocage moodle enseignant</td>
 <td align="left">statistique univariée indicateurs</td>
 <td align="left"></td>
 <td align="right">2</td>
@@ -513,65 +521,74 @@ cours</h1>
 <td align="right">3</td>
 <td align="left">05.10.26</td>
 <td align="left">02.10.26</td>
-<td align="left">bivariée : base + régression début</td>
+<td align="left">blocus au 2/10 et 5/ 10</td>
 <td align="left"></td>
-<td align="right">2</td>
+<td align="left"></td>
+<td align="right">NA</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
 <td align="left">12.10.26</td>
 <td align="left">09.10.26</td>
-<td align="left">régression fin + khi début (tableau de
-contingence)</td>
+<td align="left">fermeture administrative 9/10, filtrage entrées puis
+fermeture le 12/10</td>
+<td align="left">Gr lundi uniquement - bivariée : base + régression
+début</td>
 <td align="left"></td>
-<td align="right">2</td>
+<td align="right">NA</td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="left">19.10.26</td>
 <td align="left">16.10.26</td>
-<td align="left">Khi2 + devoir gr 1 et 2 en guise de cours 1</td>
+<td align="left">fermeture administrative le 16/10</td>
+<td align="left">Gr lunid : régression fin + khi début (tableau de
+contingence)</td>
 <td align="left"></td>
-<td align="right">2</td>
+<td align="right">NA</td>
 </tr>
 <tr class="even">
 <td align="right">NA</td>
 <td align="left">26.10.26</td>
 <td align="left">23.10.26</td>
-<td align="left">CONGES gr 1 et 2 / initiation R gr 3</td>
-<td align="left">R</td>
-<td align="right">NA</td>
+<td align="left">CONGES</td>
+<td align="left">Khi2 + devoir gr 1 et 2 en guise de cours 1</td>
+<td align="left"></td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
 <td align="right">6</td>
 <td align="left">02.11.26</td>
 <td align="left">30.10.26</td>
-<td align="left">initiation R gr 1 et 2 / CONGES gr 3</td>
 <td align="left"></td>
+<td align="left">CONGES gr 1 et 2 / initiation R gr 3</td>
+<td align="left">R</td>
 <td align="right">NA</td>
 </tr>
 <tr class="even">
 <td align="right">7</td>
 <td align="left">09.11.26</td>
 <td align="left">06.11.26</td>
-<td align="left">initiation R / boite à moustaches</td>
 <td align="left"></td>
-<td align="right">1</td>
+<td align="left">initiation R gr 1 et 2 / CONGES gr 3</td>
+<td align="left"></td>
+<td align="right">NA</td>
 </tr>
 <tr class="odd">
 <td align="right">8</td>
 <td align="left">16.11.26</td>
 <td align="left">13.11.26</td>
-<td align="left">initiation R / variance + sujet DM</td>
 <td align="left"></td>
-<td align="right">NA</td>
+<td align="left">initiation R / boite à moustaches</td>
+<td align="left"></td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="right">9</td>
 <td align="left">23.11.26</td>
 <td align="left">20.11.26</td>
-<td align="left">multivariée : boucle R et mise en forme des données
-(part 1 – régression multiple)</td>
+<td align="left"></td>
+<td align="left">initiation R / variance + sujet DM</td>
 <td align="left"></td>
 <td align="right">NA</td>
 </tr>
@@ -579,8 +596,9 @@ contingence)</td>
 <td align="right">10</td>
 <td align="left">30.11.26</td>
 <td align="left">27.11.26</td>
-<td align="left">multivariée : régression multiple (part 2) et script
-analyse factorielle et classification</td>
+<td align="left"></td>
+<td align="left">multivariée : boucle R et mise en forme des données
+(part 1 – régression multiple)</td>
 <td align="left"></td>
 <td align="right">NA</td>
 </tr>
@@ -588,8 +606,9 @@ analyse factorielle et classification</td>
 <td align="right">11</td>
 <td align="left">07.12.26</td>
 <td align="left">04.12.26</td>
-<td align="left">multivariée : analyse factorielle et classification
-(données centrées réduites)</td>
+<td align="left"></td>
+<td align="left">multivariée : régression multiple (part 2) et script
+analyse factorielle et classification</td>
 <td align="left"></td>
 <td align="right">NA</td>
 </tr>
@@ -597,8 +616,9 @@ analyse factorielle et classification</td>
 <td align="right">12</td>
 <td align="left">14.12.26</td>
 <td align="left">11.12.26</td>
-<td align="left">questions autour du devoir maison et confirmation
-groupe partiel</td>
+<td align="left"></td>
+<td align="left">multivariée : analyse factorielle et classification
+(données centrées réduites)</td>
 <td align="left"></td>
 <td align="right">NA</td>
 </tr>
@@ -606,7 +626,9 @@ groupe partiel</td>
 <td align="right">13</td>
 <td align="left"></td>
 <td align="left">18.12.26</td>
-<td align="left">révision gr3 (feuille révisions gr 1 et 2)</td>
+<td align="left"></td>
+<td align="left">questions autour du devoir maison et confirmation
+groupe partiel</td>
 <td align="left"></td>
 <td align="right">NA</td>
 </tr>
@@ -614,6 +636,16 @@ groupe partiel</td>
 <td align="right">14</td>
 <td align="left">à préciser</td>
 <td align="left">à préciser</td>
+<td align="left"></td>
+<td align="left">révision gr3 (feuille révisions gr 1 et 2)</td>
+<td align="left"></td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="right">NA</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
 <td align="left">partiel</td>
 <td align="left"></td>
 <td align="right">NA</td>
@@ -719,8 +751,8 @@ choix géographique différent par étudiant</h3>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">mf_map</span>(region, <span class="at">col =</span> <span class="st">&quot;wheat&quot;</span>, <span class="at">border=</span><span class="st">&quot;cornsilk&quot;</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">mf_map</span>(<span class="fu">st_buffer</span>(data, <span class="dv">10000</span>), <span class="at">col=</span> <span class="st">&quot;red&quot;</span>, <span class="at">add =</span> T, <span class="at">border =</span> <span class="cn">NA</span>)</span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">mf_layout</span>(<span class="st">&quot;Choix des communes</span><span class="sc">\n</span><span class="st">(tampons autour des communes)&quot;</span>, <span class="st">&quot;data.gouv et sources internes</span><span class="sc">\n</span><span class="st">septembre 2026&quot;</span>)</span></code></pre></div>
-<p><img src="intro_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<pre><code>## The scale bar does not work on unprojected (long/lat) maps.</code></pre>
+<p><img src="intro_files/figure-html/unnamed-chunk-4-1.png" alt="" width="672" /></p>
+<pre><code>## The scale bar cannot be displayed on unprojected (long/lat) maps.</code></pre>
 <p>Enregistrement de la donnée</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">st_write</span>(data, <span class="st">&quot;data/cours.gpkg&quot;</span>, <span class="st">&quot;commune&quot;</span>, <span class="at">append =</span> F, <span class="at">quiet =</span> T)</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(data)</span>
@@ -926,7 +958,7 @@ département 93</p>
 <span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">write.csv</span>(data [,<span class="fu">c</span>(<span class="dv">21</span>,<span class="dv">28</span>)], <span class="st">&quot;data/agregatBondy.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;UTF-8&quot;</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co"># Les agrégats ont-ils tous la même importance ?</span></span>
 <span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="fu">hist</span>(data<span class="sc">$</span>Montant.en...par.habitant)</span></code></pre></div>
-<p><img src="intro_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-6-1.png" alt="" width="672" /></p>
 </div>
 </div>
 </div>
@@ -1064,7 +1096,7 @@ cours</h3>
 <span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>        , <span class="at">border =</span> <span class="cn">NA</span>, <span class="at">legend =</span>  F)</span>
 <span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="fu">barplot</span>(presence<span class="sc">$</span>TD3<span class="sc">~</span>presence<span class="sc">$</span>numCours, <span class="at">col=</span><span class="st">&quot;darkorange&quot;</span>,<span class="at">beside =</span> T, <span class="at">main =</span> <span class="st">&quot;Evolution de la présence groupe 3&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;cours&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;nb&quot;</span> </span>
 <span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a>        , <span class="at">border =</span> <span class="cn">NA</span>, <span class="at">legend =</span>  F)</span></code></pre></div>
-<p><img src="intro_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="intro_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" /></p>
 </div>
 <div id="les-rendus-dexercices" class="section level3" number="3.2.2">
 <h3><span class="header-section-number">3.2.2</span> Les rendus

@@ -53,6 +53,12 @@ Résultat attendu :
 
 ![](img/restcd.png)
 
+Avec un filtre sur les valeurs représentatives :
+
+
+![](img/restcd2.png)
+
+
 ## Analyse d'un tableau de contingence
 
 -   Il faut présenter les sources, la structure et le contenu du tableau.
@@ -61,14 +67,14 @@ Résultat attendu :
 
 ### Format conditionnel
 
-![](img/formatConditionnel.png)
+![](img/formatConditionel.png)
 
 Cet outil est-il utile ici ?
 
 
 ### Fréquences conditionnelles en ligne et colonne
 
-Pour pouvoir comparer les villes, chaque groupe est ramené à une même
+Pour pouvoir comparer les blocs, chaque groupe est ramené à une même
 base égale à 100.
 
 savoir-faire tableur
@@ -85,25 +91,30 @@ Quel élément fixer, ligne ou colonne ?(raccourci clavier F4)
 
 Analyse après avoir mis le format conditionnel.
 
--   Quelles sont les agrégats qui varient le plus entre les villes ?
+-   Quelles est le bloc gagnant au 1er et au 2e tour ?
 
-Les écarts à la moyenne par agrégat sont peut-être plus parlants
+Les écarts à la moyenne par bloc sont peut-être plus parlants
 
--   pour pouvoir raisonner sur le graphique, il est nécessaire de poser
-    un filtre sur quelques villes déjà repérées pour leur originalité
-    (exemple pour le 93 : Tremblay en France et Le Raincy)
+![](img/ecMoyenneGraph.png)
 
-![](img/filtreGraphEcMoyenne.png)
 
 ![](img/ecMoyenne.png)
 
 Qu'apporterait une étude des fréquences conditionnelles en colonnes ?
 
-# Tableau de contingence : correction 
+
+Exercice conseillé = utiliser le fichier baseKhi2.csv et commencer l'analyse sur les classes
+de montant de dépense et les blocs.
+
+
+# Tableau de contingence : correction (attention exercice 2025)
 
 Beaucoup de rendus et ... beaucoup de mauvaises notes
 
 ![](img/rendu.png)
+
+
+
 
 ## Définition des variables
 
